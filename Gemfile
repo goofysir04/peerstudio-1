@@ -32,6 +32,17 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+#templates
+gem "twitter-bootstrap-rails"
+
+# User Authentication and Authorization
+gem "devise"
+gem "omniauth"
+gem 'omniauth-openid', :git => 'git://github.com/intridea/omniauth-openid.git'
+gem "cancan"
+
+
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
