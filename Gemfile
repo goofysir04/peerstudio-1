@@ -33,6 +33,8 @@ group :doc do
 end
 
 #templates
+gem "therubyracer"
+gem "less-rails"
 gem "twitter-bootstrap-rails"
 
 # User Authentication and Authorization
@@ -42,6 +44,8 @@ gem 'omniauth-openid', :git => 'git://github.com/intridea/omniauth-openid.git'
 gem "cancan"
 
 
+gem "mysql2", group: :production
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -50,7 +54,11 @@ gem "cancan"
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano', group: :development
+gem 'capistrano', group: :development
+
+
+gem "validates_email_format_of" # Validate email addresses
+gem "client_side_validations"
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]

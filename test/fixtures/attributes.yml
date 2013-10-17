@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  is_correct: false
+  score: 1.5
+  question_id: 
+
+two:
+  is_correct: false
+  score: 1.5
+  question_id: 
