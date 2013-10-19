@@ -1,4 +1,7 @@
 Humanmachine::Application.routes.draw do
+  get "grading/identify_correct"
+  get "grading/identify_incorrect"
+  get "grading/verify"
   resources :questions
 
   # The priority is based upon order of creation: first created -> highest priority.
