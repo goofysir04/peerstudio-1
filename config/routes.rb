@@ -19,6 +19,14 @@ Humanmachine::Application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
+  resources :answers do
+    collection do 
+      get 'import'
+      post 'upload'
+    end
+  end
+
+
   # Example resource route with options:
   #   resources :products do
   #     member do

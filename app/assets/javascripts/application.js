@@ -17,6 +17,10 @@
 //= require twitter/bootstrap
 //= require chosen.jquery
 //= require bootstrap-datepicker
-//= require rails.validations
 //= require tokenahead
 //= require jquery.jcarousel.min
+
+
+
+//Disabled
+//= #require rails.validations

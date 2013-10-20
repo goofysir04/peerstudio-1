@@ -58,7 +58,7 @@ gem 'capistrano', group: :development
 
 
 gem "validates_email_format_of" # Validate email addresses
-gem "client_side_validations"
+# gem "client_side_validations"
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]

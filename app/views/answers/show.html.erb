@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Response:</strong>
+  <%= @answer.response %>
+</p>
+
+<p>
+  <strong>Question:</strong>
+  <%= @answer.question_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @answer.user_id %>
+</p>
+
+<p>
+  <strong>Predicted score:</strong>
+  <%= @answer.predicted_score %>
+</p>
+
+<p>
+  <strong>Current score:</strong>
+  <%= @answer.current_score %>
+</p>
+
+<p>
+  <strong>Evaluations wanted:</strong>
+  <%= @answer.evaluations_wanted %>
+</p>
+
+<p>
+  <strong>Total evaluations:</strong>
+  <%= @answer.total_evaluations %>
+</p>
+
+<p>
+  <strong>Confidence:</strong>
+  <%= @answer.confidence %>
+</p>
+
+<%= link_to 'Edit', edit_answer_path(@answer) %> |
+<%= link_to 'Back', answers_path %>
