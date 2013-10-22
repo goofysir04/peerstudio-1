@@ -1,4 +1,5 @@
 Humanmachine::Application.routes.draw do
+  devise_for :users
   get "grading/identify/:id" => "grading#identify"
   get "grading/verify/:id" => "grading#verify"
   post "grading/identify" => 'grading#create_assessment', as: :create_grade_identification
@@ -8,7 +9,7 @@ Humanmachine::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'grading#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
