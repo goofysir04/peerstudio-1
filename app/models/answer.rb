@@ -19,14 +19,16 @@ class Answer < ActiveRecord::Base
 			    :total_evaluations => row["total_evaluations"],
 			    :confidence => row["confidence"])
 		answer.save!
-
-
   	end
-  	print  "Nothing seen yet?"
   end
 
   def self.open_spreadsheet(file)
 	raise "Unknown file type" if File.extname(file.original_filename) != ".csv"
 	return CSV.open(file.path, {:headers => :first_row})
+  end
+
+
+  def self.get_next_identify_for_user_and_question(user_id, question)
+    return self.where("user_id <> ? AND question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1", user_id, question).order("(evaluations_wanted - total_evaluations) DESC").first()
   end
 end

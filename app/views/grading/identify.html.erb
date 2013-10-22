@@ -1,0 +1,16 @@
+<h2>Step 1: Identify</h2>
+<p><strong>Question:</strong> <%= @question.title %></p>
+<p><strong>Answer guide:</strong> <%= @question.explanation %></p>
+<%= form_for @evaluation, :url=>create_grade_identification_path do |f| %>
+<p><strong>Student answer:</strong> <%= @answer.response%></p>
+<p>Does this student answer have any of the following common attributes of an <strong>incorrect</strong> answer?</p>
+<%= f.collection_check_boxes :attribute, @incorrect_attributes, :id, :description %>
+<p>Does this student answer have any of the following common attributes of an <strong>correct</strong> answer?</p>
+<%= f.collection_check_boxes :attribute, @correct_attributes, :id, :description %>
+
+<!-- Other required attributes -->
+<%= f.hidden_field :question_id %>
+<%= f.hidden_field :answer_id %>
+
+<%= submit_tag %>
+<% end %>

@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131017144105) do
+ActiveRecord::Schema.define(version: 20131022020147) do
+
+  create_table "answer_attributes", force: true do |t|
+    t.boolean  "is_correct"
+    t.float    "score"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "description"
+  end
+
+  add_index "answer_attributes", ["question_id"], name: "index_answer_attributes_on_question_id"
 
   create_table "answers", force: true do |t|
     t.text     "response"
@@ -24,35 +35,40 @@ ActiveRecord::Schema.define(version: 20131017144105) do
     t.float    "confidence"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "state",              default: "identify"
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id"
   add_index "answers", ["user_id"], name: "index_answers_on_user_id"
 
-  create_table "attributes", force: true do |t|
-    t.boolean  "is_correct"
-    t.float    "score"
+  create_table "assessments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "answer_id"
+    t.text     "comments"
     t.integer  "question_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "attributes", ["question_id"], name: "index_attributes_on_question_id"
+  add_index "assessments", ["answer_id"], name: "index_assessments_on_answer_id"
+  add_index "assessments", ["question_id"], name: "index_assessments_on_question_id"
+  add_index "assessments", ["user_id"], name: "index_assessments_on_user_id"
 
   create_table "evaluations", force: true do |t|
     t.integer  "question_id"
     t.integer  "answer_id"
-    t.text     "reason"
-    t.integer  "attribute_id"
+    t.integer  "answer_attribute_id"
     t.integer  "verified_true_count",  default: 0
     t.integer  "verified_false_count", default: 0
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "assessment_id"
   end
 
+  add_index "evaluations", ["answer_attribute_id"], name: "index_evaluations_on_answer_attribute_id"
   add_index "evaluations", ["answer_id"], name: "index_evaluations_on_answer_id"
-  add_index "evaluations", ["attribute_id"], name: "index_evaluations_on_attribute_id"
+  add_index "evaluations", ["assessment_id"], name: "index_evaluations_on_assessment_id"
   add_index "evaluations", ["question_id"], name: "index_evaluations_on_question_id"
   add_index "evaluations", ["user_id"], name: "index_evaluations_on_user_id"
 

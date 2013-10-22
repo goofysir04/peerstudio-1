@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Is correct:</strong>
+  <%= @attribute.is_correct %>
+</p>
+
+<p>
+  <strong>Score:</strong>
+  <%= @attribute.score %>
+</p>
+
+<p>
+  <strong>Question:</strong>
+  <%= @attribute.question_id %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @attribute.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @attribute.updated_at %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @attribute.description %>
+</p>
+
+<%= link_to 'Edit', edit_question_attribute_path(@question,@attribute) %> |
+<%= link_to 'Back', question_path %>

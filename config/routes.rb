@@ -1,7 +1,7 @@
 Humanmachine::Application.routes.draw do
-  get "grading/identify_correct"
-  get "grading/identify_incorrect"
-  get "grading/verify"
+  get "grading/identify/:id" => "grading#identify"
+  get "grading/verify/:id" => "grading#verify"
+  post "grading/identify" => 'grading#create_assessment', as: :create_grade_identification
   resources :questions
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -25,7 +25,9 @@ Humanmachine::Application.routes.draw do
       post 'upload'
     end
   end
-
+  resources :questions do
+    resources :answer_attributes
+  end
 
   # Example resource route with options:
   #   resources :products do
