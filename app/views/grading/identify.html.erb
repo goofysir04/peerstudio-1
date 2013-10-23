@@ -1,16 +1,23 @@
-<h2>Step 1: Identify</h2>
-<p><strong>Question:</strong> <%= @question.title %></p>
+<h2>Step 1: Identify (<%= @completed_assessments + 1%> of 4 evaluations) </h2>
+<p class="lead"><strong>Question:</strong> <%= @question.title %></p>
 <p><strong>Answer guide:</strong> <%= @question.explanation %></p>
 <%= form_for @evaluation, :url=>create_grade_identification_path do |f| %>
-<p><strong>Student answer:</strong> <%= @answer.response%></p>
-<p>Does this student answer have any of the following common attributes of an <strong>incorrect</strong> answer?</p>
-<%= f.collection_check_boxes :attribute, @incorrect_attributes, :id, :description %>
-<p>Does this student answer have any of the following common attributes of an <strong>correct</strong> answer?</p>
-<%= f.collection_check_boxes :attribute, @correct_attributes, :id, :description %>
+<div class="well"><p><strong>Student answer:</strong> <%= @answer.response%></p></div>
+
+<p class="lead">Does this student answer have any of the following common attributes of an <strong>incorrect</strong> answer?</p>
+<%= f.collection_check_boxes :answer_attribute, @incorrect_attributes, :id, :description  do |b|
+	b.label {b.check_box + " " + b.text}
+end %>
+<p class="lead">Does this student answer have any of the following common attributes of an <strong>correct</strong> answer?</p>
+<%= f.collection_check_boxes :answer_attribute, @correct_attributes, :id, :description do |b|
+	b.label {b.check_box + " " + b.text}
+end
+ %>
 
 <!-- Other required attributes -->
 <%= f.hidden_field :question_id %>
 <%= f.hidden_field :answer_id %>
+<%= text_area_tag :comments, nil, {:placeholder => "Optionally add a comment to explain your assessment to the student.", :style=> "width: 500px;"} %> <div class="clearfix"></div>
 
-<%= submit_tag %>
+<%= submit_tag "Continue to next evaluation", :class=>"btn btn-primary"%>
 <% end %>

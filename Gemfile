@@ -34,7 +34,7 @@ end
 
 #templates
 gem "therubyracer"
-gem "less-rails"
+gem "less-rails", '2.3.3'
 gem "twitter-bootstrap-rails"
 
 # User Authentication and Authorization

@@ -1,29 +1,49 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<h2>Edit Account</h2>
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
 
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email, :autofocus => true %></div>
+  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+    <%= devise_error_messages! %>
+    <div class="controls">
+      <div class="span3"  style="margin-left:0px;">
+            <legend>Login Information</legend>
+          <span style="font-weight:300; font-size:12pt; font-style:italic;">Edit your information</span></br></br></br>
+          <div class="form_field"><%= f.text_field :name, :placeholder => "Your name", :autofocus => true %></div>
+          <div class="form_field"><%= f.email_field :email, :autofocus => true, :placeholder => "Your Email" %></div>
+          <div class="form_field"><%= f.select :gender, ['', 'Male', 'Female', 'Other'], {:include_blank => true}, {'data-placeholder' => 'Gender'} %></div>
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+          <% end %>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+          <br/><span style="font-weight:300; font-size:12pt; font-style:italic;">If you would like to change your password, please fill out the following information. Otherwise, leave the fields blank.</span><br/><br/>
+          <div class="form_field"><%= f.password_field :current_password, :placeholder => "Current password" %></div>
+          <div class="form_field"><%= f.password_field :password, :autocomplete => "off", :placeholder => "New password" %></div>
+          <div class="form_field"><%= f.password_field :password_confirmation, :placeholder => "New password confirmation" %></div>
+      </div>
+      
+      <div class="clearfix"></div>
+      
+      <div class="span6"  style="margin-left:0px; padding-top:20px; padding-bottom: 20px;">
+        <legend>Configure Time Zone</legend>
+          <%= time_zone_select( :user, :time_zone, nil, :default => "Pacific Time (US & Canada)") %>
+        <br/>
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="form-actions">
+      <%= f.submit "Update Settings", :class => 'btn-large btn-primary' %>&nbsp; or <%= link_to "Go Back", :back %>
+      <div style="float:right;">
+        <strong>Unhappy?&nbsp;&nbsp;</strong><%= link_to "Delete my account", registration_path(resource_name), confirm: "Are you sure? Your account data will be permanently lost!", data: { "confirm-title" => "Delete my account", "confirm-cancel" => "Cancel", "confirm-proceed" => "Yes, delete my account" }, :method => :delete %>
+      </div>
+    </div>
+
+    <script>
+    $().ready(function() {
+      $("#user_time_zone").chosen();
+      $("#user_gender").chosen({disable_search_threshold: 10, allow_single_deselect: true});
+    });
+    </script>
+    
   <% end %>
 
-  <div><%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-  <%= f.password_field :password, :autocomplete => "off" %></div>
-
-  <div><%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation %></div>
-
-  <div><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-  <%= f.password_field :current_password %></div>
-
-  <div><%= f.submit "Update" %></div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), :data => { :confirm => "Are you sure?" }, :method => :delete %></p>
-
-<%= link_to "Back", :back %>

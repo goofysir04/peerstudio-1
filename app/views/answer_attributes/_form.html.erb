@@ -1,4 +1,4 @@
-<% submit_url ||=  question_attribute_path %>
+<% submit_url ||=  question_answer_attribute_path %>
 <%= form_for [@question,@attribute], :url=>submit_url do |f| %>
   <% if @attribute.errors.any? %>
     <div id="error_explanation">

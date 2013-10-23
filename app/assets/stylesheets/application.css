@@ -10,4 +10,8 @@
  *
  *= require_self
  *= require_tree .
+ *= require chosen
+ *= require datepicker
+ *= require pagination
+ *= require tokenahead
  */

@@ -1,0 +1,20 @@
+
+    <%= f.hidden_field :coursera_id, :value=>session[:coursera_id]%>
+    <p> Select a timezone so we can show you times in your local time.</p>
+    <%= time_zone_select( :user, :time_zone, nil, :default => "Pacific Time (US & Canada)") %>
+
+    <br/>
+  
+  <script>
+  $().ready(function() {
+    $("#user_time_zone").chosen();
+    $("#user_gender").chosen({disable_search_threshold: 10, allow_single_deselect: true});
+  });
+  $('[data-toggle=tooltip]').tooltip();
+  </script>
+
+  <div class="clearfix"></div>
+  <div class="span6" style="margin-top:40px; margin-left:0px;">
+    <p><b>diode</b> is part of a research project at Stanford University. Your use of the system will help this research. When you sign up, you consent to the following terms.</p>
+    <%= render :partial => 'consent_form' %>
+  </div>

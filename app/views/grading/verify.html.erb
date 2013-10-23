@@ -1,2 +1,42 @@
-<h1>Grading#verify</h1>
-<p>Find me in app/views/grading/verify.html.erb</p>
+<% if @total_verification_count == 0 %>
+<!-- Show guide for first time use -->
+<div class="hero-unit" id="firstTimeHelp" style="display:none;">
+	<h2>Step 2: Verification</h2>
+<p>This is the second step of the grading process. Here, you'll see some answers, and their evaluations, as marked by your classmates. Please tell us if the evaluation is correct.</p>
+
+<p>Remember, the question is: <%= @question.title%></p>
+<div style="text-align:center">
+<button href="#" id="hideNotice" class="btn btn-primary btn-large">Ok, I'm ready</button>
+</div>
+</div>
+<% end %>
+
+<div style="display: block;" id="gradingUI">
+
+<!-- First, group all of the evaluations by the answer_attribute, show them all together -->
+<p class="well">Question: <%= @question.title%> </p>
+
+<%= form_tag create_grade_verification_path do %>
+<table class="table table-hover"><thead><tr><th>Student answer</th><th>Is the answer marked correctly?</th></tr></thead>
+	<tbody>
+		<% @evaluations_grouped_by_attribute = @evaluations.group_by(&:answer_attribute_id) %>
+		<% @evaluations_grouped_by_attribute.each do |answer_attribute_id, evaluations| %>
+			<tr class="info"><td colspan="1">These were marked as: <strong><%= AnswerAttribute.find(answer_attribute_id).description %></strong></td><td>Marked correctly?</td></tr>
+			<% evaluations.each do |evaluation| %>
+				<tr><td><%= evaluation.answer.response %></td><td><%= radio_button_tag "verification[#{evaluation.answer.id}]answer_attribute[#{answer_attribute_id}]", "correct" %> <%= label_tag "verification[#{evaluation.answer.id}]answer_attribute[#{answer_attribute_id}]_correct", "Yes" %> <%= radio_button_tag "verification[#{evaluation.answer.id}]answer_attribute[#{answer_attribute_id}]", "wrong" %> <%= label_tag "verification[#{evaluation.answer.id}]answer_attribute[#{answer_attribute_id}]_wrong", "No" %>
+				</td></tr>
+			<% end %>
+		<%end%>
+	</tbody>
+</table>
+<%= submit_tag "Submit", :class=>"btn btn-primary" %>
+<% end %>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	$('#hideNotice').click(function() {
+		$('#firstTimeHelp').hide();
+		$('#gradingUI').show();
+	});
+});</script>

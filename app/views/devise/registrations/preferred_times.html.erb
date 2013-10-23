@@ -1,0 +1,24 @@
+  <%= form_for(resource, :as => resource_name, :url => 
+  update_preferred_times_registration_path, :html => { :method => :put }) do |f| %>
+
+	<%= f.hidden_field :monday_availability %>
+    <%= f.hidden_field :tuesday_availability %>
+    <%= f.hidden_field :wednesday_availability %>
+    <%= f.hidden_field :thursday_availability %>
+    <%= f.hidden_field :friday_availability %>
+    <%= f.hidden_field :saturday_availability %>
+    <%= f.hidden_field :sunday_availability %>
+
+    <%= hidden_field_tag 'back_to', @back_to %>
+
+<div class="span8">
+    <h2>Thanks for signing up for a <%= event_term %>!</h2>
+    <p class="lead">Just one more quick thing...Please select a couple of additional times that you are typically available during the week. We will use this information in case something happens to your assigned timeslot, and to determine when to schedule timeslots in the future. Note the following times are in Pacific Standard Time (PST).</p>
+    <legend>Preferred Times</legend>
+    
+    <%= render :partial => 'registration_form' %>
+
+</div>
+<div class="clearfix"></div>
+<%= f.submit "Continue", :class => 'btn-large btn-primary', :style=>"margin-left:30px;" %> 
+<% end %>

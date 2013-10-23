@@ -1,1 +1,30 @@
-TODO
+<h2>How to assess</h2>
+<p></p>
+
+<% @questions.each do |q| %>
+<table class="table table-hover">
+<thead><tr><th>Question</th><th>Status</th><th>Actions</th></tr> </thead>
+<tbody>
+<tr>
+<td><%= q.title %></td>
+<td>You need to assess <%= (4- @completed_identifications_by_question[q.id])>0 ? (4- @completed_identifications_by_question[q.id]) : 0 %> classmates, and verify <%= (8- @completed_verifications_by_question[q.id])>0 ? (8- @completed_verifications_by_question[q.id]) : 0 %>  assessments</td>
+<td>
+<% if @completed_identifications_by_question[q.id] < 4 %>
+<%= link_to "Grade now", grade_identification_path(q.id) %> 
+<% elsif @completed_verifications_by_question[q.id] < 8 %>
+<%= link_to "Verify assessments", grade_verification_path(q.id) %> 	 
+<% else %>
+<%= link_to "Grade more submissions", grade_identification_path(q.id) %> | <%= link_to "Verify more assessments", grade_verification_path(q.id) %> 	 
+ <% end -%>
+
+</td>
+</tr>
+
+</tbody>
+
+</table>
+<% end %>
+
+
+
+<%= link_to "Question 1", grade_identification_path(1) %>

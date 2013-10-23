@@ -1,0 +1,46 @@
+<table class="table table-bordered pref_time_table" style="table-layout:fixed; min-width:770px;">
+    <thead>
+      <tr>
+        <th width="100px;"></th>
+        <% Date::DAYNAMES.each do |a| %>
+          <th><%= a %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tr>
+      <td class="row_header" id="early_morning">
+        Early Morning
+        <span class="subtext">12 a.m. - 6 a.m.</span>
+      </td>
+      <% 7.times do |i| %>
+        <td class="time_block <%=Date::DAYNAMES[i].downcase%> early_morning" data-value="1"></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="row_header" id="morning">
+        Morning
+        <span class="subtext">6 a.m. - 12 p.m.</span>
+      </td>
+      <% 7.times do |i| %>
+        <td class="time_block <%=Date::DAYNAMES[i].downcase%> morning" data-value="2"></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="row_header" id="afternoon">
+        Afternoon
+        <span class="subtext">12 p.m. - 6 p.m.</span>
+      </td>
+      <% 7.times do |i| %>
+        <td class="time_block <%=Date::DAYNAMES[i].downcase%> afternoon" data-value="4"></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="row_header" id="evening">
+        Evening
+        <span class="subtext">6 p.m. - 12 a.m.</span>
+      </td>
+      <% 7.times do |i| %>
+        <td class="time_block <%=Date::DAYNAMES[i].downcase%> evening" data-value="8"></td>
+      <% end %>
+    </tr>
+  </table>

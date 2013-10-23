@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
-  <title><%= content_for?(:title) ? content_for(:title) : "Stanford | grade" %></title>
+  <title><%= content_for?(:title) ? content_for(:title) : "Stanford | talkabout" %></title>
   <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|PT+Sans:700' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
@@ -11,12 +11,23 @@
   <meta property="og:title" content="<%= content_for?(:title) ? content_for(:title) : "Stanford | talkabout" %>"/>
     <meta property="og:type" content="cause"/>
     <meta property="og:url" content="<%= "#{request.protocol}#{request.host_with_port}#{request.fullpath}" %>"/>
+    <meta property="og:image" content="<%= (@project && @project.photo.file?) ? "#{request.protocol}#{request.host_with_port}#{@project.photo.url}" : "#{request.protocol}#{request.host_with_port}/photos/original/missing.png" %>"/>
     <meta property="og:site_name" content="talkabout
     "/>
-    <meta property="og:description" content="<%= (@project && !@project.description.blank?) ? @project.description.truncate(100) : "Collaborative human and machine grading." %>" />
+    <meta property="og:description" content="<%= (@project && !@project.description.blank?) ? @project.description.truncate(100) : "Organizing people, simplified." %>" />
 </head>
 <body>
 <div id="fb-root"></div>
+
+<script>
+// (function(d, s, id) {
+//   var js, fjs = d.getElementsByTagName(s)[0];
+//   if (d.getElementById(id)) return;
+//   js = d.createElement(s); js.id = id;
+//   js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=<%= FB_APP_ID %>";
+//   fjs.parentNode.insertBefore(js, fjs);
+// }(document, 'script', 'facebook-jssdk'));</script>
+
 <div id="nav_top">
   <div class="container">
     <div class="navbar" style="margin-bottom: 0; border: 0;">
@@ -25,7 +36,7 @@
           <%= link_to @org.name, o_path(@org), :class => "brand", :style => "padding-left: 0;" %>
         <% else %>
           <%= link_to root_path, :class => "brand", :style => "padding-left: 0;" do %>
-            Stanford | <strong>diode</strong>
+            Stanford | <strong>talkabout</strong>
             <% if content_for?(:title) %>
               <small class="title_slug">&ndash; <%= content_for(:title) %></small>
             <% else %>
@@ -36,11 +47,14 @@
         <% if user_signed_in? %>
           <ul class="nav pull-right">
             <li class="dropdown">
-              <a class="dropdown-toggle" id="login_label" role="button" data-toggle="dropdown" data-target="#" href="<%= edit_user_registration_path %>">
+              <a class="dropdown-toggle" id="login_label" role="button" data-toggle="dropdown" data-target="#" href="<%= projects_path %>">
                 <%= current_user.name %>
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu" role="menu" aria-labelledby="login_label">
+                <% if can? :manage, Project %>
+                  <li><%= link_to "My Projects", u_projects_path %></li>
+                <% end %>
                 <li><%= link_to "Account Settings", edit_user_registration_path %></li>
                 <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
               </ul>
@@ -66,6 +80,11 @@
 <div style="border-top: 1px solid #efefef; margin-top: 15px;">
   <a href="http://cs.stanford.edu"><%= image_tag "stanfordcs.png", :style => 'height: 15%; width: 15%', :class => 'pull-right' %></a>
   <a href="http://hci.stanford.edu"><%= image_tag "stanfordhci.png", :style => 'height: 15%; width: 15%; border-right: 1px solid #efefef; padding-right: 5px;', :class => 'pull-right' %></a>
+  <div style="margin-top:5px">
+    <%= link_to help_path, {:style => 'text-decoration: none;'} do %>
+      <span style="font-size:11pt; font-weight: 700;"><i class="icon-question-sign"></i>&nbsp;&nbsp;Help</span>
+    <% end %>
+  </div>
   <% if Rails.env.development? || (user_signed_in? && current_user.admin?) %> 
     <p><span class="label">DEBUG</span> Parameters: <code> <%= params.inspect %> </code> Session: <code><%= session %></code> </p>
     <p><span class="label">OPENID</span> Return path <code><%= request.env['omniauth.origin']  || "None"%></code></p>

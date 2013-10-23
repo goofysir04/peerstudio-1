@@ -1,7 +1,14 @@
 Humanmachine::Application.routes.draw do
-  devise_for :users
-  get "grading/identify/:id" => "grading#identify"
-  get "grading/verify/:id" => "grading#verify"
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "registrations" }
+
+  devise_scope :user do 
+    get 'users/start' => 'registrations#start_openid', :as => :start_openid_registration
+    post 'users/complete' => 'registrations#complete_openid', :as => :complete_openid_registration
+  end
+
+  get "grading/identify/:id" => "grading#identify", as: :grade_identification
+  get "grading/verify/:id" => "grading#verify", as: :grade_verification
+  post "grading/verify" => "grading#create_verification", as: :create_grade_verification
   post "grading/identify" => 'grading#create_assessment', as: :create_grade_identification
   resources :questions
 
@@ -9,7 +16,7 @@ Humanmachine::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'grading#index'
+  
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -30,6 +37,7 @@ Humanmachine::Application.routes.draw do
     resources :answer_attributes
   end
 
+  root 'grading#index'
   # Example resource route with options:
   #   resources :products do
   #     member do
