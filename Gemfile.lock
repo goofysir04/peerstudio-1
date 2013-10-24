@@ -64,6 +64,7 @@ GEM
       warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (2.0.2)
+    google-analytics-rails (0.0.4)
     hashie (2.0.5)
     hike (1.2.3)
     i18n (0.6.5)
@@ -180,6 +181,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record
   devise
+  google-analytics-rails
   jbuilder (~> 1.2)
   jquery-rails
   less-rails (= 2.3.3)

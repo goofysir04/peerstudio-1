@@ -77,4 +77,6 @@ Humanmachine::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  GA.tracker = "UA-35198919-2"
 end

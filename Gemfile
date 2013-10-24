@@ -46,6 +46,7 @@ gem "cancan"
 
 gem "mysql2", group: :production
 gem "pg", group: :production #only heroku
+gem 'google-analytics-rails'
 
 
 # Use ActiveModel has_secure_password
