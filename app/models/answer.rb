@@ -1,4 +1,4 @@
-require 'CSV'
+require 'csv'
 
 class Answer < ActiveRecord::Base
   belongs_to :question
