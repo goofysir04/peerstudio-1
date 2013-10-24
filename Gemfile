@@ -56,9 +56,11 @@ gem 'google-analytics-rails'
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-gem 'capistrano', group: :development
-gem 'capistrano-bundler'
- gem 'capistrano-rvm'
+group :development do
+	gem 'capistrano-bundler'
+ 	gem 'capistrano-rvm'
+ 	gem 'capistrano-rails'
+end
 
 gem 'delayed_job_active_record'
 gem 'daemons'
