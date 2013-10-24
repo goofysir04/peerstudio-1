@@ -56,6 +56,8 @@ gem "mysql2", group: :production
 # Use Capistrano for deployment
 gem 'capistrano', group: :development
 
+gem 'delayed_job_active_record'
+gem 'daemons'
 
 gem "validates_email_format_of" # Validate email addresses
 # gem "client_side_validations"

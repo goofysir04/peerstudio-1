@@ -51,23 +51,37 @@ class GradingController < ApplicationController
     @total_verification_count = current_user.verifications.count
     @question = Question.find(params[:id])
     @evaluations = Verification.get_next_verification current_user, @question
-    @answer = @evaluations.first().answer
-
-    @verification = Verification.new
+    if @evaluations.empty? 
+      respond_to do |format|
+        format.html { redirect_to root_path, alert: "We have no assessments to verify (because your classmates haven't started grading yet!) Please check back in a couple hours."}
+      end
+    else
+      @answer = @evaluations.first().answer
+      @verification = Verification.new
+    end
   end
 
   def create_verification
-    
     saved_verifications = true
     incoming_verifications = params[:verification]
-    incoming_verifications.each do |answer_id, attributes| 
-      @answer = Answer.find(answer_id)
-      attributes[:answer_attribute].each do |answer_attribute_id, verification|
-        boolean_verification = verification == "correct"
-        saved_verifications &&= Verification.save_verification(current_user,@answer.question_id, answer_id, answer_attribute_id, boolean_verification)
+    if incoming_verifications.nil?
+      redirect_to grade_verification_path(params[:question_id]), alert: "We didn't get any response. Did you forget to select if answers were marked correctly?"
+    else
+      incoming_verifications.each do |answer_id, attributes| 
+        @answer = Answer.find(answer_id)
+        attributes[:answer_attribute].each do |answer_attribute_id, verification|
+          boolean_verification = verification == "correct"
+          saved_verifications &&= Verification.save_verification(current_user,@answer.question_id, answer_id, answer_attribute_id, boolean_verification)
+        end
+      end
+      respond_to do |format|
+        if saved_verifications
+          format.html { redirect_to root_path, notice: 'You successfully verified assessments.' }
+        else
+          format.html {redirect_to root_path, error: 'There was an error saving.'}
+        end
       end
     end
-    raise "Incomplete"
   end
 
   private
