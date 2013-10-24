@@ -45,6 +45,7 @@ gem "cancan"
 
 
 gem "mysql2", group: :production
+gem "pg", group: :production #only heroku
 
 
 # Use ActiveModel has_secure_password
