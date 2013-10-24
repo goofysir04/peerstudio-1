@@ -8,7 +8,7 @@ class Answer < ActiveRecord::Base
   
   def self.import(file)
   	spreadsheet = self.open_spreadsheet(file)
-  	self.insert_import_into_db(spreadsheet)
+  	self.delay.insert_import_into_db(spreadsheet)
   end
 
   def self.open_spreadsheet(file)
