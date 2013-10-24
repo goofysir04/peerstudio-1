@@ -1,5 +1,8 @@
-<h2>Step 1: Identify (<%= @completed_assessments + 1%> of 4 evaluations)<br/><h4>Note: Required assessments completed. You can now go to the <%= link_to "Verify assessments", grade_verification_path(@question.id) %> page. </span></h4></h2>
-
+<h2>Step 1: Identify (<%= @completed_assessments + 1%> of 4 evaluations)<br/>
+<% if @completed_assessments > 4 %>
+	<h4>Note: Required assessments completed. You can now go to the <%= link_to "Verify assessments", grade_verification_path(@question.id) %> page. </span></h4>
+<% end %>
+</h2>
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>
 <p><strong>Answer guide:</strong> <%= @question.explanation %></p>
 <%= form_for @evaluation, :url=>create_grade_identification_path do |f| %>

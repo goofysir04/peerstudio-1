@@ -7,11 +7,14 @@
 <tbody>
 <tr>
 <td><%= q.title %></td>
-<td>You need to assess <%= (4- @completed_identifications_by_question[q.id])>0 ? (4- @completed_identifications_by_question[q.id]) : 0 %> classmates, and verify <%= (8- @completed_verifications_by_question[q.id])>0 ? (8- @completed_verifications_by_question[q.id]) : 0 %>  assessments</td>
+<% finished_evaluations = @completed_identifications_by_question[q.id].nil? ? 0 : @completed_identifications_by_question[q.id] 
+	finished_verifications = @completed_verifications_by_question[q.id].nil? ? 0: @completed_verifications_by_question[q.id]
+%>
+<td>You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates, and verify <%= (8- finished_verifications)>0 ? (8- finished_verifications) : 0 %>  assessments</td>
 <td>
-<% if @completed_identifications_by_question[q.id] < 4 %>
+<% if finished_evaluations < 4 %>
 <%= link_to "Grade now", grade_identification_path(q.id) %> 
-<% elsif @completed_verifications_by_question[q.id] < 8 %>
+<% elsif finished_verifications < 8 %>
 <%= link_to "Verify assessments", grade_verification_path(q.id) %> 	 
 <% else %>
 <%= link_to "Grade more submissions", grade_identification_path(q.id) %> | <%= link_to "Verify more assessments", grade_verification_path(q.id) %> 	 
