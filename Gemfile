@@ -45,7 +45,7 @@ gem "cancan"
 
 
 gem "mysql2", group: :production
-gem "pg", group: :production #only heroku
+# gem "pg", group: :production #only heroku
 gem 'google-analytics-rails'
 
 
@@ -57,6 +57,8 @@ gem 'google-analytics-rails'
 
 # Use Capistrano for deployment
 gem 'capistrano', group: :development
+gem 'capistrano-bundler'
+ gem 'capistrano-rvm'
 
 gem 'delayed_job_active_record'
 gem 'daemons'

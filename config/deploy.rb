@@ -24,20 +24,20 @@ set :ssh_options, { :forward_agent => true }
 
 
 
-desc "Run on ec2: Server in us-west-2b (Oregon)"
-task :grader do
-  set :rvm_ruby_string, 'ruby-1.9.3'
-  require "rvm/capistrano"
-  server "ubuntu@54.203.252.80", :web, :app, :db, :primary => true
-end
+# desc "Run on ec2: Server in us-west-2b (Oregon)"
+# task :grader do
+#   set :rvm_ruby_string, 'ruby-1.9.3'
+#   require "rvm/capistrano"
+#   server "ubuntu@54.203.252.80", :web, :app, :db, :primary => true
+# end
 
-desc "Run on ANOTHERSERVER"
-task :clr3 do
-  set :rvm_ruby_string, 'ruby-1.9.3'
-  set :rvm_type, :system
-  require "rvm/capistrano"
-  server "root@ANOTHERSERVER", :web, :app, :db, :primary => true
-end
+# desc "Run on ANOTHERSERVER"
+# task :clr3 do
+#   set :rvm_ruby_string, 'ruby-1.9.3'
+#   set :rvm_type, :system
+#   require "rvm/capistrano"
+#   server "root@ANOTHERSERVER", :web, :app, :db, :primary => true
+# end
 
 set :deploy_to, applicationdir
 set :deploy_via, :export
