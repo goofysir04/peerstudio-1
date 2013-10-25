@@ -17,7 +17,7 @@
     </div>
     <div id="collapseBaseline" class="panel-collapse collapse in">
       <div class="panel-body">
-        <%= @question.baseline_explanation %>
+        <%= @question.baseline_explanation.html_safe %>
 
         <%= f.number_field :score %> (max: <%=@question.max_score %>, min: <%= @question.min_score %>)
         <%= f.hidden_field :answer_id %>
