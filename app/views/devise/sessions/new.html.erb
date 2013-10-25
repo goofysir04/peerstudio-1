@@ -4,13 +4,15 @@
   <div class="span6">
     <h3>Sign in</h3>
     <p>To use the peer assessment website, you need to login with your Coursera login. Click the blue button to begin. When you click "Login with Coursera", we'll redirect you to Coursera's website, where you may need to re-enter your Coursera password</p>
-  </div>
 
-  <div class="span6">
     <%= link_to omniauth_authorize_path(resource,"coursera"), :class=> "btn btn-large btn-primary", :id=>"login_button" do %>
     Log in with <%= image_tag "coursera_white.svg" %> <br/>
     <div id="progress" style="display:none;"><small>(Logging in...)</small></div>
   <% end %>
+  </div>
+
+  <div class="span6">
+    
   </div>
 
 </div>
