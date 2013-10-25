@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
-
+  before_filter :authenticate_user_is_admin!
   # GET /questions
   # GET /questions.json
   def index
@@ -72,6 +72,6 @@ class QuestionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
       params.require(:question).permit(:title, :explanation,:baseline_explanation)
-      
+
     end
 end
