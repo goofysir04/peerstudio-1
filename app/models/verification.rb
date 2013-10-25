@@ -10,10 +10,11 @@ class Verification < ActiveRecord::Base
   	order('(verified_true_count+verified_false_count) ASC').limit(8)
   end
 
-  def self.save_verification(user, question_id, answer_id, answer_attribute_id, verifiedTrue)
+  def self.save_verification(user, question_id, answer_id, answer_attribute_id, verifiedTrue, started_at)
   	#Two things need to happen. 
     #First, save the verification
     v = new(user_id: user.id, question_id: question_id, answer_id: answer_id, answer_attribute_id: answer_attribute_id, verified: verifiedTrue)
+    v.started_at = started_at
     return false unless v.save
   	#Second, change the evaluation. If the evaluation has enough positive verifications, 
   	#move it to the completed pool. If enough negative verifications, move answer identification pool.

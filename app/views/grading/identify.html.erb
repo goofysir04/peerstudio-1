@@ -55,6 +55,7 @@
 <!-- Other required attributes -->
 <%= f.hidden_field :question_id %>
 <%= f.hidden_field :answer_id %>
+<%= hidden_field_tag :start_assessment_time, Time.now %>
 
 
 <%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%>

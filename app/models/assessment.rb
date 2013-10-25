@@ -13,7 +13,7 @@ class Assessment < ActiveRecord::Base
   			#If this evaluation already exists, this is as good as creating a positive verification, 
   			#so let's do that instead of creating a new evaluation object
 
-  			return Verification.save_verification(user, question_id, answer_id, a, true)
+  			return Verification.save_verification(user, question_id, answer_id, a, true, nil)
   			
 		else
 			evaluation = Evaluation.new(question_id: question_id, answer_id: answer_id)

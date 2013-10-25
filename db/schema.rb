@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131024161904) do
+ActiveRecord::Schema.define(version: 20131025085845) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20131024161904) do
     t.integer  "question_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "started_at"
   end
 
   add_index "assessments", ["answer_id"], name: "index_assessments_on_answer_id"
@@ -129,6 +130,7 @@ ActiveRecord::Schema.define(version: 20131024161904) do
     t.integer  "question_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "started_at"
   end
 
   add_index "verifications", ["answer_attribute_id"], name: "index_verifications_on_answer_attribute_id"

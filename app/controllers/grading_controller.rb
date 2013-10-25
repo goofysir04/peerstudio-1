@@ -1,3 +1,5 @@
+require 'time'
+
 class GradingController < ApplicationController
 	before_action :assessment_attributes, only: [:create_assessment]
   before_filter :authenticate_user!
@@ -29,6 +31,7 @@ class GradingController < ApplicationController
   	@assessment = Assessment.find_or_initialize_by(user_id: current_user.id, question_id:params[:evaluation][:question_id],
       answer_id: params[:evaluation][:answer_id])
     @assessment.comments = params[:comments]
+    @assessment.started_at = params[:start_assessment_time]
     @attributes = params[:evaluation][:answer_attribute]
     if @assessment.persisted?
       flash[:alert] = "You've already submitted your assessment for that question"
@@ -64,6 +67,7 @@ class GradingController < ApplicationController
   def create_verification
     saved_verifications = true
     incoming_verifications = params[:verification]
+    @start_time = params[:start_verification_time]
     if incoming_verifications.nil?
       redirect_to grade_verification_path(params[:question_id]), alert: "We didn't get any response. Did you forget to select if answers were marked correctly?"
     else
@@ -71,7 +75,7 @@ class GradingController < ApplicationController
         @answer = Answer.find(answer_id)
         attributes[:answer_attribute].each do |answer_attribute_id, verification|
           boolean_verification = verification == "correct"
-          saved_verifications &&= Verification.save_verification(current_user,@answer.question_id, answer_id, answer_attribute_id, boolean_verification)
+          saved_verifications &&= Verification.save_verification(current_user,@answer.question_id, answer_id, answer_attribute_id, boolean_verification, @start_time)
         end
       end
       respond_to do |format|
