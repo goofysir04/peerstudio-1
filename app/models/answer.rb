@@ -22,7 +22,7 @@ class Answer < ActiveRecord::Base
         if owning_user.nil?
         #this is a dummy password
           owning_user = User.new :password => Devise.friendly_token[0,20], :email=> row["email"]
-          owning_user.save!
+          owning_user.save
         end
         answer = Answer.where(:question_id => row["question_id"], :user_id => owning_user.id).first()
         if answer.nil? 
