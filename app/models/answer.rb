@@ -7,7 +7,7 @@ class Answer < ActiveRecord::Base
   has_many :assessments
   
   def self.get_next_identify_for_user_and_question(user, question)
-    return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND answers.id NOT in (SELECT answer_id from `assessments` where assessments.user_id=?)", user.id, question, user.id)
+    return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
     .order("(evaluations_wanted - total_evaluations) DESC").first()
   end
 
