@@ -7,9 +7,13 @@ Humanmachine::Application.routes.draw do
   end
 
   get "grading/identify/:id" => "grading#identify", as: :grade_identification
+  post "grading/identify" => 'grading#create_assessment', as: :create_grade_identification
+  
   get "grading/verify/:id" => "grading#verify", as: :grade_verification
   post "grading/verify" => "grading#create_verification", as: :create_grade_verification
-  post "grading/identify" => 'grading#create_assessment', as: :create_grade_identification
+  
+  get "grading/evaluate/:id" => "grading#baseline_evaluate", as: :grade_baseline
+  post "grading/evaluate" => 'grading#create_baseline_assessment', as: :create_grade_baseline
   resources :questions
 
   # The priority is based upon order of creation: first created -> highest priority.

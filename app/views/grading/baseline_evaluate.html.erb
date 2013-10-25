@@ -1,0 +1,44 @@
+<h2>Step 1: Assess (<%= @completed_assessments + 1%> of 4 evaluations)<br/>
+</h2>
+<p class="lead"><strong>Question:</strong> <%= @question.title %></p>
+<p><strong>Answer guide:</strong> <%= @question.explanation %></p>
+<%= form_for @evaluation, :url=>create_grade_baseline_path, html: {:id=>"baseline_form"} do |f| %>
+<div class="well"><p class="lead"><strong>Student answer:</strong> <%= @answer.response.force_encoding("UTF-8")%></p></div>
+
+
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseCorrect">
+          Evaluation
+        </a>
+      </h4>
+    </div>
+    <div id="collapseBaseline" class="panel-collapse collapse in">
+      <div class="panel-body">
+        <%= @question.baseline_explanation %>
+
+        <%= f.number_field :score %> (max: <%=@question.max_score %>, min: <%= @question.min_score %>)
+        <%= f.hidden_field :answer_id %>
+        <%= f.hidden_field :question_id %>
+
+		<p><strong> Comments for your classmate? </strong></p>
+		<%= text_area_tag :comments, nil, {:placeholder => "Optionally add a comment to explain your assessment to the student.", :style=> "width: 500px;"} %> <div class="clearfix"></div>
+
+
+      <br/>
+      <div class="clearfix"></div>
+      <%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%> 
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Other required attributes -->
+<%= f.hidden_field :question_id %>
+<%= f.hidden_field :answer_id %>
+<%= hidden_field_tag :start_assessment_time, Time.now %>
+
+<% end %>

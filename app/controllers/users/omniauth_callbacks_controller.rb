@@ -19,8 +19,18 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     
     @user = User.find_by_email(request.env["omniauth.auth"]["info"]["email"]) || current_user
     if !@user.nil?
-      flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Coursera"
-      sign_in_and_redirect @user, :event => :authentication #this will throw if @user is not activated
+      if @user.sign_in_count == 0
+        session["devise.openid_data"] = request.env["omniauth.auth"]["info"].merge(
+          {:provider=> request.env["omniauth.auth"]["provider"],
+           :uid => request.env["omniauth.auth"]["uid"]})
+        @user.provider = session["devise.openid_data"]["provider"]
+        @user.uid = session["devise.openid_data"]["uid"]
+        @user.save
+        redirect_to start_openid_registration_url
+      else
+        flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Coursera"
+        sign_in_and_redirect @user, :event => :authentication #this will throw if @user is not activated
+      end
     else
       session["devise.openid_data"] = request.env["omniauth.auth"]["info"].merge(
         {:provider=> request.env["omniauth.auth"]["provider"],

@@ -8,4 +8,14 @@ class User < ActiveRecord::Base
 
 	has_many :assessments
 	has_many :verifications
+
+	def experimental_condition
+		if id%5 == 0
+			return "baseline"
+		elsif id%2 == 0
+			return "verify"
+		else
+			return "identify"
+		end	
+ 	end 
 end

@@ -14,3 +14,10 @@ $(document).ready () ->
 		$("#collapseCorrect").collapse("show")
 		event.preventDefault()
 		return false
+	$("#grading_form").submit (event) ->
+		unless $(".incorrect-check,.correct-check").is(":checked")
+			$("#collapseIncorrect").collapse("show")
+			$("#collapseCorrect").collapse("hide")
+			event.preventDefault()
+			alert("Choose at least one correct or incorrect attribute (try 'Other' if none match)")
+			return false

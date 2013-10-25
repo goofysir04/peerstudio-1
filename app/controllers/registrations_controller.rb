@@ -31,18 +31,21 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def complete_openid
-    @user = User.new user_params().merge({
-      :name=>session["devise.openid_data"]["name"],
-      :email=>session["devise.openid_data"]["email"],
-      :password => Devise.friendly_token[0,20], #this is a dummy password
-      :provider => session["devise.openid_data"]["provider"],
-      :uid => session["devise.openid_data"]["uid"]
-      }
-    )
-    if @user.save
+    @user = User.find_by_email(session["devise.openid_data"]["email"])
+    if @user.nil?
+      @user = User.new user_params().merge({
+        :name=>session["devise.openid_data"]["name"],
+        :email=>session["devise.openid_data"]["email"],
+        :password => Devise.friendly_token[0,20], #this is a dummy password
+        :provider => session["devise.openid_data"]["provider"],
+        :uid => session["devise.openid_data"]["uid"]
+        }
+      )
+    end
+    if @user.save #if user is saved or unchanged
       sign_in_and_redirect @user, :event => :authentication
     else
-      flash[:alert] = "There was a problem signing in. Please contact us, and mention your claimed id as #{session["devise.openid_data"]["claimed_id"]}"
+      flash[:alert] = "There was a problem signing in. Please contact us, and mention your claimed id as #{session["devise.openid_data"]["id"]}"
       redirect_to start_openid_registration_path
     end
   end

@@ -1,11 +1,11 @@
-<h2>Step 1: Identify (<%= @completed_assessments + 1%> of 4 evaluations)<br/>
-<% if @completed_assessments > 4 %>
+<h2>Step 1: Assess (<%= @completed_assessments + 1%> of 4 evaluations)<br/>
+<% if @completed_assessments > 4 and current_user.experimental_condition == "verify"%>
 	<h4>Note: Required assessments completed. You can now go to the <%= link_to "Verify assessments", grade_verification_path(@question.id) %> page. </span></h4>
 <% end %>
 </h2>
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>
 <p><strong>Answer guide:</strong> <%= @question.explanation %></p>
-<%= form_for @evaluation, :url=>create_grade_identification_path do |f| %>
+<%= form_for @evaluation, :url=>create_grade_identification_path, html: {:id=>"grading_form"} do |f| %>
 <div class="well"><p class="lead"><strong>Student answer:</strong> <%= @answer.response%></p></div>
 
 
@@ -46,6 +46,10 @@
 		<p><strong> Comments for your classmate? </strong></p>
 		<%= text_area_tag :comments, nil, {:placeholder => "Optionally add a comment to explain your assessment to the student.", :style=> "width: 500px;"} %> <div class="clearfix"></div>
 
+
+      <br/>
+      <div class="clearfix"></div>
+      <%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%> 
       </div>
     </div>
   </div>
@@ -57,6 +61,4 @@
 <%= f.hidden_field :answer_id %>
 <%= hidden_field_tag :start_assessment_time, Time.now %>
 
-
-<%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%>
 <% end %>

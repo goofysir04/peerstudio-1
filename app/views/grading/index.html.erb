@@ -1,4 +1,18 @@
 
+<h2>How to grade</h2>
+<% if current_user.experimental_condition == "verify" %>
+<p>Evaluation consists of two steps. In the first, <strong>assessment</strong> step, you'll grade four of your classmates (per question). In the next <strong>verification</strong> step, you'll then look at eight assessments, as graded by your classmates, and verify that they are correct. </p>
+
+<p>Your answers will go through a similar two step evaluation process. When this evaluation completes, you'll be able to see your grades on this page, and on the Coursera class site</p>
+<% elsif current_user.experimental_condition == "identify" %>
+<p>You'll grade four of your classmates (per question). For each question, we provide you a set of common correct and wrong answers to help you assess.</p>
+
+<p>Your answers will go through a similar evaluation process. When this evaluation completes, you'll be able to see your grades on this page, and on the Coursera class site</p>
+<% else %>
+<p>You'll grade four of your classmates (per question). For each question, we provide you a set of common correct and wrong answers to help you assess.</p>
+
+<p>Your answers will go through a similar evaluation process. When this evaluation completes, you'll be able to see your grades on this page, and on the Coursera class site</p>
+<% end -%>
 <div class="divider">Your assessments</div>
 
 <% @questions.each do |q| %>
@@ -10,16 +24,38 @@
 <% finished_evaluations = @completed_identifications_by_question[q.id].nil? ? 0 : @completed_identifications_by_question[q.id] 
 	finished_verifications = @completed_verifications_by_question[q.id].nil? ? 0: @completed_verifications_by_question[q.id]
 %>
+<% if current_user.experimental_condition == "verify" %>
 <td>You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates, and verify <%= (8- finished_verifications)>0 ? (8- finished_verifications) : 0 %>  assessments</td>
-<td>
-<% if finished_evaluations < 4 %>
-<%= link_to "Grade now", grade_identification_path(q.id) %> 
-<% elsif finished_verifications < 8 %>
-<%= link_to "Verify assessments", grade_verification_path(q.id) %> 	 
-<% else %>
-<%= link_to "Grade more submissions", grade_identification_path(q.id) %> | <%= link_to "Verify more assessments", grade_verification_path(q.id) %> 	 
- <% end -%>
 
+<% elsif current_user.experimental_condition == "identify" %>
+<td>You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates.</td>
+<% else %>
+<td>You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates.</td>
+<% end %>
+<td>
+
+<% if current_user.experimental_condition == "verify" %>
+	<% if finished_evaluations < 4 %>
+		<%= link_to "Grade now", grade_identification_path(q.id) %> 
+	<% elsif finished_verifications < 8 %>
+		<%= link_to "Verify assessments", grade_verification_path(q.id) %> 	 
+	<% else %>
+		<%= link_to "Grade more submissions", grade_identification_path(q.id) %> | <%= link_to "Verify more assessments", grade_verification_path(q.id) %> 	 
+ 	<% end -%>
+<% elsif current_user.experimental_condition == "identify" %>
+	<% if finished_evaluations < 4 %>
+		<%= link_to "Grade now", grade_identification_path(q.id) %> 
+	<% else %>
+		<%= link_to "Grade more submissions", grade_identification_path(q.id) %>
+ 	<% end -%>
+<% else  %>
+<!-- baseline -->
+	<% if finished_evaluations < 4 %>
+		<%= link_to "Grade now", grade_baseline_path(q.id) %> 
+	<% else %>
+		<%= link_to "Grade more submissions", grade_baseline_path(q.id) %>
+ 	<% end -%>
+<% end -%>
 </td>
 </tr>
 
