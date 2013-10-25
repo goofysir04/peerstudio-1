@@ -9,6 +9,8 @@ $(document).ready () ->
 		else
 			$("#pickCorrect").text("None of the above errors")
 
-	$("#pickCorrect").click () ->
-		$("#collapseIncorrect").collapse("hide") and $("#collapseCorrect").collapse("show")
+	$("#pickCorrect").click (event) ->
+		$("#collapseIncorrect").collapse("hide")
+		$("#collapseCorrect").collapse("show")
+		event.preventDefault()
 		return false
