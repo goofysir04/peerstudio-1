@@ -29,4 +29,5 @@ Humanmachine::Application.configure do
 
   #For devise
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  Delayed::Worker.destroy_failed_jobs = false
 end
