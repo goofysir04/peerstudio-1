@@ -18,10 +18,11 @@
 <% end -%>
 <div class="divider">Your assessments</div>
 
-<% @questions.each do |q| %>
+
 <table class="table table-hover">
 <thead><tr><th>Question</th><th>Status</th><th>Actions</th></tr> </thead>
 <tbody>
+<% @questions.each do |q| %>
 <tr>
 <td><%= q.title %></td>
 <% finished_evaluations = @completed_identifications_by_question[q.id].nil? ? 0 : @completed_identifications_by_question[q.id] 
@@ -61,10 +62,10 @@
 <% end -%>
 </td>
 </tr>
-
+<% end %>
 </tbody>
 
 </table>
-<% end %>
+
 <div class="divider">Your grades</div>
 <p>Your grades are still being computed. Please check back later.</p>
