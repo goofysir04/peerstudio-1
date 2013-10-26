@@ -26,7 +26,7 @@ Below, choose which attributes apply to this answer---<strong>you can choose bot
 	<%= f.collection_check_boxes :answer_attribute, @incorrect_attributes, :id, :description  do |b|
 		b.label {b.check_box(:class=>"incorrect-check") + " " + b.text}
 	end %>
-		<button class="pickCorrect btn btn-primary">Next</button>
+		<!-- <button class="pickCorrect btn btn-primary">Next</button> -->
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@ Below, choose which attributes apply to this answer---<strong>you can choose bot
     			b.label {b.check_box(:class=>"correct-check") + " " + b.text}
     		end %>
 
-      <button class="btn pickIncorrect">Back</button> | <button class="btn addComments btn-primary">Next</button>
+      <!-- <button class="btn pickIncorrect">Back</button> | <button class="btn addComments btn-primary">Next</button> -->
     </div>
   </div>
 </div>
@@ -63,7 +63,8 @@ Below, choose which attributes apply to this answer---<strong>you can choose bot
         <%= text_area_tag :comments, nil, {:placeholder => "Optionally add a comment to explain your assessment to the student.", :style=> "width: 500px;"} %> <div class="clearfix"></div>
         <br/>
         <div class="clearfix"></div>
-        <button class="btn pickCorrect">Back</button> | <%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%> 
+        <!-- <button class="btn pickCorrect">Back</button> |  -->
+        <%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%> 
       </div>
     </div>
   </div>
