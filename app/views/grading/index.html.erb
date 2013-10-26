@@ -30,7 +30,7 @@
 %>
 <% if current_user.experimental_condition == "verify" %>
 <td>
-<% if finished_evaluations > 4 && finished_verifications > 4 %>
+<% if finished_evaluations >= 4 && finished_verifications >= 8 %>
 <span class="label label-success">COMPLETE</span>
 <% else %>
 <span class="label label-warning">NOT COMPLETE</span>
@@ -39,7 +39,7 @@
 You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates, and verify <%= (8- finished_verifications)>0 ? (8- finished_verifications) : 0 %>  assessments</td>
 
 <% elsif current_user.experimental_condition == "identify" %>
-<td><% if finished_evaluations > 4 %>
+<td><% if finished_evaluations >= 4 %>
 <span class="label label-success">COMPLETE</span>
 <% else %>
 <span class="label label-warning">NOT COMPLETE</span>
@@ -48,7 +48,7 @@ You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) :
 <% else %>
 
 <td>
-<% if finished_evaluations > 4 %>
+<% if finished_evaluations >= 4 %>
 <span class="label label-success">COMPLETE</span>
 <% else %>
 <span class="label label-warning">NOT COMPLETE</span>
