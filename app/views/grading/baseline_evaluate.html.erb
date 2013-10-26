@@ -2,6 +2,8 @@
 </h2>
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>
 <p><strong>Answer guide:</strong> <%= @question.explanation %></p>
+<%= @question.baseline_explanation.html_safe %>
+
 <%= form_for @evaluation, :url=>create_grade_baseline_path, html: {:id=>"baseline_form"} do |f| %>
 <div class="well"><p class="lead"><strong>Student answer:</strong> <%= @answer.response.force_encoding("UTF-8")%></p></div>
 
@@ -17,9 +19,8 @@
     </div>
     <div id="collapseBaseline" class="panel-collapse collapse in">
       <div class="panel-body">
-        <%= @question.baseline_explanation.html_safe %>
 
-        <%= f.number_field :score %> (max: <%=@question.max_score %>, min: <%= @question.min_score %>)
+        <%=f.label :score %> <%= f.number_field :score %> (max: <%=@question.max_score %>, min: <%= @question.min_score %>)
         <%= f.hidden_field :answer_id %>
         <%= f.hidden_field :question_id %>
 

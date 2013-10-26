@@ -14,7 +14,7 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseIncorrect">
-          Common incorrect attributes
+          First, check if the answer has any incorrect attributes
         </a>
       </h4>
     </div>
@@ -24,7 +24,7 @@
 	<%= f.collection_check_boxes :answer_attribute, @incorrect_attributes, :id, :description  do |b|
 		b.label {b.check_box(:class=>"incorrect-check") + " " + b.text}
 	end %>
-		<button id="pickCorrect" class="btn">None of the above errors</button>
+		<button id="pickCorrect" class="btn">No errors; Continue</button>
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseCorrect">
-          Common correct attributes
+          Then, check if the answer has correct attributes, and submit <i class="icon-chevron-down"></i>
         </a>
       </h4>
     </div>

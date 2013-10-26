@@ -5,9 +5,9 @@
 $(document).ready () ->
 	$(".incorrect-check").click () ->
 		if $(".incorrect-check").is(":checked")
-			$("#pickCorrect").text("Continue")
+			$("#pickCorrect").addClass("btn-primary").text("Continue")
 		else
-			$("#pickCorrect").text("None of the above errors")
+			$("#pickCorrect").removeClass("btn-primary").text("No errors; Continue")
 
 	$("#pickCorrect").click (event) ->
 		$("#collapseIncorrect").collapse("hide")

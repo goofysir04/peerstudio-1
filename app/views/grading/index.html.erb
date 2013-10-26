@@ -1,13 +1,16 @@
 
 <h2>How to grade</h2>
 <% if current_user.experimental_condition == "verify" %>
-<p>Evaluation consists of two steps. In the first, <strong>assessment</strong> step, you'll grade four of your classmates (per question). In the next <strong>verification</strong> step, you'll then look at eight assessments, as graded by your classmates, and verify that they are correct. </p>
-
-<p>Your answers will go through a similar two step evaluation process. When this evaluation completes, you'll be able to see your grades on this page, and on the Coursera class site</p>
+<p>Evaluation consists of two steps:</p>
+<ol>
+<li> You'll grade four of your classmates' work (assessment)</li>
+<li>You'll be given 8 assignments, and verity they are correct (verification)</li>
+</ol>
+<p>Your answers will go through a similar two step evaluation process. When this evaluation completes, and when you complete these two steps, you'll be able to see your grades on this page, and on the Coursera class site</p>
 <% elsif current_user.experimental_condition == "identify" %>
 <p>You'll grade four of your classmates (per question). For each question, we provide you a set of common correct and wrong answers to help you assess.</p>
 
-<p>Your answers will go through a similar evaluation process. When this evaluation completes, you'll be able to see your grades on this page, and on the Coursera class site</p>
+<p>Your answers will go through a similar evaluation process. When this evaluation completes, and you complete your own assessments, you'll be able to see your grades on this page, and on the Coursera class site</p>
 <% else %>
 <p>You'll grade four of your classmates (per question). For each question, we provide you a set of common correct and wrong answers to help you assess.</p>
 
