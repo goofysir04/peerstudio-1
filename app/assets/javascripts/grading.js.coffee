@@ -24,6 +24,15 @@ $(document).ready () ->
 		event.preventDefault()
 		return false
 
+	$('.accordion-toggle,.incorrect-check,.correct-check').click (event) ->
+		attributes = $(':checked').map () ->
+			$(this).parent().text()
+		res = "<p>You chose</p><ul>"
+		for attr in attributes
+			res += "<li>#{attr}</li>"
+		res += "</ul>"
+		$("#chosenAttributes").html(res)
+
 	$("#grading_form").submit (event) ->
 		unless $(".incorrect-check,.correct-check").is(":checked")
 			$("#collapseIncorrect").collapse("show")

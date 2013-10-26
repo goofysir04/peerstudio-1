@@ -4,7 +4,7 @@
   <% end %>
 </h2>
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>
-<p><strong>Answer guide:</strong> <%= @question.explanation %></p>
+<p><strong>Answer guide:</strong> <%= @question.explanation.html_safe %></p>
 <%= @question.baseline_explanation.html_safe %>
 
 <%= form_for @evaluation, :url=>create_grade_baseline_path, html: {:id=>"baseline_form"} do |f| %>

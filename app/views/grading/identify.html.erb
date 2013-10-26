@@ -6,7 +6,7 @@
 <% end %>
 </h2>
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>
-<p><strong>Answer guide:</strong> <%= @question.explanation %></p>
+<p><strong>Answer guide:</strong> <%= @question.explanation.html_safe %></p>
 <%= form_for @evaluation, :url=>create_grade_identification_path, html: {:id=>"grading_form"} do |f| %>
 <div class="well"><p class="lead"><strong>Student answer:</strong> <%= @answer.response%></p></div>
 
@@ -61,6 +61,7 @@ Below, choose which attributes apply to this answer---<strong>you can choose bot
     </div>
     <div id="collapseComments" class="panel-collapse collapse">
       <div class="panel-body">
+        <div id="chosenAttributes"></div>
         <p><strong> Comments for your classmate? </strong></p>
         <%= text_area_tag :comments, nil, {:placeholder => "Optionally add a comment to explain your assessment to the student.", :style=> "width: 500px;"} %> <div class="clearfix"></div>
         <br/>
