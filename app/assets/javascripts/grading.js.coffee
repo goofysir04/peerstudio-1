@@ -3,25 +3,27 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready () ->
-	$(".incorrect-check").click () ->
-		if $(".incorrect-check").is(":checked")
-			$("#pickCorrect").addClass("btn-primary").text("Continue")
-		else
-			$("#pickCorrect").removeClass("btn-primary").text("No errors; Continue")
+	$(".pickIncorrect").click (event) ->
+		$("#collapseIncorrect").collapse("show")
+		$("#collapseComments").collapse("hide")
+		$("#collapseCorrect").collapse("hide")
+		event.preventDefault()
+		return false
 
-	$("#pickCorrect").click (event) ->
+	$(".pickCorrect").click (event) ->
 		$("#collapseIncorrect").collapse("hide")
 		$("#collapseComments").collapse("hide")
 		$("#collapseCorrect").collapse("show")
 		event.preventDefault()
 		return false
 
-	$("#addComments").click (event) ->
+	$(".addComments").click (event) ->
 		$("#collapseIncorrect").collapse("hide")
 		$("#collapseCorrect").collapse("hide")
 		$("#collapseComments").collapse("show")
 		event.preventDefault()
 		return false
+
 	$("#grading_form").submit (event) ->
 		unless $(".incorrect-check,.correct-check").is(":checked")
 			$("#collapseIncorrect").collapse("show")
