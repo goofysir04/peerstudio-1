@@ -29,12 +29,32 @@
 	finished_verifications = @completed_verifications_by_question[q.id].nil? ? 0: @completed_verifications_by_question[q.id]
 %>
 <% if current_user.experimental_condition == "verify" %>
-<td>You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates, and verify <%= (8- finished_verifications)>0 ? (8- finished_verifications) : 0 %>  assessments</td>
+<td>
+<% if finished_evaluations > 4 && finished_verifications > 4 %>
+<span class="label label-success">COMPLETE</span>
+<% else %>
+<span class="label label-warning">NOT COMPLETE</span>
+<% end %>
+
+You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates, and verify <%= (8- finished_verifications)>0 ? (8- finished_verifications) : 0 %>  assessments</td>
 
 <% elsif current_user.experimental_condition == "identify" %>
-<td>You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates.</td>
+<td><% if finished_evaluations > 4 %>
+<span class="label label-success">COMPLETE</span>
 <% else %>
-<td>You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates.</td>
+<span class="label label-warning">NOT COMPLETE</span>
+<% end %>
+You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates.</td>
+<% else %>
+
+<td>
+<% if finished_evaluations > 4 %>
+<span class="label label-success">COMPLETE</span>
+<% else %>
+<span class="label label-warning">NOT COMPLETE</span>
+<% end %>
+
+You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates.</td>
 <% end %>
 <td>
 
@@ -68,4 +88,4 @@
 </table>
 
 <div class="divider">Your grades</div>
-<p>Your grades are still being computed. Please check back later.</p>
+<p>Your grades are still being computed. Please check back after Nov 5, 2013 10pm PST.</p>
