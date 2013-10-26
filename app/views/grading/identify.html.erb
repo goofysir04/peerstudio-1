@@ -26,7 +26,7 @@ Below, choose which attributes apply to this answer---<strong>you can choose bot
 	<%= f.collection_check_boxes :answer_attribute, @incorrect_attributes, :id, :description  do |b|
 		b.label {b.check_box(:class=>"incorrect-check") + " " + b.text}
 	end %>
-		<button id="pickCorrect" class="btn">No errors; Continue</button>
+		<!-- <button id="pickCorrect" class="btn">No errors; Continue</button> -->
       </div>
     </div>
   </div>
@@ -45,14 +45,14 @@ Below, choose which attributes apply to this answer---<strong>you can choose bot
     			b.label {b.check_box(:class=>"correct-check") + " " + b.text}
     		end %>
 
-      <button class="btn" id="addComments">Continue</button>
+      <!-- <button class="btn" id="addComments">Continue</button> -->
     </div>
   </div>
 </div>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseIncorrect">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseComments">
           Finally, add comments and submit <i class="icon-chevron-down"></i>
         </a>
       </h4>
