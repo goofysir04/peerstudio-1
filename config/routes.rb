@@ -4,6 +4,7 @@ Humanmachine::Application.routes.draw do
   devise_scope :user do 
     get 'users/start' => 'registrations#start_openid', :as => :start_openid_registration
     post 'users/complete' => 'registrations#complete_openid', :as => :complete_openid_registration
+    get 'users/impersonate' => 'registrations#impersonate', :as=>:impersonate_user
   end
 
   get "grading/identify/:id" => "grading#identify", as: :grade_identification

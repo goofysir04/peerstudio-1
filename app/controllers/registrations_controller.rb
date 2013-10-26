@@ -50,6 +50,22 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def impersonate
+    unless true_user.admin?
+      redirect_to root_path
+    else
+      if params[:email].nil?
+        stop_impersonating_user
+        redirect_to root_path, :notice=>"Stopped impersonation"
+        return
+      end
+      u = User.find_by_email(params[:email])
+      redirect_to root_path, :alert=>"No such user" and return if u.nil?
+
+      impersonate_user u
+      redirect_to root_path, :notice=>"Impersonating #{u.email}"
+    end
+  end
 
   private
 

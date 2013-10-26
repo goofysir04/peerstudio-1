@@ -68,6 +68,10 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 
 gem "validates_email_format_of" # Validate email addresses
+
+#To impersonate users
+gem 'pretender'
+
 # gem "client_side_validations"
 
 # Use debugger
