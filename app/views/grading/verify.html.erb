@@ -11,7 +11,7 @@
 </div>
 <% end %>
 
-<div style="display: none;" id="gradingUI">
+<div <% if @total_verification_count == 0 %>style="display: none;"<% end %> id="gradingUI">
 
 <!-- First, group all of the evaluations by the answer_attribute, show them all together -->
 <p class="well">Question: <%= @question.title%> </p>

@@ -51,8 +51,9 @@ class GradingController < ApplicationController
 
   def verify
   	#Which of these answers has this attribute?
-    @total_verification_count = current_user.verifications.count
+    
     @question = Question.find(params[:id])
+    @total_verification_count = current_user.verifications.count
     @evaluations = Verification.get_next_verification current_user, @question
     if @evaluations.empty? 
       respond_to do |format|
