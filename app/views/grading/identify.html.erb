@@ -1,8 +1,8 @@
 <h2>Step 1: Assess (<%= @completed_assessments + 1%> of 4 evaluations)<br/>
 <% if @completed_assessments > 4 and current_user.experimental_condition == "verify"%>
-	<h4>Note: Required assessments completed. You can now go to the <%= link_to "Verify assessments", grade_verification_path(@question.id) %> page. </span></h4>
+	<h4>Note: Required assessments completed for this question. You can now go to the <%= link_to "Verify assessments", grade_verification_path(@question.id) %> page. </span></h4>
 <% elsif @completed_assessments > 4 and current_user.experimental_condition == "identify" %>
-<h4>Note: Required assessments completed. You can now assess the next question from the <%= link_to "home page", root_path %> </span></h4>
+<h4>Note: Required assessments completed for this question. You can now assess the next question from the <%= link_to "home page", root_path %> </span></h4>
 <% end %>
 </h2>
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>

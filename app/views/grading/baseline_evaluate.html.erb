@@ -1,6 +1,6 @@
 <h2>Step 1: Assess (<%= @completed_assessments + 1%> of 4 evaluations)<br/>
   <% if @completed_assessments >= 4 %>
-  <h4>Note: Required assessments completed. You can now assess the next question from the <%= link_to "home page", root_path %> </span></h4>
+  <h4>Note: Required assessments completed for this question. You can now assess the next question from the <%= link_to "home page", root_path %> </span></h4>
   <% end %>
 </h2>
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>
