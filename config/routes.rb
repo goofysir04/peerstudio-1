@@ -9,6 +9,7 @@ Humanmachine::Application.routes.draw do
 
   get "grading/identify/:id" => "grading#identify", as: :grade_identification
   post "grading/identify" => 'grading#create_assessment', as: :create_grade_identification
+  get "grading/undo_identify/:id" => "grading#undo_assessment", as: :undo_grade_identification
   
   get "grading/verify/:id" => "grading#verify", as: :grade_verification
   post "grading/verify" => "grading#create_verification", as: :create_grade_verification
