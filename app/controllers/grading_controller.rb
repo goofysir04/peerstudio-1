@@ -142,6 +142,7 @@ class GradingController < ApplicationController
     @assessment.started_at = params[:start_assessment_time]
 
     @evaluation = Evaluation.new evaluation_attributes()
+    @evaluation.user_id = current_user.id
     @evaluation.assessment = @assessment
     if @assessment.persisted?
       flash[:alert] = "You've already submitted your assessment for that question"
