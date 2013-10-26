@@ -22,6 +22,8 @@
 <table class="table table-hover">
 <thead><tr><th>Question</th><th>Status</th><th>Actions</th></tr> </thead>
 <tbody>
+
+<% completed_assessment = true %>	
 <% @questions.each do |q| %>
 <tr>
 <td><%= q.title %></td>
@@ -31,8 +33,10 @@
 <% if current_user.experimental_condition == "verify" %>
 <td>
 <% if finished_evaluations >= 4 && finished_verifications >= 8 %>
+<% completed_assessment &&= true %>
 <span class="label label-success">COMPLETE</span>
 <% else %>
+<% completed_assessment = false %>
 <span class="label label-warning">NOT COMPLETE</span>
 <% end %>
 
@@ -40,8 +44,10 @@ You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) :
 
 <% elsif current_user.experimental_condition == "identify" %>
 <td><% if finished_evaluations >= 4 %>
+<% completed_assessment &&= true %>
 <span class="label label-success">COMPLETE</span>
 <% else %>
+<% completed_assessment = false %>
 <span class="label label-warning">NOT COMPLETE</span>
 <% end %>
 You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) : 0 %> classmates.</td>
@@ -49,8 +55,10 @@ You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) :
 
 <td>
 <% if finished_evaluations >= 4 %>
+<% completed_assessment &&= true %>
 <span class="label label-success">COMPLETE</span>
 <% else %>
+<% completed_assessment = false %>
 <span class="label label-warning">NOT COMPLETE</span>
 <% end %>
 
@@ -87,5 +95,9 @@ You need to assess <%= (4- finished_evaluations)>0 ? (4- finished_evaluations) :
 
 </table>
 
+<% if completed_assessment %>
+<p class="lead">
+Done grading? Participate in our 2-minute survey, and help make peer grading better! <a href='<%= "https://stanforduniversity.qualtrics.com/SE/?SID=SV_0xmhjCfEGDsnzVz&u=#{current_user.id}&type=#{current_user.experimental_condition}"%>' class="btn btn-primary">Launch survey</a> </p>
+<% end %>
 <div class="divider">Your grades</div>
 <p>Your grades are still being computed. Please check back after Nov 5, 2013 10pm PST.</p>

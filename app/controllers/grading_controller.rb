@@ -8,6 +8,9 @@ class GradingController < ApplicationController
     @questions = Question.all
     @completed_identifications_by_question = Assessment.where("user_id = ?", current_user).group("question_id").count()
     @completed_verifications_by_question = Verification.where("user_id = ?", current_user).group(:question_id).count()
+
+    @total_assessments = current_user.assessments.count
+    @total_verifications = current_user.verifications.count
   end
 
   def identify
