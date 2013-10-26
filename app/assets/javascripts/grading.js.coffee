@@ -11,7 +11,15 @@ $(document).ready () ->
 
 	$("#pickCorrect").click (event) ->
 		$("#collapseIncorrect").collapse("hide")
+		$("#collapseComments").collapse("hide")
 		$("#collapseCorrect").collapse("show")
+		event.preventDefault()
+		return false
+
+	$("#addComments").click (event) ->
+		$("#collapseIncorrect").collapse("hide")
+		$("#collapseCorrect").collapse("hide")
+		$("#collapseComments").collapse("show")
 		event.preventDefault()
 		return false
 	$("#grading_form").submit (event) ->

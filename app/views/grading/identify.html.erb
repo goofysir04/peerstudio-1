@@ -9,6 +9,8 @@
 <div class="well"><p class="lead"><strong>Student answer:</strong> <%= @answer.response%></p></div>
 
 
+Below, choose which attributes apply to this answer---<strong>you can choose both correct and incorrect attributes</strong>, which may result in partial credit.</p>
+
 <div class="panel-group" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -39,17 +41,29 @@
     <div id="collapseCorrect" class="panel-collapse collapse">
       <div class="panel-body">
         <p>Here are some common attributes of a <strong>correct</strong> answer. Select ones that apply.</p>
-		<%= f.collection_check_boxes :answer_attribute, @correct_attributes, :id, :description do |b|
-			b.label {b.check_box(:class=>"correct-check") + " " + b.text}
-		end %>
+    		<%= f.collection_check_boxes :answer_attribute, @correct_attributes, :id, :description do |b|
+    			b.label {b.check_box(:class=>"correct-check") + " " + b.text}
+    		end %>
 
-		<p><strong> Comments for your classmate? </strong></p>
-		<%= text_area_tag :comments, nil, {:placeholder => "Optionally add a comment to explain your assessment to the student.", :style=> "width: 500px;"} %> <div class="clearfix"></div>
-
-
-      <br/>
-      <div class="clearfix"></div>
-      <%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%> 
+      <button class="btn" id="addComments">Continue</button>
+    </div>
+  </div>
+</div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseIncorrect">
+          Finally, add comments and submit <i class="icon-chevron-down"></i>
+        </a>
+      </h4>
+    </div>
+    <div id="collapseComments" class="panel-collapse collapse">
+      <div class="panel-body">
+        <p><strong> Comments for your classmate? </strong></p>
+        <%= text_area_tag :comments, nil, {:placeholder => "Optionally add a comment to explain your assessment to the student.", :style=> "width: 500px;"} %> <div class="clearfix"></div>
+        <br/>
+        <div class="clearfix"></div>
+        <%= submit_tag "Submit evaluation", :class=>"btn btn-primary"%> 
       </div>
     </div>
   </div>
