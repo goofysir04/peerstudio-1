@@ -21,7 +21,7 @@ class Assessment < ActiveRecord::Base
       		evaluation.user = user
       		evaluation.assessment = self
 
-      		return evaluation.save
+      		evaluation.save
       	end
   	end
   end

@@ -1,7 +1,7 @@
 require 'time'
 
 class GradingController < ApplicationController
-	before_action :assessment_attributes, only: [:create_assessment]
+	# before_action :assessment_attributes, only: [:create_assessment]
   before_filter :authenticate_user!
 
   def index
@@ -30,23 +30,57 @@ class GradingController < ApplicationController
   	#First find if this assessment was already submitted
   	@assessment = Assessment.find_or_initialize_by(user_id: current_user.id, question_id:params[:evaluation][:question_id],
       answer_id: params[:evaluation][:answer_id])
-    @assessment.comments = params[:comments]
-    @assessment.started_at = params[:start_assessment_time]
+    
     @attributes = params[:evaluation][:answer_attribute]
     if @assessment.persisted?
       flash[:alert] = "You've already submitted your assessment for that question"
       redirect_to grade_identification_path(assessment_attributes[:question_id]) and return
     end
-
+    @assessment.comments = params[:comments]
+    @assessment.started_at = params[:start_assessment_time]
     assessment_attributes_saved = @assessment.save_answer_attributes(@attributes)
 
     #Now that we have an evaluation, increment the total number of evaluations
     @answer = Answer.find(@assessment.answer_id)
     @answer.increment!(:total_evaluations)
     if @assessment.save && assessment_attributes_saved
-      flash[:notice] = "Thanks! Your evaluation was recorded"
+      flash[:notice] = "Thanks! Your evaluation was recorded (<a href='#{undo_grade_identification_path(@assessment.id)}'>Undo?</a>)"
       redirect_to next_identify_or_verify(@assessment.question_id) and return
     end
+  end
+
+  def undo_assessment
+    @assessment = Assessment.find(params[:id])
+    if @assessment.nil?
+      flash[:alert] = "Couldn't find that evaluation."
+      redirect_to root_path
+    elsif @assessment.created_at < Time.now - 2.minute
+      flash[:alert] = "Sorry, you can only undo an evaluation up to two minutes after it is created"
+      redirect_to grade_identification_path(@assessment.question_id)
+    else
+      if @assessment.evaluations.count > 0
+        @assessment.evaluations.destroy_all
+      end
+
+      verifications = Verification.where("user_id = ? and answer_id = ?", current_user, @assessment.answer_id)
+      verifications.each do |v|
+        if v.is_correct? 
+          v.evaluation.decrement!(:verified_true_count)
+        else
+          v.evaluation.decrement!(:verified_false_count)
+        end
+      end
+      verifications.destroy_all
+      @assessment.answer.decrement!(:total_evaluations)
+
+      if @assessment.destroy
+        flash[:notice] = "Your assessment was undone"
+        redirect_to grade_identification_path(@assessment.question_id)
+      else
+        flash[:alert] = "Sorry, your assessment could not be undone."
+        redirect_to grade_identification_path(@assessment.question_id)
+      end
+    end  
   end
 
   def verify
@@ -136,7 +170,7 @@ class GradingController < ApplicationController
   def assessment_attributes
     params.permit(:question_id, :answer_id, :comments)
     params.permit(:verification)
-  	params.require(:evaluation).permit(:answer_attribute, :question_id, :answer_id)
+  	params.permit(:evaluation => [{:answer_attribute => []}, :question_id, :answer_id])
   end
 
   def next_identify_or_verify(current_question_id)

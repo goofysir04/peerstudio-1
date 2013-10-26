@@ -8,7 +8,7 @@
 <p class="lead"><strong>Question:</strong> <%= @question.title %></p>
 <p><strong>Answer guide:</strong> <%= @question.explanation.html_safe %></p>
 <%= form_for @evaluation, :url=>create_grade_identification_path, html: {:id=>"grading_form"} do |f| %>
-<div class="well"><p class="lead"><strong>Student answer:</strong> <%= @answer.response%></p></div>
+<div class="well"><p class="lead"><strong>Student answer:</strong> <%= @answer.response.force_encoding("UTF-8")%></p></div>
 
 
 Below, choose which attributes apply to this answer---<strong>you can choose both correct and incorrect attributes</strong>, which may result in partial credit.</p>
