@@ -64,6 +64,7 @@
 <div class="clearfix"></div>
 
 <div style="border-top: 1px solid #efefef; margin-top: 15px;">
+  <span class="pull-left">Got questions? Please ask in the <a href="https://class.coursera.org/hci-004/forum/list?forum_id=13">peer assessment forum</a>.</span>
   <a href="http://cs.stanford.edu"><%= image_tag "stanfordcs.png", :style => 'height: 15%; width: 15%', :class => 'pull-right' %></a>
   <a href="http://hci.stanford.edu"><%= image_tag "stanfordhci.png", :style => 'height: 15%; width: 15%; border-right: 1px solid #efefef; padding-right: 5px;', :class => 'pull-right' %></a>
   <% if Rails.env.development? || (user_signed_in? && current_user.admin?) %> 
