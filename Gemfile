@@ -72,6 +72,8 @@ gem "validates_email_format_of" # Validate email addresses
 #To impersonate users
 gem 'pretender'
 
+gem 'airbrake'
+
 # gem "client_side_validations"
 
 # Use debugger
