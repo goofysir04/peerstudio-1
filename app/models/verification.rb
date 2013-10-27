@@ -6,7 +6,7 @@ class Verification < ActiveRecord::Base
 
   def self.get_next_verification(user, question)
   	#Find evaluations that need verification
-  	Evaluation.where('question_id = ? and verified_true_count < 2 and verified_false_count < 2 and user_id <> ? and score is null and answer_attribtute_id is not null and created_at < ?', question.id,user.id, Time.now - 3.minute).
+  	Evaluation.where('question_id = ? and verified_true_count < 2 and verified_false_count < 2 and user_id <> ? and score is null and created_at < ?', question.id,user.id, Time.now - 3.minute).
   	order('(verified_true_count+verified_false_count) ASC').limit(8)
   end
 

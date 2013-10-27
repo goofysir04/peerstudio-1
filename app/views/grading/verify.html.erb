@@ -27,6 +27,7 @@ input{
 	<tbody>
 		<% @evaluations_grouped_by_attribute = @evaluations.group_by(&:answer_attribute_id) %>
 		<% @evaluations_grouped_by_attribute.each do |answer_attribute_id, evaluations| %>
+			<%= next if answer_attribute_id.nil? %>
 			<tr class="info"><td colspan="1">These were marked as: <strong><%= AnswerAttribute.find(answer_attribute_id).description %></strong></td><td>Assessment correct?</td></tr>
 			<% evaluations.each do |evaluation| %>
 				<% next if evaluation.answer.nil? %>
