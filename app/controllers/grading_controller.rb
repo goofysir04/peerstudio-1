@@ -67,7 +67,7 @@ class GradingController < ApplicationController
 
       verifications = Verification.where("user_id = ? and answer_id = ?", current_user, @assessment.answer_id)
       verifications.each do |v|
-        if v.is_correct? 
+        if v.verified? 
           v.evaluation.decrement!(:verified_true_count)
         else
           v.evaluation.decrement!(:verified_false_count)
