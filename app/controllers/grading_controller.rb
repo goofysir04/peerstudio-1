@@ -67,10 +67,11 @@ class GradingController < ApplicationController
 
       verifications = Verification.where("user_id = ? and answer_id = ?", current_user, @assessment.answer_id)
       verifications.each do |v|
+        evaluation = Evaluation.where("question_id = ? and answer_id= ? and answer_attribute_id=?", v.question_id, v.answer_id, v.answer_attribute_id).first()
         if v.verified? 
-          v.evaluation.decrement!(:verified_true_count)
+          evaluation.decrement!(:verified_true_count)
         else
-          v.evaluation.decrement!(:verified_false_count)
+          evaluation.decrement!(:verified_false_count)
         end
       end
       verifications.destroy_all
@@ -144,7 +145,7 @@ class GradingController < ApplicationController
     end
 
     @question = Question.find(params[:evaluation][:question_id])
-    score = (params[:evaluation][:score]).to_f
+    score = (params[:evaluation][:score]).total_verifications
     if score < @question.min_score or score > @question.max_score
       flash[:alert] = "Please enter a score between #{@question.min_score} and #{@question.max_score}"
       redirect_to grade_baseline_path(params[:evaluation][:question_id]) and return
