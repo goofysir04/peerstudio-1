@@ -138,7 +138,10 @@ class GradingController < ApplicationController
   end
 
   def create_baseline_assessment
-
+    if params[:evaluation][:score].blank?
+      flash[:alert] = "Please enter a score."
+      redirect_to grade_baseline_path(params[:evaluation][:question_id]) and return
+    end
     @assessment = Assessment.find_or_initialize_by(user_id: current_user.id, question_id:params[:evaluation][:question_id],
       answer_id: params[:evaluation][:answer_id])
     @assessment.comments = params[:comments]
