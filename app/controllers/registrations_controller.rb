@@ -26,6 +26,10 @@ class RegistrationsController < Devise::RegistrationsController
     @name = session["devise.openid_data"]["name"]
     @email = session["devise.openid_data"]["email"]
     @provider = session["devise.openid_data"]["provider"]
+    if @provider.nil? or @email.nil?
+      flash[:alert] = "Please enable cookies to login."
+      redirect_to new_user_session_path and return
+    end
     self.resource = resource_class.new()
     clean_up_passwords(self.resource)
   end
