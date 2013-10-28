@@ -145,7 +145,7 @@ class GradingController < ApplicationController
     end
 
     @question = Question.find(params[:evaluation][:question_id])
-    score = (params[:evaluation][:score]).total_verifications
+    score = (params[:evaluation][:score]).to_f
     if score < @question.min_score or score > @question.max_score
       flash[:alert] = "Please enter a score between #{@question.min_score} and #{@question.max_score}"
       redirect_to grade_baseline_path(params[:evaluation][:question_id]) and return
