@@ -17,7 +17,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   
   def coursera
     
-    @user = User.find_by_email(request.env["omniauth.auth"]["info"]["email"]) || current_user
+    @user = User.find_for_authentication(:email => request.env["omniauth.auth"]["info"]["email"]) || current_user
     if !@user.nil?
       if @user.sign_in_count == 0
         session["devise.openid_data"] = request.env["omniauth.auth"]["info"].merge(

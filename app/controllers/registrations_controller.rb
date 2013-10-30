@@ -37,7 +37,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def complete_openid
-    @user = User.find_by_email(session["devise.openid_data"]["email"])
+    @user = User.find_for_authentication(:email => session["devise.openid_data"]["email"])
     if @user.nil?
       @user = User.new user_params().merge({
         :name=>session["devise.openid_data"]["name"],
@@ -51,7 +51,7 @@ class RegistrationsController < Devise::RegistrationsController
     if @user.save #if user is saved or unchanged
       sign_in_and_redirect @user, :event => :authentication
     else
-      flash[:alert] = "There was a problem signing in. Please contact us, and mention your claimed id as #{session["devise.openid_data"]["id"]}"
+      flash[:alert] = "There was a problem signing in. Please contact us, and mention your claimed id as #{session["devise.openid_data"]["uid"]}"
       redirect_to start_openid_registration_path
     end
   end
@@ -65,7 +65,7 @@ class RegistrationsController < Devise::RegistrationsController
         redirect_to root_path, :notice=>"Stopped impersonation"
         return
       end
-      u = User.find_by_email(params[:email])
+      u = User.find_for_authentication(:email => params[:email])
       redirect_to root_path, :alert=>"No such user" and return if u.nil?
 
       impersonate_user u

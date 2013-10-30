@@ -17,7 +17,7 @@ class Answer < ActiveRecord::Base
       print "STARTing job"
       spreadsheet = CSV.parse(file_text, {:headers => :first_row})
       spreadsheet.each do |row|
-        owning_user = User.find_by_email(row["email"])
+        owning_user = User.find_for_authenticaton(:email => row["email"])
 
         if owning_user.nil?
         #this is a dummy password
