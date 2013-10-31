@@ -11,6 +11,10 @@ class Answer < ActiveRecord::Base
     .order("(evaluations_wanted - total_evaluations) DESC").first()
   end
 
+  def self.get_next_evaluate_for_user_and_question(user, question)
+    return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND evaluation_type='baseline' AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
+    .order("(evaluations_wanted - total_evaluations) DESC").first()
+  end
 
   class ImportJob <  Struct.new(:file_text)
     def perform

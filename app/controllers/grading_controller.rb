@@ -129,7 +129,7 @@ class GradingController < ApplicationController
 
   def baseline_evaluate
     @question = Question.find(params[:id])
-    @answer = Answer.get_next_identify_for_user_and_question(current_user, @question) #TODO fix actual user
+    @answer = Answer.get_next_evaluate_for_user_and_question(current_user, @question) #TODO fix actual user
 
     @completed_assessments = current_user.assessments.count
 
