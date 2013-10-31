@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131025132848) do
+ActiveRecord::Schema.define(version: 20131031035315) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20131025132848) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "state",              default: "identify"
+    t.string   "evalution_type",     default: "default"
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id"
