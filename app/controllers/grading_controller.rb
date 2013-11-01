@@ -130,7 +130,16 @@ class GradingController < ApplicationController
   def baseline_evaluate
     @question = Question.find(params[:id])
     @answer = Answer.get_next_evaluate_for_user_and_question(current_user, @question) #TODO fix actual user
+    
+    #If we've exhausted all our baseline sample, go find evaluations for the rest of the pool.
+    if @answer.nil?
+      @answer = Answer.get_next_identify_for_user_and_question(current_user, @question)
+    end
 
+    if @answer.nil?
+      flash[:notice] = "We have no more answers for you to evaluate"
+      redirect_to root_path and return
+    end
     @completed_assessments = current_user.assessments.count
 
     #Create a new evaluation. This particular evaluation is never saved
