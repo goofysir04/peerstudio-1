@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
-  <title><%= content_for?(:title) ? content_for(:title) : "Stanford | peergrademe" %></title>
+  <title><%= content_for?(:title) ? content_for(:title) : "Stanford+UCSD | peergrademe" %></title>
   <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|PT+Sans:700' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
@@ -25,7 +25,7 @@
           <%= link_to @org.name, o_path(@org), :class => "brand", :style => "padding-left: 0;" %>
         <% else %>
           <%= link_to root_path, :class => "brand", :style => "padding-left: 0;" do %>
-            Stanford | <strong>peergrademe</strong>
+            Stanford+UCSD | <strong>peergrademe</strong>
             <% if content_for?(:title) %>
               <small class="title_slug">&ndash; <%= content_for(:title) %></small>
             <% else %>
@@ -65,8 +65,8 @@
 
 <div style="border-top: 1px solid #efefef; margin-top: 15px;">
   <span class="pull-left" style="font-size:12pt"><i class="icon-question-sign"></i> Got questions? Please ask in the <a href="https://class.coursera.org/hci-004/forum/list?forum_id=13">peer assessment forum</a>.</span>
-  <a href="http://cs.stanford.edu"><%= image_tag "stanfordcs.png", :style => 'height: 15%; width: 15%', :class => 'pull-right' %></a>
-  <a href="http://hci.stanford.edu"><%= image_tag "stanfordhci.png", :style => 'height: 15%; width: 15%; border-right: 1px solid #efefef; padding-right: 5px;', :class => 'pull-right' %></a>
+  <a href="http://www.ucsd.edu/"><%= image_tag "ucsd.png", :style => 'height: 15%; width: 15%', :class => 'pull-right' %></a>
+  <a href="http://cs.stanford.edu/"><%= image_tag "stanfordcs.png", :style => 'height: 15%; width: 15%; border-right: 1px solid #efefef; padding-right: 5px;', :class => 'pull-right' %></a>
   <% if Rails.env.development? || (user_signed_in? && current_user.admin?) %> 
     <p><span class="label">DEBUG</span> Parameters: <code> <%= params.inspect %> </code> Session: <code><%= session %></code> </p>
     <p><span class="label">OPENID</span> Return path <code><%= request.env['omniauth.origin']  || "None"%></code></p>
