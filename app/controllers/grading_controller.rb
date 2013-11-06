@@ -193,7 +193,11 @@ class GradingController < ApplicationController
     else
       @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
       grades = @answer_one.get_grade[0]
-      answer_grade_one = ([0.0,grades["avg_final_score"].to_f,1.0].sort[1]).floor
+      if grades.nil?
+        @evaluations_one = nil
+      else
+        answer_grade_one = ([0.0,grades["avg_final_score"].to_f,1.0].sort[1]).floor
+      end
 
       if !answer_grade_one.nil? and @answer_one.state == "identify"
         @answer_one.current_score = answer_grade_one
