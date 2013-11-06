@@ -18,6 +18,8 @@ Humanmachine::Application.routes.draw do
   post "grading/evaluate" => 'grading#create_baseline_assessment', as: :create_grade_baseline
 
   get "grading/my_grades" => "grading#my_grades", as: :my_grades
+  get "grading/appeal/:id" => "grading#appeal", as: :appeal_grading
+  post "grading/appeal/:id" => "grading#create_appeal", as: :create_appeal_grading
   resources :questions
 
   # The priority is based upon order of creation: first created -> highest priority.

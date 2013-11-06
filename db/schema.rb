@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131106075006) do
+ActiveRecord::Schema.define(version: 20131106104031) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -59,6 +59,32 @@ ActiveRecord::Schema.define(version: 20131106075006) do
     t.index ["question_id"], :name => "index_answers_on_question_id"
   end
 
+  create_table "questions", force: true do |t|
+    t.text     "title"
+    t.text     "explanation"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "min_score",            default: 0.0
+    t.float    "max_score",            default: 1.0
+    t.text     "baseline_explanation"
+  end
+
+  create_table "appeals", force: true do |t|
+    t.text     "comments"
+    t.integer  "question_id"
+    t.integer  "answer_id"
+    t.boolean  "accepted"
+    t.boolean  "inspected"
+    t.float    "appeal_score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "experimental_condition"
+    t.index ["answer_id"], :name => "index_appeals_on_answer_id"
+    t.index ["question_id"], :name => "index_appeals_on_question_id"
+    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_answer_id"
+    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
+  end
+
   create_table "assessments", force: true do |t|
     t.integer  "user_id"
     t.integer  "answer_id"
@@ -85,16 +111,6 @@ ActiveRecord::Schema.define(version: 20131106075006) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], :name => "delayed_jobs_priority"
-  end
-
-  create_table "questions", force: true do |t|
-    t.text     "title"
-    t.text     "explanation"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.float    "min_score",            default: 0.0
-    t.float    "max_score",            default: 1.0
-    t.text     "baseline_explanation"
   end
 
   create_table "users", force: true do |t|

@@ -240,7 +240,10 @@ class GradingController < ApplicationController
       flash[:alert] ="You can only submit a regrade for your own answers"
       redirect_to root_path and return 
     else
+      @appeal.experimental_condition =current_user.experimental_condition
+
       answer = @appeal.answer
+      @appeal.question_id = answer.question_id
       answer.current_score = @appeal.appeal_score
       if @appeal.save and answer.save
         flash[:notice] ="Your request has been submitted, and your score is updated"
