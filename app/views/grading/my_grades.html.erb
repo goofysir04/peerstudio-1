@@ -16,7 +16,7 @@
 			<% end %>
 			</ul>
 		<% end %>
-		<p>Your grade is: <strong><%= @answer_one.current_score.nil? ? "not available" : @answer_one.current_score %></strong>.</p>
+		<p>Your grade is: <strong><%= @answer_one.current_score.nil? ? "not available" : @answer_one.current_score %></strong>. <small>(Unacceptably unfair grade? <%=  link_to "Submit a regrade request", appeal_grading_path(@answer_one) %>)</small></p>
 
 	<% end %>
 <% end %> 
@@ -40,8 +40,10 @@
 				<% end %>
 				</ul>
 			<% end %>
-			<p>Your grade is: <strong><%= @answer_two.current_score.nil? ? "not available" : @answer_two.current_score %></strong>.</p>
+			<p>Your grade is: <strong><%= @answer_two.current_score.nil? ? "not available" : @answer_two.current_score %></strong>. <small>(Unacceptably unfair grade? <%=  link_to "Submit a regrade request", appeal_grading_path(@answer_two) %>)</small></p>
 
 		<% end %>
 	<% end %>
 </div>
+<h3>One minute survey</h3>
+<iframe src='<%= "https://stanforduniversity.qualtrics.com/SE/?SID=SV_4T8GRO3wp0mfCmh&u=#{current_user.id}&type=#{current_user.experimental_condition}"%>' target="_blank" width="800" height="600"></iframe>

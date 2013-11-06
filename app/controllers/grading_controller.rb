@@ -228,12 +228,37 @@ class GradingController < ApplicationController
     flash[:alert] = "Due to a technical problem, our grades script is being delayed for Question 2. Please check back after Nov 6 8am PDT"
   end
 
+  def appeal
+    @appeal = Appeal.new
+    @appeal.answer= Answer.find(params[:id])
+    @appeal.appeal_score = @appeal.answer.current_score
+  end
+
+  def create_appeal
+    @appeal = Appeal.new(appeal_attributes)
+    if @appeal.answer.user != current_user
+      flash[:alert] ="You can only submit a regrade for your own answers"
+      redirect_to root_path and return 
+    else
+      answer = @appeal.answer
+      answer.current_score = @appeal.appeal_score
+      if @appeal.save and answer.save
+        flash[:notice] ="Your request has been submitted, and your score is updated"
+        redirect_to root_path and return 
+      end
+    end
+
+  end
+
   private
 
   def evaluation_attributes
     params.require(:evaluation).permit(:answer_attribute, :question_id, :answer_id, :score)
   end
 
+  def appeal_attributes
+    params.require(:appeal).permit(:comments, :answer_id, :appeal_score)
+  end
   def assessment_attributes
     params.permit(:question_id, :answer_id, :comments)
     params.permit(:verification)
