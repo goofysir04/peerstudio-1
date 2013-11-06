@@ -215,10 +215,10 @@ class GradingController < ApplicationController
       if grades.nil?
         @evaluations_two = nil
       else
-        answer_grade_two = ([0.0,grades["avg_final_score"].to_f,3.0].sort[1]).floor
+        answer_grade_two = ([0.0,grades["final_score"].to_f,3.0].sort[1]).floor
       end
 
-      if !answer_grade_two.nil? and @answer_two.state == "identify"
+      if !answer_grade_two.nil? and @answer_two.state != "graded"
         @answer_two.current_score = answer_grade_two
         @answer_two.state="graded"
         @answer_two.save!
