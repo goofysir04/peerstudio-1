@@ -200,6 +200,8 @@ class GradingController < ApplicationController
         @answer.save!
       end
     end
+
+    flash[:alert] = "Due to a technical problem, our grades script is being delayed. Please check back after Nov 6 8am PDT"
   end
 
   private
