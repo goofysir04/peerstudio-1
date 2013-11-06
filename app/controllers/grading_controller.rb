@@ -188,7 +188,11 @@ class GradingController < ApplicationController
 
   def my_grades
     @answer_one = Answer.where("question_id = 1 and user_id=?", current_user.id).first()
-    @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
+    if @answer_one.nil?
+      @evaluations_one = nil
+    else
+      @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
+    end
   end
 
   private
