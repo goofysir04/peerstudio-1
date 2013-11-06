@@ -15,7 +15,9 @@
 			<% answer_attr = e.answer_attribute %>
 			<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
 		<% end %>
+		</ul>
 	<% end %>
 	<p>Your total grade is being computed. Please check back in an hour.</p>
-</ul>
 <% end %> 
+<h2>Question 1: <h4><%=Question.find(2).title %></h4></h2>
+<p> Upload in progress... </p>
