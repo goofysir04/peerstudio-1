@@ -4,7 +4,7 @@
 <% else %>
 <p><strong>Your answer</strong>: <%= @answer_one.response %></p>
 <% end %>
-<% if @evaluations_one.nil? %>
+<% if @evaluations_one.nil? and !@answer_one.nil? %>
 <p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
 <% else %>
 	<%unless current_user.experimental_condition == "baseline" %>
@@ -19,5 +19,5 @@
 	<% end %>
 	<p>Your total grade is being computed. Please check back in an hour.</p>
 <% end %> 
-<h2>Question 1: <h4><%=Question.find(2).title %></h4></h2>
+<h2>Question 2: <h4><%=Question.find(2).title %></h4></h2>
 <p> Upload in progress... </p>
