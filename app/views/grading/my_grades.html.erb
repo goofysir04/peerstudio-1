@@ -17,7 +17,7 @@
 		<% end %>
 		</ul>
 	<% end %>
-	<p>Your grade is: <strong><%= true ? "not available" : @answer_one.current_score %></strong>.</p>
+	<p>Your grade is: <strong><%= @answer_one.current_score.nil? ? "not available" : @answer_one.current_score %></strong>.</p>
 <% end %> 
 <h2>Question 2: <h4><%=Question.find(2).title %></h4></h2>
 <p> Upload in progress... </p>

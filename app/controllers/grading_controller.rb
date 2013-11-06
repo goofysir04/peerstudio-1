@@ -193,15 +193,16 @@ class GradingController < ApplicationController
     else
       @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
       grades = @answer_one.get_grade[0]
-      answer_grade_one = ([0,grades["avg_final_score"].to_f,1].sort[1])
+      answer_grade_one = ([0.0,grades["avg_final_score"].to_f,1.0].sort[1]).round
 
-      if !answer_grade_one.nil? and @answer_one.current_score.nil?
+      if !answer_grade_one.nil? and @answer_one.state == "identify"
         @answer_one.current_score = answer_grade_one
-        @answer.save!
+        @answer_one.state="graded"
+        @answer_one.save!
       end
     end
 
-    flash[:alert] = "Due to a technical problem, our grades script is being delayed. Please check back after Nov 6 8am PDT"
+    flash[:alert] = "Due to a technical problem, our grades script is being delayed for Question 2. Please check back after Nov 6 8am PDT"
   end
 
   private
