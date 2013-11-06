@@ -1,0 +1,21 @@
+<h2>Question 1: <h4><%=Question.find(1).title %></h4></h2>
+<% if @answer_one.nil? %>
+<p>We didn't find your answer for this question. If this is in error, please let us know. </p>
+<% else %>
+<p><strong>Your answer</strong>: <%= @answer_one.response %></p>
+<% end %>
+<% if @evaluations_one.nil? %>
+<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
+<% else %>
+	<%unless current_user.experimental_condition == "baseline" %>
+		<p>This answer was marked as:</p><ul>
+		<% @evaluations_one.each do |e| %>
+			
+			<% next unless (e.score.nil? and e.verified_true_count >= e.verified_false_count) %>
+			<% answer_attr = e.answer_attribute %>
+			<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
+		<% end %>
+	<% end %>
+	<p>Your total grade is being computed. Please check back in an hour.</p>
+</ul>
+<% end %> 

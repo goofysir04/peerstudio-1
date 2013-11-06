@@ -186,6 +186,11 @@ class GradingController < ApplicationController
     end
   end
 
+  def my_grades
+    @answer_one = Answer.where("question_id = 1 and user_id=?", current_user.id).first()
+    @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
+  end
+
   private
 
   def evaluation_attributes
@@ -225,4 +230,6 @@ class GradingController < ApplicationController
       end
     end
   end
+
+
 end
