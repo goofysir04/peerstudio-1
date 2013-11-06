@@ -225,7 +225,7 @@ class GradingController < ApplicationController
       end
     end
 
-    flash[:alert] = "Due to a technical problem, our grades script is being delayed for Question 2. Please check back after Nov 6 8am PDT"
+    # flash[:alert] = "Due to a technical problem, our grades script is being delayed for Question 2. Please check back after Nov 6 8am PDT"
   end
 
   def appeal
