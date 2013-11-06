@@ -193,7 +193,12 @@ class GradingController < ApplicationController
     else
       @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
       grades = @answer_one.get_grade[0]
-      @answer_grade_one = ([0,grades["avg_final_score"].to_f,1].sort[1])
+      answer_grade_one = ([0,grades["avg_final_score"].to_f,1].sort[1])
+
+      if !answer_grade_one.nil? and @answer_one.current_score.nil?
+        @answer_one.current_score = answer_grade_one
+        @answer.save!
+      end
     end
   end
 
