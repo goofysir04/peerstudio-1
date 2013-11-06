@@ -3,21 +3,45 @@
 <p>We didn't find your answer for this question. If this is in error, please let us know. </p>
 <% else %>
 <p><strong>Your answer</strong>: <%= @answer_one.response %></p>
-<% end %>
-<% if @evaluations_one.nil? and !@answer_one.nil? %>
-<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
-<% else %>
-	<%unless current_user.experimental_condition == "baseline" %>
-		<p>This answer was marked as:</p><ul>
-		<% @evaluations_one.each do |e| %>
-			
-			<% next unless (e.score.nil? and e.verified_true_count >= e.verified_false_count) %>
-			<% answer_attr = e.answer_attribute %>
-			<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
+	<% if @evaluations_one.nil? %>
+	<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
+	<% else %>
+		<%unless current_user.experimental_condition == "baseline" %>
+			<p>This answer was marked as:</p><ul>
+			<% @evaluations_one.each do |e| %>
+				
+				<% next unless (e.score.nil? and e.verified_true_count >= e.verified_false_count) %>
+				<% answer_attr = e.answer_attribute %>
+				<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
+			<% end %>
+			</ul>
 		<% end %>
-		</ul>
+		<p>Your grade is: <strong><%= @answer_one.current_score.nil? ? "not available" : @answer_one.current_score %></strong>.</p>
+
 	<% end %>
-	<p>Your grade is: <strong><%= @answer_one.current_score.nil? ? "not available" : @answer_one.current_score %></strong>.</p>
 <% end %> 
 <h2>Question 2: <h4><%=Question.find(2).title %></h4></h2>
-<p> Upload in progress... </p>
+<p>Grades being uploaded.... </p>
+<div style="display:none;">
+	<% if @answer_two.nil? %>
+	<p>We didn't find your answer for this question. If this is in error, please let us know. </p>
+	<% else %>
+	<p><strong>Your answer</strong>: <%= @answer_two.response %></p>
+		<% if @evaluations_two.nil? %>
+		<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
+		<% else %>
+			<%unless current_user.experimental_condition == "baseline" %>
+				<p>This answer was marked as:</p><ul>
+				<% @evaluations_two.each do |e| %>
+					
+					<% next unless (e.score.nil? and e.verified_true_count >= e.verified_false_count) %>
+					<% answer_attr = e.answer_attribute %>
+					<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
+				<% end %>
+				</ul>
+			<% end %>
+			<p>Your grade is: <strong><%= @answer_two.current_score.nil? ? "not available" : @answer_two.current_score %></strong>.</p>
+
+		<% end %>
+	<% end %>
+</div>

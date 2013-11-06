@@ -206,6 +206,25 @@ class GradingController < ApplicationController
       end
     end
 
+    @answer_two = Answer.where("question_id = 2 and user_id=?", current_user.id).first()
+    if @answer_two.nil?
+      @evaluations_two = nil
+    else
+      @evaluations_two = Evaluation.where("answer_id=? and score is null", @answer_two.id)
+      grades = @answer_two.get_grade[0]
+      if grades.nil?
+        @evaluations_two = nil
+      else
+        answer_grade_two = ([0.0,grades["avg_final_score"].to_f,3.0].sort[1]).floor
+      end
+
+      if !answer_grade_two.nil? and @answer_two.state == "identify"
+        @answer_two.current_score = answer_grade_two
+        @answer_two.state="graded"
+        @answer_two.save!
+      end
+    end
+
     flash[:alert] = "Due to a technical problem, our grades script is being delayed for Question 2. Please check back after Nov 6 8am PDT"
   end
 
