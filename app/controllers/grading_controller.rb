@@ -192,6 +192,8 @@ class GradingController < ApplicationController
       @evaluations_one = nil
     else
       @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
+      grades = @answer_one.get_grade[0]
+      @answer_grade_one = ([0,grades["avg_final_score"].to_f,1].sort[1])
     end
   end
 

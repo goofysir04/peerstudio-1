@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131031035917) do
+ActiveRecord::Schema.define(version: 20131106075006) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -20,10 +20,28 @@ ActiveRecord::Schema.define(version: 20131031035917) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "description"
+    t.index ["question_id"], :name => "index_answer_attributes_on_question_id"
   end
 
-  add_index "answer_attributes", ["question_id"], name: "index_answer_attributes_on_question_id"
+  create_table "evaluations", force: true do |t|
+    t.integer  "question_id"
+    t.integer  "answer_id"
+    t.integer  "answer_attribute_id"
+    t.integer  "verified_true_count",  default: 0
+    t.integer  "verified_false_count", default: 0
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "assessment_id"
+    t.integer  "score"
+    t.index ["assessment_id"], :name => "index_evaluations_on_assessment_id"
+    t.index ["answer_attribute_id"], :name => "index_evaluations_on_answer_attribute_id"
+    t.index ["user_id"], :name => "index_evaluations_on_user_id"
+    t.index ["answer_id"], :name => "index_evaluations_on_answer_id"
+    t.index ["question_id"], :name => "index_evaluations_on_question_id"
+  end
 
+  create_view "answer_grades", "SELECT answer_id,\n             sum(answer_score) AS final_score,\n             avg(answer_score) AS avg_final_score\n      FROM\n        (SELECT answer_attributes.score AS answer_score,\n                verified_answers.answer_id\n         FROM answer_attributes,\n           (SELECT answer_id,\n                   answer_attribute_id,\n                   id,\n                   assessment_id\n            FROM evaluations\n            WHERE verified_true_count >verified_false_count\n              AND verified_true_count > 0) AS verified_answers\n         WHERE verified_answers.answer_attribute_id = answer_attributes.id) AS answer_scores,\n           answers\n      WHERE answer_scores.answer_id = answers.id\n      GROUP BY answer_scores.answer_id", :force => true
   create_table "answers", force: true do |t|
     t.text     "response"
     t.integer  "question_id"
@@ -37,10 +55,9 @@ ActiveRecord::Schema.define(version: 20131031035917) do
     t.datetime "updated_at"
     t.string   "state",              default: "identify"
     t.string   "evaluation_type",    default: "default"
+    t.index ["user_id"], :name => "index_answers_on_user_id"
+    t.index ["question_id"], :name => "index_answers_on_question_id"
   end
-
-  add_index "answers", ["question_id"], name: "index_answers_on_question_id"
-  add_index "answers", ["user_id"], name: "index_answers_on_user_id"
 
   create_table "assessments", force: true do |t|
     t.integer  "user_id"
@@ -50,11 +67,10 @@ ActiveRecord::Schema.define(version: 20131031035917) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "started_at"
+    t.index ["question_id"], :name => "index_assessments_on_question_id"
+    t.index ["answer_id"], :name => "index_assessments_on_answer_id"
+    t.index ["user_id"], :name => "index_assessments_on_user_id"
   end
-
-  add_index "assessments", ["answer_id"], name: "index_assessments_on_answer_id"
-  add_index "assessments", ["question_id"], name: "index_assessments_on_question_id"
-  add_index "assessments", ["user_id"], name: "index_assessments_on_user_id"
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -68,28 +84,8 @@ ActiveRecord::Schema.define(version: 20131031035917) do
     t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["priority", "run_at"], :name => "delayed_jobs_priority"
   end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
-
-  create_table "evaluations", force: true do |t|
-    t.integer  "question_id"
-    t.integer  "answer_id"
-    t.integer  "answer_attribute_id"
-    t.integer  "verified_true_count",  default: 0
-    t.integer  "verified_false_count", default: 0
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "assessment_id"
-    t.integer  "score"
-  end
-
-  add_index "evaluations", ["answer_attribute_id"], name: "index_evaluations_on_answer_attribute_id"
-  add_index "evaluations", ["answer_id"], name: "index_evaluations_on_answer_id"
-  add_index "evaluations", ["assessment_id"], name: "index_evaluations_on_assessment_id"
-  add_index "evaluations", ["question_id"], name: "index_evaluations_on_question_id"
-  add_index "evaluations", ["user_id"], name: "index_evaluations_on_user_id"
 
   create_table "questions", force: true do |t|
     t.text     "title"
@@ -120,10 +116,9 @@ ActiveRecord::Schema.define(version: 20131031035917) do
     t.string   "uid"
     t.string   "gender"
     t.boolean  "admin"
+    t.index ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+    t.index ["email"], :name => "index_users_on_email", :unique => true
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
   create_table "verifications", force: true do |t|
     t.integer  "answer_id"
@@ -134,11 +129,10 @@ ActiveRecord::Schema.define(version: 20131031035917) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "started_at"
+    t.index ["question_id"], :name => "index_verifications_on_question_id"
+    t.index ["answer_attribute_id"], :name => "index_verifications_on_answer_attribute_id"
+    t.index ["user_id"], :name => "index_verifications_on_user_id"
+    t.index ["answer_id"], :name => "index_verifications_on_answer_id"
   end
-
-  add_index "verifications", ["answer_attribute_id"], name: "index_verifications_on_answer_attribute_id"
-  add_index "verifications", ["answer_id"], name: "index_verifications_on_answer_id"
-  add_index "verifications", ["question_id"], name: "index_verifications_on_question_id"
-  add_index "verifications", ["user_id"], name: "index_verifications_on_user_id"
 
 end
