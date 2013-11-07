@@ -15,6 +15,15 @@
 				<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
 			<% end %>
 			</ul>
+			<% if !@attributes_missing_one.nil? %>
+				<p>Other correct answers were also frequently marked as:</p> 
+				<ul>
+					<% @attributes_missing_one.each do |a| %>
+						<li><%= a.description %></li>
+					<% end %>
+				</ul>
+			<% end %>
+
 		<% end %>
 		<p>Your grade is: <strong><%= @answer_one.current_score.nil? ? "not available" : @answer_one.current_score %></strong>. <small>(Unacceptably unfair grade? <%=  link_to "Submit a regrade request", appeal_grading_path(@answer_one) %>)</small></p>
 
@@ -38,6 +47,15 @@
 					<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
 				<% end %>
 				</ul>
+
+				<% if !@attributes_missing_two.nil? %>
+					<p>Other correct answers were also frequently marked as:</p> 
+					<ul>
+						<% @attributes_missing_two.each do |a| %>
+							<li><%= a.description %></li>
+						<% end %>
+					</ul>
+				<% end %>
 			<% end %>
 			<p>Your grade is: <strong><%= @answer_two.current_score.nil? ? "not available" : @answer_two.current_score %></strong>. <small>(Unacceptably unfair grade? <%=  link_to "Submit a regrade request", appeal_grading_path(@answer_two) %> Special case: please appeal your grade if you mentioned "More individual exploration" but had that marked as an incorrect attribute)</small></p>
 

@@ -192,6 +192,8 @@ class GradingController < ApplicationController
       @evaluations_one = nil
     else
       @evaluations_one = Evaluation.where("answer_id=? and score is null", @answer_one.id)
+
+      @attributes_missing_one = AnswerAttribute.where("question_id=1 and is_correct =? and id not in (?)", true, @evaluations_one.map(&:answer_attribute_id))
       grades = @answer_one.get_grade[0]
       if grades.nil?
         @evaluations_one = nil
@@ -211,6 +213,7 @@ class GradingController < ApplicationController
       @evaluations_two = nil
     else
       @evaluations_two = Evaluation.where("answer_id=? and score is null", @answer_two.id)
+      @attributes_missing_two = AnswerAttribute.where("question_id=2 and is_correct =? and id not in (?)", true, @evaluations_two.map(&:answer_attribute_id))
       grades = @answer_two.get_grade[0]
       if grades.nil?
         @evaluations_two = nil
