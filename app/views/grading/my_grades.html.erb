@@ -1,6 +1,6 @@
 <h2>Question 1: <h4><%=Question.find(1).title %></h4></h2>
 <% if @answer_one.nil? %>
-<p>We didn't find your answer for this question. If this is in error, please let us know. </p>
+<p>We didn't find your answer for this question in our database. We've been notified that this happened, and we'll try and find that answer. Please give us until Nov 15 to do this, since the process is manual. A staff member will grade your answer once we find it. (Of course, if you didn't write an answer, you can safely disregard this message.)</p>
 <% else %>
 <p><strong>Your answer</strong>: <%= @answer_one.response %></p>
 	<% if @evaluations_one.nil? %>
@@ -23,7 +23,7 @@
 <h2>Question 2: <h4><%=Question.find(2).title %></h4></h2>
 <div style="display:block;">
 	<% if @answer_two.nil? %>
-	<p>We didn't find your answer for this question. If this is in error, please let us know. </p>
+	<p>We didn't find your answer for this question in our database. We've been notified that this happened, and we'll try and find that answer. Please give us until Nov 15 to do this, since the process is manual. A staff member will grade your answer once we find it. (Of course, if you didn't write an answer, you can safely disregard this message.)</p>
 	<% else %>
 	<p><strong>Your answer</strong>: <%= @answer_two.response %></p>
 		<% if @evaluations_two.nil? %>
