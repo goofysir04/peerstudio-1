@@ -39,7 +39,7 @@
 				<% end %>
 				</ul>
 			<% end %>
-			<p>Your grade is: <strong><%= @answer_two.current_score.nil? ? "not available" : @answer_two.current_score %></strong>. <small>(Unacceptably unfair grade? <%=  link_to "Submit a regrade request", appeal_grading_path(@answer_two) %>)</small></p>
+			<p>Your grade is: <strong><%= @answer_two.current_score.nil? ? "not available" : @answer_two.current_score %></strong>. <small>(Unacceptably unfair grade? <%=  link_to "Submit a regrade request", appeal_grading_path(@answer_two) %> Special case: please appeal your grade if you mentioned "More individual exploration" but had that marked as an incorrect attribute)</small></p>
 
 		<% end %>
 	<% end %>
