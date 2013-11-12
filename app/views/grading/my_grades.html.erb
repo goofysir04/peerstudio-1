@@ -10,7 +10,7 @@
 			<p>This answer was marked as:</p><ul>
 			<% @evaluations_one.each do |e| %>
 				
-				<% next unless (e.score.nil? and e.verified_true_count >= e.verified_false_count) %>
+				<% next unless (e.score.nil? and e.verified_true_count >= e.verified_false_count and !e.answer_attribute.nil?) %>
 				<% answer_attr = e.answer_attribute %>
 				<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
 			<% end %>
