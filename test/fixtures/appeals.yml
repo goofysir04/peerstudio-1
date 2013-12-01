@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  comments: MyText
+  question_id: 
+  answer_id: 
+  accepted: false
+  inspected: false
+  appeal_score: 1.5
+
+two:
+  comments: MyText
+  question_id: 
+  answer_id: 
+  accepted: false
+  inspected: false
+  appeal_score: 1.5

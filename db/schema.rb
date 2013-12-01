@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131106104031) do
+ActiveRecord::Schema.define(version: 20131201030318) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20131106104031) do
     t.datetime "updated_at"
     t.string   "state",              default: "identify"
     t.string   "evaluation_type",    default: "default"
+    t.boolean  "staff_graded",       default: false
     t.index ["user_id"], :name => "index_answers_on_user_id"
     t.index ["question_id"], :name => "index_answers_on_question_id"
   end
@@ -79,8 +80,11 @@ ActiveRecord::Schema.define(version: 20131106104031) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "experimental_condition"
+    t.text     "instructor_comments"
     t.index ["answer_id"], :name => "index_appeals_on_answer_id"
+    t.index ["answer_id"], :name => "fk__appeals_answer_id"
     t.index ["question_id"], :name => "index_appeals_on_question_id"
+    t.index ["question_id"], :name => "fk__appeals_question_id"
     t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_answer_id"
     t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
   end

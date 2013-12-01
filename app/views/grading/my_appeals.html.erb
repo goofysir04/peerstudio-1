@@ -1,0 +1,15 @@
+<% @appeals.each do |appeal| %>
+	<h2>Question: <%= appeal.question.title %></h2>
+	<p>
+	<%if appeal.accepted.nil? %>
+		Your appeal is still being reviewed
+	<% elsif appeal.accepted? %>
+		Your appeal was approved.
+	<% else %>
+		Your appeal was denied. 
+	<% end %>
+	</p>
+	<% unless appeal.instructor_comments.nil? %>
+		<p>Instructor comments: <%= appeal.instructor_comments %>
+	<% end %>
+<% end %>

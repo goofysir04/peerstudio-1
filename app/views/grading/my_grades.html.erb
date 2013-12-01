@@ -62,5 +62,19 @@
 		<% end %>
 	<% end %>
 </div>
-<h3>One minute survey</h3>
-<iframe src='<%= "https://stanforduniversity.qualtrics.com/SE/?SID=SV_4T8GRO3wp0mfCmh&u=#{current_user.id}&type=#{current_user.experimental_condition}"%>' target="_blank" width="800" height="600"></iframe>
+<h2>Appeals</h2>
+<% @appeals.each do |appeal| %>
+	<strong>Question:</strong> <%= appeal.question.title %>
+	<p>
+	<%if appeal.accepted.nil? %>
+		<span class="label">Pending</span> Your appeal is still being reviewed
+	<% elsif appeal.accepted? %>
+		<span class="label label-success">Approved</span> Your appeal was approved.
+	<% else %>
+		<span class="label label-important">Denied</span> Your appeal was denied. 
+	<% end %>
+	</p>
+	<% unless appeal.instructor_comments.nil? %>
+		<p>Instructor comments: <%= appeal.instructor_comments %>
+	<% end %>
+<% end %>

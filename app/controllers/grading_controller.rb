@@ -227,7 +227,8 @@ class GradingController < ApplicationController
         @answer_two.save!
       end
     end
-
+    @current_user_answers = Answer.where("user_id = ? ", current_user)
+    @appeals = Appeal.where("answer_id IN (?)", @current_user_answers)
     # flash[:alert] = "Due to a technical problem, our grades script is being delayed for Question 2. Please check back after Nov 6 8am PDT"
   end
 
@@ -253,7 +254,6 @@ class GradingController < ApplicationController
         redirect_to root_path and return 
       end
     end
-
   end
 
   private
