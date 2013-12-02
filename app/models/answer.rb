@@ -46,7 +46,8 @@ class Answer < ActiveRecord::Base
             :current_score => row["current_score"],
             :evaluations_wanted => row["evaluations_wanted"],
             :total_evaluations => row["total_evaluations"],
-            :confidence => row["confidence"])
+            :confidence => row["confidence"],
+            :evaluation_type => row["evaluation_type"])
         answer.save!
         # print "Answer saved"
       end
