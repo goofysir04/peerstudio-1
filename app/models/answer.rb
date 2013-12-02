@@ -11,7 +11,7 @@ class Answer < ActiveRecord::Base
   has_many :assessments
   
   def self.get_next_identify_for_user_and_question(user, question)
-    return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
+    return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND evaluation_type='default' AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
     .order("(evaluations_wanted - total_evaluations) DESC").first()
   end
 
@@ -29,7 +29,7 @@ class Answer < ActiveRecord::Base
       print "STARTing job"
       spreadsheet = CSV.parse(file_text, {:headers => :first_row})
       spreadsheet.each do |row|
-        owning_user = User.find_for_authenticaton(:email => row["email"])
+        owning_user = User.find_by_email(row["email"])
 
         if owning_user.nil?
         #this is a dummy password
@@ -41,7 +41,7 @@ class Answer < ActiveRecord::Base
           answer = Answer.new
         end
 
-        answer.update_attributes(:question_id  => row["question_id"],:response => row["response"], :user_id => owning_user.id,
+        answer.update_attributes(:question_id  => row["question_id"],:response => row["response"].to_s.force_encoding("UTF-8"), :user_id => owning_user.id,
           :predicted_score => row["predicted_score"],
             :current_score => row["current_score"],
             :evaluations_wanted => row["evaluations_wanted"],
