@@ -20,7 +20,7 @@ class GradingController < ApplicationController
   	@question = Question.find(params[:id])
   	@answer = Answer.get_next_identify_for_user_and_question(current_user, @question) #TODO fix actual user
 
-    @completed_assessments = current_user.assessments.count
+    @completed_assessments = current_user.assessments.where(question_id: @question.id).count
   	#Find question attributes
   	@correct_attributes = @question.answer_attributes.where(:is_correct => true)
   	@incorrect_attributes = @question.answer_attributes.where(:is_correct => false)
@@ -140,7 +140,7 @@ class GradingController < ApplicationController
       flash[:notice] = "We have no more answers for you to evaluate"
       redirect_to root_path and return
     end
-    @completed_assessments = current_user.assessments.count
+    @completed_assessments = current_user.assessments.where(question_id: @question.id).count
 
     #Create a new evaluation. This particular evaluation is never saved
     @evaluation = Evaluation.new(question_id:@question.id,answer_id:@answer.id)
