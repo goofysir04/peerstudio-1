@@ -3,7 +3,7 @@
 <p>We didn't find your answer for this question in our database. We've been notified that this happened, and we'll try and find that answer. Please give us until Nov 15 to do this, since the process is manual. A staff member will grade your answer once we find it. (Of course, if you didn't write an answer, you can safely disregard this message.)</p>
 <% else %>
 <p><strong>Your answer</strong>: <%= @answer_one.response %></p>
-	<% if @evaluations_one.nil? %>
+	<% if @answer_one.state=="identify" %>
 	<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
 	<% else %>
 		<%unless current_user.experimental_condition == "baseline" %>
@@ -35,7 +35,7 @@
 	<p>We didn't find your answer for this question in our database. We've been notified that this happened, and we'll try and find that answer. Please give us until Nov 15 to do this, since the process is manual. A staff member will grade your answer once we find it. (Of course, if you didn't write an answer, you can safely disregard this message.)</p>
 	<% else %>
 	<p><strong>Your answer</strong>: <%= @answer_two.response %></p>
-		<% if @evaluations_two.nil? %>
+		<% if @answer_two.state=="identify" %>
 		<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
 		<% else %>
 			<%unless current_user.experimental_condition == "baseline" %>
