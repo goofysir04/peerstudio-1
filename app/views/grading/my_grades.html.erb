@@ -6,7 +6,7 @@
 	<% if @answer_one.state=="identify" %>
 	<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
 	<% else %>
-		<%unless current_user.experimental_condition == "baseline" %>
+		<%if current_user.experimental_condition != "baseline" and !@evaluations_one.nil?%>
 			<p>This answer was marked as:</p><ul>
 			<% @evaluations_one.each do |e| %>
 				
@@ -38,7 +38,7 @@
 		<% if @answer_two.state=="identify" %>
 		<p>Sorry, we didn't get enough peer ratings for your answer. As this is an experimental system, a staff member will grade your submission. Please allow until December 1 for staff grades. We'll update this page when your answer is graded---as always, the forum is the best place to ask questions, but we will not be able to provide you a personalized estimate for when your grading will be completed.</p>
 		<% else %>
-			<%unless current_user.experimental_condition == "baseline" %>
+			<%if current_user.experimental_condition != "baseline" and !@evaluations_two.nil?%>
 				<p>This answer was marked as:</p><ul>
 				<% @evaluations_two.each do |e| %>
 					
