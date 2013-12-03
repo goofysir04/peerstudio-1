@@ -202,8 +202,13 @@ class GradingController < ApplicationController
 
       @attributes_missing_one = AnswerAttribute.where("question_id=1 and is_correct =? and id not in (?)", true, @evaluations_one.map(&:answer_attribute_id))
       grades = @answer_one.get_grade[0]
+
       if grades.nil?
         @evaluations_one = nil
+        baseline_evaluations_count = Evaluation.where("answer_id=? and score is not null", @answer_one.id).count
+        if baseline_evaluations_count > 0
+          answer_grade_one = Evaluation.where("answer_id=? and score is not null", @answer_one.id).average('score')
+        end
       else
         answer_grade_one = ([0.0,grades["avg_final_score"].to_f,1.0].sort[1]).floor
       end
