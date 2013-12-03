@@ -33,6 +33,10 @@ class GradingController < ApplicationController
   	#First find if this assessment was already submitted
   	@assessment = Assessment.find_or_initialize_by(user_id: current_user.id, question_id:params[:evaluation][:question_id],
       answer_id: params[:evaluation][:answer_id])
+
+    @answer = Answer.find(params[:evaluation][:answer_id])
+
+    @assessment.answer_type = @answer.evaluation_type
     
     @attributes = params[:evaluation][:answer_attribute]
     if @assessment.persisted?
@@ -165,15 +169,18 @@ class GradingController < ApplicationController
     @assessment.comments = params[:comments]
     @assessment.started_at = params[:start_assessment_time]
 
-    @evaluation = Evaluation.new evaluation_attributes()
-    @evaluation.user_id = current_user.id
-    @evaluation.assessment = @assessment
+    @answer = Answer.find(params[:evaluation][:answer_id])
+    @assessment.answer_type = @answer.evaluation_type
+
     if @assessment.persisted?
       flash[:alert] = "You've already submitted your assessment for that question"
       redirect_to grade_baseline_path(assessment_attributes[:question_id]) and return
     end
 
-    @answer = Answer.find(@assessment.answer_id)
+    @evaluation = Evaluation.new evaluation_attributes()
+    @evaluation.user_id = current_user.id
+    @evaluation.assessment = @assessment
+
     @answer.increment!(:total_evaluations)
     if @assessment.save && @evaluation.save
       flash[:notice] = "Thanks! Your evaluation was recorded"

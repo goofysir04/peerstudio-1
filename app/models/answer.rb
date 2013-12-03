@@ -11,13 +11,36 @@ class Answer < ActiveRecord::Base
   has_many :assessments
   
   def self.get_next_identify_for_user_and_question(user, question)
-    return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND evaluation_type='default' AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
-    .order("(evaluations_wanted - total_evaluations) DESC").first()
+
+    if self.should_get_ground_truth_assignment(user, question)
+      return self.get_ground_truth_assignment(user, question)
+    else
+      return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND evaluation_type='default' AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
+      .order("(evaluations_wanted - total_evaluations) DESC").first()
+    end
+  end
+
+  def self.should_get_ground_truth_assignment(user, question)
+    #First return false if this user has already identified a ground truth assignment. 
+    ground_truths_assessed_so_far = Assessment.where("question_id =? and user_id = ? and answer_type='ground_truth'", question, user).count
+    return false if ground_truths_assessed_so_far > 0 
+    #else, 
+    answers_assessed_so_far = Assessment.where("question_id = ? and user_id = ?", question, user).count
+    #choose yes based on random choice. 
+    return answers_assessed_so_far/4.0 > rand
+  end
+
+  def self.get_ground_truth_assignment(user, question)
+    return self.where("answers.user_id <> ? AND answers.question_id = ? and answers.evaluation_type='ground_truth'", user, question).order("total_evaluations ASC").first()
   end
 
   def self.get_next_evaluate_for_user_and_question(user, question)
-    return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND evaluation_type='baseline' AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
-    .order("(evaluations_wanted - total_evaluations) DESC").first()
+    if self.should_get_ground_truth_assignment(user, question)
+      return self.get_ground_truth_assignment(user, question)
+    else
+      return self.where("answers.user_id <> ? AND answers.question_id = ? AND total_evaluations < evaluations_wanted AND confidence < 1 AND evaluation_type='baseline' AND answers.id NOT in (SELECT answer_id from assessments where assessments.user_id=?)", user.id, question, user.id)
+      .order("(evaluations_wanted - total_evaluations) DESC").first()
+    end
   end
 
   def get_grade

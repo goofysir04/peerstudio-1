@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131201030318) do
+ActiveRecord::Schema.define(version: 20131203010354) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -89,34 +89,6 @@ ActiveRecord::Schema.define(version: 20131201030318) do
     t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
   end
 
-  create_table "assessments", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "answer_id"
-    t.text     "comments"
-    t.integer  "question_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "started_at"
-    t.index ["question_id"], :name => "index_assessments_on_question_id"
-    t.index ["answer_id"], :name => "index_assessments_on_answer_id"
-    t.index ["user_id"], :name => "index_assessments_on_user_id"
-  end
-
-  create_table "delayed_jobs", force: true do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["priority", "run_at"], :name => "delayed_jobs_priority"
-  end
-
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",                           null: false
     t.string   "encrypted_password",     default: "",                           null: false
@@ -138,6 +110,44 @@ ActiveRecord::Schema.define(version: 20131201030318) do
     t.boolean  "admin"
     t.index ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
     t.index ["email"], :name => "index_users_on_email", :unique => true
+  end
+
+  create_table "assessments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "answer_id"
+    t.text     "comments"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "started_at"
+    t.string   "answer_type"
+    t.index ["user_id"], :name => "k__assessments_user_id"
+    t.index ["answer_id"], :name => "k__assessments_answer_id"
+    t.index ["question_id"], :name => "k__assessments_question_id"
+    t.index ["question_id"], :name => "index_assessments_on_question_id"
+    t.index ["answer_id"], :name => "index_assessments_on_answer_id"
+    t.index ["user_id"], :name => "index_assessments_on_user_id"
+    t.index ["question_id"], :name => "fk__assessments_question_id"
+    t.index ["answer_id"], :name => "fk__assessments_answer_id"
+    t.index ["user_id"], :name => "fk__assessments_user_id"
+    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_answer_id"
+    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_question_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_user_id"
+  end
+
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], :name => "delayed_jobs_priority"
   end
 
   create_table "verifications", force: true do |t|
