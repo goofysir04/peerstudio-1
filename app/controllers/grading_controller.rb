@@ -270,7 +270,7 @@ class GradingController < ApplicationController
 
   def staff_grade
     @question = Question.find(params[:id])
-    @answer = Answer.where("question_id = ? and current_score is NULL and id not in (select answer_id from evaluations where score is not null)", @question).first #TODO fix actual user
+    @answer = Answer.where("question_id = ? and current_score is NULL and id not in (select answer_id from evaluations where score is not null) and user_id in (select user_id from answers where question_id > 2)", @question).first #TODO fix actual user
 
     if @answer.nil?
       flash[:notice] = "We have no more answers for you to evaluate"
