@@ -299,7 +299,7 @@ class GradingController < ApplicationController
     score = (params[:evaluation][:score]).to_f
     if score < @question.min_score or score > @question.max_score
       flash[:alert] = "Please enter a score between #{@question.min_score} and #{@question.max_score}"
-      redirect_to grade_baseline_path(params[:evaluation][:question_id]) and return
+      redirect_to staff_grade_path(params[:evaluation][:question_id]) and return
     end
 
     @assessment = Assessment.find_or_initialize_by(user_id: current_user.id, question_id:params[:evaluation][:question_id],
@@ -312,7 +312,7 @@ class GradingController < ApplicationController
 
     if @assessment.persisted?
       flash[:alert] = "You've already submitted your assessment for that question"
-      redirect_to grade_baseline_path(assessment_attributes[:question_id]) and return
+      redirect_to staff_grade_path(assessment_attributes[:question_id]) and return
     end
 
     @evaluation = Evaluation.new evaluation_attributes()
