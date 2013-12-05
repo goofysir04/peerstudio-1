@@ -268,6 +268,74 @@ class GradingController < ApplicationController
     end
   end
 
+  def staff_grade
+    @question = Question.find(params[:id])
+    @answer = Answer.where("question_id = ? and current_score is NULL and id not in (select answer_id from evaluations where score is not null)", @question) #TODO fix actual user
+
+    if @answer.nil?
+      flash[:notice] = "We have no more answers for you to evaluate"
+      redirect_to root_path and return
+    end
+    @completed_assessments = current_user.assessments.where(question_id: @question.id).count
+
+    #Create a new evaluation. This particular evaluation is never saved
+    raise @answer.inspect
+    @evaluation = Evaluation.new(question_id:@question.id,answer_id:@answer.id)
+    @action_path = create_staff_grade_path
+    render 'baseline_evaluate'
+  end
+
+  def create_staff_grade
+    if params[:evaluation][:score].blank?
+      flash[:alert] = "Please enter a score."
+      redirect_to staff_grade_path(params[:evaluation][:question_id]) and return
+    end
+
+    unless current_user.admin?
+      flash[:alert] = "Nope, you can't do that" and redirect_to root_path and return
+    end
+
+    @question = Question.find(params[:evaluation][:question_id])
+    score = (params[:evaluation][:score]).to_f
+    if score < @question.min_score or score > @question.max_score
+      flash[:alert] = "Please enter a score between #{@question.min_score} and #{@question.max_score}"
+      redirect_to grade_baseline_path(params[:evaluation][:question_id]) and return
+    end
+
+    @assessment = Assessment.find_or_initialize_by(user_id: current_user.id, question_id:params[:evaluation][:question_id],
+      answer_id: params[:evaluation][:answer_id])
+    @assessment.comments = params[:comments]
+    @assessment.started_at = params[:start_assessment_time]
+
+    @answer = Answer.find(params[:evaluation][:answer_id])
+    @assessment.answer_type = @answer.evaluation_type
+
+    if @assessment.persisted?
+      flash[:alert] = "You've already submitted your assessment for that question"
+      redirect_to grade_baseline_path(assessment_attributes[:question_id]) and return
+    end
+
+    @evaluation = Evaluation.new evaluation_attributes()
+    @evaluation.user_id = current_user.id
+    @evaluation.assessment = @assessment
+
+    @answer.increment!(:total_evaluations)
+
+    @answer.staff_graded = true
+
+
+    if @answer.save && @assessment.save && @evaluation.save
+      flash[:notice] = "Thanks! Your evaluation was recorded"
+      
+      redirect_to staff_grade_path(params[:evaluation][:question_id]) and return
+    else
+      @assessment.destroy 
+      flash[:alert] = "Errors! #{@evaluation.errors.full_messages.join(',')}"
+      redirect_to staff_grade_path(params[:evaluation][:question_id]) and return
+    end
+  end
+
+
   private
 
   def evaluation_attributes
