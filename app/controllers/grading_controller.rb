@@ -279,7 +279,7 @@ class GradingController < ApplicationController
     @completed_assessments = current_user.assessments.where(question_id: @question.id).count
 
     #Create a new evaluation. This particular evaluation is never saved
-    raise @answer.inspect
+
     @evaluation = Evaluation.new(question_id:@question.id,answer_id:@answer.id)
     @action_path = create_staff_grade_path
     render 'baseline_evaluate'
