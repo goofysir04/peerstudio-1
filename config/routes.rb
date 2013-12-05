@@ -20,6 +20,9 @@ Humanmachine::Application.routes.draw do
   get "grading/my_grades" => "grading#my_grades", as: :my_grades
   get "grading/appeal/:id" => "grading#appeal", as: :appeal_grading
   post "grading/appeal/:id" => "grading#create_appeal", as: :create_appeal_grading
+
+  get "grading/staff_grade/:id" => "grading#staff_grade", as: :staff_grade
+  post "grading/staff_grade" => "grading#staff_grade", as: :create_staff_grade
   resources :questions
 
   # The priority is based upon order of creation: first created -> highest priority.
