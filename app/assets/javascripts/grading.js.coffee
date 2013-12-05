@@ -33,6 +33,8 @@ $(document).ready () ->
 		res += "</ul>"
 		$("#chosenAttributes").html(res)
 
+	$('#score_field').focus()
+
 
 	verification_tour = {
 		"id": "hello-verification"

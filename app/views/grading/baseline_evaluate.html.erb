@@ -23,7 +23,7 @@
     <div id="collapseBaseline" class="panel-collapse collapse in">
       <div class="panel-body">
 
-        <%=f.label :score %> <%= f.number_field :score %> (max: <%=@question.max_score %>, min: <%= @question.min_score %>)
+        <%=f.label :score %> <%= f.number_field :score, :id=>"score_field" %> (max: <%=@question.max_score %>, min: <%= @question.min_score %>)
         <%= f.hidden_field :answer_id %>
         <%= f.hidden_field :question_id %>
 
