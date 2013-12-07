@@ -229,6 +229,10 @@ class GradingController < ApplicationController
       grades = @answer_two.get_grade[0]
       if grades.nil?
         @evaluations_two = nil
+        baseline_evaluations_count_two = Evaluation.where("answer_id=? and score is not null", @answer_one.id).count
+        if baseline_evaluations_count_two > 0
+          answer_grade_two = Evaluation.where("answer_id=? and score is not null", @answer_one.id).average('score')
+        end
       else
         answer_grade_two = ([0.0,grades["final_score"].to_f,3.0].sort[1]).floor
       end
