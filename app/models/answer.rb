@@ -48,14 +48,19 @@ class Answer < ActiveRecord::Base
   end
 
   def new_get_grade
-    grades = AnswerGrade.where("answer_id = ?", id).first
+    grades = AnswerGrade.where("answer_id = ?", id)
+
+    if grades.nil?
+      return nil
+    end
+    grade = grades[0]
     case self.question.score_aggregation_method
       when "sum"
-        final_grade = ([question.min_score,grades["final_score"].to_f,question.max_score].sort[1]).floor
+        final_grade = ([question.min_score,grade["final_score"].to_f,question.max_score].sort[1]).floor
       when "average"
-        final_grade = ([question.min_score,grades["avg_final_score"].to_f,question.max_score].sort[1]).floor
+        final_grade = ([question.min_score,grade["avg_final_score"].to_f,question.max_score].sort[1]).floor
       else #assume sum by default
-        final_grade = ([question.min_score,grades["final_score"].to_f,question.max_score].sort[1]).floor
+        final_grade = ([question.min_score,grade["final_score"].to_f,question.max_score].sort[1]).floor
     end
     return final_grade
   end
