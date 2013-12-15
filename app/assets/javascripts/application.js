@@ -19,9 +19,6 @@
 //= require bootstrap-datepicker
 //= require tokenahead
 //= require jquery.jcarousel.min
-//= require ckeditor/override
-//= require ckeditor/init
-
 
 
 //Disabled
