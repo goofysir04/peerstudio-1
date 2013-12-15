@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/galetahub/ckeditor.git
-  revision: 077827e013901f315a6a1ca9cc7ac2af05acc099
-  specs:
-    ckeditor (4.0.7)
-      mime-types
-      orm_adapter
-
-GIT
   remote: git://github.com/intridea/omniauth-openid.git
   revision: e9965493e2d8a2fc138ccae39c8bcf49311e496f
   specs:
@@ -234,7 +226,6 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-rails
   capistrano-rvm
-  ckeditor!
   coffee-rails (~> 4.0.0)
   daemons
   delayed_job_active_record
