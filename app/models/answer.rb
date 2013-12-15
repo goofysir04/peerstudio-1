@@ -57,7 +57,6 @@ class Answer < ActiveRecord::Base
       else #assume sum by default
         final_grade = ([question.min_score,grades["final_score"].to_f,question.max_score].sort[1]).floor
     end
-
     return final_grade
   end
 

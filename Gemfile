@@ -78,7 +78,7 @@ gem 'airbrake'
 
 #For editor and uploads
 gem "paperclip"
-gem "ckeditor", :git => "git@github.com:galetahub/ckeditor.git"
+gem "ckeditor", :github => "galetahub/ckeditor"
 gem "aws-sdk"
 
 gem 'rmagick', '2.13.2'
