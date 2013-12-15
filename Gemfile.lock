@@ -6,6 +6,14 @@ GIT
       omniauth (~> 1.0)
       rack-openid (~> 1.3.1)
 
+GIT
+  remote: git@github.com:galetahub/ckeditor.git
+  revision: 05fdfdb66b9953249a57867e08dc331e321d218e
+  specs:
+    ckeditor (4.0.7)
+      mime-types
+      orm_adapter
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -38,19 +46,30 @@ GEM
       json
     arel (4.0.1)
     atomic (1.1.14)
+    aws-sdk (1.29.1)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
+      uuidtools (~> 2.1)
     bcrypt-ruby (3.1.2)
     builder (3.1.4)
     cancan (1.6.10)
-    capistrano (3.0.0)
+    capistrano (3.0.1)
       i18n
       rake (>= 10.0.0)
       sshkit (>= 0.0.23)
-    capistrano-bundler (1.0.0)
-      capistrano (>= 3.0.0.pre)
-    capistrano-rails (1.0.0)
-      capistrano
-    capistrano-rvm (0.0.2)
-      capistrano
+    capistrano-bundler (1.1.1)
+      capistrano (~> 3.0)
+      sshkit (>= 1.2.0)
+    capistrano-rails (1.1.0)
+      capistrano (>= 3.0.0)
+      capistrano-bundler (>= 1.0.0)
+    capistrano-rvm (0.1.0)
+      capistrano (~> 3.0)
+      sshkit (~> 1.2.0)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.3)
+      climate_control (>= 0.0.3, < 1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -65,7 +84,7 @@ GEM
     delayed_job_active_record (4.0.0)
       activerecord (>= 3.0, < 4.1)
       delayed_job (>= 3.0, < 4.1)
-    devise (3.1.1)
+    devise (3.2.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -76,14 +95,15 @@ GEM
     google-analytics-rails (0.0.4)
     hashie (2.0.5)
     hike (1.2.3)
-    i18n (0.6.5)
-    jbuilder (1.5.2)
+    i18n (0.6.9)
+    jbuilder (1.5.3)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
+    kgio (2.8.1)
     less (2.3.3)
       commonjs (~> 0.2.6)
     less-rails (2.3.3)
@@ -93,16 +113,24 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    mime-types (1.25)
+    mime-types (1.25.1)
+    mini_portile (0.5.2)
     minitest (4.7.5)
     multi_json (1.8.2)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.7.0)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
-    orm_adapter (0.4.0)
+    orm_adapter (0.5.0)
+    paperclip (3.5.2)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.3)
+      mime-types
     pg (0.17.0)
     polyglot (0.3.3)
     pretender (0.0.3)
@@ -130,10 +158,12 @@ GEM
       activesupport (= 4.0.0)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    raindrops (0.12.0)
     rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
+    rmagick (2.13.2)
     ruby-openid (2.3.0)
     sass (3.2.12)
     sass-rails (4.0.1)
@@ -146,7 +176,7 @@ GEM
     sdoc (0.3.20)
       json (>= 1.1.3)
       rdoc (~> 3.10)
-    sprockets (2.10.0)
+    sprockets (2.10.1)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
@@ -156,8 +186,8 @@ GEM
       activesupport (>= 3.0)
       sprockets (~> 2.8)
     sqlite3 (1.3.8)
-    sshkit (1.1.0)
-      net-scp
+    sshkit (1.2.0)
+      net-scp (>= 1.1.2)
       net-ssh
       term-ansicolor
     term-ansicolor (1.2.2)
@@ -169,11 +199,11 @@ GEM
     thread_safe (0.1.3)
       atomic
     tilt (1.4.1)
-    tins (0.12.0)
+    tins (0.13.1)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbolinks (1.3.0)
+    turbolinks (2.0.0)
       coffee-rails
     twitter-bootstrap-rails (2.2.8)
       actionpack (>= 3.1)
@@ -181,9 +211,14 @@ GEM
       rails (>= 3.1)
       railties (>= 3.1)
     tzinfo (0.3.38)
-    uglifier (2.2.1)
+    uglifier (2.3.2)
       execjs (>= 0.3.0)
-      multi_json (~> 1.0, >= 1.0.2)
+      json (>= 1.8.0)
+    unicorn (4.7.0)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
+    uuidtools (2.1.4)
     validates_email_format_of (1.5.3)
     valuable (0.9.8)
     warden (1.2.3)
@@ -194,10 +229,12 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
+  aws-sdk
   cancan
   capistrano-bundler
   capistrano-rails
   capistrano-rvm
+  ckeditor!
   coffee-rails (~> 4.0.0)
   daemons
   delayed_job_active_record
@@ -208,10 +245,12 @@ DEPENDENCIES
   less-rails (= 2.3.3)
   omniauth
   omniauth-openid!
+  paperclip
   pg
   pretender
   rails (= 4.0.0)
   rails_12factor
+  rmagick (= 2.13.2)
   sass-rails (~> 4.0.0)
   schema_plus
   sdoc
@@ -220,4 +259,5 @@ DEPENDENCIES
   turbolinks
   twitter-bootstrap-rails
   uglifier (>= 1.3.0)
+  unicorn
   validates_email_format_of

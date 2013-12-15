@@ -30,4 +30,15 @@ Humanmachine::Application.configure do
   #For devise
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   Delayed::Worker.destroy_failed_jobs = false
+  config.paperclip_defaults = {
+    :storage => :s3,
+    :s3_credentials => {
+      :bucket => ENV['S3_BUCKET_NAME'],
+      :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+      :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'],
+      :s3_host_name => ENV['AWS_HOST_NAME']
+    }
+  }
+
+  $stdout.sync = true
 end

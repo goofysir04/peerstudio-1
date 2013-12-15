@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131203010354) do
+ActiveRecord::Schema.define(version: 20131215011307) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -65,9 +65,10 @@ ActiveRecord::Schema.define(version: 20131203010354) do
     t.text     "explanation"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "min_score",            default: 0.0
-    t.float    "max_score",            default: 1.0
+    t.float    "min_score",                default: 0.0
+    t.float    "max_score",                default: 1.0
     t.text     "baseline_explanation"
+    t.string   "score_aggregation_method", default: "sum"
   end
 
   create_table "appeals", force: true do |t|
@@ -133,6 +134,21 @@ ActiveRecord::Schema.define(version: 20131203010354) do
     t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_answer_id"
     t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_question_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_user_id"
+  end
+
+  create_table "ckeditor_assets", force: true do |t|
+    t.string   "data_file_name",               null: false
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.integer  "assetable_id_"
+    t.string   "assetable_type",    limit: 30
+    t.string   "type",              limit: 30
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["assetable_type", "assetable_id_"], :name => "idx_ckeditor_assetable"
+    t.index ["assetable_type", "type", "assetable_id_"], :name => "idx_ckeditor_assetable_type"
   end
 
   create_table "delayed_jobs", force: true do |t|

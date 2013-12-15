@@ -1,4 +1,5 @@
 Humanmachine::Application.routes.draw do
+  mount Ckeditor::Engine => '/ckeditor'
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "registrations" }
 
   devise_scope :user do 

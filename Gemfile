@@ -76,6 +76,15 @@ gem 'pretender'
 
 gem 'airbrake'
 
+#For editor and uploads
+gem "paperclip"
+gem "ckeditor", :git => "git@github.com:galetahub/ckeditor.git"
+gem "aws-sdk"
+
+gem 'rmagick', '2.13.2'
+
+#For heroku testing
+gem "unicorn"
 # gem "client_side_validations"
 
 # Use debugger

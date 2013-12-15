@@ -47,6 +47,20 @@ class Answer < ActiveRecord::Base
     AnswerGrade.where("answer_id = ?", id)
   end
 
+  def new_get_grade
+    grades = AnswerGrade.where("answer_id = ?", id).first
+    case self.question.score_aggregation_method
+      when "sum"
+        final_grade = ([question.min_score,grades["final_score"].to_f,question.max_score].sort[1]).floor
+      when "average"
+        final_grade = ([question.min_score,grades["avg_final_score"].to_f,question.max_score].sort[1]).floor
+      else #assume sum by default
+        final_grade = ([question.min_score,grades["final_score"].to_f,question.max_score].sort[1]).floor
+    end
+
+    return final_grade
+  end
+
   class ImportJob <  Struct.new(:file_text)
     def perform
       print "STARTing job"
