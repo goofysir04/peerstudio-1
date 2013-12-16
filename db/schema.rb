@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131215011307) do
+ActiveRecord::Schema.define(version: 20131216054759) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -34,14 +37,14 @@ ActiveRecord::Schema.define(version: 20131215011307) do
     t.datetime "updated_at"
     t.integer  "assessment_id"
     t.integer  "score"
-    t.index ["assessment_id"], :name => "index_evaluations_on_assessment_id"
     t.index ["answer_attribute_id"], :name => "index_evaluations_on_answer_attribute_id"
-    t.index ["user_id"], :name => "index_evaluations_on_user_id"
     t.index ["answer_id"], :name => "index_evaluations_on_answer_id"
+    t.index ["assessment_id"], :name => "index_evaluations_on_assessment_id"
     t.index ["question_id"], :name => "index_evaluations_on_question_id"
+    t.index ["user_id"], :name => "index_evaluations_on_user_id"
   end
 
-  create_view "answer_grades", "SELECT answer_id,\n             sum(answer_score) AS final_score,\n             avg(answer_score) AS avg_final_score\n      FROM\n        (SELECT answer_attributes.score AS answer_score,\n                verified_answers.answer_id\n         FROM answer_attributes,\n           (SELECT answer_id,\n                   answer_attribute_id,\n                   id,\n                   assessment_id\n            FROM evaluations\n            WHERE verified_true_count >verified_false_count\n              AND verified_true_count > 0) AS verified_answers\n         WHERE verified_answers.answer_attribute_id = answer_attributes.id) AS answer_scores,\n           answers\n      WHERE answer_scores.answer_id = answers.id\n      GROUP BY answer_scores.answer_id", :force => true
+  create_view "answer_grades", " SELECT answer_scores.answer_id, \n    sum(answer_scores.answer_score) AS final_score, \n    avg(answer_scores.answer_score) AS avg_final_score\n   FROM ( SELECT answer_attributes.score AS answer_score, \n            verified_answers.answer_id\n           FROM answer_attributes, \n            ( SELECT evaluations.answer_id, \n                    evaluations.answer_attribute_id, \n                    evaluations.id, \n                    evaluations.assessment_id\n                   FROM evaluations\n                  WHERE ((evaluations.verified_true_count > evaluations.verified_false_count) AND (evaluations.verified_true_count > 0))) verified_answers\n          WHERE (verified_answers.answer_attribute_id = answer_attributes.id)) answer_scores, \n    answers\n  WHERE (answer_scores.answer_id = answers.id)\n  GROUP BY answer_scores.answer_id", :force => true
   create_table "answers", force: true do |t|
     t.text     "response"
     t.integer  "question_id"
@@ -56,8 +59,8 @@ ActiveRecord::Schema.define(version: 20131215011307) do
     t.string   "state",              default: "identify"
     t.string   "evaluation_type",    default: "default"
     t.boolean  "staff_graded",       default: false
-    t.index ["user_id"], :name => "index_answers_on_user_id"
     t.index ["question_id"], :name => "index_answers_on_question_id"
+    t.index ["user_id"], :name => "index_answers_on_user_id"
   end
 
   create_table "questions", force: true do |t|
@@ -82,35 +85,12 @@ ActiveRecord::Schema.define(version: 20131215011307) do
     t.datetime "updated_at"
     t.string   "experimental_condition"
     t.text     "instructor_comments"
-    t.index ["answer_id"], :name => "index_appeals_on_answer_id"
     t.index ["answer_id"], :name => "fk__appeals_answer_id"
-    t.index ["question_id"], :name => "index_appeals_on_question_id"
     t.index ["question_id"], :name => "fk__appeals_question_id"
+    t.index ["answer_id"], :name => "index_appeals_on_answer_id"
+    t.index ["question_id"], :name => "index_appeals_on_question_id"
     t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_answer_id"
     t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
-  end
-
-  create_table "users", force: true do |t|
-    t.string   "email",                  default: "",                           null: false
-    t.string   "encrypted_password",     default: "",                           null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,                            null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "time_zone",              default: "Pacific Time (US & Canada)"
-    t.text     "name"
-    t.string   "provider"
-    t.string   "uid"
-    t.string   "gender"
-    t.boolean  "admin"
-    t.index ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-    t.index ["email"], :name => "index_users_on_email", :unique => true
   end
 
   create_table "assessments", force: true do |t|
@@ -122,18 +102,9 @@ ActiveRecord::Schema.define(version: 20131215011307) do
     t.datetime "updated_at"
     t.datetime "started_at"
     t.string   "answer_type"
-    t.index ["user_id"], :name => "k__assessments_user_id"
-    t.index ["answer_id"], :name => "k__assessments_answer_id"
-    t.index ["question_id"], :name => "k__assessments_question_id"
-    t.index ["question_id"], :name => "index_assessments_on_question_id"
     t.index ["answer_id"], :name => "index_assessments_on_answer_id"
+    t.index ["question_id"], :name => "index_assessments_on_question_id"
     t.index ["user_id"], :name => "index_assessments_on_user_id"
-    t.index ["question_id"], :name => "fk__assessments_question_id"
-    t.index ["answer_id"], :name => "fk__assessments_answer_id"
-    t.index ["user_id"], :name => "fk__assessments_user_id"
-    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_answer_id"
-    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_question_id"
-    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_user_id"
   end
 
   create_table "ckeditor_assets", force: true do |t|
@@ -166,6 +137,30 @@ ActiveRecord::Schema.define(version: 20131215011307) do
     t.index ["priority", "run_at"], :name => "delayed_jobs_priority"
   end
 
+  create_table "users", force: true do |t|
+    t.string   "email",                  default: "",                           null: false
+    t.string   "encrypted_password",     default: "",                           null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,                            null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "time_zone",              default: "Pacific Time (US & Canada)"
+    t.text     "name"
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "gender"
+    t.boolean  "admin"
+    t.integer  "cid"
+    t.index ["email"], :name => "index_users_on_email", :unique => true
+    t.index ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  end
+
   create_table "verifications", force: true do |t|
     t.integer  "answer_id"
     t.integer  "user_id"
@@ -175,10 +170,10 @@ ActiveRecord::Schema.define(version: 20131215011307) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "started_at"
-    t.index ["question_id"], :name => "index_verifications_on_question_id"
     t.index ["answer_attribute_id"], :name => "index_verifications_on_answer_attribute_id"
-    t.index ["user_id"], :name => "index_verifications_on_user_id"
     t.index ["answer_id"], :name => "index_verifications_on_answer_id"
+    t.index ["question_id"], :name => "index_verifications_on_question_id"
+    t.index ["user_id"], :name => "index_verifications_on_user_id"
   end
 
 end

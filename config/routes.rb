@@ -19,6 +19,8 @@ Humanmachine::Application.routes.draw do
   post "grading/evaluate" => 'grading#create_baseline_assessment', as: :create_grade_baseline
 
   get "grading/my_grades" => "grading#my_grades", as: :my_grades
+  get "grading/push_grades" => "grading#push_grades", as: :push_grades
+
   get "grading/appeal/:id" => "grading#appeal", as: :appeal_grading
   post "grading/appeal/:id" => "grading#create_appeal", as: :create_appeal_grading
 

@@ -21,7 +21,7 @@ module Humanmachine
     # config.i18n.default_locale = :de
     config.i18n.enforce_available_locales = true
 
-    config.autoload_paths += %W(#{config.root}/app/models/ckeditor)
+    # config.autoload_paths += %W(#{config.root}/app/models/ckeditor)
 
   end
 end

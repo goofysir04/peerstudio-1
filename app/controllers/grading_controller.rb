@@ -1,8 +1,14 @@
 require 'time'
+require 'uri'
+require 'net/https'
+# require 'always_verify_ssl_certificates'
+
+# AlwaysVerifySSLCertificates.ca_file = "#{config.root}/config/cacert.pem"
 
 class GradingController < ApplicationController
 	# before_action :assessment_attributes, only: [:create_assessment]
   before_filter :authenticate_user!
+  API_KEY = "iqw9WQi3MgvmOJsK"
 
   def index
     @questions = Question.all
@@ -340,6 +346,31 @@ class GradingController < ApplicationController
       flash[:alert] = "Errors! #{@evaluation.errors.full_messages.join(',')}"
       redirect_to staff_grade_path(params[:evaluation][:question_id]) and return
     end
+  end
+
+
+  def push_grades
+    # raise current_user.inspect
+    @answers = Answer.where("user_id = ?", current_user)
+    uri = URI.parse "https://class.coursera.org/hci-004/assignment/api/update_score"
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.ca_file = "#{config.root}/config/cacert.pem"
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+
+    # req = Net::HTTP::Post.new(uri.request_uri)
+    @answers.each do |a| 
+      # raise current_user.inspect
+      post_args = {'api_key' => API_KEY, 'user_id' => current_user.cid, 
+        'assignment_part_sid' => "question#{a.question_id}-dev",
+        'score' => a.current_score}
+
+      # req.set_form_data post_args
+      resp = http.post(uri.request_uri, "api_key=#{API_KEY}&user_id=#{current_user.cid}&assignment_part_sid=question#{a.question_id}-dev&score=#{a.current_score}")
+      raise resp.body.inspect
+    end
+
+    redirect_to root_path
   end
 
 

@@ -85,6 +85,10 @@ gem 'rmagick', '2.13.2'
 
 #For heroku testing
 gem "unicorn"
+
+#for pushing grades to coursera
+# gem "always_verify_ssl_certificates"
+
 # gem "client_side_validations"
 
 # Use debugger
