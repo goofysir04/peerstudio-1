@@ -425,7 +425,7 @@ class GradingController < ApplicationController
 
   def prepare_question_for_currrent_user(q)
       answer = Answer.where("question_id = ? and user_id = ?", q, current_user).first
-      return nil if answer.nil?
+      return {:question_id => q} if answer.nil?
       evaluations = Evaluation.where("answer_id=? and score is null", answer.id)
       return nil if answer.nil?
       grade = answer.new_get_grade
