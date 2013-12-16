@@ -6,6 +6,8 @@ Humanmachine::Application.routes.draw do
     get 'users/start' => 'registrations#start_openid', :as => :start_openid_registration
     post 'users/complete' => 'registrations#complete_openid', :as => :complete_openid_registration
     get 'users/impersonate' => 'registrations#impersonate', :as=>:impersonate_user
+    post 'users/upload' => 'registrations#upload', as: :upload_users
+    get 'users/import' => 'registrations#import'
   end
 
   get "grading/identify/:id" => "grading#identify", as: :grade_identification

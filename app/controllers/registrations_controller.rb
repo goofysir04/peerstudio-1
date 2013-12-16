@@ -73,6 +73,13 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def upload
+    User.import(params[:file])
+    redirect_to root_path, :notice => "User file imported"
+  end
+
+
+
   private
 
   # check if we need password to update user data
