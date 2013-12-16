@@ -45,7 +45,7 @@ gem "cancan"
 
 
 # gem "mysql2", group: :production
-gem "pg", group: :production #only heroku
+gem "pg" #group: :production #only heroku
 gem 'rails_12factor', group: :production #only heroku
 #create views
 gem "schema_plus"

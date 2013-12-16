@@ -62,6 +62,41 @@
 		<% end %>
 	<% end %>
 </div>
+
+<% @other_answers.each do |answer| %>
+<h2>Question <%= Question.find(answer[:question_id]).id %>: <h4><%=Question.find(answer[:question_id]).title %></h4></h2>
+<div style="display:block;">
+	<% if answer.nil? %>
+	<p>We didn't find your answer for this question in our database. </p>
+	<% else %>
+	<p><strong>Your answer</strong>: <%= answer[:answer].response %></p>
+		<% if answer[:grade].nil? %>
+		<p>Sorry, we didn't get enough peer ratings for your answer. </p>
+		<% else %>
+			<%if current_user.experimental_condition != "baseline" and !answer[:answer].nil?%>
+				<p>This answer was marked as:</p><ul>
+				<% answer[:evaluations].each do |e| %>
+					
+					<% next unless (e.score.nil? and e.verified_true_count > e.verified_false_count and e.verified_true_count > 0) %>
+					<% answer_attr = e.answer_attribute %>
+					<li> <%if answer_attr.is_correct? %> <i class="icon-ok" style="color:green"></i> <% else %> <i class="icon-remove" style="color:red"></i><%end%> <%= answer_attr.description %></li>
+				<% end %>
+				</ul>
+
+				<% if !answer[:missing_attributes].nil? %>
+					<p>Other correct answers were also frequently marked as:</p> 
+					<ul>
+						<% answer[:missing_attributes].each do |a| %>
+							<li><%= a.description %></li>
+						<% end %>
+					</ul>
+				<% end %>
+			<% end %>
+			<p>Your grade is: <strong><%= answer[:grade].nil? ? "not available" : answer[:grade] %> (out of <%= Question.find(answer[:question_id]).max_score%>)</strong>. <small>(Unacceptably unfair grade? <%=  link_to "Submit a regrade request", appeal_grading_path(answer[:answer]) %>)</small></p>
+		<% end %>
+	<% end %>
+<% end %>
+
 <h2>Appeals</h2>
 <% @appeals.each do |appeal| %>
 	<strong>Question:</strong> <%= appeal.question.title %>

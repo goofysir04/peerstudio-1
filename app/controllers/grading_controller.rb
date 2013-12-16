@@ -246,7 +246,10 @@ class GradingController < ApplicationController
     @current_user_answers = Answer.where("user_id = ? ", current_user)
     @appeals = Appeal.where("answer_id IN (?)", @current_user_answers)
     # flash[:alert] = "Due to a technical problem, our grades script is being delayed for Question 2. Please check back after Nov 6 8am PDT"
+
+    @other_answers = ([3,4,5].map {|q| prepare_question_for_currrent_user(q)})
   end
+
 
   def appeal
     @appeal = Appeal.new
@@ -383,5 +386,17 @@ class GradingController < ApplicationController
     end
   end
 
+  def prepare_question_for_currrent_user(q)
+      answer = Answer.where("question_id = ? and user_id = ?", q, current_user).first
+      evaluations = Evaluation.where("answer_id=? and score is null", answer.id)
+      return nil if answer.nil?
+      grade = answer.new_get_grade
+      if !grade.nil?
+        answer.current_score = grade
+        answer.state = "graded"
+        answer.save!
+      end
+      return {:question_id => q, :answer=>answer, :grade => answer.new_get_grade, :evaluations =>evaluations, :missing_attributes => answer.get_missing_attributes}
+  end
 
 end

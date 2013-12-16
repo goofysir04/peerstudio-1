@@ -20,6 +20,7 @@ class Answer < ActiveRecord::Base
     end
   end
 
+
   def self.should_get_ground_truth_assignment(user, question)
     #First return false if this user has already identified a ground truth assignment. 
     ground_truths_assessed_so_far = Assessment.where("question_id =? and user_id = ? and answer_type='ground_truth'", question, user).count
@@ -43,17 +44,34 @@ class Answer < ActiveRecord::Base
     end
   end
 
+  def get_missing_attributes
+    evaluations_with_attrs = Evaluation.where("answer_id=? and score is null", self.id)
+    return AnswerAttribute.where("question_id=? and is_correct =? and id not in (?)", self.question_id, true, evaluations_with_attrs.map(&:answer_attribute_id))
+  end
+
   def get_grade
     AnswerGrade.where("answer_id = ?", id)
   end
 
   def new_get_grade
+    #use the existing grade if present
+    if self.state == "graded"
+      return self.current_score
+    end
+
     grades = AnswerGrade.where("answer_id = ?", id)
 
-    if grades.nil?
-      return nil
+    if grades.nil? or grades[0].nil?
+      #try to find baseline grades
+      num_baseline_evals = Evaluation.where("answer_id=? and score is not null", self.id).count
+      if num_baseline_evals > 0
+        return Evaluation.where("answer_id=? and score is not null", self.id).average('score').to_f
+      else
+        return nil
+      end
     end
     grade = grades[0]
+
     case self.question.score_aggregation_method
       when "sum"
         final_grade = ([question.min_score,grade["final_score"].to_f,question.max_score].sort[1]).floor
