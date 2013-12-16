@@ -26,10 +26,16 @@ class GradingController < ApplicationController
   	@question = Question.find(params[:id])
   	@answer = Answer.get_next_identify_for_user_and_question(current_user, @question) #TODO fix actual user
 
+    if @answer.nil?
+      flash[:notice] = "Sorry, we have nothing for you to evaluate."
+      redirect_to root_path and return
+    end
+
     @completed_assessments = current_user.assessments.where(question_id: @question.id).count
   	#Find question attributes
   	@correct_attributes = @question.answer_attributes.where(:is_correct => true)
   	@incorrect_attributes = @question.answer_attributes.where(:is_correct => false)
+
 
   	#Create a new evaluation. This particular evaluation is never saved
     @evaluation = Evaluation.new(question_id:@question.id,answer_id:@answer.id)
