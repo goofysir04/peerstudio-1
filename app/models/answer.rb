@@ -1,10 +1,16 @@
 require 'csv'
+require 'uri'
+require 'net/https'
 
 class AnswerGrade < ActiveRecord::Base
   table_name = "answer_grades"
 end
 
 class Answer < ActiveRecord::Base
+  #To push grades
+  API_KEY = "iqw9WQi3MgvmOJsK"
+
+
   belongs_to :question
   belongs_to :user
 
@@ -82,6 +88,46 @@ class Answer < ActiveRecord::Base
     end
     return final_grade
   end
+
+  def self.push_grades(user_id, max_push_count)
+    answers = Answer.where("user_id = ? and push_count <= ?", user_id, max_push_count)
+    uri = URI.parse "https://class.coursera.org/hci-004/assignment/api/update_score"
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.ca_file = Rails.root.join("config/cacert.pem").to_s
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+
+    # req = Net::HTTP::Post.new(uri.request_uri)
+    answers.each do |a| 
+      # raise user_id.inspect
+      if a.state != "graded" #special case qn 1
+        a.current_score = a.new_get_grade
+        a.save
+      end
+      post_args = {'api_key' => API_KEY, 'user_id' => user_id.cid, 
+        'assignment_part_sid' => "question#{a.question_id}",
+        'score' => a.current_score}
+
+      # req.set_form_data post_args
+      begin
+        resp = http.post(uri.request_uri, "api_key=#{API_KEY}&user_id=#{user_id.cid}&assignment_part_sid=question#{a.question_id}&score=#{a.current_score}&feedback=#{CGI::escape("For detailed feedback, please <a href='http://www.peergrademe.com/grading/my_grades'>click here</a>.")}")
+      rescue Exception => e
+        logger.error "Push failed for answer id=#{a.id}; Exception: #{e.inspect}"
+        sleep(10)
+        logger.error "Restarting after waiting 10s"  
+        next
+      end
+
+      if resp.body == '{"status":"202"}'        
+        logger.info "Success: Response #{resp.body}"
+        a.increment!(:push_count)
+      else
+        logger.error "Push failed for answer id=#{answer.id}; Response #{resp.body}"
+      end
+    end
+  end
+
+
 
   class ImportJob <  Struct.new(:file_text)
     def perform
