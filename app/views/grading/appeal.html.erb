@@ -1,18 +1,32 @@
-<%= form_for @appeal, :url=>create_appeal_grading_path(@appeal.answer_id) do |f| %>
+<%= form_for @appeal, :url=>create_appeal_grading_path(@appeal.question_id) do |f| %>
 <h2>Appeal your grade</h2>
 <p>If you feel you were unfairly graded, you can submit an appeal to regrade. Please note that your appeal will be seen by a staff member, and eats into the time they'd otherwise use to improve the class, answer your questions on the forum etc. So, please only submit a request if you think you truly deserve a regrade. </p>
 
-<p><strong>Regrades will not always end in your favor!</strong> If we feel that your request is unwarranted (e.g. your answer is actually wrong), or that your current grade is higher than is fair, we will reduce your grade to the right value, and in addition, you'll incur a penalty of 7 points (the maximum score on the quiz is five points, so it's never worth requesting a regrade just to try your luck!) We have this policy to ensure that we can devote attention to legitimate requests, and to teaching the class.</p>
+<p><strong>Regrades will not always end in your favor!</strong> If we feel that your request is unwarranted (e.g. your answer is actually wrong), or that your current grade is higher than is fair, we will penalize your grade and set it to what we determine is fair.</p>
 
-<p>That being said, we trust our students (who, we believe, abide by the honor code). So, we will update your grade immediately when you submit this form. Of course, if your request is not legitimate, we will change your grade as above</p>
+<p>That being said, we trust our students (who, we believe, abide by the honor code). So, we will update your grade immediately when you submit this form. Of course, if we later discover (up to a week after you submit your request) that your request is not legitimate, we will change your grade as above.</p>
 
 <p>
-<strong>Question: </strong> <%= @appeal.answer.question.title %> <br/>
+<strong>Question: </strong> <%= @appeal.question.title %> <br/>
+<% if !@appeal.answer.nil? %>
 <strong>Your answer: </strong> <%= @appeal.answer.response %> <br/>
+<% else %>
+We have no answer in our system <br/>
+<% end %>
 
-Reason: <br/>
+<p>First, we'll need your Coursera ID. To get this ID, go to <a href="https://class.coursera.org/hci-004/assignment/?assignment_id=46">the assignment on coursera</a>. Find the User ID at the top of the page (see screenshot below).</p>
+
+<p><a href="https://class.coursera.org/hci-004/assignment/?assignment_id=46"><%= image_tag "get_cid.png" %></a></p>
+<%= label_tag :claimed_cid, "Paste your Coursera ID"%> <%= text_field_tag :claimed_cid %> <br/>
+
+Reason: (e.g. my answer is missing; my grade is wrong...; my grade doesn't show on coursera) <br/>
 <%= f.text_area :comments, :placeholder=>"Why are you requesting a regrade?"%></p>
 <%= f.hidden_field :answer_id%>
-<p>What should the grade be? <%= f.number_field :appeal_score, :placeholder=>"Appealed grade"%> (min: <%= @appeal.answer.question.min_score %>, max: <%= @appeal.answer.question.max_score %>)</p>
+<%= f.hidden_field :question_id%> <br/>
+
+Your response to the question (please paste your response as submitted on Coursera) <br/>
+<%= f.text_area :answer_text %></p>
+
+<p>What should the grade be? <%= f.number_field :appeal_score, :placeholder=>"Appealed grade"%> (min: <%= @appeal.question.min_score %>, max: <%= @appeal.question.max_score %>)</p>
 <%= f.submit "Submit (by clicking you affirm this request is legitimate)", :class=>"btn btn-primary" %>
 <% end %>
