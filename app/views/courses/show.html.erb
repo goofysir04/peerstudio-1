@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @course.name %>
+</p>
+
+<p>
+  <strong>Image url:</strong>
+  <%= @course.image_url %>
+</p>
+
+<p>
+  <strong>Institution:</strong>
+  <%= @course.institution %>
+</p>
+
+<p>
+  <strong>Hidden:</strong>
+  <%= @course.hidden %>
+</p>
+
+<p>
+  <strong>Open enrollment:</strong>
+  <%= @course.open_enrollment %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @course.user %>
+</p>
+
+<%= link_to 'Edit', edit_course_path(@course) %> |
+<%= link_to 'Back', courses_path %>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyText
+  image_url: MyString
+  institution: MyText
+  hidden: false
+  open_enrollment: false
+  user_id: 
+
+two:
+  name: MyText
+  image_url: MyString
+  institution: MyText
+  hidden: false
+  open_enrollment: false
+  user_id: 

@@ -1,4 +1,6 @@
 Humanmachine::Application.routes.draw do
+  resources :courses
+
   # mount Ckeditor::Engine => '/ckeditor'
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "registrations" }
 
@@ -55,7 +57,9 @@ Humanmachine::Application.routes.draw do
     resources :answer_attributes
   end
 
-  root 'grading#index'
+  #root 'grading#index'
+  root 'courses#index'
+
   # Example resource route with options:
   #   resources :products do
   #     member do
