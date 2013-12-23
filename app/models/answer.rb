@@ -122,7 +122,7 @@ class Answer < ActiveRecord::Base
         logger.info "Success: Response #{resp.body}"
         a.increment!(:push_count)
       else
-        logger.error "Push failed for answer id=#{answer.id}; Response #{resp.body}"
+        logger.error "Push failed for answer id=#{a.id}; Response #{resp.body}"
       end
     end
   end

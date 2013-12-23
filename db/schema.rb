@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131219001309) do
+
+ActiveRecord::Schema.define(version: 20131220005728) do
 
   create_table "answer_attributes", force: true do |t|
     t.boolean  "is_correct"
@@ -74,7 +75,6 @@ ActiveRecord::Schema.define(version: 20131219001309) do
 
   create_table "appeals", force: true do |t|
     t.text     "comments"
-    t.integer  "question_id"
     t.integer  "answer_id"
     t.boolean  "accepted"
     t.boolean  "inspected"
@@ -83,10 +83,17 @@ ActiveRecord::Schema.define(version: 20131219001309) do
     t.datetime "updated_at"
     t.string   "experimental_condition"
     t.text     "instructor_comments"
+<<<<<<< HEAD
     t.index ["answer_id"], :name => "index_appeals_on_answer_id"
     t.index ["answer_id"], :name => "fk__appeals_answer_id"
     t.index ["question_id"], :name => "index_appeals_on_question_id"
     t.index ["question_id"], :name => "fk__appeals_question_id"
+=======
+    t.integer  "question_id"
+    t.text     "answer_text"
+    t.index ["question_id"], :name => "fk__appeals_question_id"
+    t.index ["answer_id"], :name => "index_appeals_on_answer_id"
+>>>>>>> master
     t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_answer_id"
     t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
   end

@@ -263,24 +263,55 @@ class GradingController < ApplicationController
 
   def appeal
     @appeal = Appeal.new
-    @appeal.answer= Answer.find(params[:id])
-    @appeal.appeal_score = @appeal.answer.current_score
+    @appeal.question = Question.find(params[:id])
+    @appeal.answer= Answer.where("question_id = ? and user_id = ?", @appeal.question, current_user).first
+    if @appeal.answer.nil?
+      @appeal.appeal_score= 0  
+    else
+      @appeal.appeal_score = @appeal.answer.current_score
+    end
+
+    unless @appeal.answer.nil?
+      @appeal.answer_text = @appeal.answer.response
+    end
   end
 
   def create_appeal
     @appeal = Appeal.new(appeal_attributes)
+    if @appeal.answer.nil?
+      answer = Answer.new(:response => @appeal.answer_text, :user=>current_user, :question=> @appeal.question)
+      @appeal.answer = answer
+    else
+      answer = @appeal.answer
+    end
+    existing_user = User.where("cid=?", params[:claimed_cid]).first
+
+    if !existing_user.nil? and existing_user != current_user
+      flash[:alert] ="That coursera ID belongs to someone else"
+      redirect_to appeal_grading_path(@appeal.question_id) and return 
+    else
+      current_user.cid = params[:claimed_cid]
+      current_user.save!
+    end
+
+    # raise "rrr"
     if @appeal.answer.user != current_user
       flash[:alert] ="You can only submit a regrade for your own answers"
       redirect_to root_path and return 
     else
       @appeal.experimental_condition =current_user.experimental_condition
-
-      answer = @appeal.answer
-      @appeal.question_id = answer.question_id
+      
+      # @appeal.question_id = answer.question_id
       answer.current_score = @appeal.appeal_score
+      # answer.push_count = 0
+
       if @appeal.save and answer.save
-        flash[:notice] ="Your request has been submitted, and your score is updated"
+        Answer.delay.push_grades current_user, 50
+        flash[:notice] ="Your request has been submitted, and your score is updated. It may take up to a day to update on Coursera"
         redirect_to root_path and return 
+      else 
+        flash[:notice] ="There was an error saving your appeal. Please try again."
+        redirect_to appeal_grading_path(@appeal.question_id) and return 
       end
     end
   end
@@ -368,7 +399,7 @@ class GradingController < ApplicationController
   end
 
   def appeal_attributes
-    params.require(:appeal).permit(:comments, :answer_id, :appeal_score)
+    params.require(:appeal).permit(:comments, :answer_id, :appeal_score, :question_id, :answer_text)
   end
   def assessment_attributes
     params.permit(:question_id, :answer_id, :comments)
