@@ -30,6 +30,8 @@ Humanmachine::Application.routes.draw do
 
   get "grading/staff_grade/:id" => "grading#staff_grade", as: :staff_grade
   post "grading/staff_grade" => "grading#create_staff_grade", as: :create_staff_grade
+
+  get "grading/critique/:id" => "grading#early_feedback", as: :early_feedback
   resources :questions
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -52,6 +54,10 @@ Humanmachine::Application.routes.draw do
       get 'import'
       post 'upload'
     end
+    member do 
+      post 'upload_attachment'
+    end
+
   end
   resources :questions do
     resources :answer_attributes

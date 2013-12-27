@@ -13,7 +13,11 @@
 
   <div class="field">
     <%= f.label :response %><br>
-    <%= f.cktext_area :response %>
+    <%= f.text_area :response, :id=>"answer_response", :class=>"hidden_field" %>
+
+    <div class="editable" id="response_richedit" data-syncwith="answer_response" data-placeholder="Type your response here. Highlight text for formatting options.">
+      <%= @answer.response.html_safe %>
+    </div>
   </div>
   <div class="field">
     <%= f.label :question_id %><br>

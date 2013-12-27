@@ -9,7 +9,8 @@ end
 class Answer < ActiveRecord::Base
   #To push grades
   API_KEY = "iqw9WQi3MgvmOJsK"
-
+  has_many :attached_assets, :as => :attachable
+  accepts_nested_attributes_for :attached_assets, :allow_destroy => true
 
   belongs_to :question
   belongs_to :user

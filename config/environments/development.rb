@@ -30,6 +30,7 @@ Humanmachine::Application.configure do
   #For devise
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   Delayed::Worker.destroy_failed_jobs = false
+  #For paperclip uploads
   config.paperclip_defaults = {
     :storage => :s3,
     :s3_credentials => {

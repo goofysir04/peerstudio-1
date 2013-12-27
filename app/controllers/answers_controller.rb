@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
-  before_filter :authenticate_user_is_admin!
+  # before_filter :authenticate_user_is_admin!
   # GET /answers
   # GET /answers.json
   def index
@@ -65,6 +65,20 @@ class AnswersController < ApplicationController
   def upload
     Answer.import(params[:file])
     redirect_to answers_path, :notice => "File imported"
+  end
+
+  def upload_attachment
+    @answer = Answer.find(params[:id])
+    @attachment = @answer.attached_assets.new(:asset => params[:file])
+
+    if @attachment.save
+      respond_to do |format|
+        format.html {redirect_to root_path}
+        format.js
+      end
+    else
+      redirect_to root_path
+    end
   end
 
   private
