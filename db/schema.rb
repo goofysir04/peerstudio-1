@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131227194038) do
+ActiveRecord::Schema.define(version: 20131228015321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20131227194038) do
     t.string   "evaluation_type",    default: "default"
     t.boolean  "staff_graded",       default: false
     t.integer  "push_count",         default: 0
+    t.string   "revision_name"
     t.index ["question_id"], :name => "index_answers_on_question_id"
     t.index ["user_id"], :name => "index_answers_on_user_id"
   end

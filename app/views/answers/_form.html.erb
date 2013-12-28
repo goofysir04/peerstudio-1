@@ -15,38 +15,46 @@
     <%= f.label :response %><br>
     <%= f.text_area :response, :id=>"answer_response", :class=>"hidden_field" %>
 
-    <div class="editable" id="response_richedit" data-syncwith="answer_response" data-placeholder="Type your response here. Highlight text for formatting options.">
-      <%= @answer.response.html_safe %>
+    <div class="editable" id="response_richedit" data-syncwith="answer_response" data-placeholder="Type your response here. Highlight text for formatting options. <%= "Please save your answer before you add images" if @answer.new_record? %>">
+      <%= @answer.response.html_safe unless @answer.response.nil? %>
     </div>
   </div>
   <div class="field">
     <%= f.label :question_id %><br>
     <%= f.number_field :question_id %>
   </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.number_field :user_id %>
+
+  <% if current_user.admin? %>
+    <div class="field">
+      <%= f.label :user_id %><br>
+      <%= f.number_field :user_id %>
+    </div>
+    <div class="field">
+      <%= f.label :predicted_score %><br>
+      <%= f.text_field :predicted_score %>
+    </div>
+    <div class="field">
+      <%= f.label :current_score %><br>
+      <%= f.text_field :current_score %>
+    </div>
+    <div class="field">
+      <%= f.label :evaluations_wanted %><br>
+      <%= f.number_field :evaluations_wanted %>
+    </div>
+    <div class="field">
+      <%= f.label :total_evaluations %><br>
+      <%= f.number_field :total_evaluations %>
+    </div>
+    <div class="field">
+      <%= f.label :confidence %><br>
+      <%= f.text_field :confidence %>
+    </div>
+  <% end -%>
+<div class="field">
+    <%= f.label :revision_name %><br>
+    <%= f.text_field :revision_name %>
   </div>
-  <div class="field">
-    <%= f.label :predicted_score %><br>
-    <%= f.text_field :predicted_score %>
-  </div>
-  <div class="field">
-    <%= f.label :current_score %><br>
-    <%= f.text_field :current_score %>
-  </div>
-  <div class="field">
-    <%= f.label :evaluations_wanted %><br>
-    <%= f.number_field :evaluations_wanted %>
-  </div>
-  <div class="field">
-    <%= f.label :total_evaluations %><br>
-    <%= f.number_field :total_evaluations %>
-  </div>
-  <div class="field">
-    <%= f.label :confidence %><br>
-    <%= f.text_field :confidence %>
-  </div>
+  
   <div class="actions">
     <%= f.submit %>
   </div>
