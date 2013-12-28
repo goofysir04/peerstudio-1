@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131228015321) do
+ActiveRecord::Schema.define(version: 20131228195716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,39 @@ ActiveRecord::Schema.define(version: 20131228015321) do
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_user_id"
   end
 
+  create_table "courses", force: true do |t|
+    t.text     "title"
+    t.text     "institution"
+    t.boolean  "hidden",             default: true
+    t.boolean  "open_enrollment",    default: false
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.index ["user_id"], :name => "fk__courses_user_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_user_id"
+  end
+
+  create_table "assignments", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "due_at"
+    t.datetime "open_at"
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id"], :name => "fk__assignments_course_id"
+    t.index ["user_id"], :name => "fk__assignments_user_id"
+    t.index ["course_id"], :name => "index_assignments_on_course_id"
+    t.index ["user_id"], :name => "index_assignments_on_user_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_course_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_user_id"
+  end
+
   create_table "attached_assets", force: true do |t|
     t.integer  "attachable_id"
     t.string   "attachable_type"
@@ -140,22 +173,6 @@ ActiveRecord::Schema.define(version: 20131228015321) do
     t.datetime "updated_at"
     t.index ["assetable_type", "assetable_id_"], :name => "idx_ckeditor_assetable"
     t.index ["assetable_type", "type", "assetable_id_"], :name => "idx_ckeditor_assetable_type"
-  end
-
-  create_table "courses", force: true do |t|
-    t.text     "title"
-    t.text     "institution"
-    t.boolean  "hidden",             default: true
-    t.boolean  "open_enrollment",    default: false
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
-    t.index ["user_id"], :name => "fk__courses_user_id"
-    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_user_id"
   end
 
   create_table "delayed_jobs", force: true do |t|

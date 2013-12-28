@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @assignment.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+<div>
+  <%= sanitize @assignment.description %>
+</div>
+</p>
+
+<p>
+  <strong>Due at:</strong>
+  <%= @assignment.due_at %>
+</p>
+
+<p>
+  <strong>Open at:</strong>
+  <%= @assignment.open_at %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @assignment.user.name %>
+</p>
+
+<p>
+  <strong>Course:</strong>
+  <%= @assignment.course %>
+</p>
+
+<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
+<%= link_to 'Back', course_assignments_path(@assignment.course) %>

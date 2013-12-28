@@ -12,10 +12,10 @@
   }
 </style>
 <li class="<%= " faded" if course.ended? %>">
-  <a <% unless course.ended? %> href="<%= @org ? course_path(course, back_to:@org) : course_path(course) %>" <% end %> class="thumbnail" style="padding: 0; height: 325px; width:370px; overflow: hidden;">
-    <div class="image" style="height: 140px; background-image: url(<%= course.photo.url == "" ? "assets/default.png" : course.photo.url %>); background-repeat:no-repeat; background-size:100%;"></div>
+  <a <% unless course.ended? %> href="<%=course_path(course) %>" <% end %> class="thumbnail" style="padding: 0; height: 325px; width:370px; overflow: hidden;">
+    <div class="image" style="height: 140px; background-image: url(<%= course.photo.url %>); background-repeat:no-repeat; background-size:100%;"></div>
     <div style="padding: 10px;">
-      <b style="line-height: 25px" class="title"><%= course.name %></b>
+      <b style="line-height: 25px" class="title"><%= course.title %></b>
       <% if course.ended? %>
       	<span style="color: #3f3f3f; font-weight: 700; font-size: 14pt;">&nbsp;&nbsp;&#8212;&nbsp;&nbsp;ENDED</span>
       <% end %>
@@ -26,7 +26,7 @@
             INSTRUCTOR
           </td>
           <td>
-            <%= course.course_instructor%>
+            <%= course.user.name%>
           </td>
         </tr>
         <tr>
@@ -34,16 +34,8 @@
             UNIVERSITY
           </td>
           <td>
-            <%= course.course_institution %>
+            <%= course.institution %>
           </td>        
-        </tr>    
-        <tr>
-          <td class="row_header">
-            PLATFORM
-          </td>
-          <td>
-            <%= course.course_platform %>
-          </td>   
         </tr>
       </table>
     </div>

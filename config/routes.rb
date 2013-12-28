@@ -1,5 +1,10 @@
 Humanmachine::Application.routes.draw do
-  resources :courses
+  
+
+  resources :courses do
+    resources :assignments, shallow: true
+  end
+
 
   # mount Ckeditor::Engine => '/ckeditor'
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "registrations" }

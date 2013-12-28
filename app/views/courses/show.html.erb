@@ -1,34 +1,38 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @course.name %>
-</p>
+<div class="row">
+  <ul style="float:left; margin-right: 10px;">
+  <%= render :partial => 'course_box', :locals=>{:course => @course} %>
+  </ul>
+  <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p> 
+</div>
 
-<p>
-  <strong>Image url:</strong>
-  <%= @course.image_url %>
-</p>
+<div class="row">
+  <h2>Assignments</h2>
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Due at</th>
+      <th>Open at</th>
+      <th colspan="3"><%= link_to "Add assignment", new_course_assignment_path(@course), class: "btn btn-success"%> </th>
+    </tr>
+  </thead>
 
-<p>
-  <strong>Institution:</strong>
-  <%= @course.institution %>
-</p>
+  <tbody>
+    <% @course.assignments.each do |assignment| %>
+      <tr>
+        <td><%= assignment.title %></td>
+        <td><%= truncate (sanitize assignment.description), length: 200, escape: false %></td>
+        <td><%= assignment.due_at %></td>
+        <td><%= assignment.open_at %></td>
+        <td><%= link_to 'Show', assignment %></td>
+        <td><%= link_to 'Edit', edit_assignment_path(assignment) %></td>
+        <td><%= link_to 'Destroy', assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
-<p>
-  <strong>Hidden:</strong>
-  <%= @course.hidden %>
-</p>
-
-<p>
-  <strong>Open enrollment:</strong>
-  <%= @course.open_enrollment %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @course.user %>
-</p>
-
-<%= link_to 'Edit', edit_course_path(@course) %> |
-<%= link_to 'Back', courses_path %>
+</div>
