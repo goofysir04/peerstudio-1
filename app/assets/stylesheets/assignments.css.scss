@@ -1,3 +1,197 @@
 // Place all the styles related to the assignments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.project_edit_section {
+  .edit_section_title {
+    background-color: #f0f0f0;
+    padding: 4px 0px;
+    margin-bottom: 8px;
+    @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+      text-align: center;
+    }
+    h3 {
+      margin-left: 180px;
+      @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+        margin: 0;
+      }
+      small {
+        display: block;
+      }
+    }
+    button {
+      margin-left: 180px;
+      margin-bottom: 8px;
+      @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+        margin: 0;
+        margin-top: 4px;
+      }
+    }
+  }
+}
+
+label.required {
+  font-weight: bold;
+}
+
+.index-hero-unit {
+  position: relative;
+  background-color: transparent;
+  color: white;
+  text-shadow: 1px 1px 0 #000;
+  height: 200px;
+
+  .carousel-text {
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    width: 1170px;
+    max-width: 100%;
+    height: 140px;
+    padding: 0;
+    z-index: 0;
+    margin-bottom: 19px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    p {
+      padding-left: 30px;
+      @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+        padding: 0;
+        text-align: center;
+      }
+    }
+    h1 {
+      padding-left: 30px;
+      font-size: 48px;
+      line-height: 60px;
+      margin-bottom: 6px;
+      @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+        font-size: 24px;
+        padding: 0;
+        line-height: 30px;
+        text-align: center;
+      }
+    }
+  }
+
+  .carousel_holder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1170px;
+    max-width: 100%;
+    height: 300px;
+    z-index: -1;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid white;
+    .jcarousel {
+        position: relative;
+        height: 300px;
+        width: 1500px;
+        overflow: hidden;
+        /* You need at least a height, adjust this to your needs */
+    }
+
+    .jcarousel ul {
+        width: 20000em;
+        position: absolute;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border-radius: 6px;
+    }
+
+    .jcarousel li {
+        float: left;
+        width: 1170px;
+        background-color: white;
+        position: relative;
+        .acknowledgement {
+          position: absolute;
+          top: 0px;
+          right: 8px;
+          font-size: 10px;
+          z-index: 999;
+        }
+    }
+  }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) { 
+    #project_navigation > li {
+        float:none;
+        a {
+          border: 0;
+          border-radius: 4px;
+        }
+        &.active {
+          a {
+            border: 0 !important; 
+            background-color: #efefef !important;         
+          }
+        }
+    }
+    .nav-tabs {
+      border: 0;
+    }
+}
+
+.row-bold {
+  font-weight: bold;
+}
+
+.inline_supporter_form {
+  margin: 0;
+  background-color: #f0f0f0;
+  div {
+    margin-top: 8px;
+    line-height: 30px;
+  }
+}
+
+.faded {
+  opacity: 0.5;
+}
+
+.cell-error {
+  border-bottom: 2px solid red;
+}
+
+.timeslot_date {
+  width: 100px;
+}
+
+.thumbnails {
+  .thumbnail {
+    .image {
+       background-position: center;
+       height: 60px;
+       margin-bottom: 5px;
+    }
+    b.title {
+      font-size: x-large;
+    }
+  }
+}
+
+.thumbnails.pinned {
+  .thumbnail {
+    .image {
+      height: 80px;
+    }
+  }
+  margin-bottom: 0;
+}
+
+.support_form {
+  input[type=text], textarea {
+    color: #3a87ad;
+  }
+
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: gray;
+  }
+}

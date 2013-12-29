@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyText
+  short_title: MyString
+  ends_at: 2013-12-28 12:38:40
+  final_only: false
+  min: 1.5
+  max: 1.5
+  min_label: MyString
+  max_label: MyString
+  assignment_id: 
+  user_id: 
+
+two:
+  title: MyText
+  short_title: MyString
+  ends_at: 2013-12-28 12:38:40
+  final_only: false
+  min: 1.5
+  max: 1.5
+  min_label: MyString
+  max_label: MyString
+  assignment_id: 
+  user_id: 

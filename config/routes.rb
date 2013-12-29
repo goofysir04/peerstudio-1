@@ -5,6 +5,10 @@ Humanmachine::Application.routes.draw do
     resources :assignments, shallow: true
   end
 
+  resources :assignments do
+    resources :answers, shallow: true
+  end
+
 
   # mount Ckeditor::Engine => '/ckeditor'
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "registrations" }
@@ -62,8 +66,8 @@ Humanmachine::Application.routes.draw do
     member do 
       post 'upload_attachment'
     end
-
   end
+  
   resources :questions do
     resources :answer_attributes
   end

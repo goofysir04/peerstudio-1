@@ -43,6 +43,7 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     bcrypt-ruby (3.1.2)
+    bootstrap-datetimepicker-rails (0.0.11)
     builder (3.1.4)
     cancan (1.6.10)
     capistrano (3.0.1)
@@ -222,6 +223,7 @@ PLATFORMS
 DEPENDENCIES
   airbrake
   aws-sdk
+  bootstrap-datetimepicker-rails
   cancan
   capistrano-bundler
   capistrano-rails

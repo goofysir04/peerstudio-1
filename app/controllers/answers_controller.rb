@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
+  before_action :set_assignment, only: [:show, :edit, :update, :new, :index]
   before_filter :authenticate_user!
   # before_filter :authenticate_user_is_admin!
   # GET /answers
@@ -88,8 +89,13 @@ class AnswersController < ApplicationController
       @answer = Answer.find(params[:id])
     end
 
+    def set_assignment
+      @assignment = Assignment.find(params[:assignment_id])
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
+      params.permit(:assignment_id)
       params.require(:answer).permit(:response, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence)
     end
 end

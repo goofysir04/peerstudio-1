@@ -11,7 +11,7 @@
  *= require_self
  *= require_tree .
  *= require chosen
- *= require datepicker
+ *= require bootstrap-datetimepicker
  *= require pagination
  *= require tokenahead
  */

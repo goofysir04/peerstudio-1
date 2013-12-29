@@ -1,36 +1,48 @@
 <p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Title:</strong>
+<h1>
   <%= @assignment.title %>
+  <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> (in <%= distance_of_time_in_words @assignment.due_at, Time.now %>)</small>
 </p>
-
-<p>
-  <strong>Description:</strong>
-<div>
+</h1>
+<div id="assignment_description">
   <%= sanitize @assignment.description %>
 </div>
-</p>
 
+<div id="assignment_rubric_items">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Rubric item</th><th>Max score</th><th>Submit answer for feedback by</th> 
+      </tr>
+    </thead>
+    <% @assignment.rubric_items.each do |r| %>
+      <tr>
+        <td><strong><%= r.short_title %></strong><br/>
+         <%= sanitize r.title %></strong></td>
+         <td><%= r.max %></td>
+         <td><%= r.ends_at.strftime "%b %e, %l:%M %p" %> (in <%= distance_of_time_in_words r.ends_at, Time.now %>)</td>
+       </tr>
+    <% end %>
+  </table>
+</div>
+
+<div id="assignment_answers">
+  <ul class="nav nav-tabs">
+    <li><a href="#my_answers" data-toggle="tab">My Answers</a></li>
+    <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="my_answers" class="tab-pane active">My answers go here</div>
+    <div id="my_reviews" class="tab-pane">My reviews go here</div>
+  </div>
+</div>
+
+<div>
+  <legend></legend>
+  <h3>For instructors only</h3>
 <p>
-  <strong>Due at:</strong>
-  <%= @assignment.due_at %>
-</p>
-
-<p>
-  <strong>Open at:</strong>
-  <%= @assignment.open_at %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @assignment.user.name %>
-</p>
-
-<p>
-  <strong>Course:</strong>
-  <%= @assignment.course %>
-</p>
-
+  <strong>This assignment opens at:</strong>
+  <%= @assignment.open_at %></p>
 <%= link_to 'Edit', edit_assignment_path(@assignment) %> |
 <%= link_to 'Back', course_assignments_path(@assignment.course) %>
+</div>

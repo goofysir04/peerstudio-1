@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131228195716) do
+ActiveRecord::Schema.define(version: 20131228203840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,27 @@ ActiveRecord::Schema.define(version: 20131228195716) do
     t.datetime "updated_at"
     t.index ["user_id"], :name => "fk__revisions_user_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_revisions_user_id"
+  end
+
+  create_table "rubric_items", force: true do |t|
+    t.text     "title"
+    t.string   "short_title"
+    t.datetime "ends_at"
+    t.boolean  "final_only",    default: false
+    t.float    "min",           default: 0.0
+    t.float    "max"
+    t.string   "min_label"
+    t.string   "max_label"
+    t.integer  "assignment_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["assignment_id"], :name => "fk__rubric_items_assignment_id"
+    t.index ["user_id"], :name => "fk__rubric_items_user_id"
+    t.index ["assignment_id"], :name => "index_rubric_items_on_assignment_id"
+    t.index ["user_id"], :name => "index_rubric_items_on_user_id"
+    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_assignment_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_user_id"
   end
 
   create_table "verifications", force: true do |t|

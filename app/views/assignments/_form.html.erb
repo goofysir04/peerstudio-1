@@ -1,4 +1,4 @@
-<%= form_for [@course,@assignment] do |f| %>
+<%= form_for [@course,@assignment], :html=>{:class => "form-horizontal"} do |f| %>
   <% if @assignment.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
@@ -11,31 +11,157 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.hidden_field :description, :id=>'assignment_description' %>
-    <div class="editable" id="assignment_description_richtext" data-syncwith="assignment_description">
-      <%= @assignment.description unless @assignment.description.nil? %>
+  <div class="control-group">
+    <div class="control-label">
+      <%= f.label :title %>
+    </div>
+    <div class="control">
+      <%= f.text_field :title %>
     </div>
   </div>
-  <div class="field">
-    <%= f.label :due_at %><br>
-    <%= f.datetime_select :due_at %>
+  <div class="control-group">
+    <div class="control-label">
+      <%= f.label :description %>
+    </div>
+    <div class="control">
+      <%= f.hidden_field :description, :id=>'assignment_description' %>
+      <div class="editable" id="assignment_description_richtext" data-syncwith="assignment_description" style="margin-left:165px">
+        <%= sanitize @assignment.description unless @assignment.description.nil? %>
+      </div>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :open_at %><br>
-    <%= f.datetime_select :open_at %>
+  <div class="control-group">
+    <div class="control-label">
+      <%= f.label :due_at %>
+    </div>
+    <div class="control">
+      <div class="input-append date datetime-picker">
+        <%= f.text_field :due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+      </div>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :user %><br>
-    <%= f.text_field :user %>
+  <div class="control-group">
+    <div class="control-label">
+      <%= f.label :open_at %>
+    </div>
+    <div class="control">
+        <div class="input-append date datetime-picker">
+        <%= f.text_field :open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+      </div>
+    </div>
   </div>
+<section class="project_edit_section">
+    <div class="edit_section_title">
+      <h3>Rubrics items
+      <small>What questions should students be evaluated on?</small>
+      </h3>
+    </div>
+  <%= f.fields_for :rubric_items do |r| %>
 
+
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :short_title %>
+      </div>
+      <div class="control">
+        <%= r.text_field :short_title %>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :title do %>
+        <strong>A longer description</strong>
+        <small>Include examples of good and bad work</small>
+        <% end %>
+      </div>
+      <br/>
+      <div class="control">
+        <%= r.text_area :title %>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :ends_at %>
+      </div>
+      <div class="control">
+        <div class="input-append date datetime-picker">
+          <%= r.text_field :ends_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+        Students will only be able to get feedback on this item if they submit by this date. 
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :final_only do %>
+        <strong>Final only?</strong> <br/>
+        <small>Rubric item only useful on the final evaluation (e.g. spelling and grammar).</small>
+        <% end %>
+      </div>
+      <div class="control">
+        <%= r.check_box :final_only %>
+        
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :min do %>
+        <strong>Min Score</strong>
+        <% end %>
+      </div>
+      <div class="control">
+        <%= r.text_field :min %>
+      </div>
+      <div class="control-label">
+        <%= r.label :min_label do %>
+                  <strong class="required">Min label</strong><br/>
+          <small>What should we call the min score (e.g. no)</small>
+        <% end %>
+      </div>
+      <div class="control">
+        <%= r.text_field :min_label %>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :max do %>
+        <strong>Max Score</strong>
+        <% end %>
+      </div>
+      <div class="control">
+        <%= r.text_field :max %>
+      </div>
+      <div class="control-label">
+        <%= r.label :max_label do %>
+          <strong class="required">Max label</strong><br/>
+          <small>What should we call the max score (e.g. yes)</small>
+        <% end %>
+      </div>
+      <div class="control">
+        <%= r.text_field :max_label %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :_destroy, "Remove this rubric item" %>
+      </div>
+      <div class="control">
+        <%= r.check_box :_destroy %>
+      </div>
+    </div>
+
+    <legend></legend>
+  <% end %>
+</section>
   <div class="actions">
     <%= f.submit %>
   </div>
+
+  <script type="text/javascript">
+  $(function() {
+    $('.datetime-picker').datetimepicker({language: 'en', pickTime: true});});
+  </script>
 <% end %>
