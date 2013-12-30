@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131229205950) do
+ActiveRecord::Schema.define(version: 20131230205253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 20131229205950) do
     t.integer  "push_count",         default: 0
     t.string   "revision_name"
     t.integer  "assignment_id"
+    t.boolean  "active",             default: true
     t.index ["assignment_id"], :name => "fk__answers_assignment_id"
     t.index ["question_id"], :name => "index_answers_on_question_id"
     t.index ["user_id"], :name => "index_answers_on_user_id"

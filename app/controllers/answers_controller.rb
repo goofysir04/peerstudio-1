@@ -18,6 +18,14 @@ class AnswersController < ApplicationController
   def new
     @answer = Answer.new
     @answer.assignment = @assignment
+    @answer.active = false
+    @answer.user = current_user
+
+    if @answer.save 
+      redirect_to edit_answer_path(@answer)
+    else
+      redirect_to root_path, error: "We couldn't create an answer now. Please try again, or report a bug."
+    end
   end
 
   # GET /answers/1/edit
@@ -45,7 +53,7 @@ class AnswersController < ApplicationController
   # PATCH/PUT /answers/1.json
   def update
     respond_to do |format|
-      if @answer.update(answer_params)
+      if @answer.update(answer_params.merge(active: true)) #set active to true so the answer shows up everywhere
         format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully updated.' }
         format.json { head :no_content }
       else
