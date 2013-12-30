@@ -14,6 +14,7 @@ class Answer < ActiveRecord::Base
 
   belongs_to :question
   belongs_to :user
+  belongs_to :assignment
 
   has_many :assessments
   

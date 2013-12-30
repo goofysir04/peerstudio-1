@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
-  before_action :set_assignment, only: [:show, :edit, :update, :new, :index]
+  before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
   # before_filter :authenticate_user_is_admin!
   # GET /answers
@@ -17,6 +17,7 @@ class AnswersController < ApplicationController
   # GET /answers/new
   def new
     @answer = Answer.new
+    @answer.assignment = @assignment
   end
 
   # GET /answers/1/edit
@@ -27,10 +28,11 @@ class AnswersController < ApplicationController
   # POST /answers.json
   def create
     @answer = Answer.new(answer_params)
-
+    @answer.assignment = Assignment.find(params[:assignment_id])
+    @answer.user = current_user
     respond_to do |format|
       if @answer.save
-        format.html { redirect_to @answer, notice: 'Answer was successfully created.' }
+        format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully created.' }
         format.json { render action: 'show', status: :created, location: @answer }
       else
         format.html { render action: 'new' }
@@ -44,7 +46,7 @@ class AnswersController < ApplicationController
   def update
     respond_to do |format|
       if @answer.update(answer_params)
-        format.html { redirect_to @answer, notice: 'Answer was successfully updated.' }
+        format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -96,6 +98,6 @@ class AnswersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params.permit(:assignment_id)
-      params.require(:answer).permit(:response, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence)
+      params.require(:answer).permit(:response, :revision_name, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id)
     end
 end

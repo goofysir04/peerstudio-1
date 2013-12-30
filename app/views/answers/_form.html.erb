@@ -1,4 +1,4 @@
-<%= form_for(@answer) do |f| %>
+<%= form_for([@assignment,@answer]) do |f| %>
   <% if @answer.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@answer.errors.count, "error") %> prohibited this answer from being saved:</h2>
@@ -11,20 +11,52 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :response %><br>
-    <%= f.text_area :response, :id=>"answer_response", :class=>"hidden_field" %>
+  <div class="assignment_instructions">
+    <h1><%= link_to @answer.assignment.title, @answer.assignment %></h1>
 
-    <div class="editable" id="response_richedit" data-syncwith="answer_response" data-placeholder="Type your response here. Highlight text for formatting options. <%= "Please save your answer before you add images" if @answer.new_record? %>">
-      <%= @answer.response.html_safe unless @answer.response.nil? %>
+    <div class="assignment-description">
+      <%= sanitize @answer.assignment.description %>
     </div>
   </div>
-  <div class="field">
-    <%= f.label :question_id %><br>
-    <%= f.number_field :question_id %>
-  </div>
+  <div class="row">
+    <div class="assignment-rubric span4">
+      <p>Here's how this assignment will be assessed</p>
+      <style type="text/css">
+      .rubric {margin: 0;}
+      .rubric li {list-style-type: none;}
+      </style>
+      <ul class="rubric">
+        <% @answer.assignment.rubric_items.each do |r| %>
+        <li>
+          <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> (<%= r.max_label%>)</span><br/>
+          <legend></legend>
+          <%= sanitize r.title %>
+        </li>
+        <% end %>
+      </ul>
+    </div>
 
+    <div class="field span8">
+      <p>Write your response below. </p><legend></legend>
+      <%= f.text_area :response, :id=>"answer_response", :class=>"hidden_field" %>
+      <div class="editable" id="response_richedit" data-syncwith="answer_response" data-placeholder="Type your response here. Highlight text for formatting options. <%= "Please save your answer before you add images" if @answer.new_record? %>">
+        <%= @answer.response.html_safe unless @answer.response.nil? %>
+      </div>
+
+      <div class="actions">
+        <div class="input-append">
+        <%= f.text_field :revision_name, placeholder:"Enter a revision name" %>
+        <%= f.submit "Save Revision", class: "btn"%>
+        </div>
+        
+      </div>
+    </div>
+  </div>
   <% if current_user.admin? %>
+    <div class="field">
+      <%= f.label :question_id %><br>
+      <%= f.number_field :question_id %>
+    </div>
     <div class="field">
       <%= f.label :user_id %><br>
       <%= f.number_field :user_id %>
@@ -50,12 +82,5 @@
       <%= f.text_field :confidence %>
     </div>
   <% end -%>
-<div class="field">
-    <%= f.label :revision_name %><br>
-    <%= f.text_field :revision_name %>
-  </div>
-  
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+
 <% end %>

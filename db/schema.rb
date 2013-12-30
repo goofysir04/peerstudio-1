@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131228203840) do
+ActiveRecord::Schema.define(version: 20131229205950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,55 +24,6 @@ ActiveRecord::Schema.define(version: 20131228203840) do
     t.datetime "updated_at"
     t.text     "description"
     t.index ["question_id"], :name => "index_answer_attributes_on_question_id"
-  end
-
-  create_table "answers", force: true do |t|
-    t.text     "response"
-    t.integer  "question_id"
-    t.integer  "user_id"
-    t.float    "predicted_score"
-    t.float    "current_score"
-    t.integer  "evaluations_wanted"
-    t.integer  "total_evaluations"
-    t.float    "confidence"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "state",              default: "identify"
-    t.string   "evaluation_type",    default: "default"
-    t.boolean  "staff_graded",       default: false
-    t.integer  "push_count",         default: 0
-    t.string   "revision_name"
-    t.index ["question_id"], :name => "index_answers_on_question_id"
-    t.index ["user_id"], :name => "index_answers_on_user_id"
-  end
-
-  create_table "questions", force: true do |t|
-    t.text     "title"
-    t.text     "explanation"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.float    "min_score",                default: 0.0
-    t.float    "max_score",                default: 1.0
-    t.text     "baseline_explanation"
-    t.string   "score_aggregation_method", default: "sum"
-  end
-
-  create_table "appeals", force: true do |t|
-    t.text     "comments"
-    t.integer  "answer_id"
-    t.boolean  "accepted"
-    t.boolean  "inspected"
-    t.float    "appeal_score"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "experimental_condition"
-    t.text     "instructor_comments"
-    t.integer  "question_id"
-    t.text     "answer_text"
-    t.index ["answer_id"], :name => "fk__appeals_answer_id"
-    t.index ["question_id"], :name => "fk__appeals_question_id"
-    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_answer_id"
-    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
   end
 
   create_table "users", force: true do |t|
@@ -97,23 +48,6 @@ ActiveRecord::Schema.define(version: 20131228203840) do
     t.integer  "cid"
     t.index ["email"], :name => "index_users_on_email", :unique => true
     t.index ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-  end
-
-  create_table "assessments", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "answer_id"
-    t.text     "comments"
-    t.integer  "question_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "started_at"
-    t.string   "answer_type"
-    t.index ["answer_id"], :name => "fk__assessments_answer_id"
-    t.index ["question_id"], :name => "fk__assessments_question_id"
-    t.index ["user_id"], :name => "fk__assessments_user_id"
-    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_answer_id"
-    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_question_id"
-    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_user_id"
   end
 
   create_table "courses", force: true do |t|
@@ -147,6 +81,75 @@ ActiveRecord::Schema.define(version: 20131228203840) do
     t.index ["user_id"], :name => "index_assignments_on_user_id"
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_course_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_user_id"
+  end
+
+  create_table "answers", force: true do |t|
+    t.text     "response"
+    t.integer  "question_id"
+    t.integer  "user_id"
+    t.float    "predicted_score"
+    t.float    "current_score"
+    t.integer  "evaluations_wanted"
+    t.integer  "total_evaluations"
+    t.float    "confidence"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "state",              default: "identify"
+    t.string   "evaluation_type",    default: "default"
+    t.boolean  "staff_graded",       default: false
+    t.integer  "push_count",         default: 0
+    t.string   "revision_name"
+    t.integer  "assignment_id"
+    t.index ["assignment_id"], :name => "fk__answers_assignment_id"
+    t.index ["question_id"], :name => "index_answers_on_question_id"
+    t.index ["user_id"], :name => "index_answers_on_user_id"
+    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answers_assignment_id"
+  end
+
+  create_table "questions", force: true do |t|
+    t.text     "title"
+    t.text     "explanation"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "min_score",                default: 0.0
+    t.float    "max_score",                default: 1.0
+    t.text     "baseline_explanation"
+    t.string   "score_aggregation_method", default: "sum"
+  end
+
+  create_table "appeals", force: true do |t|
+    t.text     "comments"
+    t.integer  "answer_id"
+    t.boolean  "accepted"
+    t.boolean  "inspected"
+    t.float    "appeal_score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "experimental_condition"
+    t.text     "instructor_comments"
+    t.integer  "question_id"
+    t.text     "answer_text"
+    t.index ["answer_id"], :name => "fk__appeals_answer_id"
+    t.index ["question_id"], :name => "fk__appeals_question_id"
+    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_answer_id"
+    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
+  end
+
+  create_table "assessments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "answer_id"
+    t.text     "comments"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "started_at"
+    t.string   "answer_type"
+    t.index ["answer_id"], :name => "fk__assessments_answer_id"
+    t.index ["question_id"], :name => "fk__assessments_question_id"
+    t.index ["user_id"], :name => "fk__assessments_user_id"
+    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_answer_id"
+    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_question_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_user_id"
   end
 
   create_table "attached_assets", force: true do |t|

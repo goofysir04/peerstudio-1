@@ -1,7 +1,7 @@
+editor = null
 $(document).ready ->
 	editor = new MediumEditor('.editable')
 	$('.editable').mediumInsert({editor: editor, images: true, imagesUploadScript: "upload_attachment.js"})
-
 	syncContents = (text, element) ->
 		$(element).val(text)
 
@@ -18,5 +18,3 @@ $(document).ready ->
 		for element in editor.elements
 			syncContents((editor.serialize())[$(element).attr('id')].value, '#'+$(element).data('syncwith'))
 			return yes
-
-	# loadEditorText()

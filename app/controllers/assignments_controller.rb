@@ -11,6 +11,7 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1
   # GET /assignments/1.json
   def show
+    @my_answers = Answer.where(user: current_user, assignment: @assignment)
   end
 
   # GET /assignments/new

@@ -9,12 +9,14 @@
 </div>
 
 <div id="assignment_rubric_items">
+  <h3>Evaluation</h3>
   <table class="table">
     <thead>
       <tr>
         <th>Rubric item</th><th>Max score</th><th>Submit answer for feedback by</th> 
       </tr>
     </thead>
+    <tbody>
     <% @assignment.rubric_items.each do |r| %>
       <tr>
         <td><strong><%= r.short_title %></strong><br/>
@@ -23,16 +25,43 @@
          <td><%= r.ends_at.strftime "%b %e, %l:%M %p" %> (in <%= distance_of_time_in_words r.ends_at, Time.now %>)</td>
        </tr>
     <% end %>
+  </tbody>
   </table>
 </div>
 
 <div id="assignment_answers">
   <ul class="nav nav-tabs">
-    <li><a href="#my_answers" data-toggle="tab">My Answers</a></li>
+    <li class="active"><a href="#my_answers" data-toggle="tab">My Answers</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
   </ul>
   <div class="tab-content">
-    <div id="my_answers" class="tab-pane active">My answers go here</div>
+    <div id="my_answers" class="tab-pane active">
+      <% if @my_answers.empty? %>
+      <p>You have no answers. <%= link_to "Start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+      <% else %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Revision Name</th>
+            <th>Preview</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @my_answers.each do |answer| %>
+          <tr>
+            <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
+            <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+            <td><span class="label">In queue</span> Waiting for peer reviews</td>
+            <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %></td>
+          </tr>
+          <% end %> 
+        </tbody>
+      </table>
+      <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create new revision", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+      <% end %>
+    </div>
     <div id="my_reviews" class="tab-pane">My reviews go here</div>
   </div>
 </div>
