@@ -1,5 +1,9 @@
 class RegistrationsController < Devise::RegistrationsController
-
+  def create
+      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :name)}
+      super
+  end
+  
   def update
     @user = User.find(current_user.id)
 

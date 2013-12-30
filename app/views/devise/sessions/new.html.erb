@@ -3,16 +3,50 @@
 
   <div class="span6">
     <h3>Sign in</h3>
-    <p>To use the peer assessment website, you need to login with your Coursera login. Click the blue button to begin. When you click "Login with Coursera", we'll redirect you to Coursera's website, where you may need to re-enter your Coursera password</p>
-
+    <p>To use the peer assessment website, you need to login.</p>
+    <% if false  %>
+    <% #temporarily disable login for coursera %>
     <%= link_to omniauth_authorize_path(resource,"coursera"), :class=> "btn btn-large btn-primary", :id=>"login_button" do %>
     Log in with <%= image_tag "coursera_white.svg" %> <br/>
     <div id="progress" style="display:none;"><small>(Logging in...)</small></div>
-  <% end %>
+    <% end %>
+    <% end %>
+
+  <p>Coming soon, login link for UC San Diego IDs</p>
   </div>
 
   <div class="span6">
-    
+    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => 'form-horizontal' }) do |f| %>
+
+      <div class="control-group">
+        <label class="control-label" for="user_email"><%= f.label :email %><br /></label>
+        <div class="controls">
+          <%= f.email_field :email, :autofocus => true %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="user_password"><%= f.label :password %><br /></label>
+        <div class="controls">
+          <%= f.password_field :password %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+      <% if devise_mapping.rememberable? -%>
+        <div><%= f.check_box :remember_me %><%= f.label :remember_me, :style=>"display:inline; margin-left:10px;" %></div>
+      <% end -%>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <%= f.submit "Sign in", :class => 'btn btn-primary' %>
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
 </div>
