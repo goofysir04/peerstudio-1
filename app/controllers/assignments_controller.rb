@@ -1,7 +1,7 @@
 class AssignmentsController < ApplicationController
   before_action :set_assignment, only: [:show, :edit, :update, :destroy]
   before_action :set_course, only: [:index, :new, :create]
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: :show
   # GET /assignments
   # GET /assignments.json
   def index
@@ -11,7 +11,11 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1
   # GET /assignments/1.json
   def show
-    @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
+    if user_signed_in?
+      @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
+    else
+      @my_answers = []
+    end  
   end
 
   # GET /assignments/new
