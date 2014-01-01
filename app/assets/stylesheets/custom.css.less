@@ -517,10 +517,22 @@ td.time_block:hover {
   display:none;
 }
 
-.editable p {      
-    font-family: Georgia, Times, 'Times New Roman', serif;
-    font-size: 16px;
-    line-height: 20px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+.editable {
+  font-family: Georgia, Times, 'Times New Roman', serif;
+  p {    
+      font-size: 16px;
+      line-height: 20px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+  }
+  .has-focus {
+    border: 4px solid steelblue;
+  }
+
+  .mediumInsert-tools {
+    display: inline;
+    list-style-type: none;
+  }
 }
+
+

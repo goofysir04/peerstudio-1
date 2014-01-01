@@ -136,40 +136,18 @@
           $el = $.fn.mediumInsert.insert.$el,
           insertBlock = '',
           insertImage = '<a class="mediumInsert-action action-images-add">Image</a>',
-          insertMap = '<a class="mediumInsert-action action-maps-add">Map</a>';
-         
-      if($.fn.mediumInsert.settings.images === true && $.fn.mediumInsert.settings.maps === true) {
-        insertBlock = '<a class="mediumInsert-buttonsShow">Insert</a>'+
-          '<ul class="mediumInsert-buttonsOptions">'+
-            '<li>' + insertImage + '</li>' +
-            '<li>' + insertMap + '</li>' +
-          '</ul>';
-      } else if ($.fn.mediumInsert.settings.images === true) {
-        insertBlock = insertImage;
-      } else if ($.fn.mediumInsert.settings.maps === true) {
-        insertBlock = insertMap;
-      }   
-         
-      if (insertBlock !== '') {
         insertBlock = '<div class="mediumInsert" contenteditable="false">'+
           '<div class="mediumInsert-buttons">'+
             '<div class="mediumInsert-buttonsIcon">&rarr;</div>'+
-            insertBlock +
+            insertImage +
           '</div>'+
           '<div class="mediumInsert-placeholder"></div>'+
-        '</div>';
-      } else {
-        return;
-      }  
-         
-      if ($el.is(':empty')) {
-        $el.html('<p><br></p>');
-      }   
-            
+        '</div>';  
+
       $el.keyup(function () {        
         var i = 0;
       
-        $el.children('p').each(function () {
+        $el.children('p,h1,h2,h3').each(function () {
           if ($(this).next().hasClass('mediumInsert') === false) {
             $(this).after(insertBlock);     
             $(this).next('.mediumInsert').attr('id', 'mediumInsert-'+ i);            
@@ -205,19 +183,7 @@
           $options.hide();
           
           $('a', $options).show();
-        } else {
-          $(this).addClass('active');
-          $options.show();  
-          
-          $('a', $options).each(function () {
-            var aClass = $(this).attr('class').split('action-')[1],
-                plugin = aClass.split('-')[0];
-            if ($('.mediumInsert-'+ plugin, $placeholder).length > 0) {
-              $('a:not(.action-'+ aClass +')', $options).hide(); 
-            }
-          });
-        }
-          
+        }          
         that.deselect();
       });
         

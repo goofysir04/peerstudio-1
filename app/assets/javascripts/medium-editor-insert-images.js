@@ -24,7 +24,7 @@
         $.fn.mediumInsert.settings.imagesPlugin);
       this.addPlaceholders();
       this.setImageEvents();
-      this.setDragAndDropEvents();
+      // this.setDragAndDropEvents();
     },
 
     /**
@@ -151,37 +151,32 @@
     */
       
     setImageEvents: function () {
-      this.$el.on('mouseenter', '.mediumInsert-images', function () {
+      this.$el.on('click', '.mediumInsert-images', function () {
         var $img = $('img', this),
             positionTop,
             positionLeft;
-            
+        if($img.hasClass("has-focus")) {
+          $img.removeClass("has-focus");
+          $('.mediumInsert-tools', this).remove();
+        }
+        $img.addClass("has-focus");
         if ($img.length > 0) {
-          $(this).append('<a class="mediumInsert-imageRemove"></a>');
+          // $(this).append('<a class="mediumInsert-imageRemove"></a>');
             
-          if ($(this).parent().parent().hasClass('small')) {
-            $(this).append('<a class="mediumInsert-imageResizeBigger"></a>');
+          if ($(this).parents('.mediumInsert').hasClass('small')) {
+            $(this).append('<a class="mediumInsert-tools mediumInsert-imageResizeBigger"></a>');
           } else {
-            $(this).append('<a class="mediumInsert-imageResizeSmaller"></a>');
+            $(this).append('<a class="mediumInsert-tools mediumInsert-imageResizeSmaller"></a>');
           }
             
           positionTop = $img.position().top + parseInt($img.css('margin-top'), 10);
           positionLeft = $img.position().left + $img.width() -30;
-          $('.mediumInsert-imageRemove', this).css({
-            'right': 'auto',
-            'top': positionTop,
-            'left': positionLeft
-          });
           $('.mediumInsert-imageResizeBigger, .mediumInsert-imageResizeSmaller', this).css({
             'right': 'auto',
             'top': positionTop,
-            'left': positionLeft-31
+            'left': positionLeft+9
           });  
         }
-      });
-        
-      this.$el.on('mouseleave', '.mediumInsert-images', function () { 
-        $('.mediumInsert-imageRemove, .mediumInsert-imageResizeSmaller, .mediumInsert-imageResizeBigger', this).remove();
       });
         
       this.$el.on('click', '.mediumInsert-imageResizeSmaller', function () {
