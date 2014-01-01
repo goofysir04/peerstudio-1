@@ -35,12 +35,12 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseLikes">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseLikes_<%=r.object.rubric_item.id %>">
                     I like...
                   </a>
                 </h4>
               </div>
-              <div id="collapseLikes" class="panel-collapse collapse in">
+              <div id="collapseLikes_<%=r.object.rubric_item.id %>" class="panel-collapse collapse in">
                 <div class="panel-body">
                   <p>Select one part of the essay that's especially good on this rubric. TODO </p>
                     <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %><br/>
@@ -51,12 +51,12 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseWishes">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseWishes_<%=r.object.rubric_item.id %>">
                     I wish...
                   </a>
                 </h4>
               </div>
-              <div id="collapseWishes" class="panel-collapse collapse">
+              <div id="collapseWishes_<%=r.object.rubric_item.id %>" class="panel-collapse collapse">
                 <div class="panel-body">
                   <p>Select one part of the essay that could have done better. TODO </p>
                     <%= r.text_area :wish_feedback, placeholder: "What do you wish had been better?" %>
