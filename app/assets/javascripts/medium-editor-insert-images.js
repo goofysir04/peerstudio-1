@@ -158,6 +158,7 @@
         if($img.hasClass("has-focus")) {
           $img.removeClass("has-focus");
           $('.mediumInsert-tools', this).remove();
+          return;
         }
         $img.addClass("has-focus");
         if ($img.length > 0) {
