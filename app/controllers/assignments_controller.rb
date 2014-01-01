@@ -13,8 +13,7 @@ class AssignmentsController < ApplicationController
   def show
     if user_signed_in?
       @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
-    else
-      @my_answers = []
+      @my_reviews = Review.where(answer_id: @my_answers)
     end  
   end
 

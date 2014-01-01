@@ -62,7 +62,28 @@
       <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create new revision", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
       <% end %>
     </div>
-    <div id="my_reviews" class="tab-pane">My reviews go here</div>
+    <div id="my_reviews" class="tab-pane">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Revision Name</th>
+            <th>Preview</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @my_reviews.each do |review| %>
+          <tr>
+            <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+            <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+            <td><span class="label label-success">Unread</span></td>
+            <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %></td>
+          </tr>
+          <% end %> 
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
