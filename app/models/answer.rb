@@ -16,6 +16,9 @@ class Answer < ActiveRecord::Base
   belongs_to :user
   belongs_to :assignment
 
+  has_many :reviews
+  has_many :feedback_items, through: :reviews
+
   has_many :assessments
   
   def self.get_next_identify_for_user_and_question(user, question)

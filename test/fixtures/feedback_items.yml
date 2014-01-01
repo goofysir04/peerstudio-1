@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  review_id: 
+  rubric_item_id: 
+  like_feedback: MyText
+  wish_feedback: MyText
+  score: 1.5
+
+two:
+  review_id: 
+  rubric_item_id: 
+  like_feedback: MyText
+  wish_feedback: MyText
+  score: 1.5

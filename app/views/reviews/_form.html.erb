@@ -1,0 +1,86 @@
+<%= form_for([@answer,@review]) do |f| %>
+  <% if @review.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
+
+      <ul>
+      <% @review.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+    <div class="assignment_instructions">
+    <h1><%= link_to @review.answer.assignment.title, @answer.assignment %></h1>
+
+    <div class="assignment-description">
+      <%= sanitize @review.answer.assignment.description %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="assignment-rubric span4">
+      <p>Here's how this assignment should be assessed</p>
+      <style type="text/css">
+      .rubric {margin: 0;}
+      .rubric li {list-style-type: none;}
+      </style>
+      <ul class="rubric">
+        <li>
+          <%= f.fields_for :feedback_items do |r| %>
+          <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right label">Max: <%=r.object.rubric_item.max %> (<%= r.object.rubric_item.max_label%>)</span><br/>
+          <legend></legend>
+          <%= sanitize r.object.rubric_item.title %>
+
+          <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseLikes">
+                    I like...
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseLikes" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <p>Select one part of the essay that's especially good on this rubric. TODO </p>
+                    <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %><br/>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseWishes">
+                    I wish...
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseWishes" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <p>Select one part of the essay that could have done better. TODO </p>
+                    <%= r.text_area :wish_feedback, placeholder: "What do you wish had been better?" %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% if @review.answer.assignment.due_at < Time.now %>
+            <%= r.number_field :score %>
+          <% end %>
+          <br/>
+        </li>
+        <% end %>
+      </ul>
+
+    </div>
+
+    <div class="field span8">
+      <div class="edited-content">
+        <%= sanitize @review.answer.response unless @answer.response.nil? %>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

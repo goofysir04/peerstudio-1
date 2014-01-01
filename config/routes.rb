@@ -1,5 +1,4 @@
 Humanmachine::Application.routes.draw do
-  
 
   resources :courses do
     resources :assignments, shallow: true
@@ -66,8 +65,9 @@ Humanmachine::Application.routes.draw do
     member do 
       post 'upload_attachment'
     end
+    resources :reviews, shallow: true
   end
-  
+
   resources :questions do
     resources :answer_attributes
   end
