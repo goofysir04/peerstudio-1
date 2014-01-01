@@ -44,6 +44,7 @@
                 <div class="panel-body">
                   <p>Select one part of the essay that's especially good on this rubric. TODO </p>
                     <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %><br/>
+                    <%= r.hidden_field :rubric_item_id %>
                 </div>
               </div>
             </div>
