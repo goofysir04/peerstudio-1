@@ -44,8 +44,6 @@ gem "devise"
 gem "omniauth"
 gem 'omniauth-openid', :git => 'git://github.com/intridea/omniauth-openid.git'
 gem "cancan"
-gem "omniauth-shibboleth"
-
 
 # gem "mysql2", group: :production
 gem "pg" #group: :production #only heroku

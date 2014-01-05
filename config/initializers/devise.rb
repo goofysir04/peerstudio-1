@@ -5,13 +5,13 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  config.secret_key = '64a9eb456709a94a89be02905da1fb083e20a6171665398ad9b9798b09e6b99c6efb991a609158b9834ed80f8fbfc643927a5625b1974b08bd1a2f998307c551'
+  config.secret_key = 'd06c5c151cd4bb95fbf234db465b5ee329d9b155dff18047c23123dfebbfa588c5792943522282157c46d8b478166ea4a7b20d8fd080331ed6e0decfab9b940d'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = 'accounts@peerstudio.org'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -107,7 +107,7 @@ Devise.setup do |config|
   # able to access the website for two days without confirming his account,
   # access will be blocked just in the third day. Default is 0.days, meaning
   # the user cannot access the website without confirming his account.
-  # config.allow_unconfirmed_access_for = 2.days
+  config.allow_unconfirmed_access_for = 1.days
 
   # A period that the user is allowed to confirm their account before their
   # token becomes invalid. For example, if set to 3.days, the user can confirm
@@ -238,6 +238,14 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
+
+  # config.omniauth :saml,    
+  #   :assertion_consumer_service_url     => "consumer_service_url",
+  #   :issuer                             => "www.peerstudio.org",
+  #   :idp_sso_target_url                 => "idp_sso_target_url",
+  #   :idp_sso_target_url_runtime_params  => {:original_request_param => :mapped_idp_param},
+  #   :idp_cert                           => File.read(File.join(Rails.root, 'config/certs', 'ucsd-incommon.pem')),
+  #   :name_identifier_format             => "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

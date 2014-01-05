@@ -1,3 +1,5 @@
+require Rails.root.join('config', 'initializers', 'constants.rb')
+
 Humanmachine::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -28,7 +30,10 @@ Humanmachine::Application.configure do
   config.assets.debug = true
 
   #For devise
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'peerstudio.org' }
+
+  config.action_mailer.delivery_method = ACTION_MAILER_DELIVERY_METHOD
+  config.action_mailer.smtp_settings = ACTION_MAILER_SMTP_SETTINGS_DEVELOPMENT
   Delayed::Worker.destroy_failed_jobs = false
   #For paperclip uploads
   config.paperclip_defaults = {

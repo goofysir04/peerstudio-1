@@ -4,7 +4,7 @@
   <div class="span6">
     <h3>Sign in</h3>
     <p>To use the peer assessment website, you need to login.</p>
-    <% if false  %>
+    <% if true  %>
     <% #temporarily disable login for coursera %>
     <%= link_to omniauth_authorize_path(resource,"coursera"), :class=> "btn btn-large btn-primary", :id=>"login_button" do %>
     Log in with <%= image_tag "coursera_white.svg" %> <br/>
