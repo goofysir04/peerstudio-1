@@ -6,7 +6,7 @@ class AnswersController < ApplicationController
   # GET /answers
   # GET /answers.json
   def index
-    @answers = Answer.all
+    @answers = Answer.where('assignment_id = ?', params[:assignment_id]).order('user_id').order('created_at DESC')
   end
 
   # GET /answers/1

@@ -43,6 +43,14 @@ class Answer < ActiveRecord::Base
     end
   end
 
+  def is_latest_revision?
+    Answer.where(assignment: self.assignment, user: self.user).where('created_at > ?', self.created_at).empty?
+  end
+
+  def latest_revision
+    Answer.where(assignment: self.assignment, user: self.user).order('created_at DESC').first
+  end
+
   def revision_name=(val)
     self.base_revision_name = val
   end

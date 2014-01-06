@@ -39,7 +39,7 @@
   <div class="tab-content">
     <div id="my_answers" class="tab-pane active">
       <% if !user_signed_in? %>
-      <p>You must sign in to see your answers. <%= link_to "Start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+      <p>You must sign in to see your answers. <%= link_to "Log in and start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
       <% else %>
       <table class="table">
         <thead>
@@ -87,7 +87,8 @@
           </tr>
           <% end %> 
         </tbody>
-      </table>
+      </table> 
+        <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Start a review", assignment_answers_path(@assignment), :class=>"btn" %></p>
       <% end %>
     </div>
     <div id="all_answers" class="tab-pane">
