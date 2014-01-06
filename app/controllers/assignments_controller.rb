@@ -15,6 +15,7 @@ class AssignmentsController < ApplicationController
       @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
       @my_reviews = Review.where(answer_id: @my_answers)
       @all_answers = @assignment.answers
+      @starred_answers = @assignment.answers.where(starred: true)
     end
   end
 

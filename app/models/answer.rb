@@ -32,9 +32,20 @@ class Answer < ActiveRecord::Base
   end
 
   def versions
-    Answer.where(assignment: self.assignment, user: self.user)
+    Answer.where(assignment: self.assignment, user: self.user).order('created_at')
   end
   
+  def revision_name
+    if self.base_revision_name.blank? 
+      "Unnamed (created #{self.created_at.strftime('%b %d')})"
+    else
+      self.base_revision_name
+    end
+  end
+
+  def revision_name=(val)
+    self.base_revision_name = val
+  end
 
   def self.should_get_ground_truth_assignment(user, question)
     #First return false if this user has already identified a ground truth assignment. 

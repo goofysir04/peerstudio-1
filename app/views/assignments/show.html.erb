@@ -34,6 +34,7 @@
     <li class="active"><a href="#my_answers" data-toggle="tab">My Answers</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
     <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
+    <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
   </ul>
   <div class="tab-content">
     <div id="my_answers" class="tab-pane active">
@@ -90,24 +91,10 @@
       <% end %>
     </div>
     <div id="all_answers" class="tab-pane">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Revision Name</th>
-            <th>Preview</th>
-            <th>Grade</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @all_answers.each do |answer| %>
-          <tr>
-            <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
-            <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-            <td><%= link_to "Read with reviews", answer_reviews_path(answer) %></td>
-          </tr>
-          <% end %> 
-        </tbody>
-      </table>
+      <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
+    </div>
+    <div id="starred_answers" class="tab-pane">
+      <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
     </div>
   </div>
 </div>

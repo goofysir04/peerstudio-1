@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Revision Name</th>
+      <th>Preview</th>
+      <th>Grade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% answers.each do |answer| %>
+    <tr>
+      <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
+      <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+      <td><%= link_to "Read with reviews", answer_reviews_path(answer) %></td>
+    </tr>
+    <% end %> 
+  </tbody>
+</table>

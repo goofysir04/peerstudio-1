@@ -5,28 +5,22 @@
       <%= sanitize answer.assignment.description %>
     </div>
 </div>
-<div class="row">
-  <div class="assignment-rubric span4">
-    Show reviews for <div class="btn-group">
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-        <%= answer.revision_name %> <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <% answer.versions.each do |v| %>
-        <li><%= link_to v.revision_name, answer_reviews_path(v) %></li>
-        <% end %>
-      </ul>
-      </div>
-  	<%= yield %>
+
+<div class="navbar" id="instructor-actions">
+  <div class="navbar-inner">
+    <ul class="nav">
+      <li><%= link_to "Star answer", star_answer_path(answer), remote: true, class: "star_answer" %></li>
+      <li><a href="#">Add to calibration set</a></li>
+    </ul>
   </div>
+</div>
+
+<div class="row">
+  <%= render partial: "browser", locals: {answer: answer} %>
 
   <div class="field span8">
     <div class="edited-content">
       <%= sanitize answer.response unless answer.response.nil? %>
     </div>
   </div>
-</div>
-<div class="row" id="instructor-actions">
-  <h2>Instructors only</h2>
-  <%= link_to "Star this answer", star_answer_path(answer) %>
 </div>

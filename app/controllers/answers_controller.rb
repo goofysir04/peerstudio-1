@@ -20,7 +20,6 @@ class AnswersController < ApplicationController
     @answer.assignment = @assignment
     @answer.active = false
     @answer.user = current_user
-
     if @answer.save 
       redirect_to edit_answer_path(@answer)
     else
@@ -41,9 +40,11 @@ class AnswersController < ApplicationController
       if @answer.save
         format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully created.' }
         format.json { render action: 'show', status: :created, location: @answer }
+        format.js
       else
         format.html { render action: 'new' }
         format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -55,9 +56,11 @@ class AnswersController < ApplicationController
       if @answer.update(answer_params.merge(active: true)) #set active to true so the answer shows up everywhere
         format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully updated.' }
         format.json { head :no_content }
+        format.js
       else
         format.html { render action: 'edit' }
         format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -95,7 +98,12 @@ class AnswersController < ApplicationController
   #toggles star
   def star
     @answer.starred = !@answer.starred
-    @answer.save!
+    if @answer.save
+      respond_to do |format|
+        format.html {redirect_to answer_reviews_path(@answer)}
+        format.js
+      end
+    end
   end
 
   private
