@@ -71,7 +71,11 @@ Humanmachine::Application.routes.draw do
   end
 
   resources :questions do
-    resources :answer_attributes
+    #resources :answer_attributes
+  end
+
+  resources :rubric_items do 
+    resources :answer_attributes, shallow: true
   end
 
   #root 'grading#index'

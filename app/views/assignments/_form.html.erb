@@ -81,6 +81,19 @@
         <%= r.text_area :title %>
       </div>
     </div>
+
+    <div class="control-group">
+      <div class="control-label">
+        <%= r.label :common_wishes do %>
+        <strong>Common feedback for improvement</strong><br/>
+        <small>Often, students make similar errors. What common feedback would improve performance on this rubric?</small>
+        <% end %>
+      </div>
+      <br/>
+      <div class="control">
+        <%= r.text_area :common_wishes, placeholder: "Spend more time observing, less writing; Be specific when you write...", style: "width: 300px"%>
+      </div>
+    </div>
     <div class="control-group">
       <div class="control-label">
         <%= r.label :ends_at %>

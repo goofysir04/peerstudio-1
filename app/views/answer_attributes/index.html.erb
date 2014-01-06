@@ -1,0 +1,35 @@
+
+<p>Attributes:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Is correct</th>
+      <th>Score</th>
+      <th>Question</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @attributes.each do |attribute| %>
+      <tr>
+        <td><%= attribute.is_correct %></td>
+        <td><%= attribute.score %></td>
+        <td><%= attribute.question_id %></td>
+        <td><%= attribute.created_at %></td>
+        <td><%= attribute.updated_at %></td>
+        <td><%= attribute.description %></td>
+        <td><%= link_to 'Show', [attribute.question,attribute] %></td>
+        <td><%= link_to 'Edit', edit_question_answer_attribute_path(attribute.question,attribute) %></td>
+        <td><%= link_to 'Destroy', [attribute.question,attribute], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "New attribute", new_rubric_item_answer_attribute_path(1) %>

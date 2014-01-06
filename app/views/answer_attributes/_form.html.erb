@@ -13,20 +13,12 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :is_correct %><br>
-    <%= f.check_box :is_correct %>
-  </div>
-  <div class="field">
     <%= f.label :score %><br>
     <%= f.text_field :score %>
   </div>
   <div class="field">
-    <%= f.label :question_id %><br>
-    <%= f.number_field :question_id %>
-  </div>
-  <div class="field">
     <%= f.label :description %><br>
-    <%= f.text_area :description %>
+    <%= f.text_area :description, placeholder: "When should this be chosen? e.g. Student has not observed a specific enough activity" %>
   </div>
   <div class="actions">
     <%= f.submit %>

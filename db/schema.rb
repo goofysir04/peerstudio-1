@@ -11,20 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106194525) do
+ActiveRecord::Schema.define(version: 20140106221533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "answer_attributes", force: true do |t|
-    t.boolean  "is_correct"
-    t.float    "score"
-    t.integer  "question_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "description"
-    t.index ["question_id"], :name => "index_answer_attributes_on_question_id"
-  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",                           null: false
@@ -85,6 +75,41 @@ ActiveRecord::Schema.define(version: 20140106194525) do
     t.index ["user_id"], :name => "index_assignments_on_user_id"
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_course_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_user_id"
+  end
+
+  create_table "rubric_items", force: true do |t|
+    t.text     "title"
+    t.string   "short_title"
+    t.datetime "ends_at"
+    t.boolean  "final_only",    default: false
+    t.float    "min",           default: 0.0
+    t.float    "max"
+    t.string   "min_label"
+    t.string   "max_label"
+    t.integer  "assignment_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "common_wishes"
+    t.index ["assignment_id"], :name => "fk__rubric_items_assignment_id"
+    t.index ["user_id"], :name => "fk__rubric_items_user_id"
+    t.index ["assignment_id"], :name => "index_rubric_items_on_assignment_id"
+    t.index ["user_id"], :name => "index_rubric_items_on_user_id"
+    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_assignment_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_user_id"
+  end
+
+  create_table "answer_attributes", force: true do |t|
+    t.boolean  "is_correct"
+    t.float    "score"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "description"
+    t.integer  "rubric_item_id"
+    t.index ["rubric_item_id"], :name => "fk__answer_attributes_rubric_item_id"
+    t.index ["question_id"], :name => "index_answer_attributes_on_question_id"
+    t.foreign_key ["rubric_item_id"], "rubric_items", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answer_attributes_rubric_item_id"
   end
 
   create_table "answers", force: true do |t|
@@ -233,27 +258,6 @@ ActiveRecord::Schema.define(version: 20140106194525) do
     t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_answer_id"
     t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_assignment_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_user_id"
-  end
-
-  create_table "rubric_items", force: true do |t|
-    t.text     "title"
-    t.string   "short_title"
-    t.datetime "ends_at"
-    t.boolean  "final_only",    default: false
-    t.float    "min",           default: 0.0
-    t.float    "max"
-    t.string   "min_label"
-    t.string   "max_label"
-    t.integer  "assignment_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["assignment_id"], :name => "fk__rubric_items_assignment_id"
-    t.index ["user_id"], :name => "fk__rubric_items_user_id"
-    t.index ["assignment_id"], :name => "index_rubric_items_on_assignment_id"
-    t.index ["user_id"], :name => "index_rubric_items_on_user_id"
-    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_assignment_id"
-    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_user_id"
   end
 
   create_table "feedback_items", force: true do |t|
