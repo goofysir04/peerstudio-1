@@ -78,10 +78,10 @@ Humanmachine::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-
+  #For devise
   config.action_mailer.delivery_method = ACTION_MAILER_DELIVERY_METHOD
   config.action_mailer.smtp_settings = ACTION_MAILER_SMTP_SETTINGS
-
+  config.action_mailer.default_url_options = { :host => 'peerstudio.org' }
   #For paperclip uploads
   config.paperclip_defaults = {
     :storage => :s3,
