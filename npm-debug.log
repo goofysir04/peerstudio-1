@@ -1,0 +1,41 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'bower' ]
+info using npm@1.1.0-alpha-6
+info using node@v0.6.5
+verbose config file /Users/chinmay/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose config file /usr/local/lib/node_modules/npm/npmrc
+verbose into /usr/local/lib [ 'bower' ]
+verbose cache add bower
+verbose cache add [ 'bower', null ]
+silly cache add: name, spec, args [ undefined, 'bower', [ 'bower', null ] ]
+verbose parsed url { pathname: 'bower', path: 'bower', href: 'bower' }
+info addNamed [ 'bower', '' ]
+verbose addNamed [ null, '' ]
+verbose GET bower
+verbose raw, before any munging bower
+verbose url resolving [ 'https://registry.npmjs.org/', './bower' ]
+verbose url resolved https://registry.npmjs.org/bower
+ERR! Error: SSL Error: CERT_UNTRUSTED
+ERR!     at ClientRequest.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/main.js:329:28)
+ERR!     at ClientRequest.emit (events.js:67:17)
+ERR!     at HTTPParser.onIncoming (http.js:1225:11)
+ERR!     at HTTPParser.onHeadersComplete (http.js:102:31)
+ERR!     at CleartextStream.ondata (http.js:1124:24)
+ERR!     at CleartextStream._push (tls.js:363:27)
+ERR!     at SecurePair.cycle (tls.js:685:20)
+ERR!     at EncryptedStream.write (tls.js:122:13)
+ERR!     at Socket.ondata (stream.js:38:26)
+ERR!     at Socket.emit (events.js:67:17)
+ERR! Report this *entire* log at:
+ERR!     <http://github.com/isaacs/npm/issues>
+ERR! or email it to:
+ERR!     <npm-@googlegroups.com>
+ERR! 
+ERR! System Darwin 13.0.0
+ERR! command "node" "/usr/local/bin/npm" "install" "-g" "bower"
+ERR! cwd /Users/chinmay/projects/peergrademe
+ERR! node -v v0.6.5
+ERR! npm -v 1.1.0-alpha-6
+ERR! message SSL Error: CERT_UNTRUSTED
+verbose exit [ 1, true ]

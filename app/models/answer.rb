@@ -31,6 +31,10 @@ class Answer < ActiveRecord::Base
     end
   end
 
+  def versions
+    Answer.where(assignment: self.assignment, user: self.user)
+  end
+  
 
   def self.should_get_ground_truth_assignment(user, question)
     #First return false if this user has already identified a ground truth assignment. 
@@ -131,8 +135,6 @@ class Answer < ActiveRecord::Base
       end
     end
   end
-
-
 
   class ImportJob <  Struct.new(:file_text)
     def perform

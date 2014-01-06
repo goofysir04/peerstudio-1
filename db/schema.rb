@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140105000022) do
+ActiveRecord::Schema.define(version: 20140106004608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 20140105000022) do
     t.string   "revision_name"
     t.integer  "assignment_id"
     t.boolean  "active",             default: true
+    t.boolean  "starred",            default: false
     t.index ["assignment_id"], :name => "fk__answers_assignment_id"
     t.index ["question_id"], :name => "index_answers_on_question_id"
     t.index ["user_id"], :name => "index_answers_on_user_id"
@@ -222,6 +223,7 @@ ActiveRecord::Schema.define(version: 20140105000022) do
     t.integer  "assignment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "out_of_box_answer"
     t.index ["answer_id"], :name => "fk__reviews_answer_id"
     t.index ["assignment_id"], :name => "fk__reviews_assignment_id"
     t.index ["user_id"], :name => "fk__reviews_user_id"

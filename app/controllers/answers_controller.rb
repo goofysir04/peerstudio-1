@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :edit, :update, :destroy]
+  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
   # before_filter :authenticate_user_is_admin!
@@ -31,7 +31,6 @@ class AnswersController < ApplicationController
   # GET /answers/1/edit
   def edit
   end
-
   # POST /answers
   # POST /answers.json
   def create
@@ -91,6 +90,12 @@ class AnswersController < ApplicationController
     else
       redirect_to root_path
     end
+  end
+
+  #toggles star
+  def star
+    @answer.starred = !@answer.starred
+    @answer.save!
   end
 
   private

@@ -33,11 +33,12 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#my_answers" data-toggle="tab">My Answers</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
+    <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
   </ul>
   <div class="tab-content">
     <div id="my_answers" class="tab-pane active">
-      <% if @my_answers.empty? %>
-      <p>You have no answers. <%= link_to "Start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+      <% if !user_signed_in? %>
+      <p>You must sign in to see your answers. <%= link_to "Start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
       <% else %>
       <table class="table">
         <thead>
@@ -63,6 +64,9 @@
       <% end %>
     </div>
     <div id="my_reviews" class="tab-pane">
+      <% if !user_signed_in?%>
+      You must sign in to review.       Start new review for <div><input type="text" class='typeahead-usernames' data-assignment-context="<%= @assignment.id%>" autocomplete="off" name="something" /></div>
+      <% else %>
       <table class="table">
         <thead>
           <tr>
@@ -79,6 +83,27 @@
             <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
             <td><span class="label label-success">Unread</span></td>
             <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %></td>
+          </tr>
+          <% end %> 
+        </tbody>
+      </table>
+      <% end %>
+    </div>
+    <div id="all_answers" class="tab-pane">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Revision Name</th>
+            <th>Preview</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @all_answers.each do |answer| %>
+          <tr>
+            <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
+            <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+            <td><%= link_to "Read with reviews", answer_reviews_path(answer) %></td>
           </tr>
           <% end %> 
         </tbody>

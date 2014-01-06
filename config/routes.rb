@@ -64,8 +64,10 @@ Humanmachine::Application.routes.draw do
     end
     member do 
       post 'upload_attachment'
+      get 'star' => 'answers#star'
     end
     resources :reviews, shallow: true
+
   end
 
   resources :questions do

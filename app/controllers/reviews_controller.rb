@@ -12,6 +12,7 @@ class ReviewsController < ApplicationController
   # GET /reviews/1
   # GET /reviews/1.json
   def show
+    @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
   end
 
   # GET /reviews/new
@@ -79,6 +80,6 @@ class ReviewsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def review_params
       params.permit(:answer_id)
-      params.require(:review).permit(:answer_id,:feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score,:review_id])
+      params.require(:review).permit(:answer_id,:out_of_box_answer,:feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score,:review_id])
     end
 end

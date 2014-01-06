@@ -81,6 +81,10 @@ class RegistrationsController < Devise::RegistrationsController
     User.import(params[:file])
     redirect_to root_path, :notice => "User file imported"
   end
+
+  def find_by_name
+    
+  end
   private
 
   # check if we need password to update user data

@@ -10,16 +10,7 @@
       </ul>
     </div>
   <% end %>
-    <div class="assignment_instructions">
-    <h1><%= link_to @review.answer.assignment.title, @answer.assignment %></h1>
-
-    <div class="assignment-description">
-      <%= sanitize @review.answer.assignment.description %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="assignment-rubric span4">
-      <p>Here's how this assignment should be assessed</p>
+  <p>Here's how this assignment should be assessed</p>
       <style type="text/css">
       .rubric {margin: 0;}
       .rubric li {list-style-type: none;}
@@ -69,19 +60,12 @@
           <% end %>
           <br/>
         </li>
+
         <% end %>
+        <li><%= f.label :out_of_box_answer, "This answer is out of the box, and excellent" %><%= f.check_box :out_of_box_answer%> </li>
       </ul>
-
-    </div>
-
-    <div class="field span8">
-      <div class="edited-content">
-        <%= sanitize @review.answer.response unless @answer.response.nil? %>
+      <div class="actions">
+        <%= f.submit %>
       </div>
-    </div>
-  </div>
+  <% end %>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>

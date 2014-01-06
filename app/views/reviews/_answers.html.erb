@@ -1,0 +1,32 @@
+<div class="assignment_instructions">
+    <h1><%= link_to answer.assignment.title, answer.assignment %>
+    </h1>
+    <div class="assignment-description">
+      <%= sanitize answer.assignment.description %>
+    </div>
+</div>
+<div class="row">
+  <div class="assignment-rubric span4">
+    Show reviews for <div class="btn-group">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+        <%= answer.revision_name %> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <% answer.versions.each do |v| %>
+        <li><%= link_to v.revision_name, answer_reviews_path(v) %></li>
+        <% end %>
+      </ul>
+      </div>
+  	<%= yield %>
+  </div>
+
+  <div class="field span8">
+    <div class="edited-content">
+      <%= sanitize answer.response unless answer.response.nil? %>
+    </div>
+  </div>
+</div>
+<div class="row" id="instructor-actions">
+  <h2>Instructors only</h2>
+  <%= link_to "Star this answer", star_answer_path(answer) %>
+</div>

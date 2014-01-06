@@ -1,0 +1,24 @@
+<p>Here's how your peers assessed you.</p>
+<style type="text/css">
+.rubric {margin: 0;}
+.rubric li {list-style-type: none;}
+</style>
+<ul class="rubric">
+  <% answer.assignment.rubric_items.each do |r| %>
+    <li>
+      <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> (<%= r.max_label%>)</span><br/>
+      <legend></legend>
+      <%= sanitize r.title %>
+      <% if feedback_items_by_rubric_item[r.id].nil? %>
+      No reviews yet.
+      <% else %>
+        <% feedback_items_by_rubric_item[r.id].each do |f| %>
+            <p><strong>Like: </strong><%= f.like_feedback %></p>
+            <p><strong>Wish: </strong><%= f.wish_feedback %></p>
+            <legend></legend>
+        <% end %>
+      <% end -%>
+      <br/>
+    </li>
+  <% end %>
+</ul>
