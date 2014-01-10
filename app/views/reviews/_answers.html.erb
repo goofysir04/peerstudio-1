@@ -16,7 +16,21 @@
 </div>
 
 <div class="row">
-  <%= render partial: "browser", locals: {answer: answer} %>
+  <div class="assignment-rubric span4">
+    Show reviews for <div class="btn-group">
+      <button type="button" class="btn dropdown-toggle active-revision" data-toggle="dropdown">
+        <%= answer.revision_name %> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <% answer.versions.each do |v| %>
+        <li><%= link_to v.revision_name, answer_reviews_path(v), remote: true %></li>
+        <% end %>
+      </ul>
+      </div>
+    <div class="assignment-rubric-content"%>
+        <%= yield %>
+    </div>
+  </div>
 
   <div class="field span8">
     <div class="edited-content">
