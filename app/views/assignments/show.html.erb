@@ -37,60 +37,64 @@
     <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
   </ul>
   <div class="tab-content">
-    <div id="my_answers" class="tab-pane active">
-      <% if !user_signed_in? %>
-      <p>You must sign in to see your answers. <%= link_to "Log in and start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
-      <% else %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Revision Name</th>
-            <th>Preview</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @my_answers.each do |answer| %>
-          <tr>
-            <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
-            <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-            <td><span class="label">In queue</span> Waiting for peer reviews</td>
-            <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %></td>
-          </tr>
-          <% end %> 
-        </tbody>
-      </table>
-      <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create new revision", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
-      <% end %>
-    </div>
-    <div id="my_reviews" class="tab-pane">
-      <% if !user_signed_in?%>
-      You must sign in to review.       Start new review for <div><input type="text" class='typeahead-usernames' data-assignment-context="<%= @assignment.id%>" autocomplete="off" name="something" /></div>
-      <% else %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Revision Name</th>
-            <th>Preview</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @my_reviews.each do |review| %>
-          <tr>
-            <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
-            <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-            <td><span class="label label-success">Unread</span></td>
-            <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %></td>
-          </tr>
-          <% end %> 
-        </tbody>
-      </table> 
+      <div id="my_answers" class="tab-pane active">
+        <% if !user_signed_in? %>
+        <p>You must sign in to see your answers. <%= link_to "Log in and start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+        <% else %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Revision Name</th>
+              <th>Preview</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @my_answers %>
+            <% @my_answers.each do |answer| %>
+            <tr>
+              <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
+              <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+              <td><span class="label">In queue</span> Waiting for peer reviews</td>
+              <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %></td>
+            </tr>
+            <% end %> 
+            <% end %>
+          </tbody>
+        </table>
+        <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create new revision", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+        <% end %>
+      </div>
+      <div id="my_reviews" class="tab-pane">
+        <% if !user_signed_in?%>
+        You must sign in to review.       Start new review for <div><input type="text" class='typeahead-usernames' data-assignment-context="<%= @assignment.id %>" autocomplete="off" name="something" /></div>
+        <% else %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Revision Name</th>
+              <th>Preview</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @my_reviews %>
+            <% @my_reviews.each do |review| %>
+            <tr>
+              <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+              <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+              <td><span class="label label-success">Unread</span></td>
+              <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %></td>
+            </tr>
+            <% end %> 
+            <% end %> 
+          </tbody>
+        </table> 
         <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Start a review", assignment_answers_path(@assignment), :class=>"btn" %></p>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
     <div id="all_answers" class="tab-pane">
       <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
     </div>
