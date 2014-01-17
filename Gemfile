@@ -36,8 +36,11 @@ end
 #templates
 gem "therubyracer"
 gem "less-rails", '2.3.3'
-gem "twitter-bootstrap-rails"
+# gem "twitter-bootstrap-rails"
 gem 'bootstrap-datetimepicker-rails'
+
+#for editor
+gem 'rails-bootstrap-markdown'
 
 # User Authentication and Authorization
 gem "devise"
@@ -86,6 +89,9 @@ gem 'rmagick', '2.13.2'
 
 #For heroku testing
 gem "unicorn"
+
+#for editor
+gem "redcarpet"
 
 #for pushing grades to coursera
 # gem "always_verify_ssl_certificates"

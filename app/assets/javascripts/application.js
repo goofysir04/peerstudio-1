@@ -21,6 +21,7 @@
 //= require chosen.jquery
 //= require jquery.jcarousel.min
 //= require bootstrap-datetimepicker
+//= require bootstrap-markdown-custom
 
 //Disabled
 //= #require rails.validations

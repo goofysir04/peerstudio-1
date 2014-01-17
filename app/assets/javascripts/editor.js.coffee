@@ -1,4 +1,8 @@
 editor = null
+selectEverything = () ->
+	$('.selectAll').click () ->
+		$(this).select()
+
 $(document).ready ->
 	editor = new MediumEditor('.editable')
 	$('.editable').mediumInsert({editor: editor, images: true, imagesUploadScript: "upload_attachment.js"})
@@ -18,3 +22,36 @@ $(document).ready ->
 		for element in editor.elements
 			syncContents((editor.serialize())[$(element).attr('id')].value, '#'+$(element).data('syncwith'))
 			return yes
+
+	formatData = (file) ->
+        formData = new FormData();
+        formData.append('file', file)
+        return formData
+
+	$('.upload').click () ->
+		selectFile = $('<input type="file">').click();
+		selectFile.change () ->
+			files = this.files
+			uploadFiles(files)
+		return false
+
+	uploadFiles = (files) ->
+		for file in files
+			$.ajax({
+				type: "post",
+				url: "upload_attachment.js",
+				cache: false,
+				contentType: false,
+				complete: uploadCompleted,
+				processData: false,
+				data: formatData(file)
+			})
+	uploadCompleted = (r) ->
+		$("#attachments").html(r.responseText)
+		selectEverything()
+
+
+
+
+
+

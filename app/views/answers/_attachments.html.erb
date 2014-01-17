@@ -1,0 +1,9 @@
+        <strong>Attached files</strong><br/>
+      <% answer.attached_assets.each do |a| %>
+        <% if a.asset.content_type.include? "image" %>
+          <%=image_tag a.asset.url :thumb %>
+        <% else %>
+          <strong><a href="<%=a.asset.url %>" target="_blank"%><%= a.asset.original_filename %></a></strong>
+        <% end %>
+        <input type="text" class="selectAll" value="<%=a.asset.url %>"> <br/>
+      <% end %>
