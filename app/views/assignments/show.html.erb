@@ -1,4 +1,3 @@
-<p id="notice"><%= notice %></p>
 <h1>
   <%= @assignment.title %>
   <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> (in <%= distance_of_time_in_words @assignment.due_at, Time.now %>)</small>
@@ -39,31 +38,35 @@
   <div class="tab-content">
       <div id="my_answers" class="tab-pane active">
         <% if !user_signed_in? %>
-        <p>You must sign in to see your answers. <%= link_to "Log in and start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+          <p>You must sign in to see your answers. <%= link_to "Log in and start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
         <% else %>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Revision Name</th>
-              <th>Preview</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if @my_answers %>
-            <% @my_answers.each do |answer| %>
-            <tr>
-              <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
-              <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-              <td><span class="label">In queue</span> Waiting for peer reviews</td>
-              <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %></td>
-            </tr>
-            <% end %> 
-            <% end %>
-          </tbody>
-        </table>
-        <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create new revision", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Revision Name</th>
+                <th>Preview</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @my_answers %>
+                <% @my_answers.each do |answer| %>
+                <tr>
+                  <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
+                  <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+                  <td><span class="label">In queue</span> Waiting for peer reviews</td>
+                  <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %></td>
+                </tr>
+                <% end %> 
+              <% end %>
+            </tbody>
+          </table>
+          <% if @my_answers.empty? %>
+            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Start your response", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+          <% else %>
+            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Revise your response", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+          <% end %>
         <% end %>
       </div>
       <div id="my_reviews" class="tab-pane">

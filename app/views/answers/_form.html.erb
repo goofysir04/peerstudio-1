@@ -34,14 +34,14 @@
     </p>
       <style type="text/css">
       .rubric {margin: 0;}
-      .rubric li {list-style-type: none;}
+      .rubric li {list-style-type: none; margin-top: 20px;}
       </style>
       <div class="assignment-rubric-content"%>
         <ul class="rubric">
           <% @answer.assignment.rubric_items.each do |r| %>
           <li>
-            <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> (<%= r.max_label%>)</span><br/>
-            <legend></legend>
+            <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
+            <hr style="margin: 5px 0;">
             <%= sanitize r.title %>
           </li>
           <% end %>
