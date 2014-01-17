@@ -14,7 +14,7 @@
       <style type="text/css">
       .rubric {margin: 0;}
       .rubric li {list-style-type: none;}
-      .like_wish input {width: 364px;}
+      .like_wish {width: 364px;}
       </style>
       <ul class="rubric">
         <li>
@@ -30,8 +30,8 @@
             <%= r.label :like_feedback, "I like..." %>
             <%= r.text_area :like_feedback, size:"5x2", placeholder: "What do you like about this part?", class:"like_wish" %><br/>
             <%= r.hidden_field :rubric_item_id %>
-          I wish...
-            <%= r.text_area :wish_feedback, placeholder: "What do you wish had been better?" %>
+            <%= r.label :wish_feedback, "I like..." %>
+            <%= r.text_area :wish_feedback, placeholder: "What do you wish had been better?", class:"like_wish" %>
           <% if @review.answer.assignment.due_at < Time.now %>
             <%=# r.number_field :score 
             %>
