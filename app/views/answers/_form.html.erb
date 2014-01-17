@@ -50,21 +50,16 @@
     </div>
 
     <div class="field span8">
-      <p>Write your response below. </p><legend></legend>
+      <%= f.label :revision_name %> <%= f.text_field :revision_name, placeholder:"Enter a revision name" %>
 
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", data: {provide: "markdown"}%>
-
+      <div class="actions">
+        <%= f.submit "Save Revision", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em>
+        </div>
       <div id="attachments">
         <%= render partial: "attachments", locals: {answer: @answer} %>
       </div>
-      <button class="upload btn">Attach a file</button> <br/>
-      <div class="actions">
-        <div class="input-append">
-        <%= f.text_field :revision_name, placeholder:"Enter a revision name" %>
-        <%= f.submit "Save Revision", class: "btn"%> 
-        </div>
-        <em class="answer-save-status">Unsaved</em>
-        
+      <button class="upload btn">Attach a file</button> <br/>      
         
       </div>
     </div>

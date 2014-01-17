@@ -46,6 +46,17 @@ $(document).ready ->
 				processData: false,
 				data: formatData(file)
 			})
+
+	lastUpdated = 1
+	window.setInterval (() ->
+		unless $(".answer-save-status").hasClass("label-danger label-warning") 
+			lastUpdated = 1
+			$(".answer-save-status").addClass("label-danger label-warning") 
+		$(".answer-save-status").text("Last saved #{lastUpdated} min ago")
+		lastUpdated++
+		), 60*1000
+
+
 	uploadCompleted = (r) ->
 		$("#attachments").html(r.responseText)
 		selectEverything()
