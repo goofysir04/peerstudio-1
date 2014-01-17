@@ -34,7 +34,9 @@
 
   <div class="field span8">
     <div class="edited-content">
-      <%= sanitize answer.response unless answer.response.nil? %>
+      <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
+
+      <%= render partial:"answers/attachments", locals: {answer: answer} %>
     </div>
   </div>
 </div>
