@@ -11,6 +11,11 @@ module Humanmachine
     config.assets.paths << Rails.root.join("vendor","assets", "fonts")
     config.assets.paths << Rails.root.join("vendor","assets", "js")
     config.assets.paths << Rails.root.join("vendor","assets", "css")
+
+    config.assets.precompile += [
+        'glyphicons-halflings.png',
+        'glyphicons-halflings-white.png'
+    ]
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
