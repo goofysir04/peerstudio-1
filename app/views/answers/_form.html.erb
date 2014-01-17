@@ -51,11 +51,13 @@
 
     <div class="field span8">
       <p>Write your response below. </p><legend></legend>
-      <%= f.text_area :response, :id=>"answer_response", :class=>"hidden_field" %>
-      <div class="editable" id="response_richedit" data-syncwith="answer_response" data-placeholder="Type your response here. Highlight text for formatting options. <%= "Please save your answer before you add images" if @answer.new_record? %>">
-        <%= @answer.response.html_safe unless @answer.response.nil? %>
-      </div>
 
+      <%= f.text_area :response, size: "20x20", :id=>"answer_response", data: {provide: "markdown"}%>
+
+      <div id="attachments">
+        <%= render partial: "attachments", locals: {answer: @answer} %>
+      </div>
+      <button class="upload btn">Attach a file</button> <br/>
       <div class="actions">
         <div class="input-append">
         <%= f.text_field :revision_name, placeholder:"Enter a revision name" %>

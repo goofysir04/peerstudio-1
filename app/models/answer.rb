@@ -1,6 +1,7 @@
 require 'csv'
 require 'uri'
 require 'net/https'
+require 'format'
 
 class AnswerGrade < ActiveRecord::Base
   table_name = "answer_grades"
