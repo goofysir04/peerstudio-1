@@ -36,7 +36,7 @@ end
 #templates
 gem "therubyracer"
 gem "less-rails", '2.3.3'
-gem "twitter-bootstrap-rails"
+# gem "twitter-bootstrap-rails"
 gem 'bootstrap-datetimepicker-rails'
 
 #for editor
