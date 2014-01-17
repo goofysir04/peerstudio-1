@@ -107,6 +107,7 @@
   </div>
 </div>
 
+<% if current_user.admin? %>
 <div>
   <legend></legend>
   <h3>For instructors only</h3>
@@ -116,3 +117,4 @@
 <%= link_to 'Edit', edit_assignment_path(@assignment) %> |
 <%= link_to 'Back', course_assignments_path(@assignment.course) %>
 </div>
+<% end %>
