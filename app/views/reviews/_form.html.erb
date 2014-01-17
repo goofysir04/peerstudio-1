@@ -22,6 +22,11 @@
           <legend></legend>
           <%= sanitize r.object.rubric_item.title %>
 
+          <legend></legend>
+          <% r.object.rubric_item.answer_attributes.each do |a_attr| %>
+            <p><%= a_attr.description %></p>
+          <% end %>
+
           <div class="panel-group" id="accordion">
             <div class="panel panel-default">
               <div class="panel-heading">
@@ -60,7 +65,7 @@
         </li>
 
         <% end %>
-        <li><%= f.label :out_of_box_answer, "This answer is out of the box, and excellent" %><%= f.check_box :out_of_box_answer%> </li>
+        <li><%= f.check_box :out_of_box_answer%><%= f.label :out_of_box_answer, "This is an excellent, out of the box answer." %> </li>
       </ul>
       <div class="actions">
         <%= f.submit %>
