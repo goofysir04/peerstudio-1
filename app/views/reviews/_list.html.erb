@@ -13,6 +13,11 @@
       No reviews yet.
       <% else %>
         <% feedback_items_by_rubric_item[r.id].each do |f| %>
+          <% puts "************************" %>
+          <% puts f.answer_attributes.to_yaml %>
+          <% f.answer_attributes.each do |a_attr| %>
+            <p><%= a_attr %></p>
+          <% end %>
             <p><strong>Like: </strong><%= f.like_feedback %></p>
             <p><strong>Wish: </strong><%= f.wish_feedback %></p>
             <legend></legend>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106221533) do
+ActiveRecord::Schema.define(version: 20140120111722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,7 +56,6 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
-    t.index ["user_id"], :name => "fk__courses_user_id"
     t.index ["user_id"], :name => "index_courses_on_user_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_user_id"
   end
@@ -70,8 +69,6 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.integer  "course_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["course_id"], :name => "fk__assignments_course_id"
-    t.index ["user_id"], :name => "fk__assignments_user_id"
     t.index ["course_id"], :name => "index_assignments_on_course_id"
     t.index ["user_id"], :name => "index_assignments_on_user_id"
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_course_id"
@@ -92,8 +89,6 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "common_wishes"
-    t.index ["assignment_id"], :name => "fk__rubric_items_assignment_id"
-    t.index ["user_id"], :name => "fk__rubric_items_user_id"
     t.index ["assignment_id"], :name => "index_rubric_items_on_assignment_id"
     t.index ["user_id"], :name => "index_rubric_items_on_user_id"
     t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_assignment_id"
@@ -138,25 +133,43 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answers_assignment_id"
   end
 
-  create_table "evaluations", force: true do |t|
-    t.integer  "question_id"
+  create_table "reviews", force: true do |t|
     t.integer  "answer_id"
-    t.integer  "answer_attribute_id"
-    t.integer  "verified_true_count",  default: 0
-    t.integer  "verified_false_count", default: 0
     t.integer  "user_id"
+    t.integer  "assignment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "assessment_id"
-    t.integer  "score"
-    t.index ["answer_attribute_id"], :name => "index_evaluations_on_answer_attribute_id"
-    t.index ["answer_id"], :name => "index_evaluations_on_answer_id"
-    t.index ["assessment_id"], :name => "index_evaluations_on_assessment_id"
-    t.index ["question_id"], :name => "index_evaluations_on_question_id"
-    t.index ["user_id"], :name => "index_evaluations_on_user_id"
+    t.boolean  "out_of_box_answer"
+    t.index ["answer_id"], :name => "index_reviews_on_answer_id"
+    t.index ["assignment_id"], :name => "index_reviews_on_assignment_id"
+    t.index ["user_id"], :name => "index_reviews_on_user_id"
+    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_answer_id"
+    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_assignment_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_user_id"
   end
 
-  create_view "answer_grades", " SELECT answer_scores.answer_id, \n    sum(answer_scores.answer_score) AS final_score, \n    avg(answer_scores.answer_score) AS avg_final_score\n   FROM ( SELECT answer_attributes.score AS answer_score, \n            verified_answers.answer_id\n           FROM answer_attributes, \n            ( SELECT evaluations.answer_id, \n                    evaluations.answer_attribute_id, \n                    evaluations.id, \n                    evaluations.assessment_id\n                   FROM evaluations\n                  WHERE ((evaluations.verified_true_count > evaluations.verified_false_count) AND (evaluations.verified_true_count > 0))) verified_answers\n          WHERE (verified_answers.answer_attribute_id = answer_attributes.id)) answer_scores, \n    answers\n  WHERE (answer_scores.answer_id = answers.id)\n  GROUP BY answer_scores.answer_id", :force => true
+  create_table "feedback_items", force: true do |t|
+    t.integer  "review_id"
+    t.integer  "rubric_item_id"
+    t.text     "like_feedback"
+    t.text     "wish_feedback"
+    t.float    "score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["review_id"], :name => "index_feedback_items_on_review_id"
+    t.index ["rubric_item_id"], :name => "index_feedback_items_on_rubric_item_id"
+    t.foreign_key ["review_id"], "reviews", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_review_id"
+    t.foreign_key ["rubric_item_id"], "rubric_items", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_rubric_item_id"
+  end
+
+  create_table "answer_attributes_feedback_items", id: false, force: true do |t|
+    t.integer "answer_attribute_id"
+    t.integer "feedback_item_id"
+    t.index ["answer_attribute_id"], :name => "fk__answer_attributes_feedback_items_answer_attribute_id"
+    t.index ["feedback_item_id"], :name => "fk__answer_attributes_feedback_items_feedback_item_id"
+    t.foreign_key ["answer_attribute_id"], "answer_attributes", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answer_attributes_feedback_items_answer_attribute_id"
+    t.foreign_key ["feedback_item_id"], "feedback_items", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answer_attributes_feedback_items_feedback_item_id"
+  end
 
   create_table "questions", force: true do |t|
     t.text     "title"
@@ -218,7 +231,6 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.integer  "question_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["question_id"], :name => "fk__attributes_question_id"
     t.index ["question_id"], :name => "index_attributes_on_question_id"
   end
 
@@ -252,38 +264,22 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.index ["priority", "run_at"], :name => "delayed_jobs_priority"
   end
 
-  create_table "reviews", force: true do |t|
+  create_table "evaluations", force: true do |t|
+    t.integer  "question_id"
     t.integer  "answer_id"
+    t.integer  "answer_attribute_id"
+    t.integer  "verified_true_count",  default: 0
+    t.integer  "verified_false_count", default: 0
     t.integer  "user_id"
-    t.integer  "assignment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "out_of_box_answer"
-    t.index ["answer_id"], :name => "fk__reviews_answer_id"
-    t.index ["assignment_id"], :name => "fk__reviews_assignment_id"
-    t.index ["user_id"], :name => "fk__reviews_user_id"
-    t.index ["answer_id"], :name => "index_reviews_on_answer_id"
-    t.index ["assignment_id"], :name => "index_reviews_on_assignment_id"
-    t.index ["user_id"], :name => "index_reviews_on_user_id"
-    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_answer_id"
-    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_assignment_id"
-    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_user_id"
-  end
-
-  create_table "feedback_items", force: true do |t|
-    t.integer  "review_id"
-    t.integer  "rubric_item_id"
-    t.text     "like_feedback"
-    t.text     "wish_feedback"
-    t.float    "score"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["review_id"], :name => "fk__feedback_items_review_id"
-    t.index ["rubric_item_id"], :name => "fk__feedback_items_rubric_item_id"
-    t.index ["review_id"], :name => "index_feedback_items_on_review_id"
-    t.index ["rubric_item_id"], :name => "index_feedback_items_on_rubric_item_id"
-    t.foreign_key ["review_id"], "reviews", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_review_id"
-    t.foreign_key ["rubric_item_id"], "rubric_items", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_rubric_item_id"
+    t.integer  "assessment_id"
+    t.integer  "score"
+    t.index ["answer_attribute_id"], :name => "index_evaluations_on_answer_attribute_id"
+    t.index ["answer_id"], :name => "index_evaluations_on_answer_id"
+    t.index ["assessment_id"], :name => "index_evaluations_on_assessment_id"
+    t.index ["question_id"], :name => "index_evaluations_on_question_id"
+    t.index ["user_id"], :name => "index_evaluations_on_user_id"
   end
 
   create_table "revisions", force: true do |t|
@@ -291,7 +287,6 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["user_id"], :name => "fk__revisions_user_id"
     t.index ["user_id"], :name => "index_revisions_on_user_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_revisions_user_id"
   end

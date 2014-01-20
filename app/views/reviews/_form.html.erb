@@ -24,7 +24,7 @@
 
           <legend></legend>
           <% r.object.rubric_item.answer_attributes.each do |a_attr| %>
-            <p><%= a_attr.description %></p>
+            <p><%= r.check_box :answer_attributes, {multiple: true}, a_attr.id, nil %><%= a_attr.description %></p>
           <% end %>
 
           <div class="panel-group" id="accordion">
