@@ -7,12 +7,20 @@ class ReviewsController < ApplicationController
     @answer = Answer.find(params[:answer_id])
     @reviews = @answer.reviews
     @feedback_items_by_rubric_item = @answer.feedback_items.group_by(&:rubric_item_id)
+    unless @reviews.empty?
+      @reviews.each do |r|
+        (@feedback_items_by_rubric_item["comments"] ||= []) << r.comments
+      end
+    end
   end
 
   # GET /reviews/1
   # GET /reviews/1.json
   def show
     @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
+    unless @review.comments.empty?
+      (@feedback_items_by_rubric_item["comments"] ||= []) << @review.comments
+    end
   end
 
   # GET /reviews/new
