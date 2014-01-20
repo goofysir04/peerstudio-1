@@ -11,11 +11,9 @@
     </div>
   <% end %>
   <p>Here's how this assignment should be assessed</p>
-  <textarea id="review_text"></textarea>
       <style type="text/css">
       .rubric {margin: 0;}
       .rubric li {list-style-type: none;}
-      .like_wish {width: 364px;}
       </style>
       <ul class="rubric">
         <li>
@@ -26,23 +24,48 @@
 
           <legend></legend>
           <% r.object.rubric_item.answer_attributes.each do |a_attr| %>
-            <p><%=check_box_tag "rubric_item_#{a_attr.id}", a_attr.id, false, data: {score: a_attr.score}, :class=>"rubric_item"  %> <%=label_tag "rubric_item_#{a_attr.id}", a_attr.description %></p>
+            <p><%= r.check_box :answer_attributes, {multiple: true}, a_attr.id, nil %><%= a_attr.description %></p>
           <% end %>
-            <%= r.label :like_feedback, "I like..." %>
-            <%= r.text_area :like_feedback, size:"5x2", placeholder: "What do you like about this part?", class:"like_wish" %><br/>
-            <%= r.hidden_field :rubric_item_id %>
-            <%= r.label :wish_feedback, "I like..." %>
-            <%= r.text_area :wish_feedback, placeholder: "What do you wish had been better?", class:"like_wish" %>
+
+          <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseLikes_<%=r.object.rubric_item.id %>">
+                    I like...
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseLikes_<%=r.object.rubric_item.id %>" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %><br/>
+                    <%= r.hidden_field :rubric_item_id %>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseWishes_<%=r.object.rubric_item.id %>">
+                    I wish...
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseWishes_<%=r.object.rubric_item.id %>" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <%= r.text_area :wish_feedback, placeholder: "What do you wish had been better?" %>
+                </div>
+              </div>
+            </div>
+          </div>
           <% if @review.answer.assignment.due_at < Time.now %>
-            <%=# r.number_field :score 
-            %>
+            <%= r.number_field :score %>
           <% end %>
           <br/>
         </li>
 
         <% end %>
         <li><%= f.check_box :out_of_box_answer%><%= f.label :out_of_box_answer, "This is an excellent, out of the box answer." %> </li>
-        <strong>Computed score: </strong><input type="text" readonly="readonly" value="" id="calculatedGrade"/>
       </ul>
       <div class="actions">
         <%= f.submit %>

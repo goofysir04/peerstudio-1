@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106221533) do
+ActiveRecord::Schema.define(version: 20140120111722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
-    t.index ["user_id"], :name => "fk__courses_user_id"
+    t.index ["user_id"], :name => "index_courses_on_user_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_user_id"
   end
 
@@ -69,8 +69,6 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.integer  "course_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["course_id"], :name => "fk__assignments_course_id"
-    t.index ["user_id"], :name => "fk__assignments_user_id"
     t.index ["course_id"], :name => "index_assignments_on_course_id"
     t.index ["user_id"], :name => "index_assignments_on_user_id"
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_course_id"
@@ -91,8 +89,6 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "common_wishes"
-    t.index ["assignment_id"], :name => "fk__rubric_items_assignment_id"
-    t.index ["user_id"], :name => "fk__rubric_items_user_id"
     t.index ["assignment_id"], :name => "index_rubric_items_on_assignment_id"
     t.index ["user_id"], :name => "index_rubric_items_on_user_id"
     t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_assignment_id"
@@ -137,6 +133,44 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answers_assignment_id"
   end
 
+  create_table "reviews", force: true do |t|
+    t.integer  "answer_id"
+    t.integer  "user_id"
+    t.integer  "assignment_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "out_of_box_answer"
+    t.index ["answer_id"], :name => "index_reviews_on_answer_id"
+    t.index ["assignment_id"], :name => "index_reviews_on_assignment_id"
+    t.index ["user_id"], :name => "index_reviews_on_user_id"
+    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_answer_id"
+    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_assignment_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_user_id"
+  end
+
+  create_table "feedback_items", force: true do |t|
+    t.integer  "review_id"
+    t.integer  "rubric_item_id"
+    t.text     "like_feedback"
+    t.text     "wish_feedback"
+    t.float    "score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["review_id"], :name => "index_feedback_items_on_review_id"
+    t.index ["rubric_item_id"], :name => "index_feedback_items_on_rubric_item_id"
+    t.foreign_key ["review_id"], "reviews", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_review_id"
+    t.foreign_key ["rubric_item_id"], "rubric_items", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_rubric_item_id"
+  end
+
+  create_table "answer_attributes_feedback_items", id: false, force: true do |t|
+    t.integer "answer_attribute_id"
+    t.integer "feedback_item_id"
+    t.index ["answer_attribute_id"], :name => "fk__answer_attributes_feedback_items_answer_attribute_id"
+    t.index ["feedback_item_id"], :name => "fk__answer_attributes_feedback_items_feedback_item_id"
+    t.foreign_key ["answer_attribute_id"], "answer_attributes", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answer_attributes_feedback_items_answer_attribute_id"
+    t.foreign_key ["feedback_item_id"], "feedback_items", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_answer_attributes_feedback_items_feedback_item_id"
+  end
+
   create_table "questions", force: true do |t|
     t.text     "title"
     t.text     "explanation"
@@ -150,6 +184,7 @@ ActiveRecord::Schema.define(version: 20140106221533) do
 
   create_table "appeals", force: true do |t|
     t.text     "comments"
+    t.integer  "question_id"
     t.integer  "answer_id"
     t.boolean  "accepted"
     t.boolean  "inspected"
@@ -158,10 +193,9 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.datetime "updated_at"
     t.string   "experimental_condition"
     t.text     "instructor_comments"
-    t.integer  "question_id"
     t.text     "answer_text"
-    t.index ["answer_id"], :name => "fk__appeals_answer_id"
-    t.index ["question_id"], :name => "fk__appeals_question_id"
+    t.index ["answer_id"], :name => "index_appeals_on_answer_id"
+    t.index ["question_id"], :name => "index_appeals_on_question_id"
     t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_answer_id"
     t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_appeals_question_id"
   end
@@ -175,12 +209,9 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.datetime "updated_at"
     t.datetime "started_at"
     t.string   "answer_type"
-    t.index ["answer_id"], :name => "fk__assessments_answer_id"
-    t.index ["question_id"], :name => "fk__assessments_question_id"
-    t.index ["user_id"], :name => "fk__assessments_user_id"
-    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_answer_id"
-    t.foreign_key ["question_id"], "questions", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_question_id"
-    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assessments_user_id"
+    t.index ["answer_id"], :name => "index_assessments_on_answer_id"
+    t.index ["question_id"], :name => "index_assessments_on_question_id"
+    t.index ["user_id"], :name => "index_assessments_on_user_id"
   end
 
   create_table "attached_assets", force: true do |t|
@@ -192,6 +223,15 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.string   "asset_content_type"
     t.integer  "asset_file_size"
     t.datetime "asset_updated_at"
+  end
+
+  create_table "attributes", force: true do |t|
+    t.boolean  "is_correct"
+    t.float    "score"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["question_id"], :name => "index_attributes_on_question_id"
   end
 
   create_table "ckeditor_assets", force: true do |t|
@@ -242,46 +282,12 @@ ActiveRecord::Schema.define(version: 20140106221533) do
     t.index ["user_id"], :name => "index_evaluations_on_user_id"
   end
 
-  create_table "reviews", force: true do |t|
-    t.integer  "answer_id"
-    t.integer  "user_id"
-    t.integer  "assignment_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "out_of_box_answer"
-    t.index ["answer_id"], :name => "fk__reviews_answer_id"
-    t.index ["assignment_id"], :name => "fk__reviews_assignment_id"
-    t.index ["user_id"], :name => "fk__reviews_user_id"
-    t.index ["answer_id"], :name => "index_reviews_on_answer_id"
-    t.index ["assignment_id"], :name => "index_reviews_on_assignment_id"
-    t.index ["user_id"], :name => "index_reviews_on_user_id"
-    t.foreign_key ["answer_id"], "answers", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_answer_id"
-    t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_assignment_id"
-    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_reviews_user_id"
-  end
-
-  create_table "feedback_items", force: true do |t|
-    t.integer  "review_id"
-    t.integer  "rubric_item_id"
-    t.text     "like_feedback"
-    t.text     "wish_feedback"
-    t.float    "score"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["review_id"], :name => "fk__feedback_items_review_id"
-    t.index ["rubric_item_id"], :name => "fk__feedback_items_rubric_item_id"
-    t.index ["review_id"], :name => "index_feedback_items_on_review_id"
-    t.index ["rubric_item_id"], :name => "index_feedback_items_on_rubric_item_id"
-    t.foreign_key ["review_id"], "reviews", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_review_id"
-    t.foreign_key ["rubric_item_id"], "rubric_items", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_rubric_item_id"
-  end
-
   create_table "revisions", force: true do |t|
     t.string   "name"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["user_id"], :name => "fk__revisions_user_id"
+    t.index ["user_id"], :name => "index_revisions_on_user_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_revisions_user_id"
   end
 

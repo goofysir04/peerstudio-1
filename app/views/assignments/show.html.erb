@@ -56,7 +56,7 @@
                   <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
                   <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                   <td><span class="label">In queue</span> Waiting for peer reviews</td>
-                  <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %><% if current_user.admin? %><%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %><% end %></td>
+                  <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %><% if user_signed_in? && current_user.admin? %><%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %><% end %></td>
                 </tr>
                 <% end %> 
               <% end %>
@@ -107,6 +107,7 @@
   </div>
 </div>
 
+<% if user_signed_in? && current_user.admin? %>
 <div>
   <legend></legend>
   <h3>For instructors only</h3>
@@ -116,3 +117,4 @@
 <%= link_to 'Edit', edit_assignment_path(@assignment) %> |
 <%= link_to 'Back', course_assignments_path(@assignment.course) %>
 </div>
+<% end %>
