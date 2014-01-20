@@ -9,7 +9,7 @@ $(document).ready () ->
 	#On page load, recalculateGrade
 	recalculateGrade()
 
-	$('#review_text').keyup () ->
+	$('.review_text').keyup () ->
 		getReviewQuality($(this).val())
 
 recalculateGrade = () ->
@@ -89,16 +89,17 @@ getReviewQuality = (text) ->
 	lengthScore = Math.floor(Math.pow(((text.match(/\s+/g) or []).length),0.8))
 
 	if lengthScore < 10
-		feedback.push "Elaborate on your comment..."
+		feedback.push "Say more..."
 
-	if (content_score - lengthScore)/(1.0+lengthScore) < 0.5
+	if (content_score - lengthScore)/(1.0+lengthScore) < 0.5 and lengthScore > 8	
 		feedback.push("Quick check: Is your feedback actionable? Are you expressing yourself succinctly?")
 
 
 	totalScore = content_score + lengthScore
 	console.log "Content score: #{content_score}, lengthScore: #{lengthScore}, totalScore: #{totalScore} feedback: #{feedback}"
 	
-	return totalScore
+	$('#review_tips').html(feedback.join(" "))
+	return {totalScore: totalScore, feedback: feedback, lengthScore: lengthScore}
 
 
 
