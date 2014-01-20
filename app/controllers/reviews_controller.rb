@@ -81,6 +81,6 @@ class ReviewsController < ApplicationController
     def review_params
       params.permit(:answer_id)
       params.permit(:review_text)
-      params.require(:review).permit(:answer_id,:out_of_box_answer,:feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score,:review_id])
+      params.require(:review).permit(:answer_id,:out_of_box_answer,:feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
     end
 end

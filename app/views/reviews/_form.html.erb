@@ -23,9 +23,10 @@
           <%= sanitize r.object.rubric_item.title %>
 
           <legend></legend>
-          <% r.object.rubric_item.answer_attributes.each do |a_attr| %>
-            <p><%= r.check_box :answer_attributes, {multiple: true}, a_attr.id, nil %><%= a_attr.description %></p>
+          <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
+            <p><%= b.check_box %><%= b.label %></p>
           <% end %>
+          
 
           <div class="panel-group" id="accordion">
             <div class="panel panel-default">
