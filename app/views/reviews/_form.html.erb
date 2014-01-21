@@ -13,38 +13,45 @@
   <p>Here's how this assignment should be assessed</p>
       <style type="text/css">
       .rubric {margin: 0;}
-      .rubric li {list-style-type: none;}
+      .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
       </style>
       <ul class="rubric">
+        <%= f.fields_for :feedback_items do |r| %>
         <li>
-          <%= f.fields_for :feedback_items do |r| %>
-          <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right label">Max: <%=r.object.rubric_item.max %> (<%= r.object.rubric_item.max_label%>)</span><br/>
+          <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right label">Max: <%=r.object.rubric_item.max %> <%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span><br/>
           <legend></legend>
           <%= sanitize r.object.rubric_item.title %>
 
           <legend></legend>
+          <table>
           <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
-            <p><%= b.check_box %><%= b.label %></p>
+            <tr>
+            <td style="vertical-align:top;"><%= b.check_box :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= b.label %></td>
+            </tr
           <% end %>
+          </table>
 
           Comments
-          <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %><br/>
+          <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %>
           <%= r.hidden_field :rubric_item_id %>
           <% if @review.answer.assignment.due_at < Time.now %>
             <%= r.number_field :score %>
           <% end %>
-          <br/>
         </li>
         <% end %>
-        <li><%= f.check_box :out_of_box_answer%><%= f.label :out_of_box_answer, "This is an excellent, out of the box answer." %> </li>
       </ul>
 
       <b>Overall comments</b>
+      <table>
+        <tr>
+          <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an excellent, out of the box response." %></td>
+        </tr>
+      </table>
       <%= f.text_area :comments, size: "10x5", class:"review_text" %>
 
       <div class="alert" id="review_tips">Review tips appear here as you begin typing </div>
       <div class="actions">
-        <%= f.submit %>
+        <%= f.submit class: "btn btn-primary" %>
       </div>
   <% end %>
 

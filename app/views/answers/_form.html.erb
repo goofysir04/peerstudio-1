@@ -43,6 +43,9 @@
             <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
             <hr style="margin: 5px 0;">
             <%= sanitize r.title %>
+            <% r.answer_attributes.each do |a_attr| %>
+              <p><%= a_attr.description %></p>
+            <% end %>
           </li>
           <% end %>
         </ul>    

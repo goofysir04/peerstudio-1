@@ -69,8 +69,6 @@ ActiveRecord::Schema.define(version: 20140120232112) do
     t.integer  "course_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["course_id"], :name => "fk__assignments_course_id"
-    t.index ["user_id"], :name => "fk__assignments_user_id"
     t.index ["course_id"], :name => "index_assignments_on_course_id"
     t.index ["user_id"], :name => "index_assignments_on_user_id"
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_assignments_course_id"
@@ -91,8 +89,6 @@ ActiveRecord::Schema.define(version: 20140120232112) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "common_wishes"
-    t.index ["assignment_id"], :name => "fk__rubric_items_assignment_id"
-    t.index ["user_id"], :name => "fk__rubric_items_user_id"
     t.index ["assignment_id"], :name => "index_rubric_items_on_assignment_id"
     t.index ["user_id"], :name => "index_rubric_items_on_user_id"
     t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_assignment_id"
@@ -145,9 +141,6 @@ ActiveRecord::Schema.define(version: 20140120232112) do
     t.datetime "updated_at"
     t.boolean  "out_of_box_answer"
     t.text     "comments"
-    t.index ["answer_id"], :name => "fk__reviews_answer_id"
-    t.index ["assignment_id"], :name => "fk__reviews_assignment_id"
-    t.index ["user_id"], :name => "fk__reviews_user_id"
     t.index ["answer_id"], :name => "index_reviews_on_answer_id"
     t.index ["assignment_id"], :name => "index_reviews_on_assignment_id"
     t.index ["user_id"], :name => "index_reviews_on_user_id"
@@ -164,8 +157,6 @@ ActiveRecord::Schema.define(version: 20140120232112) do
     t.float    "score"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["review_id"], :name => "fk__feedback_items_review_id"
-    t.index ["rubric_item_id"], :name => "fk__feedback_items_rubric_item_id"
     t.index ["review_id"], :name => "index_feedback_items_on_review_id"
     t.index ["rubric_item_id"], :name => "index_feedback_items_on_rubric_item_id"
     t.foreign_key ["review_id"], "reviews", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_review_id"
@@ -236,6 +227,15 @@ ActiveRecord::Schema.define(version: 20140120232112) do
     t.string   "asset_content_type"
     t.integer  "asset_file_size"
     t.datetime "asset_updated_at"
+  end
+
+  create_table "attributes", force: true do |t|
+    t.boolean  "is_correct"
+    t.float    "score"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["question_id"], :name => "index_attributes_on_question_id"
   end
 
   create_table "ckeditor_assets", force: true do |t|

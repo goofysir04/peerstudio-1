@@ -12,7 +12,7 @@ module Humanmachine
     config.assets.paths << Rails.root.join("vendor","assets", "js")
     config.assets.paths << Rails.root.join("vendor","assets", "css")
 
-    print config.assets.precompile
+    # print config.assets.precompile
     config.assets.precompile += [
         'glyphicons-halflings.png',
         'glyphicons-halflings-white.png',
