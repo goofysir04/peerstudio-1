@@ -16,18 +16,21 @@
           <% f.answer_attributes.each do |a_attr| %>
             <p><%= a_attr.description %></p>
           <% end %>
+          <% unless f.like_feedback.blank? %>
             <p><strong>Because: </strong><%= f.like_feedback %></p>
             <!-- <p><strong>Wish: </strong><%= f.wish_feedback %></p> -->
+          <% end %>
         <% end %>
       <% end -%>
     </li>
   <% end %>
+  <% unless feedback_items_by_rubric_item["comments"].nil? %>
   <li>
-    <% unless feedback_items_by_rubric_item["comments"].nil? %>
-      <strong>Overall feedback:</strong>
-      <% feedback_items_by_rubric_item["comments"].each do |comment| %>
-        <% next if comment.nil? %>
-        <p><%= comment %> </p>
-      <% end %>
+    <strong>Overall feedback:</strong>
+    <% feedback_items_by_rubric_item["comments"].each do |comment| %>
+      <% next if comment.nil? %>
+      <p><%= comment %> </p>
     <% end %>
+  </li>
+  <% end %>
 </ul>

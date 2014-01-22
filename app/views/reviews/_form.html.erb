@@ -16,6 +16,11 @@
       .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
       </style>
       <ul class="rubric">
+        <li>
+          <strong>Who is your pair reviewing partner?</strong>
+          <p>Write their email address here:</p>
+          <%= f.text_field :copilot_email, class:"row-fluid" %>
+        </li>
         <%= f.fields_for :feedback_items do |r| %>
         <li>
           <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right label">Max: <%=r.object.rubric_item.max %> <%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span><br/>
@@ -35,6 +40,7 @@
           <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %>
           <%= r.hidden_field :rubric_item_id %>
           <% if @review.answer.assignment.due_at < Time.now %>
+            <legend></legend>
             <%= r.number_field :score %>
           <% end %>
         </li>

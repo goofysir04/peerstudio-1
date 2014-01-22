@@ -43,6 +43,8 @@ class ReviewsController < ApplicationController
   # POST /reviews.json
   def create
     @review = Review.new(review_params.merge(user: current_user, answer: Answer.find(params[:answer_id])))
+    puts "*************************"
+    puts @review.to_yaml
     @review.assignment = @review.answer.assignment
     respond_to do |format|
       if @review.save
@@ -88,6 +90,6 @@ class ReviewsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def review_params
       params.permit(:answer_id)
-      params.require(:review).permit(:answer_id,:comments, :out_of_box_answer,:feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
+      params.require(:review).permit(:answer_id, :comments, :out_of_box_answer, :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
     end
 end
