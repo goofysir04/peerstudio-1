@@ -36,6 +36,7 @@ $(document).ready ->
 		return false
 
 	uploadFiles = (files) ->
+		$("#attachment_progress").show()
 		for file in files
 			$.ajax({
 				type: "post",
@@ -58,6 +59,7 @@ $(document).ready ->
 
 
 	uploadCompleted = (r) ->
+		$("#attachment_progress").hide()
 		$("#attachments").html(r.responseText)
 		selectEverything()
 
