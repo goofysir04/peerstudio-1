@@ -30,7 +30,7 @@
 
 <div id="assignment_answers">
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#my_answers" data-toggle="tab">My Answers</a></li>
+    <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
     <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
     <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
@@ -38,12 +38,12 @@
   <div class="tab-content">
       <div id="my_answers" class="tab-pane active">
         <% if !user_signed_in? %>
-          <p>You must sign in to see your answers. <%= link_to "Log in and start your answer", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+          <p>You must <%= link_to "sign in", new_user_session_path %> to see your submissions. <%= link_to "Log in and start a new submission", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
         <% else %>
           <table class="table">
             <thead>
               <tr>
-                <th>Revision Name</th>
+                <th>Draft</th>
                 <th>Preview</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -63,20 +63,20 @@
             </tbody>
           </table>
           <% if @my_answers.empty? %>
-            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Start your response", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create your first draft", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
           <% else %>
-            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Revise your response", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create a new draft", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
           <% end %>
         <% end %>
       </div>
       <div id="my_reviews" class="tab-pane">
         <% if !user_signed_in?%>
-        You must sign in to review.       Start new review for <div><input type="text" class='typeahead-usernames' data-assignment-context="<%= @assignment.id %>" autocomplete="off" name="something" /></div>
+        You must sign in to give feedback.
         <% else %>
         <table class="table">
           <thead>
             <tr>
-              <th>Revision Name</th>
+              <th>Draft title</th>
               <th>Preview</th>
               <th>Status</th>
               <th>Actions</th>
