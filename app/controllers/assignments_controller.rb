@@ -52,7 +52,7 @@ class AssignmentsController < ApplicationController
   # PATCH/PUT /assignments/1
   # PATCH/PUT /assignments/1.json
   def update
-    # raise params.inspect
+    # raise assignment_params.inspect
     respond_to do |format|
       if @assignment.update(assignment_params)
         format.html { redirect_to @assignment, notice: 'Assignment was successfully updated.' }
@@ -88,8 +88,8 @@ class AssignmentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def assignment_params
       params.permit(:course_id)
-      params.require(:assignment).permit(:title, :description, :due_at, :open_at,:rubric_items_attributes=>[
-        :id,:title,:short_title,:ends_at, :final_only,
+      params.require(:assignment).permit(:title, :description, :milestone_list,:due_at, :open_at,:rubric_items_attributes=>[
+        :id,:title,:short_title, :ends_at, :final_only,
         :min, :max, :min_label, :max_label,:_destroy]) #don't allow user id. set to current user
     end
 end

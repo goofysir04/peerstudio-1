@@ -93,6 +93,10 @@ gem "unicorn"
 #for editor
 gem "redcarpet"
 
+
+#For versioning in submissions
+gem 'acts-as-taggable-on'
+
 #for pushing grades to coursera
 # gem "always_verify_ssl_certificates"
 
