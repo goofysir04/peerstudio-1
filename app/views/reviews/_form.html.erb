@@ -23,7 +23,8 @@
         </li>
         <%= f.fields_for :feedback_items do |r| %>
         <li>
-          <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right label">Max: <%=r.object.rubric_item.max %> <%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span><br/>
+          <strong><%= r.object.rubric_item.short_title %></strong> <!-- <span class="pull-right label">Max: <%=r.object.rubric_item.max %> <%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span> -->
+          <br/>
           <legend></legend>
           <%= sanitize r.object.rubric_item.title %>
 

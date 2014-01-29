@@ -6,7 +6,9 @@
 <ul class="rubric">
   <% answer.assignment.rubric_items.each do |r| %>
     <li>
-      <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %><%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
+      <strong><%= r.short_title %></strong> 
+      <!-- <span class="pull-right label">Max: <%=r.max %><%= "(#{r.max_label})" unless r.max_label.blank?%></span> -->
+      <br/>
       <legend></legend>
       <%= sanitize r.title %>
       <% if feedback_items_by_rubric_item[r.id].nil? %>
