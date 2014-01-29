@@ -12,6 +12,8 @@ $(document).ready () ->
 	$('.review_text').keyup () ->
 		getReviewQuality($(this).val())
 
+	# debugTokenList()
+
 recalculateGrade = () ->
 	sum = 0
 	for elem in $('.rubric_item:checked')
@@ -102,6 +104,9 @@ getReviewQuality = (text) ->
 	return {totalScore: totalScore, feedback: feedback, lengthScore: lengthScore}
 
 
-
-
+debugTokenList = () ->
+	txt = ""
+	for token, matcher of token_list
+		txt += ("#{token}... : #{matcher.score}\n")
+	console.log txt
 
