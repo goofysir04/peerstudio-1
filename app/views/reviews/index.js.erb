@@ -1,2 +1,2 @@
 $(".assignment-rubric-content").html('<%= escape_javascript render partial: "list", layout:nil, :locals=>{answer: @answer,feedback_items_by_rubric_item: @feedback_items_by_rubric_item} %>')
-$(".active-revision").html('<%=j @answer.revision_name %> <span class="caret"></span>')
+$(".active-revision").html('<%=j @answer.revision_name.join(" ") %> <span class="caret"></span>')

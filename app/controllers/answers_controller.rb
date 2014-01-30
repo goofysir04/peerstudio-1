@@ -54,13 +54,13 @@ class AnswersController < ApplicationController
   def update
     respond_to do |format|
       if @answer.update(answer_params.merge(active: true)) #set active to true so the answer shows up everywhere
-        format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully updated.' }
+        format.html { redirect_to (@answer), notice: 'Answer was successfully updated.' }
         format.json { head :no_content }
         format.js
       else
         format.html { render action: 'edit' }
         format.json { render json: @answer.errors, status: :unprocessable_entity }
-        format.js
+        format.js {flash[:alert] = @answer.errors.full_messages.join(","); render} 
       end
     end
   end
@@ -119,6 +119,6 @@ class AnswersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params.permit(:assignment_id)
-      params.require(:answer).permit(:response, :revision_name, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id)
+      params.require(:answer).permit(:response, :revision_name, :revision_list, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id)
     end
 end

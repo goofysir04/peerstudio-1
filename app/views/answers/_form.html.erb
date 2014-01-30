@@ -53,8 +53,8 @@
     </div>
 
     <div class="field span8">
-      <%= f.label :revision_name %> <%= f.text_field :revision_name, placeholder:"Enter a revision name" %>
-
+      <%= f.label :revision_list, "Draft type" %>
+      <%= f.select :revision_list, @answer.assignment.milestone_list %>
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", data: {provide: "markdown"}%>
       <div class="actions">
         <%= f.submit "Save Revision", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em>

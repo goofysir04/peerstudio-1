@@ -23,6 +23,8 @@ class Answer < ActiveRecord::Base
   has_many :assessments
 
   acts_as_taggable_on :revisions
+
+  validate :revisions_are_valid
   
   def self.get_next_identify_for_user_and_question(user, question)
 
@@ -43,12 +45,23 @@ class Answer < ActiveRecord::Base
     self.revision_list
   end
 
+  def revision_name=(val)
+    raise NotImplementedError("setting directly is deprecated. Use the revisions tag helpers")
+  end
+
   def is_latest_revision?
     Answer.where(assignment: self.assignment, user: self.user).where('created_at > ?', self.created_at).empty?
   end
 
   def latest_revision
     Answer.where(assignment: self.assignment, user: self.user).order('created_at DESC').first
+  end
+
+  def revisions_are_valid
+    other_answers_tagged_like_this = Answer.where(assignment: self.assignment, user: self.user).where('answers.id <> ?', self.id).tagged_with(self.revision_list)
+    if other_answers_tagged_like_this.count > 0
+      errors.add :revision_list, "You already have a draft that is #{self.revision_list} (#{other_answers_tagged_like_this.first.id})"
+    end
   end
 
   def self.should_get_ground_truth_assignment(user, question)
