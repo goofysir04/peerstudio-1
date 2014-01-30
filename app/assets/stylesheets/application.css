@@ -10,11 +10,9 @@
  *
  *= require_self
  *= require_tree .
- *= require bootstrap.min
+ *= require bootstrap
  *= require chosen
  *= require bootstrap-datetimepicker
- *= #require pagination
- *= #require tokenahead
  *= require bootstrap-glyphicons
  *= require bootstrap-markdown
  */

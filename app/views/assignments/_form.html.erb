@@ -15,7 +15,7 @@
     <div class="control-label">
       <%= f.label :title %>
     </div>
-    <div class="control">
+    <div class="controls">
       <%= f.text_field :title %>
     </div>
   </div>
@@ -23,7 +23,7 @@
     <div class="control-label">
       <%= f.label :description %>
     </div>
-    <div class="control">
+    <div class="controls">
       <%= f.hidden_field :description, :id=>'assignment_description' %>
       <div class="editable" id="assignment_description_richtext" data-syncwith="assignment_description" style="margin-left:165px">
         <%= sanitize @assignment.description unless @assignment.description.nil? %>
@@ -34,7 +34,7 @@
     <div class="control-label">
       <%= f.label :due_at %>
     </div>
-    <div class="control">
+    <div class="controls">
       <div class="input-append date datetime-picker">
         <%= f.text_field :due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
@@ -45,7 +45,7 @@
     <div class="control-label">
       <%= f.label :open_at %>
     </div>
-    <div class="control">
+    <div class="controls">
         <div class="input-append date datetime-picker">
         <%= f.text_field :open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
@@ -56,7 +56,7 @@
     <div class="control-label">
       <%= f.label :milestone_list %>
     </div>
-    <div class="control">
+    <div class="controls">
       <%= f.text_field :milestone_list %>
     </div>
   </div>
@@ -73,7 +73,7 @@
       <div class="control-label">
         <%= r.label :short_title %>
       </div>
-      <div class="control">
+      <div class="controls">
         <%= r.text_field :short_title %>
       </div>
     </div>
@@ -85,7 +85,7 @@
         <% end %>
       </div>
       <br/>
-      <div class="control">
+      <div class="controls">
         <%= r.text_area :title %>
       </div>
     </div>
@@ -98,7 +98,7 @@
         <% end %>
       </div>
       <br/>
-      <div class="control">
+      <div class="controls">
         <%= r.text_area :common_wishes, placeholder: "Spend more time observing, less writing; Be specific when you write...", style: "width: 300px"%>
       </div>
     </div>
@@ -106,7 +106,7 @@
       <div class="control-label">
         <%= r.label :ends_at %>
       </div>
-      <div class="control">
+      <div class="controls">
         <div class="input-append date datetime-picker">
           <%= r.text_field :ends_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
           <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
@@ -121,7 +121,7 @@
         <small>Rubric item only useful on the final evaluation (e.g. spelling and grammar).</small>
         <% end %>
       </div>
-      <div class="control">
+      <div class="controls">
         <%= r.check_box :final_only %>
         
       </div>
@@ -132,7 +132,7 @@
         <strong>Min Score</strong>
         <% end %>
       </div>
-      <div class="control">
+      <div class="controls">
         <%= r.text_field :min %>
       </div>
       <div class="control-label">
@@ -141,7 +141,7 @@
           <small>What should we call the min score (e.g. no)</small>
         <% end %>
       </div>
-      <div class="control">
+      <div class="controls">
         <%= r.text_field :min_label %>
       </div>
     </div>
@@ -151,7 +151,7 @@
         <strong>Max Score</strong>
         <% end %>
       </div>
-      <div class="control">
+      <div class="controls">
         <%= r.text_field :max %>
       </div>
       <div class="control-label">
@@ -160,7 +160,7 @@
           <small>What should we call the max score (e.g. yes)</small>
         <% end %>
       </div>
-      <div class="control">
+      <div class="controls">
         <%= r.text_field :max_label %>
       </div>
     </div>
@@ -169,7 +169,7 @@
       <div class="control-label">
         <%= r.label :_destroy, "Remove this rubric item" %>
       </div>
-      <div class="control">
+      <div class="controls">
         <%= r.check_box :_destroy %>
       </div>
     </div>
