@@ -21,6 +21,8 @@ class Answer < ActiveRecord::Base
   has_many :feedback_items, through: :reviews
 
   has_many :assessments
+
+  acts_as_taggable_on :revisions
   
   def self.get_next_identify_for_user_and_question(user, question)
 
@@ -37,11 +39,8 @@ class Answer < ActiveRecord::Base
   end
   
   def revision_name
-    if self.base_revision_name.blank? 
-      "Unnamed (created #{self.created_at.strftime('%b %d')})"
-    else
-      self.base_revision_name
-    end
+    #really this should only be one tag, but comma separate if more
+    self.revision_list
   end
 
   def is_latest_revision?
@@ -50,10 +49,6 @@ class Answer < ActiveRecord::Base
 
   def latest_revision
     Answer.where(assignment: self.assignment, user: self.user).order('created_at DESC').first
-  end
-
-  def revision_name=(val)
-    self.base_revision_name = val
   end
 
   def self.should_get_ground_truth_assignment(user, question)
