@@ -65,6 +65,7 @@ Humanmachine::Application.routes.draw do
     member do 
       post 'upload_attachment'
       get 'star' => 'answers#star'
+      post 'autosubmit/:doIt', :action=>'autosubmit', as: :autosubmit
     end
     resources :reviews, shallow: true
   end

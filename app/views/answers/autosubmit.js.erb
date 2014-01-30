@@ -1,0 +1,7 @@
+<% if @answer.in_progress? %>
+$('.answer_public_status').html('Will not auto-submit on deadline. ' + '<%= j link_to "Auto-submit", autosubmit_answer_path(@answer,true), remote: true, method: :post,  data: {toggle: "popover"}, title: "You can continue to make changes till the deadline. On the deadline, you must manually submit the assignment."%>')
+<% else %>
+$('.answer_public_status').html('Will auto-submit on deadline. ' + '<%= j link_to "Don't auto-submit", autosubmit_answer_path(@answer,false), remote: true, method: :post,  data: {toggle: "popover"}, title: "You can continue to make changes till the deadline. On the deadline, the draft will be automatically submitted. If you don't want to submit unfinished work, choose don't auto-submit."%>')
+<% end %>
+
+$('[data-toggle=popover]').popover({trigger:'hover'});

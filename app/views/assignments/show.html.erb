@@ -45,7 +45,6 @@
               <tr>
                 <th>Draft</th>
                 <th>Preview</th>
-                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -53,10 +52,16 @@
               <% if @my_answers %>
                 <% @my_answers.each do |answer| %>
                 <tr>
-                  <td><%= answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : answer.revision_name %></td>
+                  <td><%= answer.revision_name %> </td>
                   <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                  <td><span class="label">In queue</span> Waiting for peer reviews</td>
-                  <td><%= link_to "Edit", edit_answer_path(answer), class:"btn" %><% if user_signed_in? && current_user.admin? %><%= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %><% end %></td>
+                    <td>
+                    <% if answer.in_progress? %>
+                    <span class="label label-important">Won't autosubmit</span> 
+                    <% else %>
+                  <% end %>
+                    <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
+                  </td>
+                  
                 </tr>
                 <% end %> 
               <% end %>

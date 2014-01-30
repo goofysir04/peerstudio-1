@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star]
+  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, :autosubmit]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
   # before_filter :authenticate_user_is_admin!
@@ -75,6 +75,27 @@ class AnswersController < ApplicationController
     end
   end
 
+  def autosubmit
+
+    if params[:doIt] == "true"
+      @answer.in_progress = false
+    elsif params[:doIt] == "false"
+      # raise @answer.inspect  
+      @answer.in_progress = true
+    end
+    
+    respond_to do |format|
+      if @answer.save
+        format.html {redirect_to assignment_path(@answer.assignment), notice: "Your draft has been submitted"}
+        format.json { head :no_content }
+        format.js
+      else
+        format.html {redirect_to answer_path(@answer), alert: "We couldn't submit your assignment because " + @answer.errors.full_messages.join(". ")}
+        format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
+  end
   #To import csv answers
   def upload
     Answer.import(params[:file])
@@ -119,6 +140,7 @@ class AnswersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params.permit(:assignment_id)
+      params.permit(:doIt)
       params.require(:answer).permit(:response, :revision_name, :revision_list, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id)
     end
 end

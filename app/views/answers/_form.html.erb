@@ -57,7 +57,13 @@
       <%= f.select :revision_list, @answer.assignment.milestone_list %>
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", data: {provide: "markdown"}%>
       <div class="actions">
-        <%= f.submit "Save Revision", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em>
+        <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
+        <% if @answer.in_progress? %>
+        Will not auto-submit on deadline. <%= link_to "Auto-submit", autosubmit_answer_path(@answer,true), remote: true, method: :post,  data: {toggle: "popover"}, title: "You can continue to make changes till the deadline. On the deadline, you must manually submit the assignment."%>.</span>
+        <% else %>
+        Will auto-submit on deadline. <%= link_to "Don't auto-submit", autosubmit_answer_path(@answer,false), remote: true, method: :post,  data: {toggle: "popover"}, title: "You can continue to make changes till the deadline. On the deadline, the draft will be automatically submitted. If you don't want to submit unfinished work, choose don't auto-submit."%>.</span>
+
+        <% end %>
         </div>
       <div id="attachments">
         <%= render partial: "attachments", locals: {answer: @answer} %>
@@ -97,5 +103,6 @@
       <%= f.text_field :confidence %>
     </div>
   <% end -%>
-
+<script type="text/javascript">
+$().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
 <% end %>
