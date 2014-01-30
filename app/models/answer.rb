@@ -25,6 +25,8 @@ class Answer < ActiveRecord::Base
   acts_as_taggable_on :revisions
 
   validate :revisions_are_valid
+
+  scope :reviewable, -> {where(in_progress: false)}
   
   def self.get_next_identify_for_user_and_question(user, question)
 
