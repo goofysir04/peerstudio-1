@@ -1,0 +1,11 @@
+<% unless notice.nil? %>
+$(".notice-container").html('<div class="alert alert-info">' + "<%= j notice.html_safe %>" + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>')
+<% end %>
+
+<% unless alert.nil? %>
+$(".notice-container").html('<div class="alert alert-error">' + "<%= alert %>" + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>')
+<% end %>
+<% if alert.nil? and notice.nil? %>
+	$(".notice-container").empty()
+<% end %>
+<%= yield %>
