@@ -18,27 +18,22 @@
       <ul class="rubric">
         <li>
           <strong>Who is your pair reviewing partner?</strong>
-          <p>Write their email address here:</p>
-          <%= f.text_field :copilot_email, class:"row-fluid" %>
+          <%= f.label :copilot_email, "Their email address (if not pair reviewing, leave blank)" %>
+          <%= f.email_field :copilot_email, class:"input-block-level", placeholder:"your-partner@ucsd.edu" %>
         </li>
         <%= f.fields_for :feedback_items do |r| %>
         <li>
           <strong><%= r.object.rubric_item.short_title %></strong> <!-- <span class="pull-right label">Max: <%=r.object.rubric_item.max %> <%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span> -->
-          <br/>
           <legend></legend>
           <%= sanitize r.object.rubric_item.title %>
-
-          <legend></legend>
           <table>
           <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
             <tr>
             <td style="vertical-align:top;"><%= b.check_box :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= b.label %></td>
-            </tr
+            </tr>
           <% end %>
           </table>
-
-          Comments
-          <%= r.text_area :like_feedback, placeholder: "What do you like about this part?" %>
+          <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"input-block-level", size: "10x4" %>
           <%= r.hidden_field :rubric_item_id %>
           <% if @review.answer.assignment.due_at < Time.now %>
             <legend></legend>
@@ -49,12 +44,12 @@
         <li>
           <strong>Overall comments</strong>
           <legend></legend>
-          <%= f.text_area :comments, size: "10x5", class:"review_text row-fluid" %>
+          <%= f.text_area :comments, size: "10x5", class:"review_text input-block-level" %>
           <div class="alert" id="review_tips">Review tips appear here as you begin typing.</div>
           <legend></legend>
           <table>
             <tr>
-              <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an excellent, out of the box response." %></td>
+              <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an excellent, out of the box submission." %></td>
             </tr>
           </table>
         </li>
