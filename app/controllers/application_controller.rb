@@ -10,4 +10,14 @@ class ApplicationController < ActionController::Base
   		end
       sign_out_and_redirect(current_user) unless (current_user.admin?)
 	end
+
+  before_filter :set_timezone 
+
+  def set_timezone
+    if user_signed_in?
+      Time.zone = current_user.time_zone
+    else
+      Time.zone = "Pacific Time (US & Canada)"
+    end
+  end 
 end

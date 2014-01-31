@@ -1,6 +1,6 @@
 <h1>
   <%= @assignment.title %>
-  <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> (in <%= distance_of_time_in_words @assignment.due_at, Time.now %>)</small>
+  <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> (<%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</small>
 </p>
 </h1>
 <div id="assignment_description">
@@ -21,7 +21,7 @@
         <td><strong><%= r.short_title %></strong><br/>
          <%= sanitize r.title %></strong></td>
          <td><%= r.max %></td>
-         <td><%= r.ends_at.strftime "%b %e, %l:%M %p" %> (in <%= distance_of_time_in_words r.ends_at, Time.now %>)</td>
+         <td><%= r.ends_at.strftime "%b %e, %l:%M %p" %> (<%= "in " if r.ends_at > Time.now %><%= distance_of_time_in_words r.ends_at, Time.now %><%= " ago" if r.ends_at < Time.now %>)</td>
        </tr>
     <% end %>
   </tbody>
