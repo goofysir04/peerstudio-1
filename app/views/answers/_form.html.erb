@@ -18,36 +18,43 @@
       <%= sanitize @answer.assignment.description %>
     </div>
   </div>
+  <hr style="margin: 20px 0;">
   <div class="row">
     <div class="assignment-rubric span4">
-      <p>Here's how this assignment will be assessed.</p>
-      <p>Show reviews for <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle active-revision" data-toggle="dropdown">
-          <%= @answer.revision_name %> <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <% @answer.versions.each do |v| %>
-          <li><%= link_to v.revision_name, answer_reviews_path(v), remote: true %></li>
-          <% end %>
-        </ul>
-      </div>
-    </p>
+      <strong>Here's how this assignment will be assessed.</strong>
+      <table>
+        <tr>
+          <td>Show reviews for &nbsp;</td>
+          <td><div class="btn-group">
+            <button type="button" class="btn dropdown-toggle active-revision" data-toggle="dropdown">
+              <%= @answer.revision_name %> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <% @answer.versions.each do |v| %>
+              <li><%= link_to v.revision_name, answer_reviews_path(v), remote: true %></li>
+              <% end %>
+            </ul>
+          </div></td>
+        </tr>
+      </table>
       <style type="text/css">
       .rubric {margin: 0;}
-      .rubric li {list-style-type: none; margin-top: 20px;}
+      .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
       </style>
       <div class="assignment-rubric-content"%>
         <ul class="rubric">
           <% @answer.assignment.rubric_items.each do |r| %>
           <li>
             <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
-            <hr style="margin: 5px 0;">
+            <legend></legend>
             <%= sanitize r.title %>
-            <ul>
+            <table>
               <% r.answer_attributes.each do |a_attr| %>
-                <li><%= a_attr.description %></li>
+                <tr>
+                  <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
+                </tr>
               <% end %>
-            </ul>
+            </table>
           </li>
           <% end %>
         </ul>    
@@ -55,8 +62,12 @@
     </div>
 
     <div class="field span8">
-      <%= f.label :revision_list, "Draft type" %>
-      <%= f.select :revision_list, @answer.assignment.milestone_list %>
+      <table>
+        <tr>
+          <td><%= f.label :revision_list, "<strong>Draft type</strong>&nbsp;".html_safe %></td>
+          <td><%= f.select :revision_list, @answer.assignment.milestone_list %></td>
+        </tr>
+      </table>
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", data: {provide: "markdown"}%>
       <div class="actions">
         <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
