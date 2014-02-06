@@ -39,7 +39,7 @@ class Answer < ActiveRecord::Base
   end
 
   def versions
-    Answer.where(assignment: self.assignment, user: self.user).order('created_at')
+    Answer.where(assignment: self.assignment, user: self.user, active: true).order('created_at')
   end
   
   def revision_name

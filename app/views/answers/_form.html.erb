@@ -21,44 +21,53 @@
   <hr style="margin: 20px 0;">
   <div class="row">
     <div class="assignment-rubric span4">
-      <strong>Here's how this assignment will be assessed.</strong>
-      <table>
-        <tr>
-          <td>Show reviews for &nbsp;</td>
-          <td><div class="btn-group">
-            <button type="button" class="btn dropdown-toggle active-revision" data-toggle="dropdown">
-              <%= @answer.revision_name %> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <% @answer.versions.each do |v| %>
-              <li><%= link_to v.revision_name, answer_reviews_path(v), remote: true %></li>
-              <% end %>
-            </ul>
-          </div></td>
-        </tr>
-      </table>
       <style type="text/css">
       .rubric {margin: 0;}
       .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
+      #reviews {min-height: 200px;}
       </style>
-      <div class="assignment-rubric-content"%>
-        <ul class="rubric">
-          <% @answer.assignment.rubric_items.each do |r| %>
-          <li>
-            <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
-            <legend></legend>
-            <%= sanitize r.title %>
-            <table>
-              <% r.answer_attributes.each do |a_attr| %>
-                <tr>
-                  <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
-                </tr>
+
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#evaluation" data-toggle="tab">Evaluation</a></li>
+        <li ><a href="#reviews" data-toggle="tab">Reviews</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="evaluation">
+          <div class="assignment-rubric-static"%>
+            <ul class="rubric">
+              <% @answer.assignment.rubric_items.each do |r| %>
+              <li>
+                <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
+                <legend></legend>
+                <%= sanitize r.title %>
+                <table>
+                  <% r.answer_attributes.each do |a_attr| %>
+                    <tr>
+                      <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
+                    </tr>
+                  <% end %>
+                </table>
+              </li>
               <% end %>
-            </table>
-          </li>
-          <% end %>
-        </ul>    
-    </div>
+            </ul>    
+          </div>
+        </div>
+        <div class="tab-pane" id="reviews">
+          Show reviews for &nbsp;
+            <div class="btn-group">
+                  <button type="button" class="btn dropdown-toggle active-revision" data-toggle="dropdown">
+                    <%= @answer.revision_name %> <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <% @answer.versions.each do |v| %>
+                    <li><%= link_to v.revision_name, answer_reviews_path(v), remote: true %></li>
+                    <% end %>
+                  </ul>
+            </div>
+          <div class="assignment-rubric-content">
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="field span8">
