@@ -2,6 +2,9 @@ Humanmachine::Application.routes.draw do
 
   resources :courses do
     resources :assignments, shallow: true
+    collection do 
+      get 'help'
+    end
   end
 
   resources :assignments do

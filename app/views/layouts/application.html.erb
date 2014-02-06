@@ -14,6 +14,8 @@
     <meta property="og:site_name" content="talkabout
     "/>
     <meta property="og:description" content="<%= (@project && !@project.description.blank?) ? @project.description.truncate(100) : "Collaborative human and machine grading." %>" />
+
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 </head>
 <body>
 <div id="fb-root"></div>
@@ -64,9 +66,11 @@
 <div class="clearfix"></div>
 
 <div style="border-top: 1px solid #efefef; margin-top: 15px;">
-  <span class="pull-left" style="font-size:12pt"><i class="icon-question-sign"></i> Got questions? Please ask in the <a href="https://class.coursera.org/hci-004/forum/list?forum_id=13">peer assessment forum</a>.</span>
+  <span class="pull-left" style="font-size:12pt"><i class="glyphicon glyphicon-question-sign
+"></i> Got a question or need <%= link_to "help?", help_courses_path%></span>
   <a href="http://www.ucsd.edu/"><%= image_tag "ucsd.png", :style => 'height: 15%; width: 15%', :class => 'pull-right' %></a>
   <a href="http://cs.stanford.edu/"><%= image_tag "stanfordcs.png", :style => 'height: 15%; width: 15%; border-right: 1px solid #efefef; padding-right: 5px;', :class => 'pull-right' %></a>
+  <br/>
   <% if Rails.env.development? || (user_signed_in? && current_user.admin?) %> 
     <p><span class="label">DEBUG</span> Parameters: <code> <%= params.inspect %> </code> Session: <code><%= session %></code> </p>
     <p><span class="label">OPENID</span> Return path <code><%= request.env['omniauth.origin']  || "None"%></code></p>
