@@ -32,8 +32,10 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
+    <% if @assignment.due_at < Time.now %>
     <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
     <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
+    <% end %>
   </ul>
   <div class="tab-content">
       <div id="my_answers" class="tab-pane active">
