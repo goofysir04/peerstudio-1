@@ -109,7 +109,7 @@ class AnswersController < ApplicationController
     if @attachment.save
       respond_to do |format|
         format.html {redirect_to root_path}
-        format.js
+        format.js {render layout: nil}
       end
     else
       redirect_to root_path
