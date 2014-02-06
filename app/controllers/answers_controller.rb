@@ -12,6 +12,7 @@ class AnswersController < ApplicationController
   # GET /answers/1
   # GET /answers/1.json
   def show
+    redirect_to root_path
   end
 
   # GET /answers/new
@@ -23,12 +24,15 @@ class AnswersController < ApplicationController
     if @answer.save 
       redirect_to edit_answer_path(@answer)
     else
-      redirect_to root_path, error: "We couldn't create an answer now. Please try again, or report a bug."
+      redirect_to root_path, alert: "We couldn't create an answer now. Please try again, or report a bug."
     end
   end
 
   # GET /answers/1/edit
   def edit
+    unless @answer.user == current_user or current_user.admin?
+      redirect_to assignment_path(@answer.assignment), alert: "You can only edit your own answers!" and return
+    end
   end
   # POST /answers
   # POST /answers.json
@@ -52,6 +56,9 @@ class AnswersController < ApplicationController
   # PATCH/PUT /answers/1
   # PATCH/PUT /answers/1.json
   def update
+    unless @answer.user == current_user or current_user.admin?
+      redirect_to assignment_path(@answer.assignment), alert: "You can only edit your own answers!" and return
+    end
     respond_to do |format|
       if @answer.update(answer_params.merge(active: true)) #set active to true so the answer shows up everywhere
         format.html { redirect_to (@answer), notice: 'Answer was successfully updated.' }
