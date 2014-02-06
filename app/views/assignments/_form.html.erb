@@ -36,7 +36,7 @@
     </div>
     <div class="controls">
       <div class="input-append date datetime-picker">
-        <%= f.text_field :due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+        <%= f.text_field :due_at, :value => f.object.due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
       </div>
     </div>
@@ -47,7 +47,7 @@
     </div>
     <div class="controls">
         <div class="input-append date datetime-picker">
-        <%= f.text_field :open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+        <%= f.text_field :open_at, :value => f.object.open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
       </div>
     </div>
@@ -108,7 +108,7 @@
       </div>
       <div class="controls">
         <div class="input-append date datetime-picker">
-          <%= r.text_field :ends_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <%= r.text_field :ends_at, :value => r.object.ends_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
           <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
         </div>
         Students will only be able to get feedback on this item if they submit by this date. 
