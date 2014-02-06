@@ -105,12 +105,14 @@
         <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Start a review", assignment_answers_path(@assignment), :class=>"btn" %></p>
         <% end %>
       </div>
+    <% if @assignment.due_at < Time.now %>
     <div id="all_answers" class="tab-pane">
       <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
     </div>
     <div id="starred_answers" class="tab-pane">
       <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
     </div>
+    <% end %>
   </div>
 </div>
 
