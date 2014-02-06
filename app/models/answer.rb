@@ -17,7 +17,7 @@ class Answer < ActiveRecord::Base
   belongs_to :user
   belongs_to :assignment
 
-  has_many :reviews, :dependent => :delete_all
+  has_many :reviews, :dependent => :destroy
   has_many :feedback_items, through: :reviews
 
   has_many :assessments
