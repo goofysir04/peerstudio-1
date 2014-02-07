@@ -43,8 +43,6 @@ class ReviewsController < ApplicationController
   # POST /reviews.json
   def create
     @review = Review.new(review_params.merge(user: current_user, answer: Answer.find(params[:answer_id])))
-    puts "*************************"
-    puts @review.to_yaml
     @review.assignment = @review.answer.assignment
     respond_to do |format|
       if @review.save

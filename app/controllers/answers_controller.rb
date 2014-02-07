@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
   # GET /answers
   # GET /answers.json
   def index
+    redirect_to root_path and return unless current_user.admin? #FIXME Make this so students can only see it after the due date.
     @answers = Answer.where('assignment_id = ? and active =?', params[:assignment_id], true).order('user_id').order('created_at DESC')
   end
 
