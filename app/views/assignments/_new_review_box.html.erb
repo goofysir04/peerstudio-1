@@ -1,0 +1,10 @@
+<div class="well">
+	<%= form_for :typed_review, url:assignment_create_typed_review_path(assignment), class:"form-inline" do |f| %>
+	<%= f.email_field :email, placeholder: "student email address" %>
+	<%= f.select :revision, options_from_collection_for_select(assignment.milestones, "name","name"), prompt: "Choose draft type" %>
+	<%= f.hidden_field :type, value:"exchange" %>
+	<%= submit_tag "Start exchange review", :class=>"btn form-control" %>
+	
+	<a href="#" id="other_review_types"> Create a paired, or final review...</a>
+	<% end %>
+</div>

@@ -91,18 +91,18 @@
           </thead>
           <tbody>
             <% if @my_reviews %>
-            <% @my_reviews.each do |review| %>
-            <tr>
-              <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
-              <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-              <td><span class="label label-success">Unread</span></td>
-              <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %></td>
-            </tr>
-            <% end %> 
+              <% @my_reviews.each do |review| %>
+              <tr>
+                <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+                <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+                <td><span class="label label-success">Unread</span></td>
+                <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %></td>
+              </tr>
+              <% end %> 
             <% end %> 
           </tbody>
         </table> 
-        <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Start a review", assignment_answers_path(@assignment), :class=>"btn" %></p>
+        <%= render partial: "new_review_box", locals:{assignment:@assignment} %>
         <% end %>
       </div>
     <% if @assignment.due_at < Time.now %>

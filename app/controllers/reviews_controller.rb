@@ -26,12 +26,7 @@ class ReviewsController < ApplicationController
   # GET /reviews/new
   def new
     @answer = Answer.find(params[:answer_id])
-    @review = Review.new(answer: @answer, user: current_user, assignment: @answer.assignment)
-
-    @answer.assignment.rubric_items.each do |item|
-      @review.feedback_items.build(rubric_item: item)
-    end
-
+    @review = create_review_for_answer(@answer)
     # raise @review.feedback_items.count.inspect
   end
 
@@ -79,6 +74,24 @@ class ReviewsController < ApplicationController
     end
   end
 
+  #Create a new review with a particular type 
+  # such as paired, exchange, final etc
+  def create_with_type
+    @submitter = User.find_by_email(params[:typed_review][:email])
+    redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return if @submitter.nil?
+    redirect_to assignment_path(params[:assignment_id]), alert: "You can't review yourself!" and return if @submitter==current_user 
+    @answers = Answer.tagged_with(params[:typed_review][:revision]).where(user_id: @submitter.id, assignment_id: params[:assignment_id])
+
+    if @answers.empty?
+      redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find any draft from that student" and return 
+    end
+
+    @answer = @answers.order("RANDOM()").first
+    @review = create_review_for_answer(@answer, params[:typed_review][:type])
+    @review.save!
+    redirect_to edit_review_path(@review)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_review
@@ -88,6 +101,24 @@ class ReviewsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def review_params
       params.permit(:answer_id)
+      params.permit(:assignment_id)
+      params.permit(:typed_review).permit(:email,:type, :revision)
+
       params.require(:review).permit(:answer_id, :comments, :out_of_box_answer, :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
+    end
+
+    def create_review_for_answer(answer, type=nil)
+          reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
+          unless reviews.empty?
+            return reviews.first
+          end
+          #else
+          review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
+
+          answer.assignment.rubric_items.each do |item|
+            review.feedback_items.build(rubric_item: item)
+          end
+
+          review
     end
 end

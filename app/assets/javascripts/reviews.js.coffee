@@ -12,6 +12,10 @@ $(document).ready () ->
 	$('.review_text').keyup () ->
 		getReviewQuality($(this).val())
 
+	$('#other_review_types').click(() ->
+		alert "These review types are not yet open for this assignment."
+		return false)
+
 	# debugTokenList()
 
 recalculateGrade = () ->
