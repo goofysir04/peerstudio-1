@@ -38,7 +38,7 @@
     <% end %>
   </ul>
   <div class="tab-content">
-      <div id="my_answers" class="tab-pane">
+      <div id="my_answers" class="tab-pane active">
         <% if !user_signed_in? %>
           <p>You must <%= link_to "sign in", new_user_session_path %> to see your submissions. <%= link_to "Log in and start a new submission", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
         <% else %>
@@ -76,7 +76,7 @@
           <% end %>
         <% end %>
       </div>
-      <div id="my_reviews" class="tab-pane active">
+      <div id="my_reviews" class="tab-pane">
         <% if !user_signed_in?%>
         You must sign in to give feedback.
         <% else %>

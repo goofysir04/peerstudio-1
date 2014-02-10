@@ -78,7 +78,8 @@ class ReviewsController < ApplicationController
   # such as paired, exchange, final etc
   def create_with_type
     @submitter = User.find_by_email(params[:typed_review][:email])
-    redirect_to assignment_path(params[:assignment_id]), alert: "You can't review yourself!" and return if @submitter.nil? or @submitter==current_user 
+    redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return if @submitter.nil?
+    redirect_to assignment_path(params[:assignment_id]), alert: "You can't review yourself!" and return if @submitter==current_user 
     @answers = Answer.tagged_with(params[:typed_review][:revision]).where(user_id: @submitter.id, assignment_id: params[:assignment_id])
 
     if @answers.empty?
