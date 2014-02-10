@@ -107,12 +107,12 @@ class ReviewsController < ApplicationController
     end
 
     def create_review_for_answer(answer, type=nil)
-          reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment)
+          reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
           unless reviews.empty?
             return reviews.first
           end
           #else
-          review = Review.new(answer: answer, user: current_user, assignment: answer.assignment)
+          review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
 
           answer.assignment.rubric_items.each do |item|
             review.feedback_items.build(rubric_item: item)
