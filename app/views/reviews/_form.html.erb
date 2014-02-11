@@ -22,6 +22,7 @@
           <%= f.email_field :copilot_email, class:"input-block-level", placeholder:"your-partner@ucsd.edu" %>
         </li>
         <%= f.fields_for :feedback_items do |r| %>
+        <% if r.object.rubric_item.open_at < Time.now and r.object.rubric_item.ends_at > Time.now %>
         <li>
           <strong><%= r.object.rubric_item.short_title %></strong> <!-- <span class="pull-right label">Max: <%=r.object.rubric_item.max %> <%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span> -->
           <legend></legend>
@@ -40,6 +41,7 @@
             <%= r.number_field :score %>
           <% end %>
         </li>
+        <% end %>
         <% end %>
         <li>
           <strong>Overall comments</strong>

@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20140210211916) do
   create_table "rubric_items", force: true do |t|
     t.text     "title"
     t.string   "short_title"
+    t.datetime "open_at"
     t.datetime "ends_at"
     t.boolean  "final_only",    default: false
     t.float    "min",           default: 0.0
@@ -160,8 +161,6 @@ ActiveRecord::Schema.define(version: 20140210211916) do
     t.float    "score"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["review_id"], :name => "fk__feedback_items_review_id"
-    t.index ["rubric_item_id"], :name => "fk__feedback_items_rubric_item_id"
     t.index ["review_id"], :name => "index_feedback_items_on_review_id"
     t.index ["rubric_item_id"], :name => "index_feedback_items_on_rubric_item_id"
     t.foreign_key ["review_id"], "reviews", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_feedback_items_review_id"
@@ -232,6 +231,15 @@ ActiveRecord::Schema.define(version: 20140210211916) do
     t.string   "asset_content_type"
     t.integer  "asset_file_size"
     t.datetime "asset_updated_at"
+  end
+
+  create_table "attributes", force: true do |t|
+    t.boolean  "is_correct"
+    t.float    "score"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["question_id"], :name => "index_attributes_on_question_id"
   end
 
   create_table "ckeditor_assets", force: true do |t|

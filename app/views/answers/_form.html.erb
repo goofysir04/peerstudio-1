@@ -36,6 +36,7 @@
           <div class="assignment-rubric-static"%>
             <ul class="rubric">
               <% @answer.assignment.rubric_items.each do |r| %>
+              <% if r.open_at < Time.now and r.ends_at > Time.now %>
               <li>
                 <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
                 <legend></legend>
@@ -45,6 +46,7 @@
                     <tr>
                       <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
                     </tr>
+                  <% end %>
                   <% end %>
                 </table>
               </li>
