@@ -89,7 +89,7 @@ class AssignmentsController < ApplicationController
     def assignment_params
       params.permit(:course_id)
       params.require(:assignment).permit(:title, :description, :milestone_list,:due_at, :open_at,:rubric_items_attributes=>[
-        :id,:title,:short_title, :open_at, :ends_at, :final_only,
+        :id,:title,:short_title, :ends_at, :final_only,
         :min, :max, :min_label, :max_label,:_destroy]) #don't allow user id. set to current user
     end
 end
