@@ -114,7 +114,7 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
     @attachment = @answer.attached_assets.new(:asset => params[:file])
 
-    if @attachment.save
+    if @attachment.save!
       respond_to do |format|
         format.html {redirect_to root_path}
         format.js {render layout: nil}
