@@ -104,6 +104,18 @@
     </div>
     <div class="control-group">
       <div class="control-label">
+        <%= r.label :open_at %>
+      </div>
+      <div class="controls">
+        <div class="input-append date datetime-picker">
+          <%= r.text_field :open_at, :value => r.object.open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+        Students will only be able to get feedback on this item after this date. 
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
         <%= r.label :ends_at %>
       </div>
       <div class="controls">

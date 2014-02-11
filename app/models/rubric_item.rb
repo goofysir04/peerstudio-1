@@ -3,5 +3,5 @@ class RubricItem < ActiveRecord::Base
   belongs_to :user
   has_many :answer_attributes, :dependent => :destroy
 
-  default_scope :order=>'ends_at ASC, created_at ASC'
+  default_scope :order=>'ends_at ASC, open_at ASC, created_at ASC'
 end
