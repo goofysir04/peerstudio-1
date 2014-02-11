@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140210211916) do
+ActiveRecord::Schema.define(version: 20140211070647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,7 +78,6 @@ ActiveRecord::Schema.define(version: 20140210211916) do
   create_table "rubric_items", force: true do |t|
     t.text     "title"
     t.string   "short_title"
-    t.datetime "open_at"
     t.datetime "ends_at"
     t.boolean  "final_only",    default: false
     t.float    "min",           default: 0.0
@@ -90,6 +89,7 @@ ActiveRecord::Schema.define(version: 20140210211916) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "common_wishes"
+    t.datetime "open_at"
     t.index ["assignment_id"], :name => "index_rubric_items_on_assignment_id"
     t.index ["user_id"], :name => "index_rubric_items_on_user_id"
     t.foreign_key ["assignment_id"], "assignments", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_rubric_items_assignment_id"
