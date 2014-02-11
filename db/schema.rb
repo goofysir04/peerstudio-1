@@ -78,7 +78,6 @@ ActiveRecord::Schema.define(version: 20140210211916) do
   create_table "rubric_items", force: true do |t|
     t.text     "title"
     t.string   "short_title"
-    t.datetime "open_at"
     t.datetime "ends_at"
     t.boolean  "final_only",    default: false
     t.float    "min",           default: 0.0
