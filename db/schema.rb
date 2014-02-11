@@ -233,14 +233,6 @@ ActiveRecord::Schema.define(version: 20140210211916) do
     t.datetime "asset_updated_at"
   end
 
-  create_table "attributes", force: true do |t|
-    t.boolean  "is_correct"
-    t.float    "score"
-    t.integer  "question_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["question_id"], :name => "index_attributes_on_question_id"
-  end
 
   create_table "ckeditor_assets", force: true do |t|
     t.string   "data_file_name",               null: false
