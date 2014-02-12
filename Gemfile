@@ -93,6 +93,8 @@ gem "unicorn"
 #for editor
 gem "redcarpet"
 
+gem 'will_paginate', '~> 3.0'
+
 
 #For versioning in submissions
 gem 'acts-as-taggable-on'

@@ -7,7 +7,7 @@ class AnswersController < ApplicationController
   # GET /answers.json
   def index
     redirect_to root_path and return unless current_user.admin? #FIXME Make this so students can only see it after the due date.
-    @answers = Answer.where('assignment_id = ? and active =?', params[:assignment_id], true).order('user_id').order('created_at DESC')
+    @answers = Answer.where('assignment_id = ? and active =?', params[:assignment_id], true).order('user_id').order('created_at DESC').paginate(:page => params[:page])
   end
 
   # GET /answers/1
@@ -148,6 +148,7 @@ class AnswersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params.permit(:assignment_id)
+      params.permit(:page)
       params.permit(:doIt)
       params.require(:answer).permit(:response, :revision_name, :revision_list, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id)
     end
