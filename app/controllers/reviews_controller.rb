@@ -78,16 +78,32 @@ class ReviewsController < ApplicationController
   # such as paired, exchange, final etc
   def create_with_type
     @submitter = User.find_by_email(params[:typed_review][:email])
-    redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return if @submitter.nil?
+    review_type = params[:typed_review][:type]
+    if @submitter.nil? and review_type != "final"
+      redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return
+    end
     redirect_to assignment_path(params[:assignment_id]), alert: "You can't review yourself!" and return if @submitter==current_user 
-    @answers = Answer.tagged_with(params[:typed_review][:revision]).where(user_id: @submitter.id, assignment_id: params[:assignment_id])
+    
+    
+    case review_type
+    when "exchange"
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(user_id: @submitter.id, assignment_id: params[:assignment_id])
+    when "paired"
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(assignment_id: params[:assignment_id]).where("user_id NOT in (?)", [@submitter.id, current_user.id])
+    else
+      redirect_to assignment_path(params[:assignment_id]), alert: "That review type has not opened yet." and return 
+    end
 
     if @answers.empty?
-      redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find any draft from that student" and return 
+      redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find any drafts to review" and return 
     end
 
     @answer = @answers.order("RANDOM()").first
     @review = create_review_for_answer(@answer, params[:typed_review][:type])
+
+    if review_type == "paired"
+      @review.copilot_email = @submitter.email
+    end 
     @review.save!
     redirect_to edit_review_path(@review)
   end
