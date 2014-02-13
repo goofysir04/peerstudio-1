@@ -18,7 +18,7 @@ class ReviewsController < ApplicationController
   # GET /reviews/1.json
   def show
     @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
-    unless @review.comments.empty?
+    unless @review.comments.blank?
       (@feedback_items_by_rubric_item["comments"] ||= []) << @review.comments
     end
   end
