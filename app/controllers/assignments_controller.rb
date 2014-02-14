@@ -17,6 +17,7 @@ class AssignmentsController < ApplicationController
     end
     @all_answers = @assignment.answers.reviewable
     @starred_answers = @assignment.answers.reviewable.where(starred: true)
+    @assignment.get_tasks
   end
 
   # GET /assignments/new
