@@ -14,12 +14,12 @@
       <% if feedback_items_by_rubric_item[r.id].nil? %>
       No reviews yet.
       <% else %>
-        <% feedback_items_by_rubric_item[r.id].each do |f| %>
+        <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
           <% f.answer_attributes.each do |a_attr| %>
             <p><%= a_attr.description %></p>
           <% end %>
           <% unless f.like_feedback.blank? %>
-            <p><strong>Because: </strong><%= f.like_feedback %></p>
+            <p><strong>Reviewer <%= i %></strong> <%= f.like_feedback %></p>
             <!-- <p><strong>Wish: </strong><%= f.wish_feedback %></p> -->
           <% end %>
         <% end %>
@@ -29,9 +29,9 @@
   <% unless feedback_items_by_rubric_item["comments"].nil? %>
   <li>
     <strong>Overall feedback:</strong>
-    <% feedback_items_by_rubric_item["comments"].each do |comment| %>
+    <% feedback_items_by_rubric_item["comments"].each.with_index(1) do |comment,i| %>
       <% next if comment.nil? %>
-      <p><%= comment %> </p>
+      <p><strong>Reviewer <%=i %></strong> <%= comment %> </p>
     <% end %>
   </li>
   <% end %>
