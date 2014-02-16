@@ -1,0 +1,28 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>Student name</th>
+			<% @milestones.each do |m| %>
+				<th><%= m %> </th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% @students.order('name').each do |s| %>
+			<tr>
+				<td><%= s.name %> (<%= s.email %>)</td>
+				
+				<% @milestones.each do |m| %>
+				
+					<% if @assignment.answers.where(user_id: s).tagged_with(m).exists? %>
+					
+					<td style="background-color: #8cc665;">Submitted</td>
+					<% else %>
+					<td style="background-color: rgb(244,109,67);">Not Submitted</td>
+					<% end %>
+				</td>
+				<% end %>					
+			</tr>
+		<% end %>
+	</tbody>
+</table>

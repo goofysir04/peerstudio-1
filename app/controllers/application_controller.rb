@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   impersonates :user
 
   	def authenticate_user_is_admin!
+      return true if Rails.env.development?
   		unless user_signed_in?
   			authenticate_user!
   		end

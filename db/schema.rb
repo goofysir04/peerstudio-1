@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140211070647) do
+ActiveRecord::Schema.define(version: 20140216182316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,6 +261,17 @@ ActiveRecord::Schema.define(version: 20140211070647) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], :name => "delayed_jobs_priority"
+  end
+
+  create_table "enrollments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id"], :name => "fk__enrollments_course_id"
+    t.index ["user_id"], :name => "fk__enrollments_user_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_enrollments_course_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_enrollments_user_id"
   end
 
   create_table "evaluations", force: true do |t|
