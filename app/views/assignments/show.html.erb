@@ -3,6 +3,7 @@
   <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> (<%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</small>
 </p>
 </h1>
+<%= render partial: "task_box", locals: {task_list: @assignment.task_list} %>
 <div id="assignment_description">
   <%= sanitize @assignment.description %>
 </div>

@@ -1,0 +1,12 @@
+<div class="table-responsive">
+	<table cellspacing=0 class="task_box" style="width:100%">
+		<tr>
+		<% for task in task_list %>
+			<% unless task[:close_at].blank? %>
+				<td style="text-align: center; vertical-align: middle; <%= 'background-color: #d9edf7;' if task[:close_at] < Time.now %><%= 'background-color: #3a87ad; color: #ffffff;' if (task[:open_at] < Time.now and task[:close_at] > Time.now) %><%= 'background-color: #efefef;' if (task[:open_at] > Time.now and task[:close_at] > Time.now) %>"><strong><%= task[:name] %></strong><br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %><br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)</td>
+				<td style="text-align: center; vertical-align: middle; <%= 'background-color: #d9edf7;' if task[:review_close_at] < Time.now %><%= 'background-color: #3a87ad; color: #ffffff;' if (task[:review_open_at] < Time.now and task[:review_close_at] > Time.now) %><%= 'background-color: #efefef;' if (task[:review_open_at] > Time.now and task[:review_close_at] > Time.now) %>"><strong>Review <%= task[:name] %></strong><br />by <%= (task[:review_close_at]).strftime "%b %e, %l:%M %p" %><br />(<%= "in " if task[:review_close_at] > Time.now %><%= distance_of_time_in_words task[:review_close_at], Time.now %><%= " ago" if task[:review_close_at] < Time.now %>)</td>
+			<% end %>
+		<% end %>
+		</tr>
+	</table>
+</div>

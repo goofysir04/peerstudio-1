@@ -6,13 +6,17 @@ class Assignment < ActiveRecord::Base
   accepts_nested_attributes_for :rubric_items, :allow_destroy => true, reject_if: proc { |attributes| attributes['short_title'].blank? and attributes['title'].blank? }
 
   acts_as_taggable_on :milestones
+  accepts_nested_attributes_for :taggings, :allow_destroy => true
 
-  def get_tasks
-  	puts self.milestones
-  	puts "*****************************************"
+  def task_list
+    task_list = []
   	taggings = Tagging.where("taggable_id = ?", self.id)
   	for tagging in taggings
-  		puts tagging.tag_id
+      if self.milestone_list.include?(tagging.tag_name)
+        task = { :name => tagging.tag_name, :open_at => tagging.open_at, :close_at => tagging.close_at, :review_open_at => tagging.review_open_at, :review_close_at => tagging.review_close_at }
+        task_list << task
+      end
   	end
+    return task_list
   end
 end
