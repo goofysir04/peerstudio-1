@@ -1,6 +1,6 @@
 namespace :grading do
 	
-	desc "check logger"
+	desc "push grades to coursera"
 	task :push_grades => :environment do
 		logger = Rails.logger
 		users = User.all

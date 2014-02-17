@@ -39,7 +39,7 @@ class Answer < ActiveRecord::Base
   end
 
   def active_reviews
-    self.reviews.where("updated_at > created_at")
+    self.reviews.where(active: true)
   end
 
   def versions
