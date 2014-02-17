@@ -38,34 +38,3 @@
 	</tbody>
 </table>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>Student name</th>
-			<% @milestones.each do |m| %>
-				<th><%= m %> </th>
-			<% end %>
-		</tr>
-	</thead>
-	<tbody>
-		<% @students.order('name').each do |s| %>
-			<tr>
-				<td><%= s.name %> (<%= s.email %>)</td>
-				
-				<% @milestones.each do |m| %>
-				<% answer = @assignment.answers.where(user_id: s).tagged_with(m).first %>
-					<% if answer.nil? %>
-					<td style="background-color: rgb(244,109,67);">Not Submitted</td>
-					<% else %>
-						<% if answer.active_reviews.count == 0 %>
-							<td style="background-color: rgb(255,255,191);"><%= link_to "Submitted", new_answer_review_path(answer)%>; No reviews</td>
-						<% else %>
-							<td style="background-color: #8cc665;"><%= link_to "Submitted", new_answer_review_path(answer)%>; <%= answer.active_reviews.count %> reviews</td>
-						<% end %>
-					<% end %>
-				</td>
-				<% end %>					
-			</tr>
-		<% end %>
-	</tbody>
-</table>
