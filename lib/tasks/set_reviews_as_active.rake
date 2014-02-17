@@ -9,7 +9,7 @@ namespace :grading do
 		#Find all the students who submitted an answer.
 		logger.info "Activating existing reviews"
 		Review.all.each do |r|
-			if r.created_at == r.updated_at
+			if r.created_at == r.updated_at and r.comments.blank?
 				r.active = false
 				r.save
 			end
