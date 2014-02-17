@@ -38,6 +38,10 @@ class Answer < ActiveRecord::Base
     end
   end
 
+  def active_reviews
+    self.reviews.where("updated_at > created_at")
+  end
+
   def versions
     Answer.where(assignment: self.assignment, user: self.user, active: true).order('created_at')
   end

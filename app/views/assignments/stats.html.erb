@@ -13,12 +13,15 @@
 				<td><%= s.name %> (<%= s.email %>)</td>
 				
 				<% @milestones.each do |m| %>
-				
-					<% if @assignment.answers.where(user_id: s).tagged_with(m).exists? %>
-					
-					<td style="background-color: #8cc665;">Submitted</td>
-					<% else %>
+				<%= answer = @assignment.answers.where(user_id: s).tagged_with(m).first %>
+					<% if answer.nil? %>
 					<td style="background-color: rgb(244,109,67);">Not Submitted</td>
+					<% else %>
+						<% if answer.active_reviews.count == 0 %>
+							<td style="background-color: rgb(255,255,191);">Submitted; No reviews</td>
+						<% else %>
+							<td style="background-color: #8cc665;">Submitted; <%= answer.active_reviews.count %> reviews</td>
+						<% end %>
 					<% end %>
 				</td>
 				<% end %>					
