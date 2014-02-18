@@ -54,7 +54,7 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1.json
   def update
     respond_to do |format|
-      if @review.update(review_params)
+      if @review.update(review_params.merge(active: true))
         format.html { redirect_to @review, notice: 'Review was successfully updated.' }
         format.json { head :no_content }
       else
@@ -129,8 +129,10 @@ class ReviewsController < ApplicationController
             return reviews.first
           end
           #else
-          review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
 
+          review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
+          #Set to false to be sure you actually do the review before it's considered active
+          review.active = false 
           answer.assignment.rubric_items.each do |item|
             review.feedback_items.build(rubric_item: item)
           end
