@@ -44,8 +44,12 @@
         <% end %>
         <% end %>
         <li>
-          <strong>Overall comments</strong>
+          <strong>Overall comments</strong> 
           <legend></legend>
+          <% if @review.review_type == "final"%> 
+            Here's <a href="#" target="_blank">a good submission from last year</a>. What can the current submission copy from this submission to improve?
+          <% end %>
+          
           <%= f.text_area :comments, size: "10x5", class:"review_text input-block-level" %>
           <div class="alert" id="review_tips">Review tips appear here as you begin typing.</div>
           <legend></legend>

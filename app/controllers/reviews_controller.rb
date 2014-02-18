@@ -140,6 +140,14 @@ class ReviewsController < ApplicationController
           unless reviews.empty?
             return reviews.first
           end
+
+          pending_reviews = Review.where(user: current_user, active: false)
+          pending_reviews.each do |r|
+            if(r.answer.assignment_id == answer.assignment_id)
+              #return the first pending review from this student
+              return r
+            end
+          end
           #else
 
           review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
