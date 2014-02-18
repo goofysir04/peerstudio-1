@@ -39,6 +39,8 @@ class ReviewsController < ApplicationController
   def create
     @review = Review.new(review_params.merge(user: current_user, answer: Answer.find(params[:answer_id])))
     @review.assignment = @review.answer.assignment
+    @answer = @review.answer
+    @answer.increment!(:total_evaluations)
     respond_to do |format|
       if @review.save
         format.html { redirect_to @review, notice: 'Review was successfully created.' }
@@ -54,6 +56,12 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1.json
   def update
     respond_to do |format|
+      if !@review.active?
+        #The review is not active, so this is an update of a pending review
+        @answer = @review.answer
+        @answer.increment!(:total_evaluations)
+        @answer.decrement!(:pending_reviews)
+      end
       if @review.update(review_params.merge(active: true))
         format.html { redirect_to @review, notice: 'Review was successfully updated.' }
         format.json { head :no_content }
@@ -98,7 +106,9 @@ class ReviewsController < ApplicationController
       redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find any drafts to review" and return 
     end
 
-    @answer = @answers.order("RANDOM()").first
+    @answer = @answers.order("evaluations_wanted - (pending_reviews + total_evaluations) DESC").first
+
+    @answer.increment!(:pending_reviews)
     @review = create_review_for_answer(@answer, params[:typed_review][:type])
 
     if review_type == "paired"
