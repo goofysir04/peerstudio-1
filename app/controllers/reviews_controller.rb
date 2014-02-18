@@ -98,6 +98,8 @@ class ReviewsController < ApplicationController
       @answers = Answer.tagged_with(params[:typed_review][:revision]).where(user_id: @submitter.id, assignment_id: params[:assignment_id])
     when "paired"
       @answers = Answer.tagged_with(params[:typed_review][:revision]).where(assignment_id: params[:assignment_id]).where("user_id NOT in (?)", [@submitter.id, current_user.id])
+    when "final"
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(assignment_id: params[:assignment_id]).where("user_id NOT in (?)", current_user.id)
     else
       redirect_to assignment_path(params[:assignment_id]), alert: "That review type has not opened yet." and return 
     end
