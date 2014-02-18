@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140217231629) do
+ActiveRecord::Schema.define(version: 20140218000325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 20140217231629) do
     t.boolean  "active",             default: true
     t.boolean  "starred",            default: false
     t.boolean  "in_progress",        default: false
+    t.integer  "pending_reviews",    default: 0
     t.index ["assignment_id"], :name => "fk__answers_assignment_id"
     t.index ["question_id"], :name => "index_answers_on_question_id"
     t.index ["user_id"], :name => "index_answers_on_user_id"
