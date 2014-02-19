@@ -26,11 +26,9 @@
 				</td>
 				<td class="<%= 'completed_task' if task[:review_close_at] < Time.now %><%= 'current_task' if (task[:review_open_at] < Time.now and task[:review_close_at] > Time.now) %><%= 'future_task' if (task[:review_open_at] > Time.now and task[:review_close_at] > Time.now) %>">
 					<% if (task[:review_open_at] < Time.now and task[:review_close_at] > Time.now) %>
-						<%= link_to(nil) do %>
 							<strong>Review <%= task[:name] %></strong>
 							<br />by <%= (task[:review_close_at]).strftime "%b %e, %l:%M %p" %>
 							<br />(<%= "in " if task[:review_close_at] > Time.now %><%= distance_of_time_in_words task[:review_close_at], Time.now %><%= " ago" if task[:review_close_at] < Time.now %>)
-						<% end %>
 					<% else %>
 						<strong>Review <%= task[:name] %></strong>
 						<br />by <%= (task[:review_close_at]).strftime "%b %e, %l:%M %p" %>
