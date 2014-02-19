@@ -114,7 +114,7 @@
             </tr>
           </thead>
           <tbody>
-            <% if !@reviews_by_me.blank? and true_user.admin?%>
+            <% if !@reviews_by_me.blank? %>
               <% @reviews_by_me.each do |review| %>
               <tr>
                 <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
