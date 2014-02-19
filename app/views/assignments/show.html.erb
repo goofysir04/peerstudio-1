@@ -35,7 +35,7 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
-    <% if @assignment.due_at < Time.now %>
+    <% if @assignment.task_list.last[:review_close_at] < Time.now %>
     <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
     <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
     <% end %>
@@ -108,14 +108,14 @@
         <%= render partial: "new_review_box", locals:{assignment:@assignment} %>
         <% end %>
       </div>
-    <% if @assignment.due_at < Time.now %>
-    <div id="all_answers" class="tab-pane">
-      <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
-    </div>
-    <div id="starred_answers" class="tab-pane">
-      <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
-    </div>
-    <% end %>
+      <% if @assignment.task_list.last[:review_close_at] < Time.now %>
+      <div id="all_answers" class="tab-pane">
+        <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
+      </div>
+      <div id="starred_answers" class="tab-pane">
+        <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
+      </div>
+      <% end %>
   </div>
 </div>
 

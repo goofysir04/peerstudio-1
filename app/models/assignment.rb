@@ -13,8 +13,10 @@ class Assignment < ActiveRecord::Base
   	taggings = Tagging.where("taggable_id = ?", self.id)
   	for tagging in taggings
       if self.milestone_list.include?(tagging.tag_name)
-        task = { :name => tagging.tag_name, :open_at => tagging.open_at, :close_at => tagging.close_at, :review_open_at => tagging.review_open_at, :review_close_at => tagging.review_close_at }
-        task_list << task
+        unless tagging.close_at.blank?
+          task = { :name => tagging.tag_name, :open_at => tagging.open_at, :close_at => tagging.close_at, :review_open_at => tagging.review_open_at, :review_close_at => tagging.review_close_at }
+          task_list << task
+        end
       end
   	end
     return task_list
