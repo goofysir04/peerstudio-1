@@ -103,6 +103,32 @@
               <% end %> 
             <% end %> 
           </tbody>
+        </table>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Draft title</th>
+              <th>Answer preview</th>
+              <th>Review type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if !@reviews_by_me.blank? and true_user.admin?%>
+              <% @reviews_by_me.each do |review| %>
+              <tr>
+                <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+                <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+                <td><%= review.review_type.capitalize unless review.review_type.nil? %> review</td>
+                <td>
+                  <% if review.review_type == "final" %>
+                    <%= link_to "Edit", edit_review_path(review), class:"btn" %>
+                  <% end %>
+                </td>
+              </tr>
+              <% end %> 
+            <% end %> 
+          </tbody>
         </table> 
         <%= render partial: "new_review_box", locals:{assignment:@assignment} %>
         <% end %>

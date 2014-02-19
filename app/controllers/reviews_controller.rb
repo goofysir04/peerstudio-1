@@ -63,8 +63,13 @@ class ReviewsController < ApplicationController
         @answer.decrement!(:pending_reviews)
       end
       if @review.update(review_params.merge(active: true))
-        format.html { redirect_to @review, notice: 'Review was successfully updated.' }
-        format.json { head :no_content }
+        if @review.review_type=="final"
+          format.html { redirect_to @review, notice: 'Review was successfully updated. Go to the assignment page to start a new review.' }
+          format.json { head :no_content }
+        else  
+          format.html { redirect_to @review, notice: 'Review was successfully updated.' }
+          format.json { head :no_content }
+        end
       else
         format.html { render action: 'edit' }
         format.json { render json: @review.errors, status: :unprocessable_entity }
@@ -136,27 +141,27 @@ class ReviewsController < ApplicationController
     end
 
     def create_review_for_answer(answer, type=nil)
-          reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
-          unless reviews.empty?
-            return reviews.first
-          end
+      reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment, review_type: type, active:true)
+      # if !reviews.empty? and type != "final"
+      #   return reviews.first
+      # end
+      #else
+      pending_reviews = Review.where(user: current_user, active: false)
+      pending_reviews.each do |r|
+        if(r.answer.assignment_id == answer.assignment_id)
+          #return the first pending review from this student
+          return r
+        end
+      end
+      #else
 
-          pending_reviews = Review.where(user: current_user, active: false)
-          pending_reviews.each do |r|
-            if(r.answer.assignment_id == answer.assignment_id)
-              #return the first pending review from this student
-              return r
-            end
-          end
-          #else
+      review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
+      #Set to false to be sure you actually do the review before it's considered active
+      review.active = false 
+      answer.assignment.rubric_items.each do |item|
+        review.feedback_items.build(rubric_item: item)
+      end
 
-          review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
-          #Set to false to be sure you actually do the review before it's considered active
-          review.active = false 
-          answer.assignment.rubric_items.each do |item|
-            review.feedback_items.build(rubric_item: item)
-          end
-
-          review
+      review
     end
 end
