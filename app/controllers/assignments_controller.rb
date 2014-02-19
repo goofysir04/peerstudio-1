@@ -1,7 +1,8 @@
 class AssignmentsController < ApplicationController
-  before_action :set_assignment, only: [:show, :edit, :update, :destroy]
+  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
+  before_filter :authenticate_user_is_admin!, only: [:stats]
   # GET /assignments
   # GET /assignments.json
   def index
@@ -73,6 +74,11 @@ class AssignmentsController < ApplicationController
       format.html { redirect_to course_assignments_url(@course) }
       format.json { head :no_content }
     end
+  end
+
+  def stats
+    @students = @assignment.course.students
+    @milestones = @assignment.milestones
   end
 
   private
