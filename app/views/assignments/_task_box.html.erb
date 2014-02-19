@@ -5,10 +5,18 @@
 			<% unless task[:close_at].blank? %>
 				<td class="<%= 'completed_task' if task[:close_at] < Time.now %><%= 'current_task' if (task[:open_at] < Time.now and task[:close_at] > Time.now) %><%= 'future_task' if (task[:open_at] > Time.now and task[:close_at] > Time.now) %>">
 					<% if (task[:open_at] < Time.now and task[:close_at] > Time.now) %>
-						<%= link_to(new_assignment_answer_path(@assignment)) do %>
-							<strong><%= task[:name] %></strong>
-							<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
-							<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
+						<% if answers.last.revision_name.to_s == task[:name] %>
+							<%= link_to(edit_answer_path(answers.last)) do %>
+								<strong><%= task[:name] %></strong>
+								<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
+								<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
+							<% end %>
+						<% else %>
+							<%= link_to(new_assignment_answer_path(@assignment)) do %>
+								<strong><%= task[:name] %></strong>
+								<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
+								<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
+							<% end %>
 						<% end %>
 					<% else %>
 						<strong><%= task[:name] %></strong>

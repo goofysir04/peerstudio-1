@@ -5,7 +5,7 @@
   </small>
 </p>
 </h1>
-<%= render partial: "task_box", locals: {task_list: @assignment.task_list} %>
+<%= render partial: "task_box", locals: {task_list: @assignment.task_list, answers: @my_answers} %>
 <div id="assignment_description">
   <%= sanitize @assignment.description %>
 </div>
