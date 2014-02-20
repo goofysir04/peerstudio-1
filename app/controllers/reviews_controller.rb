@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :set_review, only: [:show, :edit, :update, :destroy]
+  before_action :set_review, only: [:show, :edit, :update, :destroy, :rate, :create_rating]
   before_filter :authenticate_user!
   # GET /reviews
   # GET /reviews.json
@@ -116,7 +116,7 @@ class ReviewsController < ApplicationController
       redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find any drafts to review" and return 
     end
 
-    @answer = @answers.order("evaluations_wanted - (pending_reviews + total_evaluations) DESC").first
+    @answer = @answers.order("(pending_reviews + total_evaluations) ASC").first
 
     @answer.increment!(:pending_reviews)
     @review = create_review_for_answer(@answer, params[:typed_review][:type])
@@ -126,6 +126,16 @@ class ReviewsController < ApplicationController
     end 
     @review.save!
     redirect_to edit_review_path(@review)
+  end
+
+  def rate
+    @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
+    unless @review.comments.blank?
+      (@feedback_items_by_rubric_item["comments"] ||= []) << @review.comments
+    end
+  end
+
+  def create_rating
   end
 
   private
