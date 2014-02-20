@@ -60,7 +60,7 @@ class ReviewsController < ApplicationController
         #The review is not active, so this is an update of a pending review
         @answer = @review.answer
         @answer.increment!(:total_evaluations)
-        @answer.decrement!(:pending_reviews)
+        @answer.decrement!(:pending_reviews) unless @answer.pending_reviews == 0
       end
       if @review.update(review_params.merge(active: true))
         if @review.review_type=="final"
