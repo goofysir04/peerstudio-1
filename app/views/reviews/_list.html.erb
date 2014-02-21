@@ -12,7 +12,7 @@
       <legend></legend>
       <%= sanitize r.title %>
       <% if feedback_items_by_rubric_item[r.id].nil? %>
-      No reviews yet.
+      No review.
       <% else %>
         <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
           <% f.answer_attributes.each do |a_attr| %>

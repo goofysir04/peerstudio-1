@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140218003428) do
+ActiveRecord::Schema.define(version: 20140221145711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,7 +150,12 @@ ActiveRecord::Schema.define(version: 20140218003428) do
     t.text     "comments"
     t.string   "copilot_email"
     t.string   "review_type"
-    t.boolean  "active",            default: true
+    t.boolean  "active",                default: true
+    t.integer  "accurate_rating"
+    t.integer  "concrete_rating"
+    t.integer  "recognize_rating"
+    t.text     "other_rating_comments"
+    t.boolean  "rating_completed",      default: false
     t.index ["answer_id"], :name => "fk__reviews_answer_id"
     t.index ["assignment_id"], :name => "fk__reviews_assignment_id"
     t.index ["user_id"], :name => "fk__reviews_user_id"

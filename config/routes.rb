@@ -77,6 +77,11 @@ Humanmachine::Application.routes.draw do
     resources :reviews, shallow: true
   end
 
+  
+  get 'reviews/:id/rate' => "reviews#rate", as: :rate_review
+  post 'reviews/:id/rate' => "reviews#create_rating", as: :create_rate_review
+  
+
   resources :questions do
     #resources :answer_attributes
   end

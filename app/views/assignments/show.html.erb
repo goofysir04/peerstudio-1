@@ -82,6 +82,7 @@
         <% if !user_signed_in?%>
         You must sign in to give feedback.
         <% else %>
+        <h3>Reviews of my work</h3>
         <table class="table">
           <thead>
             <tr>
@@ -97,13 +98,20 @@
               <tr>
                 <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
                 <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                <td><span class="label label-success">Unread</span></td>
-                <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %></td>
+                <% if review.rating_completed? %>
+                  <td><span class="label label-success">Rating complete</span></td>
+                <% else %>
+                  <td><span class="label label-warning">Unrated</span></td>
+                <% end %>
+                <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %>
+                <%= link_to "Rate", rate_review_path(review), class:"btn btn-primary" %>
+              </td>
               </tr>
               <% end %> 
             <% end %> 
           </tbody>
         </table>
+        <h3>Reviews I wrote</h3>
         <table class="table">
           <thead>
             <tr>
@@ -114,6 +122,7 @@
             </tr>
           </thead>
           <tbody>
+
             <% if !@reviews_by_me.blank? %>
               <% @reviews_by_me.each do |review| %>
               <tr>

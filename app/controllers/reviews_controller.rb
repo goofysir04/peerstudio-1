@@ -137,6 +137,23 @@ class ReviewsController < ApplicationController
   end
 
   def create_rating
+    respond_to do |format|
+      if @review.update(review_params.merge(rating_completed: true))
+        @my_answers = Answer.where({active: true, assignment_id: @review.answer.assignment_id, user: current_user})
+        @next_review = Review.where({active: true, rating_completed: false, answer_id: @my_answers}).first
+        if @next_review.blank?
+          format.html { redirect_to assignment_path(@review.answer.assignment_id), notice: "Thank you for rating all your reviews" }
+          format.json { head :no_content }
+        else
+          format.html {redirect_to rate_review_path(@next_review), notice: "Thank you for your rating!"}
+          format.json { head :no_content }
+        end
+      else
+        format.html { redirect_to action: 'rate', alert: "We couldn't save the rating. Please report a bug" }
+        format.json { render json: @review.errors, status: :unprocessable_entity }
+      end
+    end
+
   end
 
   private
@@ -151,7 +168,12 @@ class ReviewsController < ApplicationController
       params.permit(:assignment_id)
       params.permit(:typed_review).permit(:email,:type, :revision)
 
-      params.require(:review).permit(:answer_id, :comments, :out_of_box_answer, :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
+      params.require(:review).permit(:answer_id, :comments, :out_of_box_answer, 
+        :accurate_rating,
+        :concrete_rating,
+        :recognize_rating,
+        :other_rating_comments,
+        :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
     end
 
     def create_review_for_answer(answer, type=nil)
