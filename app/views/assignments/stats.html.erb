@@ -2,7 +2,9 @@
 	<thead>
 		<tr>
 			<th>Student name</th>
-			<th>Paired Reviews performed</th>
+			<th>Reviews performed: Paired</th>
+			<th>Exchange</th>
+			<th>Final</th>
 			<% @milestones.each do |m| %>
 				<th><%= m %> </th>
 			<% end %>
@@ -12,14 +14,28 @@
 		<% @students.order('name').each do |s| %>
 			<tr>
 				<td><%= s.name %> (<%= s.email %>)</td>
-				<% paired_reviews = Review.where("user_id = ? or copilot_email= ? and review_type='paired' and updated_at > created_at", s.id, s.email) %>
+				<% paired_reviews = Review.where("user_id = ? or copilot_email= ? and review_type='paired' and active = ? and assignment_id=?", s.id, s.email, true, @assignment.id) %>
 				<% if paired_reviews.count == 0 %>
 					<td style="background-color: rgb(244,109,67);">
-					No paired reviews performed</td>
+					None</td>
 				<% else %>
-					<td><%= paired_reviews.count %> paired reviews</td>
+					<td><%= paired_reviews.count %></td>
 				<% end %>
-				
+				<% exchange_reviews = Review.where("user_id = ? and review_type='exchange' and active = ? and assignment_id=?", s.id, true, @assignment.id) %>
+				<% if exchange_reviews.count == 0 %>
+					<td style="background-color: rgb(244,109,67);">
+					None</td>
+				<% else %>
+					<td><%= exchange_reviews.count %></td>
+				<% end %>
+				<% final_reviews = Review.where("user_id = ? and review_type='final' and active = ? and assignment_id=?", s.id, true, @assignment.id) %>
+				<% if final_reviews.count == 0 %>
+					<td style="background-color: rgb(244,109,67);">
+					None</td>
+				<% else %>
+					<td><%= final_reviews.count %></td>
+				<% end %>
+
 				<% @milestones.each do |m| %>
 				<% answer = @assignment.answers.where(user_id: s).tagged_with(m).first %>
 					<% if answer.nil? %>
