@@ -21,7 +21,7 @@
 				<% else %>
 					<td><%= exchange_reviews.count %></td>
 				<% end %>
-				<% paired_reviews = Review.where("user_id = ? or copilot_email= ? and review_type='paired' and active = ? and assignment_id=?", s.id, s.email, true, @assignment.id) %>
+				<% paired_reviews = Review.where("(user_id = ? or copilot_email= ?) and review_type='paired' and active = ? and assignment_id=?", s.id, s.email, true, @assignment.id) %>
 				<% if paired_reviews.count == 0 %>
 					<td style="background-color: rgb(244,109,67);">
 					None</td>
