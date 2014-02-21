@@ -16,7 +16,10 @@ class AssignmentsController < ApplicationController
       @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
       @my_reviews = Review.where(answer_id: @my_answers)
       @reviews_by_me = Review.where(user: current_user, active: true)
-      @out_of_box_answers = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
+      @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
+      unless @out_of_box_answers_with_count.blank?
+        @out_of_box_answers = @out_of_box_answers_with_count.reject {|k,v| v < 2 }
+      end
     end
     @all_answers = @assignment.answers.reviewable
     @starred_answers = @assignment.answers.reviewable.where(starred: true)
