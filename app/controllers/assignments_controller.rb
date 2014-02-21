@@ -19,6 +19,9 @@ class AssignmentsController < ApplicationController
       @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
       unless @out_of_box_answers_with_count.blank?
         @out_of_box_answers = @out_of_box_answers_with_count.reject {|k,v| v < 2 }
+        if @out_of_box_answers.blank?
+          @out_of_box_answers = {}
+        end
       end
     end
     @all_answers = @assignment.answers.reviewable
