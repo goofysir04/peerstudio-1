@@ -35,7 +35,6 @@
     <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
 
-    <% if !current_user.nil? and current_user.admin?  %>
     <% if user_signed_in? and current_user.admin? %>
     <li><a href="#out_of_box_answers" data-toggle="tab">Out of box answers</a></li>
     <% end %>
