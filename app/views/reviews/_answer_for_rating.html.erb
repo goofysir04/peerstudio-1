@@ -13,7 +13,7 @@
     <% unless @review.review_type.blank?%>
       <p><strong><%= @review.review_type.capitalize%> review.</strong></p>
     <% end %>
-    <p>Please answer honestly. Your feedback will be anonymous. How do you rate the following statements?</p>
+    <p>Please answer honestly. Your feedback will be kept anonymous. How do you rate the following statements?</p>
     <%= f.label :accurate_rating, "\"The reviewer accurately assessed my work on this assignment\"" %>
 
      <%= f.select :accurate_rating, options_for_select([["strongly disagree",1], ["disagree", 2], ["somewhat disagree",3], ["somewhat agree",4], ["agree",5],

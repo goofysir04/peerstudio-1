@@ -14,7 +14,7 @@ class AssignmentsController < ApplicationController
   def show
     if user_signed_in?
       @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
-      @my_reviews = Review.where(answer_id: @my_answers)
+      @my_reviews = Review.where(answer_id: @my_answers, active: true)
       @reviews_by_me = Review.where(user: current_user, active: true)
       @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
       unless @out_of_box_answers_with_count.blank?
