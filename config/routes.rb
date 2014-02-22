@@ -11,6 +11,7 @@ Humanmachine::Application.routes.draw do
     resources :answers, shallow: true
     member do 
       get 'stats'
+      get 'grades'
     end
     post 'create_typed_review' => 'reviews#create_with_type' 
   end

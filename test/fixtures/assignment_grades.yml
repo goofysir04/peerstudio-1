@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  assignment_id: 
+  user_id: 
+  rubric_item_id: 
+  grade_type: MyString
+
+two:
+  assignment_id: 
+  user_id: 
+  rubric_item_id: 
+  grade_type: MyString
