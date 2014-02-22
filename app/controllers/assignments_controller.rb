@@ -20,6 +20,9 @@ class AssignmentsController < ApplicationController
       unless @out_of_box_answers_with_count.blank?
         @out_of_box_answers = @out_of_box_answers_with_count.reject {|k,v| v < 2 }
       end
+      if @out_of_box_answers.blank?
+        @out_of_box_answers = {}
+      end
     end
     @all_answers = @assignment.answers.reviewable
     @starred_answers = @assignment.answers.reviewable.where(starred: true)
