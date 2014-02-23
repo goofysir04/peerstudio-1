@@ -5,6 +5,7 @@
   </small>
 </p>
 </h1>
+<%= render partial: "task_box", locals: {task_list: @assignment.task_list, answers: @my_answers} %>
 <div id="assignment_description">
   <%= sanitize @assignment.description %>
 </div>
@@ -14,7 +15,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Rubric item</th><th>Max score</th><th>Submit answer for feedback by</th> 
+        <th>Rubric item</th><th>Max score</th><th>Submit feedback by</th> 
       </tr>
     </thead>
     <tbody>
@@ -34,11 +35,10 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
     <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
-
     <% if user_signed_in? and current_user.admin? %>
     <li><a href="#out_of_box_answers" data-toggle="tab">Out of box answers</a></li>
     <% end %>
-    <% if @assignment.due_at < Time.now %>
+    <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
     <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
     <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
     <% end %>
@@ -151,14 +151,14 @@
           <%= render partial: "reviews/answers_with_reviews", locals: {answers: Answer.find(@out_of_box_answers.keys)} %>
         </div>
       <% end %>
-    <% if @assignment.due_at < Time.now %>
-    <div id="all_answers" class="tab-pane">
-      <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
-    </div>
-    <div id="starred_answers" class="tab-pane">
-      <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
-    </div>
-    <% end %>
+      <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
+      <div id="all_answers" class="tab-pane">
+        <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
+      </div>
+      <div id="starred_answers" class="tab-pane">
+        <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
+      </div>
+      <% end %>
   </div>
 </div>
 

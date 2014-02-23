@@ -60,6 +60,63 @@
       <%= f.text_field :milestone_list %>
     </div>
   </div>
+  <%= f.fields_for :taggings do |t| %>
+
+    <legend></legend>
+    <div class="edit_section_title">
+      <h4><%= Tag.find(t.object.tag_id).name %></h4>
+    </div>
+    
+    <div class="control-group">
+      <div class="control-label">
+        <%= t.label :open_at %>
+      </div>
+      <div class="controls">
+        <div class="input-append date datetime-picker">
+          <%= t.text_field :open_at, :value => t.object.open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+        When should students start working on this milestone?
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= t.label :close_at %>
+      </div>
+      <div class="controls">
+        <div class="input-append date datetime-picker">
+          <%= t.text_field :close_at, :value => t.object.close_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+        When should students submit this milestone?
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= t.label :review_open_at %>
+      </div>
+      <div class="controls">
+        <div class="input-append date datetime-picker">
+          <%= t.text_field :review_open_at, :value => t.object.review_open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+        When should students start reviewing this milestone?
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= t.label :review_close_at %>
+      </div>
+      <div class="controls">
+        <div class="input-append date datetime-picker">
+          <%= t.text_field :review_close_at, :value => t.object.review_close_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+        When should students finish reviewing this milestone?
+      </div>
+    </div>
+
+  <% end %>
 <section class="project_edit_section">
     <div class="edit_section_title">
       <h3>Rubric items
