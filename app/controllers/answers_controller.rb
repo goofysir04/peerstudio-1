@@ -13,7 +13,10 @@ class AnswersController < ApplicationController
   # GET /answers/1
   # GET /answers/1.json
   def show
-    redirect_to root_path
+    respond_to do |format|
+      format.html {redirect_to root_path}
+      format.text {render text: @answer.response}
+    end
   end
 
   # GET /answers/new
