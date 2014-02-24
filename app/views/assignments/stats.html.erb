@@ -13,7 +13,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% grades = (AssignmentGrade.where(assignment: @assignment).where("rubric_item_id is not NULL").group(:user_id).sum(:credit)) 
+		<% grades = (AssignmentGrade.where(assignment: @assignment).group(:user_id).sum(:credit)) 
 			grades = Hash[*grades.map {|user, grade| [user,grade.round]}.flatten] 
 
 			%>
