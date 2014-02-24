@@ -5,12 +5,18 @@
 			<th>Reviews performed: Exchange</th>
 			<th>Paired</th>
 			<th>Final</th>
+
 			<% @milestones.each do |m| %>
 				<th><%= m %> </th>
 			<% end %>
+			<th>Grade</th>
 		</tr>
 	</thead>
 	<tbody>
+		<% grades = (AssignmentGrade.where(assignment: @assignment).where("rubric_item_id is not NULL").group(:user_id).sum(:credit)) 
+			grades = Hash[*grades.map {|user, grade| [user,grade.round]}.flatten] 
+
+			%>
 		<% @students.order('name').each do |s| %>
 			<tr>
 				<td><%= s.name %> (<%= s.email %>)</td>
@@ -48,9 +54,12 @@
 						<% end %>
 					<% end %>
 				</td>
-				<% end %>					
+				<% end %>
+				<td><%= grades[s.id] %></td>
 			</tr>
 		<% end %>
 	</tbody>
 </table>
+
+
 

@@ -89,6 +89,9 @@ class AssignmentsController < ApplicationController
     @milestones = @assignment.milestones
   end
 
+  def grade
+    
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_assignment
