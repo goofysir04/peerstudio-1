@@ -1,5 +1,5 @@
 class AssignmentsController < ApplicationController
-  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats]
+  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
   before_filter :authenticate_user_is_admin!, only: [:stats]
@@ -89,8 +89,17 @@ class AssignmentsController < ApplicationController
     @milestones = @assignment.milestones
   end
 
-  def grade
-    
+  def grades
+    @grades = AssignmentGrade.where(assignment: @assignment, user: current_user)
+  end
+
+  def update_grade
+    @grade = AssignmentGrade.find(params[:grade_id])
+    if(@grade.update(params[:assignment_grade]))
+      redirect_to grades_assignment_path(@grade.assignment)
+    else
+      redirect_to grades_assignment_path(@grade.assignment), alert: "Could not update grade"
+    end
   end
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -105,6 +114,8 @@ class AssignmentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def assignment_params
       params.permit(:course_id)
+      params.permit(:grade_id)
+      params.permit(:assignment_grade => [:credit])
       params.require(:assignment).permit(:title, :description, :milestone_list, :due_at, :open_at, :rubric_items_attributes=>[
         :id, :title, :short_title, :open_at, :ends_at, :final_only,
         :min, :max, :min_label, :max_label, :_destroy], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user

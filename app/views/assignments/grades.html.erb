@@ -1,0 +1,25 @@
+<h1>Grades for <%=link_to @assignment.title, @assignment %></h1>
+<p>Your grade is the rounded sum of grades for each attribute on this assignment. You also earn credit for performing reviews.</p>
+<table class="table">
+	<thead>
+		<th>Component</th>
+		<th>Your grade</th>
+	</thead>
+
+	<tbody>
+
+		<% @grades.each do |grade| %>
+			<tr>
+				<td><%= grade.grade_type %></td>
+				<td>
+					<% if true_user.admin? and false %>
+						<%= form_for grade, :url=>update_grade_assignment_path(@assignment, grade), method: :post do |f| %><%= f.number_field :credit %> <%= f.submit "Update grade" %><%end %>
+					<% else %>
+						<%= grade.credit %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+		<tr><td><strong>Total</strong></td><td><%= (@grades.inject(0) { |acc, grade| acc+grade.credit }).round %></td>
+	</tbody>
+</table>
