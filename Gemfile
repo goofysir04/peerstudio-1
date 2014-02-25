@@ -84,6 +84,8 @@ gem 'airbrake'
 gem "paperclip"
 # gem "ckeditor", :github => "galetahub/ckeditor"
 gem "aws-sdk"
+gem 's3_direct_upload' # direct upload (CORS) form helper and assets
+
 
 gem 'rmagick', '2.13.2'
 

@@ -48,9 +48,9 @@
 					<td style="background-color: rgb(244,109,67);">Not Submitted</td>
 					<% else %>
 						<% if answer.active_reviews.count == 0 %>
-							<td style="background-color: rgb(255,255,191);"><%= link_to "Submitted", new_answer_review_path(answer)%>; No reviews</td>
+							<td style="background-color: rgb(255,255,191);"><%= link_to "Submitted", answer_reviews_path(answer)%>; No reviews</td>
 						<% else %>
-							<td style="background-color: #8cc665;"><%= link_to "Submitted", new_answer_review_path(answer)%>; <%= answer.active_reviews.count %> reviews</td>
+							<td style="background-color: #8cc665;"><%= link_to "Submitted", answer_reviews_path(answer)%>; <%= answer.active_reviews.count %> reviews</td>
 						<% end %>
 					<% end %>
 				</td>
