@@ -64,7 +64,7 @@ class Answer < ActiveRecord::Base
   end
 
   def revisions_are_valid
-    other_answers_tagged_like_this = Answer.where(assignment: self.assignment, user: self.user).where('answers.id <> ?', self.id).tagged_with(self.revision_list)
+    other_answers_tagged_like_this = Answer.where(assignment: self.assignment, user: self.user, active: true).where('answers.id <> ?', self.id).tagged_with(self.revision_list)
     if other_answers_tagged_like_this.count > 0
       errors.add :revision_list, "You already have a draft that is #{self.revision_list} (#{other_answers_tagged_like_this.first.id})"
     end
