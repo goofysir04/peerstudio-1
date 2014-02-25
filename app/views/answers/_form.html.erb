@@ -73,12 +73,7 @@
     </div>
 
     <div class="field span8">
-      <table>
-        <tr>
-          <td><%= f.label :revision_list, "<strong>Draft type</strong>&nbsp;".html_safe %></td>
-          <td><%= f.select :revision_list, @answer.assignment.milestone_list %></td>
-        </tr>
-      </table>
+      <legend><%= @answer.revision_name %></legend>
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", data: {provide: "markdown"}%>
       <div class="actions">
         <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 

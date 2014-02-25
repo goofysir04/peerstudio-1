@@ -25,6 +25,8 @@ class AnswersController < ApplicationController
     @answer.assignment = @assignment
     @answer.active = false
     @answer.user = current_user
+    draft_type = params[:draft_type].nil? ? nil : params.require(:draft_type)
+    @answer.revision_list = draft_type
     if @answer.save 
       redirect_to edit_answer_path(@answer)
     else
@@ -79,9 +81,10 @@ class AnswersController < ApplicationController
   # DELETE /answers/1
   # DELETE /answers/1.json
   def destroy
+    @assignment = @answer.assignment
     @answer.destroy
     respond_to do |format|
-      format.html { redirect_to answers_url }
+      format.html { redirect_to @assignment }
       format.json { head :no_content }
     end
   end

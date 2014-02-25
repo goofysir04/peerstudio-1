@@ -77,10 +77,11 @@
               <% end %>
             </tbody>
           </table>
-          <% if @my_answers.empty? %>
-            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create your first draft", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+          <% next_due_milestone = @assignment.task_list.detect {|task| task[:open_at] < Time.now and task[:close_at] > Time.now} %>
+          <% if !next_due_milestone.blank? and @my_answers.tagged_with(next_due_milestone[:name]).blank? %>
+            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create your #{next_due_milestone[:name]}", new_assignment_answer_path(@assignment, draft_type: next_due_milestone[:name]), :class=>"btn btn-success" %></p>
           <% else %>
-            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create a new draft", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+            <p  style="text-align:center; padding:10px 0 10px 0">Update your draft above</p>
           <% end %>
         <% end %>
       </div>

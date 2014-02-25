@@ -1,6 +1,6 @@
 <strong>Attached files</strong><br/>
 <% answer.versions.each do |version| %>
-	<legend><%= version.revision_name %></legend>
+	<legend><small><%= version.revision_name %></small></legend>
 	<div <%= "class=shaded" if version==answer %>>
 
 	  <% version.attached_assets.each do |a| %>

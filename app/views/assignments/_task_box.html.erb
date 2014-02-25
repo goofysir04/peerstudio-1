@@ -12,7 +12,7 @@
 								<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
 							<% end %>
 						<% else %>
-							<%= link_to(new_assignment_answer_path(@assignment)) do %>
+							<%= link_to(new_assignment_answer_path(@assignment, draft_type: task[:name])) do %>
 								<strong><%= task[:name] %></strong>
 								<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
 								<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
