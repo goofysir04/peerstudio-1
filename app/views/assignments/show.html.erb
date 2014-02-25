@@ -110,8 +110,8 @@
                 <% else %>
                   <td><span class="label label-warning">Unrated</span></td>
                 <% end %>
-                <td><%= link_to "Read", answer_reviews_path(review.answer), class:"btn" %>
-                <%= link_to "Rate", rate_review_path(review), class:"btn btn-primary" %>
+                <td>
+                <%= link_to "Read and Rate", rate_review_path(review), class:"btn btn-primary" %>
               </td>
               </tr>
               <% end %> 
