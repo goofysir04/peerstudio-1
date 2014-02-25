@@ -90,12 +90,17 @@ class AssignmentsController < ApplicationController
   end
 
   def grades
-    @grades = AssignmentGrade.where(assignment: @assignment, user: current_user)
+    if current_user.admin? 
+      @permitted_user = params[:user].nil? ? current_user : User.find(params.require(:user))
+    else
+      @permitted_user = current_user
+    end
+    @grades = AssignmentGrade.where(assignment: @assignment, user: @permitted_user)
   end
 
   def update_grade
     @grade = AssignmentGrade.find(params[:grade_id])
-    if(@grade.update(params[:assignment_grade]))
+    if(@grade.update(params.require(:assignment_grade).permit(:credit,:grade_type)))
       redirect_to grades_assignment_path(@grade.assignment)
     else
       redirect_to grades_assignment_path(@grade.assignment), alert: "Could not update grade"

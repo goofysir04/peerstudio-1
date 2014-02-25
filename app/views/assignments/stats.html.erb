@@ -55,7 +55,7 @@
 					<% end %>
 				</td>
 				<% end %>
-				<td><%= grades[s.id] %></td>
+				<td><%= grades[s.id] %> <%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
 			</tr>
 		<% end %>
 	</tbody>
