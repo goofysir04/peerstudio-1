@@ -30,8 +30,9 @@
   </tbody>
   </table>
 </div>
-
+<% if @assignment.grades_released? %>
 <h3><%= link_to "Check your grade", grades_assignment_path(@assignment) %></h3>
+<% end %>
 <div id="assignment_answers">
   <ul class="nav nav-tabs">
     <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
@@ -169,7 +170,13 @@
   <h3>For instructors only</h3>
 <p>
   <strong>This assignment opens at:</strong>
-  <%= @assignment.open_at %></p>
+  <%= @assignment.open_at %>
+</p>
+<% if @assignment.grades_released? %>
+<p>Grades have been released to students.</p>
+<% else %>
+<p>Grades are not visible to students.</p>
+<% end %>
 <%= link_to 'Edit', edit_assignment_path(@assignment) %> |
 <%= link_to 'Back', course_assignments_path(@assignment.course) %>
 </div>

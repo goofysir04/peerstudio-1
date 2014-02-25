@@ -2,7 +2,7 @@ class AssignmentsController < ApplicationController
   before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
-  before_filter :authenticate_user_is_admin!, only: [:stats]
+  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade]
   # GET /assignments
   # GET /assignments.json
   def index
@@ -90,9 +90,11 @@ class AssignmentsController < ApplicationController
   end
 
   def grades
+
     if current_user.admin? 
       @permitted_user = params[:user].nil? ? current_user : User.find(params.require(:user))
     else
+      redirect_to @assignment and return unless @assignment.grades_released?
       @permitted_user = current_user
     end
     @grades = AssignmentGrade.where(assignment: @assignment, user: @permitted_user)
@@ -101,9 +103,9 @@ class AssignmentsController < ApplicationController
   def update_grade
     @grade = AssignmentGrade.find(params[:grade_id])
     if(@grade.update(params.require(:assignment_grade).permit(:credit,:grade_type)))
-      redirect_to grades_assignment_path(@grade.assignment)
+      redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), notice: "Grade updated"
     else
-      redirect_to grades_assignment_path(@grade.assignment), alert: "Could not update grade"
+      redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), alert: "Could not update grade"
     end
   end
   private
