@@ -12,6 +12,7 @@ Humanmachine::Application.routes.draw do
     member do 
       get 'stats'
       get 'grades'
+      get 'export_grades'
       post 'update_grade/:grade_id' => "assignments#update_grade", as: :update_grade
     end
     post 'create_typed_review' => 'reviews#create_with_type' 

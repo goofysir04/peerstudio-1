@@ -1,8 +1,9 @@
 class AssignmentsController < ApplicationController
-  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades]
+  # include Humanize
+  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades, :export_grades]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
-  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade]
+  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
   # GET /assignments
   # GET /assignments.json
   def index
@@ -90,7 +91,6 @@ class AssignmentsController < ApplicationController
   end
 
   def grades
-
     if current_user.admin? 
       @permitted_user = params[:user].nil? ? current_user : User.find(params.require(:user))
     else
@@ -106,6 +106,12 @@ class AssignmentsController < ApplicationController
       redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), notice: "Grade updated"
     else
       redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), alert: "Could not update grade"
+    end
+  end
+
+  def export_grades
+    respond_to do |format|
+      format.csv { send_data AssignmentGrade.where(assignment_id: @assignment.id).export_to_csv, :filename => "gradebook.csv"}
     end
   end
   private
