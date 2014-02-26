@@ -22,6 +22,7 @@
 //= require jquery.jcarousel.min
 //= require bootstrap-datetimepicker
 //= require bootstrap-markdown-custom
+//= require jquery_nested_form
 
 //Disabled
 //= #require rails.validations

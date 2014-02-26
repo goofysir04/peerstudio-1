@@ -99,6 +99,9 @@ gem 'will_paginate', '~> 3.0'
 #For versioning in submissions
 gem 'acts-as-taggable-on'
 
+#For easy nested forms
+gem 'nested_form'
+
 #for pushing grades to coursera
 # gem "always_verify_ssl_certificates"
 

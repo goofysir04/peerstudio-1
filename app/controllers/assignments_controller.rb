@@ -32,12 +32,12 @@ class AssignmentsController < ApplicationController
   def new
     #Course id is set in callback
     @assignment = Assignment.new(:course=>@course)
-    2.times do @assignment.rubric_items.build() end
+    #2.times do @assignment.rubric_items.build() end
   end
 
   # GET /assignments/1/edit
   def edit
-    2.times do @assignment.rubric_items.build() end
+    #2.times do @assignment.rubric_items.build() end
   end
 
   # POST /assignments
@@ -125,6 +125,6 @@ class AssignmentsController < ApplicationController
       params.permit(:assignment_grade => [:credit])
       params.require(:assignment).permit(:title, :description, :milestone_list, :due_at, :open_at, :rubric_items_attributes=>[
         :id, :title, :short_title, :open_at, :ends_at, :final_only,
-        :min, :max, :min_label, :max_label, :_destroy], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
+        :min, :max, :min_label, :max_label, :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
     end
 end

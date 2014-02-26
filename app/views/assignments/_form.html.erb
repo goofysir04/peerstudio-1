@@ -1,4 +1,4 @@
-<%= form_for [@course,@assignment], :html=>{:class => "form-horizontal"} do |f| %>
+<%= nested_form_for [@course,@assignment], :html=>{:class => "form-horizontal"} do |f| %>
   <% if @assignment.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
@@ -125,7 +125,6 @@
     </div>
   <%= f.fields_for :rubric_items do |r| %>
 
-
     <div class="control-group">
       <div class="control-label">
         <%= r.label :short_title %>
@@ -188,7 +187,7 @@
     <div class="control-group">
       <div class="control-label">
         <%= r.label :min do %>
-        <strong>Min Score</strong>
+        Min Score
         <% end %>
       </div>
       <div class="controls">
@@ -209,7 +208,7 @@
     <div class="control-group">
       <div class="control-label">
         <%= r.label :max do %>
-        <strong>Max Score</strong>
+        Max Score
         <% end %>
       </div>
       <div class="controls">
@@ -230,15 +229,37 @@
 
     <div class="control-group">
       <div class="control-label">
-        <%= r.label :_destroy, "Remove this rubric item" %>
+        <strong>Checkboxes</strong>
       </div>
       <div class="controls">
-        <%= r.check_box :_destroy %>
+        <table id="checkboxes">
+          <tr class="header">
+            <td>Checkbox title</td>
+            <td>Score</td>
+            <td>&nbsp;</td>
+          </tr>
+          <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
+          <tr class="fields">
+            <td><%= a.text_field :description %></td>
+            <td><%= a.text_field :score %></td>
+            <td><%= a.link_to_remove "Remove this checkbox" %></td>
+          </tr>
+          <% end %>
+        </table>
+        <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes" } %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <%= r.link_to_remove "Remove this rubric item" %>
       </div>
     </div>
 
     <legend></legend>
   <% end %>
+  <%= f.link_to_add "Add a rubric item", :rubric_items %>
+  <legend></legend>
 </section>
   <div class="actions">
     <%= f.submit class: "btn btn-primary" %>
