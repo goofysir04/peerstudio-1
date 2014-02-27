@@ -15,9 +15,17 @@
       No review.
       <% else %>
         <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-          <% f.answer_attributes.each do |a_attr| %>
-            <p><%= a_attr.description %></p>
+          <table>
+          <% answer.assignment.rubric_items.find(r.id).answer_attributes.each do |a_attr| %>
+            <tr>
+            <% if f.answer_attributes.include?(a_attr) %>
+              <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;" checked></td><td style="vertical-align:top;"><%= a_attr.description %></td>
+            <% else %>
+              <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><b><%= a_attr.description %></b></td>
+            <% end %>
+            </tr>
           <% end %>
+          </table>
           <% unless f.like_feedback.blank? %>
             <p><strong>Reviewer <%= i %></strong> <%= f.like_feedback %></p>
             <!-- <p><strong>Wish: </strong><%= f.wish_feedback %></p> -->
