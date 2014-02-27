@@ -98,17 +98,16 @@ class ReviewsController < ApplicationController
     end
     redirect_to assignment_path(params[:assignment_id]), alert: "You can't review yourself!" and return if @submitter==current_user 
     
-    
+    @reviewed_already = Review.where(user: current_user, active: true)
+    @reviewed_answers = @reviewed_already.map {|r| r.answer_id}
+      # raise @reviewed_answers.inspect
+    @reviewed_answers << 0 if @reviewed_answers.blank?
     case review_type
     when "exchange"
       @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, user_id: @submitter.id, assignment_id: params[:assignment_id])
     when "paired"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:assignment_id]).where("user_id NOT in (?)", [@submitter.id, current_user.id])
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:assignment_id]).where("user_id NOT in (?) and answers.id NOT in (?)", [@submitter.id, current_user.id], @reviewed_answers)
     when "final"
-      @reviewed_already = Review.where(user: current_user, active: true)
-      @reviewed_answers = @reviewed_already.map {|r| r.answer_id}
-      # raise @reviewed_answers.inspect
-      @reviewed_answers << 0 if @reviewed_answers.blank?
       @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:assignment_id]).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
     else
       redirect_to assignment_path(params[:assignment_id]), alert: "That review type has not opened yet." and return 
