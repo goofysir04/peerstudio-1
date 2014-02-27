@@ -137,9 +137,7 @@
                 <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                 <td><%= review.review_type.capitalize unless review.review_type.nil? %> review</td>
                 <td>
-                  <% if review.review_type == "final" %>
                     <%= link_to "Edit", edit_review_path(review), class:"btn" %>
-                  <% end %>
                 </td>
               </tr>
               <% end %> 
