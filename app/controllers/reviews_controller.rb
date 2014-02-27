@@ -80,9 +80,10 @@ class ReviewsController < ApplicationController
   # DELETE /reviews/1
   # DELETE /reviews/1.json
   def destroy
+    @assignment = @review.assignment
     @review.destroy
     respond_to do |format|
-      format.html { redirect_to reviews_url }
+      format.html { redirect_to @assignment }
       format.json { head :no_content }
     end
   end
@@ -100,15 +101,15 @@ class ReviewsController < ApplicationController
     
     case review_type
     when "exchange"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(user_id: @submitter.id, assignment_id: params[:assignment_id])
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, user_id: @submitter.id, assignment_id: params[:assignment_id])
     when "paired"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(assignment_id: params[:assignment_id]).where("user_id NOT in (?)", [@submitter.id, current_user.id])
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:assignment_id]).where("user_id NOT in (?)", [@submitter.id, current_user.id])
     when "final"
       @reviewed_already = Review.where(user: current_user, active: true)
       @reviewed_answers = @reviewed_already.map {|r| r.answer_id}
       # raise @reviewed_answers.inspect
       @reviewed_answers << 0 if @reviewed_answers.blank?
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(assignment_id: params[:assignment_id]).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:assignment_id]).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
     else
       redirect_to assignment_path(params[:assignment_id]), alert: "That review type has not opened yet." and return 
     end

@@ -1,8 +1,9 @@
 class AssignmentsController < ApplicationController
-  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades]
+  # include Humanize
+  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades, :export_grades]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
-  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade]
+  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
   # GET /assignments
   # GET /assignments.json
   def index
@@ -14,8 +15,8 @@ class AssignmentsController < ApplicationController
   def show
     if user_signed_in?
       @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
-      @my_reviews = Review.where(answer_id: @my_answers, active: true)
-      @reviews_by_me = Review.where(user: current_user, active: true)
+      @my_reviews = Review.where(answer_id: @my_answers, active: true, assignment_id: @assignment.id)
+      @reviews_by_me = Review.where(user: current_user, active: true, assignment_id: @assignment.id)
       @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
       unless @out_of_box_answers_with_count.blank?
         @out_of_box_answers = @out_of_box_answers_with_count.reject {|k,v| v < 2 }
@@ -89,7 +90,6 @@ class AssignmentsController < ApplicationController
   end
 
   def grades
-
     if current_user.admin? 
       @permitted_user = params[:user].nil? ? current_user : User.find(params.require(:user))
     else
@@ -105,6 +105,12 @@ class AssignmentsController < ApplicationController
       redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), notice: "Grade updated"
     else
       redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), alert: "Could not update grade"
+    end
+  end
+
+  def export_grades
+    respond_to do |format|
+      format.csv { send_data AssignmentGrade.where(assignment_id: @assignment.id).export_to_csv, :filename => "gradebook.csv"}
     end
   end
   private
