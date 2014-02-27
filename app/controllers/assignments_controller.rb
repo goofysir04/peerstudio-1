@@ -32,12 +32,11 @@ class AssignmentsController < ApplicationController
   def new
     #Course id is set in callback
     @assignment = Assignment.new(:course=>@course)
-    #2.times do @assignment.rubric_items.build() end
   end
 
   # GET /assignments/1/edit
   def edit
-    #2.times do @assignment.rubric_items.build() end
+    #noop
   end
 
   # POST /assignments
