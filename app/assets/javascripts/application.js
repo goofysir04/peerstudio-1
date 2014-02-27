@@ -22,6 +22,7 @@
 //= require jquery.jcarousel.min
 //= require bootstrap-datetimepicker
 //= require bootstrap-markdown-custom
+//= require s3_direct_upload
 
 //Disabled
 //= #require rails.validations
