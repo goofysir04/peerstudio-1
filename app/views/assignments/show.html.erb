@@ -137,7 +137,7 @@
                 <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                 <td><%= review.review_type.capitalize unless review.review_type.nil? %> review</td>
                 <td>
-                    <%= link_to "Edit", edit_review_path(review), class:"btn" %>
+                    <%= link_to "Edit", edit_review_path(review), class:"btn" %> <%= link_to 'Delete review', review, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                 </td>
               </tr>
               <% end %> 
