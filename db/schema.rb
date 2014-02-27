@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140222015857) do
+ActiveRecord::Schema.define(version: 20140227042724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20140222015857) do
     t.float    "predicted_score"
     t.float    "current_score"
     t.integer  "evaluations_wanted", default: 0
-    t.integer  "total_evaluations"
+    t.integer  "total_evaluations",  default: 0
     t.float    "confidence"
     t.datetime "created_at"
     t.datetime "updated_at"
