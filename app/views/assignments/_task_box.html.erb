@@ -2,11 +2,12 @@
 	<table cellspacing=0 class="task_box" style="width:100%">
 		<tr>
 		<% for task in task_list %>
+			<% task_answer = answers.tagged_with(task[:name]).first %>
 			<% unless task[:close_at].blank? %>
 				<td class="<%= 'completed_task' if task[:close_at] < Time.now %><%= 'current_task' if (task[:open_at] < Time.now and task[:close_at] > Time.now) %><%= 'future_task' if (task[:open_at] > Time.now and task[:close_at] > Time.now) %>">
 					<% if (task[:open_at] < Time.now and task[:close_at] > Time.now) %>
-						<% if !answers.blank? and answers.last.revision_name.to_s == task[:name] %>
-							<%= link_to(edit_answer_path(answers.last)) do %>
+						<% if !task_answer.blank? and task_answer.revision_name.to_s == task[:name] %>
+							<%= link_to(edit_answer_path(task_answer)) do %>
 								<strong><%= task[:name] %></strong>
 								<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
 								<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
@@ -19,9 +20,19 @@
 							<% end %>
 						<% end %>
 					<% else %>
-						<strong><%= task[:name] %></strong>
-						<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
-						<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
+						<% if !task_answer.blank? and task_answer.revision_name.to_s == task[:name] %>
+							<%= link_to(edit_answer_path(task_answer), confirm: "Are you sure? This draft is not currently open.") do %>
+								<strong><%= task[:name] %></strong>
+								<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
+								<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
+							<% end %>
+						<% else %>
+							<%= link_to(new_assignment_answer_path(@assignment, draft_type: task[:name])) do %>
+								<strong><%= task[:name] %></strong>
+								<br />due <%= (task[:close_at]).strftime "%b %e, %l:%M %p" %>
+								<br />(<%= "in " if task[:close_at] > Time.now %><%= distance_of_time_in_words task[:close_at], Time.now %><%= " ago" if task[:close_at] < Time.now %>)
+							<% end %>
+						<% end %>
 					<% end %>
 				</td>
 				<td class="<%= 'completed_task' if task[:review_close_at] < Time.now %><%= 'current_task' if (task[:review_open_at] < Time.now and task[:review_close_at] > Time.now) %><%= 'future_task' if (task[:review_open_at] > Time.now and task[:review_close_at] > Time.now) %>">
