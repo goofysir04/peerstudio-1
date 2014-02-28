@@ -87,7 +87,7 @@
       <div id="attachments">
         <%= render partial: "attachments", locals: {answer: @answer} %>
       </div>
-      <%= s3_uploader_form callback_url: upload_attachment_answer_path, id: "s3_uploader", acl: "private", callback_param: "direct_upload_url", max_file_size: 40.megabytes do %>
+      <%= s3_uploader_form callback_url: upload_attachment_answer_path(@answer), id: "s3_uploader", acl: "private", callback_param: "direct_upload_url", max_file_size: 40.megabytes do %>
         <%= file_field_tag :file, multiple: true %>
       <% end %>
 
@@ -99,11 +99,11 @@
       </div>
       </script>
       <%= f.fields_for :attached_assets do |aa| %>
-        <%= aa.hidden_field :direct_upload_url %>
+        
         <%= aa.hidden_field :asset_file_name %>
         <%= aa.hidden_field :asset_file_size %>
         <%= aa.hidden_field :asset_content_type %>
-        <%= aa.hidden_field :asset_file_path %>
+        
         <%= aa.submit "Upload" %>
       <% end %>
       <br/>
