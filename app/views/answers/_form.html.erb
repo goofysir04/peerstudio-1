@@ -84,30 +84,11 @@
 
         <% end %>
         </div>
-      <div id="attachments">
-        <%= render partial: "attachments", locals: {answer: @answer} %>
-      </div>
-      <%= s3_uploader_form callback_url: upload_attachment_answer_path(@answer), id: "s3_uploader", acl: "private", callback_param: "direct_upload_url", max_file_size: 40.megabytes do %>
-        <%= file_field_tag :file, multiple: true %>
-      <% end %>
+        
+        <div id="attachments">
+          <%= render partial: "attachments", locals: {answer: @answer} %>
+        </div>
 
-      <div id="uploads_container"></div>
-      <script id="template-upload" type="text/x-tmpl">
-      <div id="upload_{%=o.unique_id%}" class="upload">
-        <h5>{%=o.name%}</h5>
-        <div class="progress progress-striped active"><div class="bar" style="width: 0%"></div></div>
-      </div>
-      </script>
-      <%= f.fields_for :attached_assets do |aa| %>
-        
-        <%= aa.hidden_field :asset_file_name %>
-        <%= aa.hidden_field :asset_file_size %>
-        <%= aa.hidden_field :asset_content_type %>
-        
-        <%= aa.submit "Upload" %>
-      <% end %>
-      <br/>
-        
       </div>
     </div>
   </div>
@@ -144,3 +125,26 @@
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
 <% end %>
+
+
+
+      <%= s3_uploader_form callback_url: upload_attachment_answer_path(@answer), id: "s3_uploader", acl: "private", callback_param: "direct_upload_url", max_file_size: 40.megabytes do %>
+        <%= file_field_tag :file, multiple: false %>
+        <%= submit_tag %>
+      <% end %>
+
+      <div id="uploads_container"></div>
+      <script id="template-upload" type="text/x-tmpl">
+      <div id="upload_{%=o.unique_id%}" class="upload">
+        <h5>{%=o.name%}</h5>
+        <div class="progress progress-striped active"><div class="bar" style="width: 0%"></div></div>
+      </div>
+      </script>
+      <%= form_for :attached_assets do |aa| %>
+        
+        <%= aa.hidden_field :asset_file_name %>
+        <%= aa.hidden_field :asset_file_size %>
+        <%= aa.hidden_field :asset_content_type %>
+        
+        <%= aa.submit "Upload" %>
+      <% end %>
