@@ -227,17 +227,19 @@ label.required {
   border-bottom-right-radius:10px;
 }
 
-.completed_task {
+.completed_task, .completed_task a {
   background-color: #d9edf7;
+  color: #333333;
 }
 
-.current_task {
+.current_task, .current_task a {
   background-color: #3a87ad; 
   color: #ffffff;
 }
 
-.future_task {
+.future_task, .future_task a {
   background-color: #efefef;
+  color: #333333;
 }
 
 .task_box a {
@@ -245,5 +247,4 @@ label.required {
   width: 100%; 
   height: 100%;
   text-decoration: none;
-  color: #ffffff;
 }
