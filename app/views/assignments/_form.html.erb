@@ -1,4 +1,4 @@
-<%= form_for [@course,@assignment], :html=>{:class => "form-horizontal"} do |f| %>
+<%= nested_form_for [@course,@assignment], :html=>{:class => "form-horizontal"} do |f| %>
   <% if @assignment.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
@@ -125,38 +125,12 @@
     </div>
   <%= f.fields_for :rubric_items do |r| %>
 
-
     <div class="control-group">
       <div class="control-label">
         <%= r.label :short_title %>
       </div>
       <div class="controls">
         <%= r.text_field :short_title %>
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= r.label :title do %>
-        <strong>A longer description</strong>
-        <small>Include examples of good and bad work</small>
-        <% end %>
-      </div>
-      <br/>
-      <div class="controls">
-        <%= r.text_area :title %>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <div class="control-label">
-        <%= r.label :common_wishes do %>
-        <strong>Common feedback for improvement</strong><br/>
-        <small>Often, students make similar errors. What common feedback would improve performance on this rubric?</small>
-        <% end %>
-      </div>
-      <br/>
-      <div class="controls">
-        <%= r.text_area :common_wishes, placeholder: "Spend more time observing, less writing; Be specific when you write...", style: "width: 300px"%>
       </div>
     </div>
     <div class="control-group">
@@ -186,53 +160,57 @@
     <div class="control-group">
       <div class="control-label">
         <%= r.label :min do %>
-        <strong>Min Score</strong>
+        Min Score
         <% end %>
       </div>
       <div class="controls">
         <%= r.text_field :min %>
       </div>
-      <div class="control-label">
-        <%= r.label :min_label do %>
-                  <strong class="required">Min label</strong><br/>
-          <small>What should we call the min score (e.g. no)</small>
-        <% end %>
-      </div>
-      <div class="controls">
-        <%= r.text_field :min_label %>
-      </div>
     </div>
     <div class="control-group">
       <div class="control-label">
         <%= r.label :max do %>
-        <strong>Max Score</strong>
+        Max Score
         <% end %>
       </div>
       <div class="controls">
         <%= r.text_field :max %>
       </div>
-      <div class="control-label">
-        <%= r.label :max_label do %>
-          <strong class="required">Max label</strong><br/>
-          <small>What should we call the max score (e.g. yes)</small>
-        <% end %>
-      </div>
-      <div class="controls">
-        <%= r.text_field :max_label %>
-      </div>
     </div>
 
     <div class="control-group">
       <div class="control-label">
-        <%= r.label :_destroy, "Remove this rubric item" %>
+        <strong>Checkboxes</strong>
       </div>
       <div class="controls">
-        <%= r.check_box :_destroy %>
+        <table id="checkboxes">
+          <tr class="header">
+            <td>Checkbox title</td>
+            <td>Score</td>
+            <td>&nbsp;</td>
+          </tr>
+          <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
+          <tr class="fields">
+            <td><%= a.text_field :description %></td>
+            <td><%= a.text_field :score %></td>
+            <td><%= a.link_to_remove "Remove this checkbox" %></td>
+          </tr>
+          <% end %>
+        </table>
+        <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes" } %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <%= r.link_to_remove "Remove this rubric item" %>
       </div>
     </div>
 
     <legend></legend>
   <% end %>
+  <%= f.link_to_add "Add a rubric item", :rubric_items %>
+  <legend></legend>
 </section>
   <div class="actions">
     <%= f.submit class: "btn btn-primary" %>
