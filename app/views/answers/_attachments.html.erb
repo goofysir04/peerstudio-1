@@ -5,7 +5,7 @@
 
 	  <% version.attached_assets.each do |a| %>
 	    <% if !a.asset.content_type.blank? and a.asset.content_type.include? "image" %>
-	      <%=image_tag a.asset.url :thumb %>
+	      <%=image_tag (a.asset.url :original), width: "200px", height: "200px" %>
 	    <% else %>
 	      <strong><a href="<%=a.asset.url %>" target="_blank"%><%= a.asset.original_filename %></a></strong>
 	    <% end %>
