@@ -118,8 +118,6 @@ class ReviewsController < ApplicationController
     end
 
     @answer = @answers.order("(pending_reviews + total_evaluations) ASC").first
-
-    @answer.increment!(:pending_reviews)
     @review = create_review_for_answer(@answer, params[:typed_review][:type])
 
     if review_type == "paired"
@@ -184,7 +182,7 @@ class ReviewsController < ApplicationController
       #else
       pending_reviews = Review.where(user: current_user, active: false)
       pending_reviews.each do |r|
-        if(r.answer.assignment_id == answer.assignment_id)
+        if(r.answer.assignment_id == answer.assignment_id and r.review_type==type)
           #return the first pending review from this student
           return r
         end
@@ -197,7 +195,7 @@ class ReviewsController < ApplicationController
       answer.assignment.rubric_items.each do |item|
         review.feedback_items.build(rubric_item: item)
       end
-
+      review.answer.increment!(:pending_reviews)
       review
     end
 end
