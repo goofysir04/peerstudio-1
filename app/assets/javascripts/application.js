@@ -23,6 +23,7 @@
 //= require bootstrap-datetimepicker
 //= require bootstrap-markdown-custom
 //= require jquery_nested_form
+//= require s3_direct_upload
 
 //Disabled
 //= #require rails.validations

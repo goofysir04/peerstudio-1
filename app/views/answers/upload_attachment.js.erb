@@ -1,1 +1,2 @@
-<%= render partial: "attachments", locals: {answer: @answer} %>
+$(".pendingUpload").text("Upload complete")
+$("#attachments").html("<%= j render partial: "attachments", locals: {answer: @answer} %>")
