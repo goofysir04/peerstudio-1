@@ -87,7 +87,7 @@
         </div>
         <% end %>
         <%= s3_uploader_form callback_url: direct_upload_attachment_answer_path(@answer, format: "js"), id: "s3_uploader", acl: "public-read", callback_param: "direct_upload_url", max_file_size: 40.megabytes do %>
-          <strong>Upload attachment (Max size 40MB)</strong> <%= file_field_tag :file, multiple: false %><br/>
+          <strong>Upload attachment (Max size 20MB)</strong> <%= file_field_tag :file, multiple: false %><br/>
         <% end %>
 
         <div id="uploads_container"></div>
