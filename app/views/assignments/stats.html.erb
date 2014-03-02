@@ -43,7 +43,7 @@
 				<% end %>
 
 				<% @milestones.each do |m| %>
-				<% answer = @assignment.answers.where(user_id: s).tagged_with(m).first %>
+				<% answer = @assignment.answers.where(user_id: s, active: true).tagged_with(m).first %>
 					<% if answer.nil? %>
 					<td style="background-color: rgb(244,109,67);">Not Submitted</td>
 					<% else %>
