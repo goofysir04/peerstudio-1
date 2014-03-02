@@ -1,4 +1,4 @@
-<%= form_for([@assignment,@answer], remote: true) do |f| %>
+
   <% if @answer.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@answer.errors.count, "error") %> prohibited this answer from being saved:</h2>
@@ -73,6 +73,7 @@
     </div>
 
     <div class="field span8">
+      <%= form_for([@assignment,@answer], remote: true) do |f| %>
       <legend><%= @answer.revision_name %></legend>
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", data: {provide: "markdown"}%>
       <div class="actions">
@@ -84,44 +85,31 @@
 
         <% end %>
         </div>
-      <div id="attachments">
-        <%= render partial: "attachments", locals: {answer: @answer} %>
-      </div>
-      <button class="upload btn">Attach a file</button> Recommended formats: pdf, text (.txt), images (.jpg, .png) Max size: 10MB<span id="attachment_progress" style="font-style: italic; display:none;">Uploading attachment...</span><br/>
-        
+        <% end %>
+        <%= s3_uploader_form callback_url: direct_upload_attachment_answer_path(@answer, format: "js"), id: "s3_uploader", acl: "public-read", callback_param: "direct_upload_url", max_file_size: 40.megabytes do %>
+          <strong>Upload attachment (Max size 40MB)</strong> <%= file_field_tag :file, multiple: false %><br/>
+        <% end %>
+
+        <div id="uploads_container"></div>
+        <script id="template-upload" type="text/x-tmpl">
+        <div id="upload_{%=o.unique_id%}" class="upload" style="width:200px;">
+          <h5>{%=o.name%}</h5>
+          <div class="progress"><div class="bar" id="progress_{%=o.unique_id%}" style="width: 0%"></div></div>
+        </div>
+        </script>
+        <div id="attachments">
+          <%= render partial: "attachments", locals: {answer: @answer} %>
+        </div>
+
       </div>
     </div>
   </div>
-  <% if current_user.admin? %>
-    <div class="field">
-      <%= f.label :question_id %><br>
-      <%= f.number_field :question_id %>
-    </div>
-    <div class="field">
-      <%= f.label :user_id %><br>
-      <%= f.number_field :user_id %>
-    </div>
-    <div class="field">
-      <%= f.label :predicted_score %><br>
-      <%= f.text_field :predicted_score %>
-    </div>
-    <div class="field">
-      <%= f.label :current_score %><br>
-      <%= f.text_field :current_score %>
-    </div>
-    <div class="field">
-      <%= f.label :evaluations_wanted %><br>
-      <%= f.number_field :evaluations_wanted %>
-    </div>
-    <div class="field">
-      <%= f.label :total_evaluations %><br>
-      <%= f.number_field :total_evaluations %>
-    </div>
-    <div class="field">
-      <%= f.label :confidence %><br>
-      <%= f.text_field :confidence %>
-    </div>
-  <% end -%>
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
-<% end %>
+
+
+
+
+
+
+

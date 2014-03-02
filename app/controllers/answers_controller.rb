@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, :autosubmit]
+  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, :autosubmit, :direct_upload_attachment]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
   # before_filter :authenticate_user_is_admin!
@@ -124,6 +124,27 @@ class AnswersController < ApplicationController
       respond_to do |format|
         format.html {redirect_to root_path}
         format.js {render layout: nil}
+      end
+    else
+      redirect_to root_path
+    end
+  end
+
+  def direct_upload_attachment
+    filepath = params.permit(:filepath)[:filepath]
+    filename = params.permit(:filename)[:filename]
+    mimetype = params.permit(:filetype)[:filetype]
+    @attachment = @answer.attached_assets.new(asset_file_name: filename, asset_content_type: mimetype)
+
+
+    
+
+    if @attachment.save! 
+      @attachment.move_file_in_place(filepath)
+      # raise @attachment.inspect
+      respond_to do |format|
+        format.html {redirect_to root_path}
+        format.js {render 'upload_attachment', layout: nil}
       end
     else
       redirect_to root_path
