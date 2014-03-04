@@ -1,4 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
+
+
   def create
       devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :name)}
       super
@@ -61,7 +63,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def impersonate
-    unless true_user.admin?
+    unless user_signed_in? and true_user.admin?
       redirect_to root_path
     else
       if params[:email].nil?
@@ -78,8 +80,9 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def upload
-    User.import(params[:file])
-    redirect_to root_path, :notice => "User file imported"
+    authenticate_user_is_admin!
+    # User.import(params[:file])
+    # redirect_to root_path, :notice => "User file imported"
   end
 
   def find_by_name
