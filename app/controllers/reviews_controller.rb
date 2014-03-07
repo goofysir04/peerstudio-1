@@ -62,7 +62,7 @@ class ReviewsController < ApplicationController
         @answer.increment!(:total_evaluations)
         @answer.decrement!(:pending_reviews) unless @answer.pending_reviews == 0
       end
-      if @review.update(review_params.merge(active: true))
+      if @review.update(review_params.merge(active: true, completed_at: Time.now))
         if @review.review_type=="final"
           format.html { redirect_to @review, notice: 'Review was successfully updated. Go to the assignment page to start a new review.' }
           format.json { head :no_content }
@@ -171,6 +171,7 @@ class ReviewsController < ApplicationController
         :concrete_rating,
         :recognize_rating,
         :other_rating_comments,
+        :reflection,
         :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
     end
 

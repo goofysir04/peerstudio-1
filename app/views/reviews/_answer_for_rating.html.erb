@@ -27,9 +27,11 @@
     <%= f.select :recognize_rating, options_for_select([["strongly disagree",1], ["disagree", 2], ["somewhat disagree",3], ["somewhat agree",4], ["agree",5],
      ["strongly agree", "6"]]), prompt: "Choose one" %>
     
-    <%=f.label :other_rating_comments, "Any other comments?" %>
+    <%=f.label :other_rating_comments, "Other comments?" %>
     <%= f.text_area :other_rating_comments %>
 
+    <%=f.label :reflection, "Reflect on the above review. How would you improve your own work?" %>
+    <%= f.text_area :reflection %>
     <%= f.submit "Submit and rate next review", class: "btn btn-primary" %>
     <%end %>
 
