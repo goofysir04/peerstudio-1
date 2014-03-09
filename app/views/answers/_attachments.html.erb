@@ -1,15 +1,27 @@
+<div id="attachments">
 <strong>Attached files</strong><br/>
 <% answer.versions.each do |version| %>
 	<legend><small><%= version.revision_name %></small></legend>
 	<div <%= "class=shaded" if version==answer %>>
 
 	  <% version.attached_assets.each do |a| %>
+	  	<% next if a.deleted? and (answer.user != current_user or current_user.admin?) %>
 	    <% if !a.asset.content_type.blank? and a.asset.content_type.include? "image" %>
 	      <%=image_tag (a.asset.url :original), width: "200px", height: "200px" %>
 	    <% else %>
 	      <strong><a href="<%=a.asset.url %>" target="_blank"%><%= a.asset.original_filename %></a></strong>
 	    <% end %>
-	    <input type="text" class="selectAll" value="<%=a.asset.url %>"> <br/>
+	    <input type="text" class="selectAll" value="<%=a.asset.url %>"> 
+
+	    <% if answer.user == current_user%>
+	    	<% if a.deleted? %>
+	    		<%= link_to "Undo delete", delete_attachment_answer_path(answer,{attachment_id: a.id}), remote: true, method: :delete %>
+    		<% else %>
+	    		<%= link_to "Delete", delete_attachment_answer_path(answer,{attachment_id: a.id}), remote: true, method: :delete %>
+    		<% end %>
+	    <% end %>
+	    <br/>
 	  <% end %>
 	</div>
 <% end -%>
+</div>

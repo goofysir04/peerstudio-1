@@ -97,9 +97,7 @@
           <div class="progress"><div class="bar" id="progress_{%=o.unique_id%}" style="width: 0%"></div></div>
         </div>
         </script>
-        <div id="attachments">
-          <%= render partial: "attachments", locals: {answer: @answer} %>
-        </div>
+        <%= render partial: "attachments", locals: {answer: @answer} %>
 
       </div>
     </div>
