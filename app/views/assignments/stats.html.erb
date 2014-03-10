@@ -14,6 +14,7 @@
 <table class="table">
 	<thead>
 		<tr>
+			<th>Fixed</th>
 			<th>Affected student</th>
 			<th>Action required</th>
 			<th>Actions</th>
@@ -23,15 +24,19 @@
 		<% @action_items.group_by(&:reason_code).each do |reason_code, items| %>
 			<% case reason_code 
 				 when "TOO_FEW_REVIEWS" %>
-				 <tr class="info"><td colspan="3">Too few reviews</td></tr>
+				 <tr class="info"><td colspan="4">Too few reviews</td></tr>
 				 <% when "BLANK_REVIEW" %>
-				 <tr class="info"><td colspan="3">Review was blank</td></tr>
+				 <tr class="info"><td colspan="4">Review was blank</td></tr>
 				 <% when "BAD_REVIEW" %>
-				 <tr class="info"><td colspan="3">Review was rated poorly</td></tr>
+				 <tr class="info"><td colspan="4">Review was rated poorly</td></tr>
 			<% end %>
 			<% items.each do |a| %>
 
-				<tr>
+				<tr <%= "class=faded" if a.resolved? %> id=<%= "action-item-#{a.id}"%>>
+					<td><%= check_box_tag 'resolved', a.resolved?, a.resolved?,
+							data: {remote: true, method: :post,
+									url: resolve_action_item_assignment_path(@assignment, item: a.id) }
+					 %></td>
 					<td><%= a.user.name %> (<%= a.user.email %>) </td>
 					
 						<% case a.reason_code 

@@ -1,0 +1,4 @@
+$("#action-item-<%=@action_item.id%>").removeClass("faded")
+<% if @action_item.resolved? %>
+	$("#action-item-<%=@action_item.id%>").addClass("faded")
+<% end %>
