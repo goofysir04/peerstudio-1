@@ -130,7 +130,8 @@ namespace :grading do
 							user: student, 
 							reason_code: "BLANK_REVIEW",
 							reason: "#{r.user.name} (#{r.user.email}) submitted a blank review. The current grade for submission is #{AssignmentGrade.where(user: student, assignment_id: assignment_id).sum(:credit).round}",
-							review: r
+							review: r,
+							answer: final_answer
 						)
 					end
 
@@ -147,7 +148,8 @@ namespace :grading do
 							user: student, 
 							reason_code: "BAD_REVIEW",
 							reason: "Review rated poorly.",
-							review: r
+							review: r,
+							answer: final_answer
 							)
     					end
 					end

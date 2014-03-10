@@ -1,27 +1,55 @@
+		<% grades = (AssignmentGrade.where(assignment: @assignment).group(:user_id).sum(:credit)) 
+			grades = Hash[*grades.map {|user, grade| [user,grade.round]}.flatten] 
+			review_by_type = Review.where(assignment_id: @assignment.id, active: true).group(:user_id, :review_type).select(:user_id, :review_type).count
+			review_by_answer = Review.where(assignment_id: @assignment.id, active: true).group(:answer_id).select(:answer_id).count
+
+			answers = {}
+			@milestones.each do |m|
+				answers[m] = Answer.tagged_with(m).where(active: true, assignment_id: @assignment.id).select('answers.id','user_id')
+			end
+
+			paired_reviews_copiloted = Review.where(assignment_id: @assignment.id, active: true, review_type: "paired").group(:copilot_email).count
+			%>
+
 <table class="table">
 	<thead>
 		<tr>
-			<th>Student</th>
+			<th>Affected student</th>
 			<th>Action required</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
-		<% @action_items.each do |a| %>
-			<tr>
-				<td><%= a.user.name %> (<%= a.user.email %>) </td>
-				<td><%= a.reason %></td>
-				<td>
-					<% case a.reason_code 
-					 when "TOO_FEW_REVIEWS" %>
-						<%= link_to "Submission", edit_answer_path(a.answer) %> | <%= link_to "Regrade", grades_assignment_path(@assignment, user: a.user_id) %>
-					<% when "BLANK_REVIEW" %>
-						<%= link_to "Edit review", edit_review_path(a.review) %>
-					<% when "BAD_REVIEW" %> 
-						<%= link_to "Edit review", rate_review_path(a.review) %>
-					<% end %>
-				</td>
-			</tr>
+		<% @action_items.group_by(&:reason_code).each do |reason_code, items| %>
+			<% case reason_code 
+				 when "TOO_FEW_REVIEWS" %>
+				 <tr class="info"><td colspan="3">Too few reviews</td></tr>
+				 <% when "BLANK_REVIEW" %>
+				 <tr class="info"><td colspan="3">Review was blank</td></tr>
+				 <% when "BAD_REVIEW" %>
+				 <tr class="info"><td colspan="3">Review was rated poorly</td></tr>
+			<% end %>
+			<% items.each do |a| %>
+
+				<tr>
+					<td><%= a.user.name %> (<%= a.user.email %>) </td>
+					
+						<% case a.reason_code 
+						 when "TOO_FEW_REVIEWS" %>
+						 <td><%= a.reason %></td>
+						 <td>
+							<%= link_to "Submission", edit_answer_path(a.answer) %> | <%= link_to "Regrade", grades_assignment_path(@assignment, user: a.user_id) %>
+						 </td>
+						<% when "BLANK_REVIEW" %>
+							<td>Review by <%= a.review.user.name %> (<%= a.review.user.email %>). This assignment has a total of <%= review_by_answer[a.answer.id]%> reviews. </td>
+							<td><%= link_to "Edit review", edit_review_path(a.review) %></td>
+						<% when "BAD_REVIEW" %> 
+							<td><p>Review by <%= a.review.user.name %> (<%= a.review.user.email %>).</p> <p>The reviewed student wrote: <%= truncate a.review.other_rating_comments,:length => 200, :separator => ' ' %></p></td>
+							<td><%= link_to "See/Rate review", rate_review_path(a.review) %></td>
+						<% end %>
+					</td>
+				</tr>
+			<% end %>
 		<% end %>
 	</tbody>
 </table>
@@ -41,18 +69,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% grades = (AssignmentGrade.where(assignment: @assignment).group(:user_id).sum(:credit)) 
-			grades = Hash[*grades.map {|user, grade| [user,grade.round]}.flatten] 
-			review_by_type = Review.where(assignment_id: @assignment.id, active: true).group(:user_id, :review_type).select(:user_id, :review_type).count
-			review_by_answer = Review.where(assignment_id: @assignment.id, active: true).group(:answer_id).select(:answer_id).count
 
-			answers = {}
-			@milestones.each do |m|
-				answers[m] = Answer.tagged_with(m).where(active: true, assignment_id: @assignment.id).select('answers.id','user_id')
-			end
-
-			paired_reviews_copiloted = Review.where(assignment_id: @assignment.id, active: true, review_type: "paired").group(:copilot_email).count
-			%>
 		<% @students.order('name').each do |s| %>
 			<tr>
 				<td><%= s.name %> (<%= s.email %>)</td>
