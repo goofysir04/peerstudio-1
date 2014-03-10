@@ -104,6 +104,9 @@ gem 'acts-as-taggable-on'
 #For easy nested forms
 gem 'nested_form'
 
+gem 'newrelic_rpm'
+
+
 #for pushing grades to coursera
 # gem "always_verify_ssl_certificates"
 
