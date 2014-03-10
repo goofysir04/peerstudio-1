@@ -71,7 +71,7 @@ namespace :grading do
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
 				assignment.rubric_items.each do |rubric|
 					rubric.answer_attributes.each do |answer_attribute|
-						marked_count = swer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+						marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
 						attribute_credit = (if final_reviews.count >= 3 
 											 marked_count >= 2 ? answer_attribute.score : 0
 											elsif final_reviews.count > 0 and final_reviews.count < 3
