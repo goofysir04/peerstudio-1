@@ -11,6 +11,8 @@
 			paired_reviews_copiloted = Review.where(assignment_id: @assignment.id, active: true, review_type: "paired").group(:copilot_email).count
 			%>
 
+<h2>What needs your attention?</h2>
+
 <table class="table">
 	<thead>
 		<tr>
@@ -59,6 +61,7 @@
 	</tbody>
 </table>
 
+<h2>Class stats</h2>
 <table class="table">
 	<thead>
 		<tr>
