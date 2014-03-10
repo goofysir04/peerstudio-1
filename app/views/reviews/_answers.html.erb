@@ -7,13 +7,13 @@
 </div>
 
 <div class="row">
-  <div class="assignment-rubric span4">
+  <div class="assignment-rubric">
     <div class="assignment-rubric-content"%>
         <%= yield %>
     </div>
   </div>
 
-  <div class="field span8">
+  <div class="field">
     <div class="edited-content">
       <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
 

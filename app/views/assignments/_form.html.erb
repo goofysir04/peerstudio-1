@@ -183,7 +183,7 @@
         <strong>Checkboxes</strong>
       </div>
       <div class="controls">
-        <table id="checkboxes">
+        <table id="checkboxes-<%=r.object.id%>">
           <tr class="header">
             <td>Checkbox title</td>
             <td>Score</td>
@@ -197,7 +197,7 @@
           </tr>
           <% end %>
         </table>
-        <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes" } %>
+        <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes-#{r.object.id}" } %>
       </div>
     </div>
 
