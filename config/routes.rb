@@ -14,8 +14,9 @@ Humanmachine::Application.routes.draw do
       get 'grades'
       get 'export_grades'
       post 'update_grade/:grade_id' => "assignments#update_grade", as: :update_grade
+      post 'resolve' => 'assignments#resolve_action_item', as: :resolve_action_item
     end
-    post 'create_typed_review' => 'reviews#create_with_type' 
+    post 'create_typed_review' => 'reviews#create_with_type'    
   end
 
 
@@ -75,6 +76,7 @@ Humanmachine::Application.routes.draw do
     member do 
       post 'upload_attachment'
       post 'direct_upload_attachment'
+      delete 'delete_attachment'
       get 'star' => 'answers#star'
       post 'autosubmit/:doIt', :action=>'autosubmit', as: :autosubmit
     end

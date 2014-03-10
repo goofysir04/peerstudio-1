@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, :autosubmit, :direct_upload_attachment]
+  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, :autosubmit, :direct_upload_attachment, :delete_attachment]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
   # before_filter :authenticate_user_is_admin!
@@ -135,10 +135,6 @@ class AnswersController < ApplicationController
     filename = params.permit(:filename)[:filename]
     mimetype = params.permit(:filetype)[:filetype]
     @attachment = @answer.attached_assets.new(asset_file_name: filename, asset_content_type: mimetype)
-
-
-    
-
     if @attachment.save! 
       @attachment.move_file_in_place(filepath)
       # raise @attachment.inspect
@@ -148,6 +144,18 @@ class AnswersController < ApplicationController
       end
     else
       redirect_to root_path
+    end
+  end
+
+  def delete_attachment
+    @attachment = @answer.attached_assets.find(params.permit(:attachment_id)[:attachment_id])
+    @attachment.deleted = !@attachment.deleted
+
+    if @attachment.save
+      respond_to do |format|
+        format.html {redirect_to root_path}
+        format.js
+      end
     end
   end
 

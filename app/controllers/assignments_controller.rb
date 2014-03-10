@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
   # include Humanize
-  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades, :export_grades]
+  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
   before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
@@ -87,6 +87,8 @@ class AssignmentsController < ApplicationController
   def stats
     @students = @assignment.course.students
     @milestones = @assignment.milestones
+
+    @action_items = ActionItem.where(assignment: @assignment)
   end
 
   def grades
@@ -111,6 +113,19 @@ class AssignmentsController < ApplicationController
   def export_grades
     respond_to do |format|
       format.csv { send_data AssignmentGrade.where(assignment_id: @assignment.id).export_to_csv, :filename => "gradebook.csv"}
+    end
+  end
+
+  def resolve_action_item
+    @action_item = ActionItem.find(params.permit(:item)[:item])
+
+    @action_item.resolved = !@action_item.resolved?
+
+    if @action_item.save
+      respond_to do |format|
+      format.html { redirect_to stats_assignment_path(@assignment) }
+      format.js
+    end
     end
   end
   private
