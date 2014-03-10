@@ -63,7 +63,7 @@
 				<% else %>
 					<td><%= exchange_reviews_count %></td>
 				<% end %>
-				<% paired_reviews_count =  (review_by_type[[s.id, "exchange"]] or 0) + (paired_reviews_copiloted[s.email] or 0) %>
+				<% paired_reviews_count =  (review_by_type[[s.id, "paired"]] or 0) + (paired_reviews_copiloted[s.email] or 0) %>
 				<% if paired_reviews_count == 0 %>
 					<td style="background-color: rgb(244,109,67);">
 					None</td>
