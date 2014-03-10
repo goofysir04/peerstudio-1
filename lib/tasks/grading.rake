@@ -124,6 +124,10 @@ namespace :grading do
 					 	review_blank = false
 					 end
 					end
+					if !r.comments.blank?
+						review_blank = false
+					end
+					
 					if review_blank
 						ActionItem.create(
 							assignment: assignment,
