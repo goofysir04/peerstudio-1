@@ -135,9 +135,9 @@ namespace :grading do
 					end
 
 					if r.rating_completed?
-						accurate_rating = r.accurate_rating or 0
-    					concrete_rating = r.concrete_rating or 0
-    					recognize_rating = r.recognize_rating or 0
+						accurate_rating = r.accurate_rating.to_f
+    					concrete_rating = r.concrete_rating.to_f
+    					recognize_rating = r.recognize_rating.to_f
 
     					total_rating = accurate_rating + concrete_rating + recognize_rating
 
