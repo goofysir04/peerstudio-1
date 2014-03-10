@@ -19,7 +19,7 @@ namespace :grading do
 	desc "ASSIGNMENT=id; Grade all students for an assignment"
 	task :regrade => :environment do 
 		assignment_id = ENV['ASSIGNMENT']
-
+		final_draft_name = ENV['FINAL_DRAFT']
 		###
 		# setup variables
 		###
@@ -29,7 +29,7 @@ namespace :grading do
 		final_review_credit = 3
 		paired_review_threshold = 1
 		final_review_threshold = 1
-		final_draft_name = "Final Draft"
+		
 
 		puts "Regrading Assignment #{assignment_id}"
 		assignment = Assignment.find(assignment_id)
@@ -45,10 +45,10 @@ namespace :grading do
 				end
 			end
 
-			transcript = Answer.tagged_with("Transcript Writeup").where(assignment: assignment, active:true, user: student)
-			if(transcript.count > 0)
-				AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Completion: Transcript and index", credit: 7)	
-			end
+			# transcript = Answer.tagged_with("Transcript Writeup").where(assignment: assignment, active:true, user: student)
+			# if(transcript.count > 0)
+			# 	AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Completion: Transcript and index", credit: 7)	
+			# end
 
 			Review.where(user: student, assignment: assignment, active: true).group(:review_type).count.each do |review_type, review_count|
 				if review_type == "exchange"
