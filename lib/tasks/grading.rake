@@ -1,5 +1,4 @@
 namespace :grading do
-	
 	desc "push grades to coursera"
 	task :push_grades => :environment do
 		logger = Rails.logger
@@ -80,6 +79,10 @@ namespace :grading do
 											else
 												0
 											end)
+
+						if answer_attribute.id==70
+							attribute_credit = 1
+						end
 						AssignmentGrade.create(user: student, assignment: assignment, 
 							grade_type: "#{rubric.short_title}: #{answer_attribute.description}", 
 							credit: attribute_credit, 
@@ -92,18 +95,20 @@ namespace :grading do
 		end
 	end
 
-	desc "ASSIGNMENT=id; Grade all students for an assignment"
+	desc "ASSIGNMENT=id; Find assignments with few reviews"
 	task :reviews_without_items => :environment do 
 		assignment_id = ENV['ASSIGNMENT']
+		final_draft_name = ENV['FINAL_DRAFT']
+		puts "Finding assignments with problematic reviews"
+		answers_without_reviews(assignment_id, final_draft_name)
+	end
 
-		###
-		# setup variables
-		###
-		final_draft_name = "Final Draft"
-
+	def answers_without_reviews(assignment_id, final_draft_name = "Final Draft", reviews_needed = 3)
+		assignment_id = ENV['ASSIGNMENT']
 		# puts "Inspecting all reviews for Assignment #{assignment_id}"
 		assignment = Assignment.find(assignment_id)
-		puts "\"Review id\", \"Reviewer user id\", \"Reviewer name\", \"Reviewer email\", \"Submitter user id\", \"Submitter name\", \"Submitter email\", \"Reviewing URL\",\"Rating URL\", Grade"
+		ActionItem.delete_all(assignment: assignment, reason_code: ["TOO_FEW_REVIEWS", "BLANK_REVIEW", "BAD_REVIEW"])
+
 		Enrollment.where(course: assignment.course).each do |enrollment|
 			student = enrollment.user
 			#First set participation credit
@@ -120,8 +125,43 @@ namespace :grading do
 					 end
 					end
 					if review_blank
-						puts "#{r.id}, #{r.user_id}, \"#{r.user.name}\", \"#{r.user.email}\", #{final_answer.user_id}, \"#{final_answer.user.name}\", \"#{final_answer.user.email}\", \"http://www.peerstudio.org/answers/#{final_answer.id}/reviews/new\",\"http://www.peerstudio.org/reviews/#{r.id}/rate\", #{AssignmentGrade.where(user: student, assignment_id: 3).sum(:credit).round}"
+						ActionItem.create(
+							assignment: assignment,
+							user: student, 
+							reason_code: "BLANK_REVIEW",
+							reason: "#{r.user.name} (#{r.user.email}) submitted a blank review. The current grade for submission is #{AssignmentGrade.where(user: student, assignment_id: assignment_id).sum(:credit).round}",
+							review: r
+						)
 					end
+
+					if r.rating_completed?
+						accurate_rating = r.accurate_rating or 0
+    					concrete_rating = r.concrete_rating or 0
+    					recognize_rating = r.recognize_rating or 0
+
+    					total_rating = accurate_rating + concrete_rating + recognize_rating
+
+    					if total_rating <= 4
+    						ActionItem.create(
+							assignment: assignment,    							
+							user: student, 
+							reason_code: "BAD_REVIEW",
+							reason: "Review rated poorly.",
+							review: r
+							)
+    					end
+					end
+				end
+
+				if final_answer.reviews.where(active: true).count < reviews_needed
+					ActionItem.create(
+							assignment: assignment,
+							user: student, 
+							reason_code: "TOO_FEW_REVIEWS",
+							reason: "Submission has only #{final_reviews.count} reviews, we need #{reviews_needed}. The current grade for submission is #{AssignmentGrade.where(user: student, assignment_id: assignment_id).sum(:credit).round}",
+							answer: final_answer,
+							priority: 3 + (reviews_needed - final_answer.reviews.where(active: true).count)
+						)
 				end
 			end
 		end

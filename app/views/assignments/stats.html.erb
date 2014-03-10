@@ -1,6 +1,34 @@
 <table class="table">
 	<thead>
 		<tr>
+			<th>Student</th>
+			<th>Action required</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @action_items.each do |a| %>
+			<tr>
+				<td><%= a.user.name %> (<%= a.user.email %>) </td>
+				<td><%= a.reason %></td>
+				<td>
+					<% case a.reason_code 
+					 when "TOO_FEW_REVIEWS" %>
+						<%= link_to "Submission", edit_answer_path(a.answer) %> | <%= link_to "Regrade", grades_assignment_path(@assignment, user: a.user_id) %>
+					<% when "BLANK_REVIEW" %>
+						<%= link_to "Edit review", edit_review_path(a.review) %>
+					<% when "BAD_REVIEW" %> 
+						<%= link_to "Edit review", rate_review_path(a.review) %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<table class="table">
+	<thead>
+		<tr>
 			<th>Student name</th>
 			<th>Reviews performed: Exchange</th>
 			<th>Paired</th>
@@ -51,7 +79,7 @@
 				<% end %>
 
 				<% @milestones.each do |m| %>
-				<% answer = (answers[m].first {|answer| answer.user_id == s.id})
+				<% answer = (answers[m].select {|answer| answer.user_id == s.id}).first
 				%>
 					<% if answer.nil? %>
 					<td style="background-color: rgb(244,109,67);">Not Submitted</td>

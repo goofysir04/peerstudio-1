@@ -87,6 +87,8 @@ class AssignmentsController < ApplicationController
   def stats
     @students = @assignment.course.students
     @milestones = @assignment.milestones
+
+    @action_items = ActionItem.where(assignment: @assignment)
   end
 
   def grades
