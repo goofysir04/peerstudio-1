@@ -135,9 +135,9 @@ namespace :grading do
 					end
 
 					if r.rating_completed?
-						accurate_rating = r.accurate_rating.to_f
-    					concrete_rating = r.concrete_rating.to_f
-    					recognize_rating = r.recognize_rating.to_f
+						accurate_rating = r.accurate_rating.nil? ? 3.5 : r.accurate_rating #Take the middle value if we don't have a rating
+    					concrete_rating = r.concrete_rating.nil? ? 3.5 : r.concrete_rating #Take the middle value if we don't have a rating
+    					recognize_rating = r.recognize_rating.nil? ? 3.5 : r.recognize_rating #Take the middle value if we don't have a rating
 
     					total_rating = accurate_rating + concrete_rating + recognize_rating
 
