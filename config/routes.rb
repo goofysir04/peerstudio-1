@@ -75,6 +75,7 @@ Humanmachine::Application.routes.draw do
     member do 
       post 'upload_attachment'
       post 'direct_upload_attachment'
+      delete 'delete_attachment'
       get 'star' => 'answers#star'
       post 'autosubmit/:doIt', :action=>'autosubmit', as: :autosubmit
     end

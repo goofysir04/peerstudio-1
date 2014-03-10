@@ -52,7 +52,7 @@ gem "cancan"
 gem "pg" #group: :production #only heroku
 gem 'rails_12factor', group: :production #only heroku
 #create views
-gem "schema_plus"
+# gem "schema_plus"
 
 gem 'google-analytics-rails'
 
