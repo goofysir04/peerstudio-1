@@ -80,6 +80,7 @@
 
 				<% @milestones.each do |m| %>
 				<% answer = (answers[m].select {|answer| answer.user_id == s.id}).first
+			
 				%>
 					<% if answer.nil? %>
 					<td style="background-color: rgb(244,109,67);">Not Submitted</td>
