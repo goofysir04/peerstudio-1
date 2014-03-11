@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
   # include Humanize
-  before_action :set_assignment, only: [:show, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item]
+  before_action :set_assignment, only: [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
   before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
@@ -25,8 +25,15 @@ class AssignmentsController < ApplicationController
         @out_of_box_answers = {}
       end
     end
-    @all_answers = @assignment.answers.reviewable
+    @all_answers = @assignment.answers.reviewable.limit(10)
     @starred_answers = @assignment.answers.reviewable.where(starred: true)
+  end
+
+  def show_all_answers
+    @all_answers = @assignment.answers.reviewable
+    respond_to do |format| 
+      format.js
+    end
   end
 
   # GET /assignments/new

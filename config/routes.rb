@@ -15,6 +15,7 @@ Humanmachine::Application.routes.draw do
       get 'export_grades'
       post 'update_grade/:grade_id' => "assignments#update_grade", as: :update_grade
       post 'resolve' => 'assignments#resolve_action_item', as: :resolve_action_item
+      get "show_all_answers"
     end
     post 'create_typed_review' => 'reviews#create_with_type'    
   end
