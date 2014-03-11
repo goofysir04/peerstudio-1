@@ -14,46 +14,32 @@
       <% if feedback_items_by_rubric_item[r.id].nil? %>
       No review.
       <% else %>
-        <table class="review-comparison-box">
-          <tr>
-            <td style="min-width:150px;vertical-align:top;">
-              <table class="checkbox-container">
-                <% answer.assignment.rubric_items.find(r.id).answer_attributes.each do |a_attr| %>
-                  <tr>
-                    <td style="vertical-align:middle;">
-                      <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                        <% if f.answer_attributes.include?(a_attr) %>
-                          <div class="reviewer-label reviewer<%= i%10 %>"></div>
-                        <% else %>
-                          <div class="reviewer-label"></div>
-                        <% end %>
-                      <% end %>
-                    </td>
-                    <td style="vertical-align:top;"><b><%= a_attr.description %></b></td>
-                  </tr>
-                <% end %>
-              </table>
-            </td>
-            <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-              <td>
-                <% unless f.like_feedback.blank? %>
-                  <div class="reviewer-label reviewer<%= i %>"></div><p><%= f.like_feedback %></p>
-                <% end %>
-              </td>
+        <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
+          <table>
+          <% answer.assignment.rubric_items.find(r.id).answer_attributes.each do |a_attr| %>
+            <tr>
+            <% if f.answer_attributes.include?(a_attr) %>
+              <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;" checked></td><td style="vertical-align:top;"><%= a_attr.description %></td>
+            <% else %>
+              <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><b><%= a_attr.description %></b></td>
             <% end %>
-          </tr>
-        </table>
-      <% end %>
+            </tr>
+          <% end %>
+          </table>
+          <% unless f.like_feedback.blank? %>
+            <p><strong>Reviewer <%= i %></strong> <%= f.like_feedback %></p>
+            <!-- <p><strong>Wish: </strong><%= f.wish_feedback %></p> -->
+          <% end %>
+        <% end %>
+      <% end -%>
     </li>
   <% end %>
   <% unless feedback_items_by_rubric_item["comments"].nil? %>
   <li>
     <strong>Overall feedback:</strong>
-    <br/>
-    <legend></legend>
     <% feedback_items_by_rubric_item["comments"].each.with_index(1) do |comment,i| %>
       <% next if comment.nil? %>
-      <div class="reviewer-label reviewer<%= i %>"></div><p><%= comment %> </p>
+      <p><strong>Reviewer <%=i %></strong> <%= comment %> </p>
     <% end %>
   </li>
   <% end %>
