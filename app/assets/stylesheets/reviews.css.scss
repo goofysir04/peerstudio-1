@@ -1,0 +1,61 @@
+// Place all the styles related to the reviews controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.review-comparison-box td {
+	padding: 0 8px;
+}
+
+.checkbox-container {
+	
+}
+
+.reviewer-label {
+	width: 15px;
+	height: 15px;
+	-moz-border-radius:15px;
+  	-webkit-border-radius:15px;
+  	border-radius:10px;
+  	margin: 0 5px 0 0;
+  	float: left;
+}
+
+.reviewer1 {
+	background-color: #1f77b4;
+}
+
+.reviewer2 { 
+	background-color: #ff7f0e;
+}
+
+.reviewer3 { 
+	background-color: #2ca02c;
+}
+
+.reviewer4 { 
+	background-color: #d62728;
+}
+
+.reviewer5 { 
+	background-color: #9467bd;
+}
+
+.reviewer6 {
+	background-color: #8c564b;
+}
+
+.reviewer7 { 
+	background-color: #e377c2;
+}
+
+.reviewer8 { 
+	background-color: #7f7f7f;
+}
+
+.reviewer9 { 
+	background-color: #bcbd22;
+}
+
+.reviewer10 { 
+	background-color: #17becf;
+}
