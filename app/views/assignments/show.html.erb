@@ -137,7 +137,11 @@
               <tr>
                 <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
                 <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                <td><%= review.review_type.capitalize unless review.review_type.nil? %> review</td>
+                <td><%= review.review_type.capitalize unless review.review_type.nil? %> review 
+                  <% if review.review_type == "paired" and review.copilot_email == current_user.email %>
+                    (Copilot)
+                  <% end %>
+                </td>
                 <td>
                     <%= link_to "Edit", edit_review_path(review), class:"btn" %> <%= link_to 'Delete review', review, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                 </td>
