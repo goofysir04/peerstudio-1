@@ -50,7 +50,7 @@
   <div class="tab-content">
       <div id="my_answers" class="tab-pane active">
         <% if !user_signed_in? %>
-          <p>You must <%= link_to "sign in", new_user_session_path %> to see your submissions. <%= link_to "Log in and start a new submission", new_assignment_answer_path(@assignment), :class=>"btn btn-success" %></p>
+          <p>You must <%= link_to "sign in", new_user_session_path %> to see your submissions.</p>
         <% else %>
           <table class="table">
             <thead>
