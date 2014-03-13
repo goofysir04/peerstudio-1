@@ -16,6 +16,12 @@ namespace :grading do
 		end
 	end
 
+	desc "ASSIGNMENT=id; Find low agreement rubric items"
+	task :low_agreement => :environment do 
+		assignment_id = ENV['ASSIGNMENT']
+		rubrics_with_low_agreement(assignment_id)
+	end
+
 	desc "ASSIGNMENT=id; Grade all students for an assignment"
 	task :regrade => :environment do 
 		assignment_id = ENV['ASSIGNMENT']
@@ -118,16 +124,8 @@ namespace :grading do
 			if !final_answer.nil?
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
 				final_reviews.each do |r| 
-					review_blank = true
-					r.feedback_items.each do |f|
-					 if f.answer_attributes.count > 0
-					 	review_blank = false
-					 end
-					end
-					if !r.comments.blank?
-						review_blank = false
-					end
-
+					
+					review_blank = r.blank?
 					if review_blank
 						ActionItem.create(
 							assignment: assignment,
@@ -171,5 +169,57 @@ namespace :grading do
 				end
 			end
 		end
+	end
+
+	def rubrics_with_low_agreement(assignment_id)
+		assignment = Assignment.find(assignment_id)
+		answer_attributes = AnswerAttribute.where(rubric_item_id: assignment.rubric_items)
+		#First find all answers
+		answers = Answer.where(active: true, assignment: assignment)
+		report = []
+		answer_attributes.each do |answer_attribute|
+			#Assign a score to each attribute based on the percentage disagreement
+			#First find all answers
+			scores = []
+			answers.each do |answer|
+				final_reviews = Review.where(answer: answer, active: true, review_type: "final")
+				next if final_reviews.blank?
+				marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+				#A bad attribute is one where the ratio is 1:1
+				#I define the degree of agreement as |(marked/total-0.5)|
+				scores << 2*(marked_count/(0.0+final_reviews.count) -0.5).abs
+			end
+			median_score = scores.median
+			mean_score 	= scores.mean
+
+			# puts "attribute: #{answer_attribute.description}; median_score: #{median_score}, mean: #{mean_score}"
+			report << {attribute: answer_attribute, median_score: median_score, mean_score: mean_score}
+		end
+		sorted_report = report.sort_by {|item| item[:mean_score]}
+
+		top_three = sorted_report.take(3)
+
+		ActionItem.delete_all(assignment: assignment, reason_code: ["POOR_AGREEMENT"])
+
+		top_three.each do |it| 
+			ActionItem.create(assignment: assignment, 
+				reason_code: "POOR_AGREEMENT",
+				reason: "#{it[:attribute].description} (#{it[:attribute].rubric_item.short_title}). Mean score: #{it[:mean_score]} (best is 1.0), median_score: #{it[:median_score]}",
+				priority: 3*it[:mean_score])
+		end
+
+	end
+
+end
+
+module Enumerable
+	def median
+  		sorted = self.sort
+  		len = sorted.length
+  		return (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+	end
+
+	def mean
+		return self.sum/self.length.to_f
 	end
 end

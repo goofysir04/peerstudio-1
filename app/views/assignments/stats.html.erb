@@ -30,7 +30,10 @@
 				 <% when "BLANK_REVIEW" %>
 				 <tr class="info"><td colspan="4">Review was blank</td></tr>
 				 <% when "BAD_REVIEW" %>
-				 <tr class="info"><td colspan="4">Review was rated poorly</td></tr>
+				 <tr class="info"><td colspan="4">Review was rated poorly</td>
+				 <% when "POOR_AGREEMENT" %>
+				 <tr class="info"><td colspan="4">Poor inter-rater agreement. This usually suggests that students don't have a consensus about what this question asks about.</td>
+				 </tr>
 			<% end %>
 			<% items.each do |a| %>
 
@@ -39,8 +42,12 @@
 							data: {remote: true, method: :post,
 									url: resolve_action_item_assignment_path(@assignment, item: a.id) }
 					 %></td>
-					<td><%= a.user.name %> (<%= a.user.email %>) </td>
-					
+					<td>
+						<% if a.user.blank? %>
+							Everyone
+						<% else %>
+						<%= a.user.name %> (<%= a.user.email %>) </td>
+						<% end %>
 						<% case a.reason_code 
 						 when "TOO_FEW_REVIEWS" %>
 						 <td><%= a.reason %></td>
@@ -53,6 +60,9 @@
 						<% when "BAD_REVIEW" %> 
 							<td><p>Review by <%= a.review.user.name %> (<%= a.review.user.email %>).</p> <p>The reviewed student wrote: <%= truncate a.review.other_rating_comments,:length => 200, :separator => ' ' %></p></td>
 							<td><%= link_to "See/Rate review", rate_review_path(a.review) %></td>
+						<% when "POOR_AGREEMENT" %>
+							<td><p><%= a.reason %></td>
+							<td><%= link_to "Edit assignment", edit_assignment_path(@assignment) %></td>
 						<% end %>
 					</td>
 				</tr>
