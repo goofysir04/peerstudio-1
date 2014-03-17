@@ -120,7 +120,7 @@ namespace :grading do
 			#First set participation credit
 			
 			##grades for assignment rubrics
-			final_answer = Answer.where(user: student, active: true).tagged_with(final_draft_name).first
+			final_answer = Answer.where(user: student, active: true, assignment_id: assignment_id).tagged_with(final_draft_name).first
 			if !final_answer.nil?
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
 				final_reviews.each do |r| 
