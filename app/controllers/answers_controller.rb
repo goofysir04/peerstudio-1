@@ -25,6 +25,10 @@ class AnswersController < ApplicationController
     @answer.assignment = @assignment
     @answer.active = false
     @answer.user = current_user
+    assignment = Assignment.find(params[:assignment_id])
+    if assignment.course.students.exists?(current_user.id).nil?
+      assignment.course.students << current_user
+    end
     draft_type = params[:draft_type].nil? ? nil : params.require(:draft_type)
     @answer.revision_list = draft_type
     if @answer.save 
@@ -46,6 +50,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
     @answer.assignment = Assignment.find(params[:assignment_id])
     @answer.user = current_user
+    
     respond_to do |format|
       if @answer.save
         format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully created.' }

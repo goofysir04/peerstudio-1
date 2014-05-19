@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
 
 	devise :omniauthable, :omniauth_providers=>[:coursera]
 
+  validate do |user|
+    user.errors[:base] << ("You must choose whether you want to participate in our research.") if user.consented.blank?
+  end
+
 	has_many :assessments
 	has_many :verifications
 

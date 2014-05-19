@@ -13,8 +13,12 @@
   $('[data-toggle=tooltip]').tooltip();
   </script>
 
-  <div class="clearfix"></div>
-  <div class="span6" style="margin-top:40px; margin-left:0px;">
-    <p><b><%= t :PeerStudio %></b> is part of a research project at Stanford University. Your use of the system will help this research. When you sign up, you consent to the following terms.</p>
+  <div class="span10" style="margin-top:40px; margin-left:0px;">
+    <p><b><%= t :PeerStudio %></b> is part of a research project at Stanford University. You can still use the system without participating in our research, but you can choose to help us below, and we'll be so grateful! :) <a href="https://docs.google.com/document/d/1kZKBs2JXX9rFSQ4LzAy-XBOxNPPmHFS6l7CwXtP63JY/pub" target="_blank"><strong>Open in new window</strong></a></p>
     <%= render :partial => 'consent_form' %>
+        <%= f.radio_button :consented, true, value: true -%><%= f.label :consented_true, style: "display: inline;" do %>
+        <strong>I am at least 18 years of age, and I consent to participating in this research study.</strong>
+        <% end %>
+    </br/>
+    <%= f.radio_button :consented, false, value: false %> <%= f.label :consented_false, "I do not consent to participating in this research study (or am under 18).", style: "display: inline;"  %>
   </div>

@@ -2,7 +2,7 @@ class RegistrationsController < Devise::RegistrationsController
 
 
   def create
-      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :name)}
+      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :name, :consented)}
       super
   end
   
@@ -99,6 +99,6 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def user_params
-     params.require(:user).permit(:name, :email, :current_password, :password, :confirm_password, :time_zone, :gender)
+     params.require(:user).permit(:name, :email, :consented, :current_password, :password, :confirm_password, :time_zone, :gender)
    end
 end
