@@ -6533,32 +6533,38 @@
 
 				$('#redactor_filename').val(text);
 
-				// dragupload
-				if (!this.isMobile() && !this.isIPad())
-				{
-					this.draguploadInit('#redactor_file', {
+				if(this.opts.s3 === false) {
+					// dragupload
+					if (!this.isMobile() && !this.isIPad())
+					{
+						this.draguploadInit('#redactor_file', {
+							url: this.opts.fileUpload,
+							uploadFields: this.opts.uploadFields,
+							success: $.proxy(this.fileCallback, this),
+							error: $.proxy( function(obj, json)
+							{
+								this.callback('fileUploadError', json);
+
+							}, this),
+							uploadParam: this.opts.fileUploadParam
+						});
+					}
+
+					this.uploadInit('redactor_file', {
+						auto: true,
 						url: this.opts.fileUpload,
-						uploadFields: this.opts.uploadFields,
 						success: $.proxy(this.fileCallback, this),
-						error: $.proxy( function(obj, json)
+						error: $.proxy(function(obj, json)
 						{
 							this.callback('fileUploadError', json);
 
-						}, this),
-						uploadParam: this.opts.fileUploadParam
+						}, this)
 					});
 				}
-
-				this.uploadInit('redactor_file', {
-					auto: true,
-					url: this.opts.fileUpload,
-					success: $.proxy(this.fileCallback, this),
-					error: $.proxy(function(obj, json)
-					{
-						this.callback('fileUploadError', json);
-
-					}, this)
-				});
+				else
+				{
+					$('#redactor_file').on('change.redactor', $.proxy(this.s3handleFileSelect, this));
+				}
 
 			}, this);
 
@@ -7713,7 +7719,7 @@
 							this.sync();
 
 							// file upload callback
-							this.callback('fileUpload', linkmarker, json);
+							this.callback('fileUpload', linkmarker, null);
 						}
 						this.tempFile = undefined;
 

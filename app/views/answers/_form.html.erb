@@ -74,14 +74,7 @@
     <div class="field span8">
       <%= form_for([@assignment,@answer], remote: true) do |f| %>
       <legend><%= @answer.revision_name %></legend>
-      <%= f.text_area :response, size: "20x20", :id=>"answer_response"%>
-      <script type="text/javascript">
-      $('#answer_response').redactor({
-        s3: '/uploads/create.js',
-        fileUpload: '/uploads/create.js'
-
-        });
-      </script>
+      <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
       <div class="actions">
         <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
         <% if @answer.in_progress? %>
