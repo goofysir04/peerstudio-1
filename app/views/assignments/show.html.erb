@@ -12,26 +12,6 @@
   <%= sanitize @assignment.description %>
 </div>
 
-<div id="assignment_rubric_items">
-  <h3>Evaluation</h3>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Rubric item</th><th>Max score</th><th>Submit feedback by</th> 
-      </tr>
-    </thead>
-    <tbody>
-    <% @assignment.rubric_items.each do |r| %>
-      <tr>
-        <td><strong><%= r.short_title %></strong><br/>
-         <%= sanitize r.title %></strong></td>
-         <td><%= r.max %></td>
-         <td><%= r.ends_at.strftime "%b %e, %l:%M %p" %> (<%= "in " if r.ends_at > Time.now %><%= distance_of_time_in_words r.ends_at, Time.now %><%= " ago" if r.ends_at < Time.now %>)</td>
-       </tr>
-    <% end %>
-  </tbody>
-  </table>
-</div>
 <% if @assignment.grades_released? %>
 <h3><%= link_to "Check your grade", grades_assignment_path(@assignment) %></h3>
 <% end %>
