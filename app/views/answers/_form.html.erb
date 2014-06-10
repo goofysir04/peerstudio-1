@@ -77,7 +77,8 @@
       <%= f.text_area :response, size: "20x20", :id=>"answer_response"%>
       <script type="text/javascript">
       $('#answer_response').redactor({
-        s3: 'your-server-side-script.php'
+        s3: '/uploads/create.js',
+        fileUpload: '/uploads/create.js'
 
         });
       </script>

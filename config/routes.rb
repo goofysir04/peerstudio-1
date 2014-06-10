@@ -1,5 +1,6 @@
 Humanmachine::Application.routes.draw do
 
+  get "uploads/create"
   resources :courses do
     resources :assignments, shallow: true
     collection do 
