@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140610223612) do
+ActiveRecord::Schema.define(version: 20140611214445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -355,6 +355,19 @@ ActiveRecord::Schema.define(version: 20140610223612) do
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
+
+  create_table "trigger_actions", force: true do |t|
+    t.string   "trigger"
+    t.string   "description"
+    t.integer  "count",         default: 0
+    t.integer  "user_id"
+    t.integer  "assignment_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "trigger_actions", ["assignment_id"], name: "index_trigger_actions_on_assignment_id", using: :btree
+  add_index "trigger_actions", ["user_id"], name: "index_trigger_actions_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",                           null: false
