@@ -19,47 +19,50 @@
 </head>
 <body>
 <div id="fb-root"></div>
-<div id="nav_top" <% if current_user != true_user %>style="color: rgb(255, 255, 255); background-image: -webkit-linear-gradient(top, rgb(238, 95, 91), rgb(189, 54, 47)); background-color: rgb(189, 54, 47);"<%end%> >
-  <div class="container">
-    <div class="navbar" style="margin-bottom: 0; border: 0;">
-      <div class="navbar-inner" style="padding-right: 0; border: 0; margin: 0; background: 0; box-shadow: none;">
-        <% if @org %>
-          <%= link_to @org.name, o_path(@org), :class => "brand", :style => "padding-left: 0;" %>
-        <% else %>
-          <%= link_to root_path, :class => "brand", :style => "padding-left: 0;" do %>
-            Stanford+UCSD | <strong><%= t :PeerStudio %></strong>
-            <% if content_for?(:title) %>
-              <small class="title_slug">&ndash; <%= content_for(:title) %></small>
-            <% else %>
-              <small class="title_slug">&ndash; Let's learn together!</small>
+<div id="wrapper">
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0"
+   <% if current_user != true_user %>style="color: rgb(255, 255, 255); background-image: -webkit-linear-gradient(top, rgb(238, 95, 91), rgb(189, 54, 47)); background-color: rgb(189, 54, 47);"<%end%> >
+        <div class="navbar-header">
+          <% if @org %>
+            <%= link_to @org.name, o_path(@org), :class => "navbar-brand", :style => "padding-left: 0;" %>
+          <% else %>
+            <%= link_to root_path, :class => "navbar-brand" do %>
+              Stanford+UCSD | <strong><%= t :PeerStudio %></strong>
+              <% if content_for?(:title) %>
+                <small class="title_slug">&ndash; <%= content_for(:title) %></small>
+              <% else %>
+                <small class="title_slug">&ndash; Let's learn together!</small>
+              <% end %>
             <% end %>
           <% end %>
-        <% end %>
+        </div>
         <% if user_signed_in? %>
-          <ul class="nav pull-right">
-            <li class="dropdown">
-              <a class="dropdown-toggle" id="login_label" role="button" data-toggle="dropdown" data-target="#" href="<%= edit_user_registration_path %>">
-                <%= current_user.name %>
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu" role="menu" aria-labelledby="login_label">
-                <li><%= link_to "Account Settings", edit_user_registration_path %></li>
-                <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
-              </ul>
-            </li>
-          </ul>
-        <% else %>
-          <ul class="nav pull-right">
-            <li><%= link_to "Sign up / Sign in", new_user_session_path, :method => :get %></li>
-          </ul>
-        <% end %>
-      </div>
-      
-    </div>
-  </div>
-</div>
+            <ul class="nav navbar-top-links navbar-right">
+              <li class="dropdown">
+                <a class="dropdown-toggle" id="login_label" role="button" data-toggle="dropdown" data-target="#" href="<%= edit_user_registration_path %>">
+                  <%= current_user.name %>
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="login_label">
+                  <li><%= link_to "Account Settings", edit_user_registration_path %></li>
+                  <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+                </ul>
+              </li>
+            </ul>
+          <% else %>
+            <ul class="nav navbar-top-links navbar-right">
+              <li><%= link_to "Sign up / Sign in", new_user_session_path, :method => :get %></li>
+            </ul>
+          <% end %>
+          <div class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                  <%= content_for?(:context_menu) ? content_for(:context_menu) : render(:partial => 'layouts/global_context_menu') %>
+                </div>
+                <!-- /.sidebar-collapse -->
+          </div>
+  </nav>
 
-<div class="container">
+<div id="page-wrapper">
 <%= render :partial => 'layouts/notice', :locals => {:notice => notice, :alert => alert} %>
 <%= yield %>
 
@@ -87,6 +90,7 @@
 
 </div>
 <script type="text/javascript">$('.dropdown-toggle').dropdown();</script>
+</div>
 </body>
 
 </html>

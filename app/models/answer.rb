@@ -26,7 +26,7 @@ class Answer < ActiveRecord::Base
 
   validate :revisions_are_valid
 
-  scope :reviewable, -> {where(in_progress: false, active: true)}
+  scope :reviewable, -> {where(submitted:true, active: true)}
   
   def self.get_next_identify_for_user_and_question(user, question)
 

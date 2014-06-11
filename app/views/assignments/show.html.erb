@@ -47,8 +47,8 @@
                   <td><%= answer.revision_name %> </td>
                   <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                     <td>
-                    <% if answer.in_progress? %>
-                    <span class="label label-important">Won't autosubmit</span> 
+                    <% if answer.submitted? %>
+                    <span class="label label-important">Submitted</span> 
                     <% else %>
                   <% end %>
                     <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>

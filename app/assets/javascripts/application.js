@@ -14,16 +14,12 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
-// require twitter/bootstrap #compile without typeahead
 //= require bootstrap.min
-//= require typeahead
 //= require_tree .
 //= require chosen.jquery
-//= require jquery.jcarousel.min
 //= require bootstrap-datetimepicker
 //= require bootstrap-markdown-custom
 //= require jquery_nested_form
-//= require s3_direct_upload
 
 //Disabled
 //= #require rails.validations

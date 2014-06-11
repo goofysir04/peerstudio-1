@@ -1,31 +1,7 @@
-do_on_load = ->
-  $("#s3_uploader").S3Uploader
-    remove_completed_progress_bar: false
-    progress_bar_target: $("#uploads_container")
-    allow_multiple_files: false
-
-  $("#s3_uploader").bind "s3_upload_failed", (e, content) ->
-    alert content.filename + " failed to upload due to a timeout."
-
-  $("#s3_uploader").bind "s3_upload_complete", (e, content) ->
-    
-    #insert any post progress bar complete stuff here.
-    $("#progress_"+content.unique_id).addClass("pendingUpload").text("Finalizing upload...")
-    $("#answer_direct_upload_url").val content.url
-    $("#answer_asset_file_name").val content.filename
-    $("#answer_asset_file_path").val content.filepath
-    $("#answer_asset_file_size").val content.filesize
-    $("#answer_asset_content_type").val content.filetype
-    return
-
-  return
 
 bind_tab_toggle = ->
   $("a[data-toggle=\"tab\"]").on "shown.bs.tab", (e) ->
     $(".assignment-rubric").toggleClass "span4"
     return
   return
-
-$(document).ready do_on_load
 $(document).ready bind_tab_toggle
-$(window).bind "page:change", do_on_load

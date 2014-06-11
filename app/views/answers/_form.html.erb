@@ -9,50 +9,44 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="assignment_instructions">
-    <h1><%= link_to @answer.assignment.title, @answer.assignment %></h1>
-
-    <div class="assignment-description">
-      <%= sanitize @answer.assignment.description %>
+    <div class="page-header">
+    <h1> <%= @answer.assignment.title %> <small><%= link_to "Show assignment instructions", @answer.assignment %></small></h1>
     </div>
-  </div>
-  <hr style="margin: 20px 0;">
-  <div class="row">
-    <div class="assignment-rubric span4">
+  
+      <% content_for :context_menu do %>
+      <div class="assignment-rubric">
       <style type="text/css">
       .rubric {margin: 0;}
       .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
       #reviews {min-height: 200px;}
       </style>
 
-      <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a href="#evaluation" data-toggle="tab">Evaluation</a></li>
-        <li ><a href="#reviews" data-toggle="tab">Reviews</a></li>
-      </ul>
-      <div class="tab-content">
-        <div class="tab-pane active" id="evaluation">
-          <div class="assignment-rubric-static"%>
-            <ul class="rubric">
-              <% @answer.assignment.rubric_items.each do |r| %>
-              <% if r.open_at < Time.now and r.ends_at > Time.now %>
-              <li>
-                <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
-                <legend></legend>
-                <%= sanitize r.title %>
-                <table>
-                  <% r.answer_attributes.each do |a_attr| %>
-                    <tr>
-                      <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
-                    </tr>
-                  <% end %>
-                </table>
-              </li>
-              <% end %>
-              <% end %>
-            </ul>    
-          </div>
+      <div class="btn-group">
+        <button type="button" href="#evaluation" class="btn btn-default">Evaluation</button>
+        <button type="button" href="#evaluation" class="btn btn-default">Previous reviews</button>
+      </div>
+      <div class="tab-pane active" id="evaluation">
+        <div class="assignment-rubric-static"%>
+          <ul class="rubric">
+            <% @answer.assignment.rubric_items.each do |r| %>
+            <% if r.open_at < Time.now and r.ends_at > Time.now %>
+            <li>
+              <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
+              <legend></legend>
+              <%= sanitize r.title %>
+              <table>
+                <% r.answer_attributes.each do |a_attr| %>
+                  <tr>
+                    <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
+                  </tr>
+                <% end %>
+              </table>
+            </li>
+            <% end %>
+            <% end %>
+          </ul>    
         </div>
+      </div>
         <div class="tab-pane" id="reviews">
           Show reviews for &nbsp;
             <div class="btn-group">
@@ -70,37 +64,22 @@
         </div>
       </div>
     </div>
-
-    <div class="field span8">
+  <% end %>
+  <div class="row">
+    
       <%= form_for([@assignment,@answer], remote: true) do |f| %>
       <legend><%= @answer.revision_name %></legend>
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
-      <div class="actions">
-        <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
-        <% if @answer.in_progress? %>
-        Will not auto-submit on deadline. <%= link_to "Auto-submit", autosubmit_answer_path(@answer,"true"), remote: true, method: :post,  data: {toggle: "popover"}, title: "You can continue to make changes till the deadline. On the deadline, you must manually submit the assignment."%>.</span>
-        <% else %>
-        Will auto-submit on deadline. <%= link_to "Don't auto-submit", autosubmit_answer_path(@answer,"false"), remote: true, method: :post,  data: {toggle: "popover"}, title: "You can continue to make changes till the deadline. On the deadline, the draft will be automatically submitted. If you don't want to submit unfinished work, choose don't auto-submit."%>.</span>
-
-        <% end %>
+        <div class="actions">
+          <% if @answer.submitted? %>
+          You submitted this answer for a review, so you can't change it anymore. 
+          <% else %>
+          <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
+          <% end %>
         </div>
-        <% end %>
-        <%= s3_uploader_form callback_url: direct_upload_attachment_answer_path(@answer, format: "js"), id: "s3_uploader", acl: "public-read", callback_param: "direct_upload_url", max_file_size: 40.megabytes do %>
-          <strong>Upload attachment (Max size 20MB)</strong> <%= file_field_tag :file, multiple: false %><br/>
-        <% end %>
-
-        <div id="uploads_container"></div>
-        <script id="template-upload" type="text/x-tmpl">
-        <div id="upload_{%=o.unique_id%}" class="upload" style="width:200px;">
-          <h5>{%=o.name%}</h5>
-          <div class="progress"><div class="bar" id="progress_{%=o.unique_id%}" style="width: 0%"></div></div>
-        </div>
-        </script>
-        <%= render partial: "attachments", locals: {answer: @answer} %>
-
+      <% end %>
       </div>
-    </div>
-  </div>
+</div>
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
 
