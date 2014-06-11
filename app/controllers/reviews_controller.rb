@@ -88,6 +88,9 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def you_first
+    @assignment = Assignment.find(3)
+  end
   #Create a new review with a particular type 
   # such as paired, exchange, final etc
   def create_with_type

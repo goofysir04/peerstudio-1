@@ -22,7 +22,7 @@
       </style>
 
       <div class="btn-group">
-        <button type="button" href="#evaluation" class="btn btn-default">Evaluation</button>
+        <button type="button" href="#evaluation" class="btn btn-default active">Evaluation</button>
         <button type="button" href="#evaluation" class="btn btn-default">Previous reviews</button>
       </div>
       <div class="tab-pane active" id="evaluation">
@@ -66,7 +66,6 @@
     </div>
   <% end %>
   <div class="row">
-    
       <%= form_for([@assignment,@answer], remote: true) do |f| %>
       <legend><%= @answer.revision_name %></legend>
       <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
@@ -76,6 +75,13 @@
           <% else %>
           <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
           <% end %>
+          <div class="navbar-right">
+            <% unless @answer.submitted? %>
+            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn btn-success", :role=>"button", :method=>:post %>
+            <% else %>
+             <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
+            <% end %>
+            <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-primary", :role=>"button" %>
         </div>
       <% end %>
       </div>

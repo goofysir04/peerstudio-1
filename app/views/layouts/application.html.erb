@@ -64,7 +64,9 @@
 
 <div id="page-wrapper">
 <%= render :partial => 'layouts/notice', :locals => {:notice => notice, :alert => alert} %>
-<%= yield %>
+<div class="col-lg-12">
+  <%= yield %>
+</div>
 
 <div class="clearfix"></div>
 

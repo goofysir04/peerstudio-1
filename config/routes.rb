@@ -70,6 +70,12 @@ Humanmachine::Application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
+  resources :reviews do
+    collection do 
+      get 'you_first'
+    end
+  end
+  
   resources :answers do
     collection do 
       get 'import'
@@ -80,7 +86,9 @@ Humanmachine::Application.routes.draw do
       post 'direct_upload_attachment'
       delete 'delete_attachment'
       get 'star' => 'answers#star'
-      post 'autosubmit/:doIt', :action=>'autosubmit', as: :autosubmit
+      post 'submit_for_feedback'
+      post 'unsubmit_for_feedback'
+      post 'submit_for_grades'
     end
     resources :reviews, shallow: true
   end
