@@ -7,11 +7,6 @@
 #   local: ['timtrueman', 'JakeHarding', 'vskarich']
 # })
 
-$(".typeahead-usernames").typeahead({
-      name: 'accounts',
-    local: ["Apache", "Cochise", "Coconino", "Gila", "Graham", "Greenlee", "La Paz", "Maricopa", "Mohave", "Navajo", "Pima", "Pinal", "Santa Cruz", "Yavapai", "Yuma"]
-});
-
 $(document).ready () ->
 	$("#typed_review_type").change(()->
 		$("#typed_review_email").show().attr("placeholder","Choose a review type first")

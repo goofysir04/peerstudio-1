@@ -101,7 +101,7 @@ class AnswersController < ApplicationController
     trigger = TriggerAction.add_trigger(current_user, @answer.assignment, trigger: "review_required", count: 2)
     respond_to do |format|
       if @answer.save and trigger.save
-        format.html {redirect_to assignment_review_first_path(@answer.assignment)}
+        format.html {redirect_to review_first_assignment_path(@answer.assignment)}
         format.json { head :no_content }
         format.js
       else

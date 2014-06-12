@@ -138,7 +138,9 @@ class AssignmentsController < ApplicationController
 
   def review_first
     @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
-
+    unless params[:recent_review].nil?
+      @recent_review = Review.find(params[:recent_review])  
+    end
     if @trigger.nil? 
       redirect_to root_path
     end
@@ -159,6 +161,7 @@ class AssignmentsController < ApplicationController
       params.permit(:course_id)
       params.permit(:grade_id)
       params.permit(:assignment_grade => [:credit])
+      params.permit(:recent_review)
       params.require(:assignment).permit(:title, :description, :milestone_list, :due_at, :open_at, :rubric_items_attributes=>[
         :id, :title, :short_title, :open_at, :ends_at, :final_only,
         :min, :max, :min_label, :max_label, :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user

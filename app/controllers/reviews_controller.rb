@@ -66,13 +66,8 @@ class ReviewsController < ApplicationController
         trigger.save!
       end
       if @review.update(review_params.merge(active: true, completed_at: Time.now))
-        if @review.review_type=="final"
-          format.html { redirect_to @review, notice: 'Review was successfully updated. Go to the assignment page to start a new review.' }
-          format.json { head :no_content }
-        else  
-          format.html { redirect_to @review, notice: 'Review was successfully updated.' }
-          format.json { head :no_content }
-        end
+        format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Ok, we saved that review!' }
+        format.json { head :no_content }
       else
         format.html { render action: 'edit' }
         format.json { render json: @review.errors, status: :unprocessable_entity }

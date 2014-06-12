@@ -68,7 +68,7 @@
   <div class="row">
       <%= form_for([@assignment,@answer], remote: true) do |f| %>
       <legend><%= @answer.revision_name %></legend>
-      <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
+      
         <div class="actions">
           <% if @answer.submitted? %>
           You submitted this answer for a review, so you can't change it anymore. 
@@ -83,8 +83,11 @@
             <% end %>
             <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-primary", :role=>"button" %>
         </div>
-      <% end %>
+      
       </div>
+      <div class="clearfix"></div>
+        <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
+      <% end %>
 </div>
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>

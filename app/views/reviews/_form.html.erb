@@ -1,4 +1,4 @@
-<%= form_for([@answer,@review]) do |f| %>
+
   <% if @review.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
@@ -11,6 +11,7 @@
     </div>
   <% end %>
   <% content_for :context_menu do %>
+  <%= form_for([@answer,@review]) do |f| %>
   <p>Here's how this assignment should be assessed</p>
       <style type="text/css">
       .rubric {margin: 0;}

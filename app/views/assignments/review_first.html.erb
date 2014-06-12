@@ -4,4 +4,9 @@
 
 <p>You have <%= @trigger.count %> more reviews to complete before we can show you your feedback, <strong>and your work has already been reviewed!</strong> So, to unlock your reviews, give your classmates feedback now!</p>
 
-<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post %>
+<div class="controls">
+	<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %>
+	<% unless @recent_review.nil? %>
+		<%= link_to "Edit your review", edit_review_path(@recent_review),class: "btn btn-default" %>
+	<% end %>
+</div>
