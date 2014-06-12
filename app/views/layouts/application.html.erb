@@ -22,22 +22,32 @@
 <div id="wrapper">
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0"
    <% if current_user != true_user %>style="color: rgb(255, 255, 255); background-image: -webkit-linear-gradient(top, rgb(238, 95, 91), rgb(189, 54, 47)); background-color: rgb(189, 54, 47);"<%end%> >
-        <div class="navbar-header">
+        
           <% if @org %>
-            <%= link_to @org.name, o_path(@org), :class => "navbar-brand", :style => "padding-left: 0;" %>
+            <div class="navbar-header">
+              <%= link_to @org.name, o_path(@org), :class => "navbar-brand", :style => "padding-left: 0;" %>
+            </div>
           <% else %>
-            <%= link_to root_path, :class => "navbar-brand" do %>
-              Stanford+UCSD | <strong><%= t :PeerStudio %></strong>
-              <% if content_for?(:title) %>
-                <small class="title_slug">&ndash; <%= content_for(:title) %></small>
+              <% if content_for?(:local_nav) %>
+              <div class="navbar-header">
+                  <%= link_to root_path, :class => "navbar-brand" do %>
+                    Stanford+UCSD | <strong><%= t :PeerStudio %></strong> <%end %>
+              </div>
+              <ul class="nav navbar-nav">
+                 <%= content_for(:local_nav) %>
+              </ul>
+              
               <% else %>
-                <small class="title_slug">&ndash; Let's learn together!</small>
-              <% end %>
+                <%= link_to root_path, :class => "navbar-brand" do %>
+                  Stanford+UCSD | <strong><%= t :PeerStudio %></strong>
+                    <small class="title_slug">&ndash; Let's learn together!</small>
+                <% end %>
             <% end %>
           <% end %>
-        </div>
+        <ul class="nav navbar-top-links navbar-right">
+          <li> <%= link_to "Help", help_courses_path %> </li>
         <% if user_signed_in? %>
-            <ul class="nav navbar-top-links navbar-right">
+            
               <li class="dropdown">
                 <a class="dropdown-toggle" id="login_label" role="button" data-toggle="dropdown" data-target="#" href="<%= edit_user_registration_path %>">
                   <%= current_user.name %>
@@ -48,51 +58,23 @@
                   <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
                 </ul>
               </li>
-            </ul>
+            
           <% else %>
-            <ul class="nav navbar-top-links navbar-right">
               <li><%= link_to "Sign up / Sign in", new_user_session_path, :method => :get %></li>
-            </ul>
           <% end %>
-          <div class="navbar-default navbar-static-side" role="navigation">
-                <div class="sidebar-collapse">
-                  <%= content_for?(:context_menu) ? content_for(:context_menu) : render(:partial => 'layouts/global_context_menu') %>
-                </div>
-                <!-- /.sidebar-collapse -->
-          </div>
+        </ul>
   </nav>
-
-<div id="page-wrapper">
-<%= render :partial => 'layouts/notice', :locals => {:notice => notice, :alert => alert} %>
-<div class="col-lg-12">
-  <%= yield %>
-</div>
-
-<div class="clearfix"></div>
-
-<div style="border-top: 1px solid #efefef; margin-top: 15px;">
-  <span class="pull-left" style="font-size:12pt"><i class="glyphicon glyphicon-question-sign
-"></i> Got a question or need <%= link_to "help?", help_courses_path%></span>
-  <a href="http://www.ucsd.edu/"><%= image_tag "ucsd.png", :style => 'height: 15%; width: 15%', :class => 'pull-right' %></a>
-  <a href="http://cs.stanford.edu/"><%= image_tag "stanfordcs.png", :style => 'height: 15%; width: 15%; border-right: 1px solid #efefef; padding-right: 5px;', :class => 'pull-right' %></a>
-  <br/>
-  <% if Rails.env.development? || (user_signed_in? && current_user.admin?) %> 
-    <p><span class="label">DEBUG</span> Parameters: <code> <%= params.inspect %> </code> Session: <code><%= session %></code> </p>
-    <p><span class="label">OPENID</span> Return path <code><%= request.env['omniauth.origin']  || "None"%></code></p>
-    <% if not flash[:debug].nil? %>
-    <div class="well">
-      <%flash[:debug].each do |msg| %>
-      <%= msg %>
-    <% end %>
+  <div class="row">
+    <div  id="sidebar" class="col-md-3 col-sm-4">
+            <%= content_for?(:context_menu) ? content_for(:context_menu) : render(:partial => 'layouts/global_context_menu') %>
     </div>
-    <% end %>
-    
-  <% end %>
-</div>
-
+    <div  id="mainpage" class="col-md-9 col-sm-8">
+      <%= render :partial => 'layouts/notice', :locals => {:notice => notice, :alert => alert} %>
+      <%= yield %>
+    </div>
+  </div>
 </div>
 <script type="text/javascript">$('.dropdown-toggle').dropdown();</script>
-</div>
 </body>
 
 </html>

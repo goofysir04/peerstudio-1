@@ -61,6 +61,9 @@ class ReviewsController < ApplicationController
         @answer = @review.answer
         @answer.increment!(:total_evaluations)
         @answer.decrement!(:pending_reviews) unless @answer.pending_reviews == 0
+
+        trigger = TriggerAction.add_trigger(current_user, @answer.assignment, count: -1, trigger:"review_required")
+        trigger.save!
       end
       if @review.update(review_params.merge(active: true, completed_at: Time.now))
         if @review.review_type=="final"
@@ -87,19 +90,15 @@ class ReviewsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  def you_first
-    @assignment = Assignment.find(3)
-  end
   #Create a new review with a particular type 
   # such as paired, exchange, final etc
   def create_with_type
     @submitter = User.find_by_email(params[:typed_review][:email])
     review_type = params[:typed_review][:type]
     if @submitter.nil? and review_type != "final"
-      redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return
+      redirect_to assignment_path(params[:id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return
     end
-    redirect_to assignment_path(params[:assignment_id]), alert: "You can't review yourself!" and return if @submitter==current_user 
+    redirect_to assignment_path(params[:id]), alert: "You can't review yourself!" and return if @submitter==current_user 
     
     @reviewed_already = Review.where(user: current_user, active: true)
     @reviewed_answers = @reviewed_already.map {|r| r.answer_id}
@@ -107,17 +106,17 @@ class ReviewsController < ApplicationController
     @reviewed_answers << 0 if @reviewed_answers.blank?
     case review_type
     when "exchange"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, user_id: @submitter.id, assignment_id: params[:assignment_id])
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, user_id: @submitter.id, assignment_id: params[:id])
     when "paired"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:assignment_id]).where("user_id NOT in (?) and answers.id NOT in (?)", [@submitter.id, current_user.id], @reviewed_answers)
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", [@submitter.id, current_user.id], @reviewed_answers)
     when "final"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:assignment_id]).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
     else
-      redirect_to assignment_path(params[:assignment_id]), alert: "That review type has not opened yet." and return 
+      redirect_to assignment_path(params[:id]), alert: "That review type has not opened yet." and return 
     end
 
     if @answers.empty?
-      redirect_to assignment_path(params[:assignment_id]), alert: "We didn't find any drafts to review" and return 
+      redirect_to assignment_path(params[:id]), alert: "We didn't find any drafts to review" and return 
     end
 
     @answer = @answers.order("(pending_reviews + total_evaluations) ASC").first

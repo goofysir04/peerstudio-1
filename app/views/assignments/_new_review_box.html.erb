@@ -1,5 +1,5 @@
 <div class="well">
-	<%= form_for :typed_review, url:assignment_create_typed_review_path(assignment), class:"form-inline" do |f| %>
+	<%= form_for :typed_review, url:create_typed_review_assignment_path(assignment), class:"form-inline" do |f| %>
 	<%= f.select :revision, options_from_collection_for_select(assignment.milestones, "name","name"), prompt: "Choose draft type" %>
 	<%= f.select :type, [["Exchange review","exchange"], ["Paired review","paired"], ["Final review","final"]], prompt: "Choose review type" %>
 	<%= f.email_field :email, placeholder: "Choose a review type first" %>

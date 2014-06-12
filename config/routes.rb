@@ -17,8 +17,9 @@ Humanmachine::Application.routes.draw do
       post 'update_grade/:grade_id' => "assignments#update_grade", as: :update_grade
       post 'resolve' => 'assignments#resolve_action_item', as: :resolve_action_item
       get "show_all_answers"
+      get 'review_first'
+      post 'create_typed_review' => 'reviews#create_with_type'
     end
-    post 'create_typed_review' => 'reviews#create_with_type'    
   end
 
 
@@ -69,12 +70,6 @@ Humanmachine::Application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-
-  resources :reviews do
-    collection do 
-      get 'you_first'
-    end
-  end
   
   resources :answers do
     collection do 

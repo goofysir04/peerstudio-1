@@ -1,23 +1,11 @@
-<div class="assignment_instructions">
-    <h1><%= link_to answer.assignment.title, answer.assignment %>
-    </h1>
-    <div class="assignment-description">
-      <%= sanitize answer.assignment.description %>
-    </div>
+<%= content_for :title do %>
+Reviewing <%= answer.assignment.title %>
+<% end %>
+<div class="page-header">
+<h1> <%= answer.assignment.title %> <small><%= link_to "Show assignment instructions", answer.assignment %></small></h1>
 </div>
-
 <div class="row">
-  <div class="assignment-rubric span4">
-    <div class="assignment-rubric-content"%>
-        <%= yield %>
-    </div>
-  </div>
+    <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
 
-  <div class="field span8">
-    <div class="edited-content">
-      <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
-
-      <%= render partial:"answers/attachments", locals: {answer: answer} %>
-    </div>
-  </div>
+    <%= render partial:"answers/attachments", locals: {answer: answer} %>
 </div>

@@ -1,0 +1,7 @@
+<h1>Your draft is in the review pile, but...</h1>
+
+<p>Here's how reviewing works. When you ask your classmates for feedback, you also promise to review work by two of your classmates. To help you keep this promise, we only show you your own feedback after you finish two reviews. </p>
+
+<p>You have <%= @trigger.count %> more reviews to complete before we can show you your feedback, <strong>and your work has already been reviewed!</strong> So, to unlock your reviews, give your classmates feedback now!</p>
+
+<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post %>

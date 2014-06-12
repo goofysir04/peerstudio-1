@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
   # include Humanize
-  before_action :set_assignment, only: [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item]
+  before_action :set_assignment, only: [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item, :review_first]
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
   before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
@@ -130,10 +130,19 @@ class AssignmentsController < ApplicationController
 
     if @action_item.save
       respond_to do |format|
-      format.html { redirect_to stats_assignment_path(@assignment) }
-      format.js
+        format.html { redirect_to stats_assignment_path(@assignment) }
+        format.js
+      end
     end
+  end
+
+  def review_first
+    @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
+
+    if @trigger.nil? 
+      redirect_to root_path
     end
+    #otherwise render
   end
   private
     # Use callbacks to share common setup or constraints between actions.

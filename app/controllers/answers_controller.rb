@@ -98,9 +98,10 @@ class AnswersController < ApplicationController
 
   def submit_for_feedback
     @answer.submitted = true
+    trigger = TriggerAction.add_trigger(current_user, @answer.assignment, trigger: "review_required", count: 2)
     respond_to do |format|
-      if @answer.save
-        format.html {redirect_to you_first_reviews_path}
+      if @answer.save and trigger.save
+        format.html {redirect_to assignment_review_first_path(@answer.assignment)}
         format.json { head :no_content }
         format.js
       else
