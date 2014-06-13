@@ -138,10 +138,15 @@ class AssignmentsController < ApplicationController
 
   def review_first
     @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
+
     unless params[:recent_review].nil?
       @recent_review = Review.find(params[:recent_review])  
     end
+
+
     if @trigger.nil? 
+      #this means that either the required reviews were completed, or that we never had a trigger. 
+      #In either case, check if there are
       redirect_to root_path
     end
     #otherwise render

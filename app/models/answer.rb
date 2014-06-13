@@ -17,8 +17,7 @@ class Answer < ActiveRecord::Base
   belongs_to :user
   belongs_to :assignment
 
-  belongs_to :previous_version, class_name: "Answer", inverse_of: :next_version
-  has_one :next_version
+  belongs_to :previous_version, class_name: "Answer"
 
   has_many :reviews, :dependent => :destroy
   has_many :feedback_items, through: :reviews
@@ -72,6 +71,24 @@ class Answer < ActiveRecord::Base
     if other_answers_tagged_like_this.count > 10
       errors.add :revision_list, "You already have more than ten drafts that are #{self.revision_list}. You can't create any more."
     end
+  end
+  def next_version
+    if Answer.where(previous_version: self).exists?
+      return Answer.where(previous_version: self).first
+    else
+      return nil
+    end
+  end
+  
+  def feedback_items_by_rubric_item
+    grouped_items = self.feedback_items.group_by(&:rubric_item_id)
+    reviews = self.reviews
+    unless reviews.empty?
+      reviews.each do |r|
+        (grouped_items["comments"] ||= []) << r.comments
+      end
+    end
+    return grouped_items
   end
 
   def self.should_get_ground_truth_assignment(user, question)

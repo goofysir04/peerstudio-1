@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613011151) do
+ActiveRecord::Schema.define(version: 20140613202939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20140613011151) do
     t.boolean  "submitted",           default: false
     t.boolean  "is_final",            default: false
     t.integer  "previous_version_id"
+    t.text     "reflection"
   end
 
   add_index "answers", ["assignment_id"], name: "fk__answers_assignment_id", using: :btree

@@ -163,11 +163,26 @@ class AnswersController < ApplicationController
   end
 
   def clone
-    @cloned_answer = Answer.new(user: current_user, assignment: @answer.assignment, previous_version: @answer, 
-      response: @answer.response, milestone_list: @answer.milestone_list,
-      active: false)
-    @cloned_answer.save!
-    redirect_to edit_answer_path(@cloned_answer)
+    @cloned_answer = @answer.next_version
+    if @cloned_answer.nil?
+      @cloned_answer = Answer.new(user: current_user, assignment: @answer.assignment, previous_version: @answer, 
+        response: @answer.response, revision_list: @answer.revision_list,
+        active: false)
+      @cloned_answer.save!
+    end
+
+    respond_to do |format|
+      if @answer.update(answer_params) #set active to true so the answer shows up everywhere
+        format.html { redirect_to edit_answer_path(@cloned_answer) }
+        format.json { head :no_content }
+        format.js
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.js {flash[:alert] = @answer.errors.full_messages.join(","); render} 
+      end
+    end
+    
   end
 
   def reflect
@@ -199,6 +214,7 @@ class AnswersController < ApplicationController
     def answer_params
       params.permit(:assignment_id)
       params.permit(:page)
-      params.require(:answer).permit(:response, :revision_name, :revision_list, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id)
+      params.require(:answer).permit(:response, :revision_name, :revision_list, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id,
+        :reflection)
     end
 end

@@ -73,4 +73,10 @@
       </li>
     <% end %>
   </ul>
+  <% if show_revision_link %>
+    <div class="form-controls">
+      <%= link_to "Revise submission", reflect_answer_path(answer), class: "btn btn-primary"%>
+    </div>
+  <% end %>
+  <br/>
 <% end %>

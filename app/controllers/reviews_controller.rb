@@ -5,13 +5,6 @@ class ReviewsController < ApplicationController
   # GET /reviews.json
   def index
     @answer = Answer.find(params[:answer_id])
-    @reviews = @answer.reviews
-    @feedback_items_by_rubric_item = @answer.feedback_items.group_by(&:rubric_item_id)
-    unless @reviews.empty?
-      @reviews.each do |r|
-        (@feedback_items_by_rubric_item["comments"] ||= []) << r.comments
-      end
-    end
   end
 
   # GET /reviews/1

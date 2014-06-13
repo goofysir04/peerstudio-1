@@ -15,7 +15,12 @@ $(document).ready ->
 		lastUpdated++
 		), 60*1000
 
-
+	$('.expandable').on('keyup', () ->
+        this.style.overflow = 'hidden'
+        this.style.height = this.style.min_height
+        this.style.height = this.scrollHeight + 'px'
+        return true
+      )
 	uploadCompleted = (r) ->
 		$("#attachment_progress").hide()
 		$("#attachments").html(r.responseText)
