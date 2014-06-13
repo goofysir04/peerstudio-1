@@ -1,6 +1,9 @@
 <%= content_for :title do %>
 Reviewing <%= answer.assignment.title %>
 <% end %>
+
+<%= yield %>
+
 <div class="page-header">
 <h1> <%= answer.assignment.title %> <small><%= link_to "Show assignment instructions", answer.assignment %></small></h1>
 </div>

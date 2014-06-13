@@ -1,60 +1,76 @@
-<p>Here's how your peers assessed you.</p>
-<style type="text/css">
-.rubric {margin: 0;}
-.rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
-</style>
-<ul class="rubric">
-  <% answer.assignment.rubric_items.each do |r| %>
-    <li>
-      <strong><%= r.short_title %></strong> 
-      <!-- <span class="pull-right label">Max: <%=r.max %><%= "(#{r.max_label})" unless r.max_label.blank?%></span> -->
-      <br/>
-      <legend></legend>
-      <%= sanitize r.title %>
-      <% if feedback_items_by_rubric_item[r.id].nil? %>
-      No review.
-      <% else %>
-        <div class="row">
-          <div class="span4">
+<% content_for :context_menu do %>
+  <style type="text/css">
+  .rubric {margin: 0;}
+  .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
+  </style>
+  <ul class="rubric">
+    <% unless feedback_items_by_rubric_item["comments"].nil? %>
+      <li>
+        <strong>Overall feedback:</strong>
+        <br/>
+        <legend></legend>
+        <% feedback_items_by_rubric_item["comments"].each.with_index(1) do |comment,i| %>
+          <% next if comment.nil? %>
             <div class="row">
-              <% answer.assignment.rubric_items.find(r.id).answer_attributes.each do |a_attr| %>
-                <div class="span1">
-                  <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                    <% if f.answer_attributes.include?(a_attr) %>
-                      <div class="reviewer-label reviewer<%= i%10 %>"></div>
-                    <% else %>
-                      <div class="reviewer-label"></div>
-                    <% end %>
-                  <% end %>
-                </div>
-                <div class="span3">
-                  <p><%= a_attr.description %></p>
-                </div>
-              <% end %>
+              <div class="col-sm-2 col-md-3">
+                <div class="reviewer-label reviewer<%= i %>"></div>
+              </div>
+              <div class="col-sm-10 col-md-9">
+                <p><%= comment %></p>
+              </div>
             </div>
-          </div>
-          <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-            <div class="span4">
-              <% if f.like_feedback.blank? %>
-                &nbsp;
-              <% else %>
-                <div class="reviewer-label reviewer<%= i %>"></div><p><%= f.like_feedback %></p>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </li>
-  <% end %>
-  <% unless feedback_items_by_rubric_item["comments"].nil? %>
-  <li>
-    <strong>Overall feedback:</strong>
-    <br/>
-    <legend></legend>
-    <% feedback_items_by_rubric_item["comments"].each.with_index(1) do |comment,i| %>
-      <% next if comment.nil? %>
-      <div class="reviewer-label reviewer<%= i %>"></div><p><%= comment %> </p>
+        <% end %>
+      </li>
     <% end %>
-  </li>
-  <% end %>
-</ul>
+    <% answer.assignment.rubric_items.each do |r| %>
+      <li>
+        <strong><%= r.short_title %></strong> 
+        <!-- <span class="pull-right label">Max: <%=r.max %><%= "(#{r.max_label})" unless r.max_label.blank?%></span> -->
+        <br/>
+        <legend></legend>
+        <%= sanitize r.title %>
+        <% if feedback_items_by_rubric_item[r.id].nil? %>
+        No review.
+        <% else %>
+          <div class="row-fluid">
+              <% answer.assignment.rubric_items.find(r.id).answer_attributes.each do |a_attr| %>
+                <div class="row">
+                  <div class="col-sm-2 col-md-3">
+                    Yes:
+                    <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
+                      <% if !f.answer_attributes.include?(a_attr) %>
+                        <div class="reviewer-label reviewer<%= i%10 %> reviewer-fail"></div>
+                      <% end %>
+                    <% end %>
+                    <br/>
+                    No:
+                    <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
+                      <% if f.answer_attributes.include?(a_attr) %>
+                        <div class="reviewer-label reviewer<%= i%10 %> reviewer-success"></div>
+                      <% end %>
+                    <% end %>
+                  </div>
+                  <div class="col-sm-10 col-md-9">
+                    <p><%= a_attr.description %></p>
+                  </div>
+                </div>
+              <% end %>
+            Comments <br/>
+            <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
+              
+                <% unless f.like_feedback.blank? %>
+                  <div class="col-sm-2 col-md-3">
+                    <div class="reviewer-label reviewer<%= i %>"></div>
+                  </div>
+                  <div class="col-sm-10 col-md-9">
+                    <p><%= f.like_feedback %></p>
+                  </div>
+                <% end %>
+
+            <% end %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

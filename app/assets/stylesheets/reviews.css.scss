@@ -11,13 +11,14 @@
 }
 
 .reviewer-label {
-	width: 15px;
-	height: 15px;
-	-moz-border-radius:15px;
+	width: 0.5em;
+	height: 1em;
+	
+	/*-moz-border-radius:15px;
   	-webkit-border-radius:15px;
-  	border-radius:10px;
-  	margin: 0 5px 0 0;
-  	float: left;
+  	border-radius:10px;*/
+  	margin-left: 0px;
+  	float:right; 
 }
 
 .reviewer1 {
