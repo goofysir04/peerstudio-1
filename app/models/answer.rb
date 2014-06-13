@@ -17,6 +17,9 @@ class Answer < ActiveRecord::Base
   belongs_to :user
   belongs_to :assignment
 
+  belongs_to :previous_version, class_name: "Answer", inverse_of: :next_version
+  has_one :next_version
+
   has_many :reviews, :dependent => :destroy
   has_many :feedback_items, through: :reviews
 
