@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, 
     :submit_for_feedback, :submit_for_grades, :unsubmit_for_feedback,
-    :direct_upload_attachment, :delete_attachment]
+    :reflect, :clone]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
   # before_filter :authenticate_user_is_admin!
@@ -162,33 +162,16 @@ class AnswersController < ApplicationController
     end
   end
 
-  def direct_upload_attachment
-    filepath = params.permit(:filepath)[:filepath]
-    filename = params.permit(:filename)[:filename]
-    mimetype = params.permit(:filetype)[:filetype]
-    @attachment = @answer.attached_assets.new(asset_file_name: filename, asset_content_type: mimetype)
-    if @attachment.save! 
-      @attachment.move_file_in_place(filepath)
-      # raise @attachment.inspect
-      respond_to do |format|
-        format.html {redirect_to root_path}
-        format.js {render 'upload_attachment', layout: nil}
-      end
-    else
-      redirect_to root_path
-    end
+  def clone
+    @cloned_answer = Answer.new(user: current_user, assignment: @answer.assignment, previous_version: @answer, 
+      response: @answer.response, milestone_list: @answer.milestone_list,
+      active: false)
+    @cloned_answer.save!
+    redirect_to edit_answer_path(@cloned_answer)
   end
 
-  def delete_attachment
-    @attachment = @answer.attached_assets.find(params.permit(:attachment_id)[:attachment_id])
-    @attachment.deleted = !@attachment.deleted
-
-    if @attachment.save
-      respond_to do |format|
-        format.html {redirect_to root_path}
-        format.js
-      end
-    end
+  def reflect
+    
   end
 
   #toggles star

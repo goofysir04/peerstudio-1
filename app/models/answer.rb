@@ -68,8 +68,9 @@ class Answer < ActiveRecord::Base
 
   def revisions_are_valid
     other_answers_tagged_like_this = Answer.where(assignment: self.assignment, user: self.user, active: true).where('answers.id <> ?', self.id).tagged_with(self.revision_list)
-    if other_answers_tagged_like_this.count > 0
-      errors.add :revision_list, "You already have a draft that is #{self.revision_list} (#{other_answers_tagged_like_this.first.id})"
+    #Sort of an arbitrary cutoff.
+    if other_answers_tagged_like_this.count > 10
+      errors.add :revision_list, "You already have more than ten drafts that are #{self.revision_list}. You can't create any more."
     end
   end
 
