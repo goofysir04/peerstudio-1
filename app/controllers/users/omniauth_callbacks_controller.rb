@@ -25,6 +25,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
            :uid => request.env["omniauth.auth"]["uid"]})
         @user.provider = session["devise.openid_data"]["provider"]
         @user.uid = session["devise.openid_data"]["uid"]
+        @user.confirm!
         @user.save
         redirect_to start_openid_registration_url
       else
