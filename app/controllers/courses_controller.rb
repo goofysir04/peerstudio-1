@@ -15,7 +15,7 @@ class CoursesController < ApplicationController
 
   # GET /courses/new
   def new
-    @course = Course.new
+    @course = Course.new(user: current_user)
   end
 
   # GET /courses/1/edit
@@ -47,7 +47,7 @@ class CoursesController < ApplicationController
         format.html { redirect_to @course, notice: 'Course was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'edit', alert: 'There was trouble saving your changes.' }
         format.json { render json: @course.errors, status: :unprocessable_entity }
       end
     end
