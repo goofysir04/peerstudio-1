@@ -44,7 +44,10 @@ body {
 #mainpage {
     position: fixed;
     right: 0;
+    bottom:0;
     overflow: auto;
+    padding-bottom: 2em;
+    padding-top: 4em;
     height: 100%;
 }
 
