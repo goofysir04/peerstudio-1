@@ -1,55 +1,55 @@
 
 <div class="row-fluid">
+  <div class="col-md-3 col-md-offset-4">
+    
+    <div class="login-panel panel panel-default">
+      <div class="panel-heading">             
+          <h3 class="panel-title">Please Sign In to <strong style="font-family: 'Rock Salt', cursive;">PeerStudio</strong></h3>
+      </div>
+      <div class="panel-body">
+        <div class="row-fluid" id="omniauth-login">
+            <%= link_to omniauth_authorize_path(resource,"coursera"), :class=> "btn btn-lg btn-primary btn-block", :id=>"login_button" do %>
+              Sign in with <%= image_tag "coursera_white.svg" %> <br/>
+              <div id="progress" style="display:none;"><small>(Signing in...)</small></div>
+            <% end %>
+        </div>
 
-  <div class="span6">
-    <h3>Sign in</h3>
-    <p>To use the peer assessment website, you need to login.</p>
-    <% if true  %>
-    <% #temporarily disable login for coursera %>
-    <%= link_to omniauth_authorize_path(resource,"coursera"), :class=> "btn btn-large btn-primary", :id=>"login_button" do %>
-    Log in with <%= image_tag "coursera_white.svg" %> <br/>
-    <div id="progress" style="display:none;"><small>(Logging in...)</small></div>
-    <% end %>
-    <% end %>
+        <div class="row-fluid" id="password-login">
+          <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
 
-  <p>Coming soon, login link for UC San Diego IDs</p>
+            <div class="form-group">
+              <%= f.label :email %>
+              <%= f.email_field :email, :autofocus => true, class: "form-control" %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :password %>
+                <%= f.password_field :password, class: "form-control" %>
+            </div>
+
+            <div class="checkbox">
+              <% if devise_mapping.rememberable? -%>
+                <%= f.label :remember_me do %>
+                  <%= f.check_box :remember_me %> Remember me
+                <% end %>
+              <% end -%>
+            </div>
+
+            <div class="form-group">
+                <%= f.submit "Sign in", :class => 'btn btn-primary' %>
+                
+            </div>
+            <%= render "devise/shared/links" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="panel-footer">
+          <a href="#" id="enable-password-login">I have a password</a>
+      </div> 
+    </div>
   </div>
-
-  <div class="span6">
-    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => 'form-horizontal' }) do |f| %>
-
-      <div class="control-group">
-        <label class="control-label" for="user_email"><%= f.label :email %><br /></label>
-        <div class="controls">
-          <%= f.email_field :email, :autofocus => true %>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="control-label" for="user_password"><%= f.label :password %><br /></label>
-        <div class="controls">
-          <%= f.password_field :password %>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="controls">
-      <% if devise_mapping.rememberable? -%>
-        <div><%= f.check_box :remember_me %><%= f.label :remember_me, :style=>"display:inline; margin-left:10px;" %></div>
-      <% end -%>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="controls">
-          <%= f.submit "Sign in", :class => 'btn btn-primary' %>
-          <%= render "devise/shared/links" %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-
 </div>
+
 
 <br />
 <script type="text/javascript">
@@ -57,7 +57,10 @@ $(function() {
   $("#login_button").click(function(event) {
     $("#progress").show()
     return true;
-  })
+  });
+  $('#password-login').hide();
+  $('#enable-password-login').click(function() {$('#password-login').show();$('#omniauth-login').hide(); return false});
+
 });
 </script>
 <%= #render "devise/shared/links" 

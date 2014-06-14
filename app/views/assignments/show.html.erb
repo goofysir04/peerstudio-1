@@ -1,7 +1,6 @@
 <h1>
   <%= @assignment.title %>
   <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> (<%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>) 
-    <%if user_signed_in? and current_user.admin? %> <%= link_to "Stats", stats_assignment_path(@assignment) %><% end %>
   </small>
 </p>
 </h1>
@@ -48,10 +47,12 @@
                   <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                     <td>
                     <% if answer.submitted? %>
-                    <span class="label label-important">Submitted</span> 
+                    <span class="label label-important">Being reviewed</span> 
+                    <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
                     <% else %>
-                  <% end %>
+                  
                     <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
+                    <% end %>
                   </td>
                   
                 </tr>
@@ -149,21 +150,15 @@
       <% end %>
   </div>
 </div>
-
-<% if user_signed_in? && current_user.admin? %>
-<div>
-  <legend></legend>
-  <h3>For instructors only</h3>
-<p>
-  <strong>This assignment opens at:</strong>
-  <%= @assignment.open_at %>
-</p>
-<% if @assignment.grades_released? %>
-<p>Grades have been released to students.</p>
-<% else %>
-<p>Grades are not visible to students.</p>
-<% end %>
-<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
-<%= link_to 'Back', course_assignments_path(@assignment.course) %>
-</div>
+<% content_for :context_menu do %>
+  <ul class="nav nav-stacked">
+    <li><a href="#my_answers">My drafts</a></li>
+    <li><a href="#my_grades">My grades</a></li>
+    <li><a href="#my_grades">Give your peers feedback</a></li>
+    <% if user_signed_in? && current_user.admin? %>
+      <li>For instructors only</li>
+      <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>
+      <li><%= link_to 'Assignment statistics', stats_assignment_path(@assignment) %></li>
+    <% end %>
+  </ul>
 <% end %>

@@ -15,55 +15,57 @@
     "/>
     <meta property="og:description" content="<%= (@project && !@project.description.blank?) ? @project.description.truncate(100) : "Collaborative human and machine grading." %>" />
 
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|Rock+Salt' rel='stylesheet' type='text/css'>
 </head>
 <body>
 <div id="fb-root"></div>
 <div id="wrapper">
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0"
+  <div class="container-fluid">
+    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation" style="margin-bottom: 0"
    <% if current_user != true_user %>style="color: rgb(255, 255, 255); background-image: -webkit-linear-gradient(top, rgb(238, 95, 91), rgb(189, 54, 47)); background-color: rgb(189, 54, 47);"<%end%> >
         
-          <% if @org %>
-            <div class="navbar-header">
-              <%= link_to @org.name, o_path(@org), :class => "navbar-brand", :style => "padding-left: 0;" %>
-            </div>
-          <% else %>
-              <% if content_for?(:local_nav) %>
+            <% if @org %>
               <div class="navbar-header">
-                  <%= link_to root_path, :class => "navbar-brand" do %>
-                    Stanford+UCSD | <strong><%= t :PeerStudio %></strong> <%end %>
+                <%= link_to @org.name, o_path(@org), :class => "navbar-brand", :style => "padding-left: 0;" %>
               </div>
-              <ul class="nav navbar-nav">
-                 <%= content_for(:local_nav) %>
-              </ul>
-              
-              <% else %>
-                <%= link_to root_path, :class => "navbar-brand" do %>
-                  Stanford+UCSD | <strong><%= t :PeerStudio %></strong>
-                    <small class="title_slug">&ndash; Let's learn together!</small>
-                <% end %>
-            <% end %>
-          <% end %>
-        <ul class="nav navbar-top-links navbar-right">
-          <li> <%= link_to "Help", help_courses_path %> </li>
-        <% if user_signed_in? %>
-            
-              <li class="dropdown">
-                <a class="dropdown-toggle" id="login_label" role="button" data-toggle="dropdown" data-target="#" href="<%= edit_user_registration_path %>">
-                  <%= current_user.name %>
-                  <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="login_label">
-                  <li><%= link_to "Account Settings", edit_user_registration_path %></li>
-                  <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+            <% else %>
+                <% if content_for?(:local_nav) %>
+                <div class="navbar-header">
+                    <%= link_to root_path, :class => "navbar-brand" do %>
+                      Stanford+UCSD | <strong><%= t :PeerStudio %></strong> <%end %>
+                </div>
+                <ul class="nav navbar-nav">
+                   <%= content_for(:local_nav) %>
                 </ul>
-              </li>
-            
-          <% else %>
-              <li><%= link_to "Sign up / Sign in", new_user_session_path, :method => :get %></li>
-          <% end %>
-        </ul>
-  </nav>
+                
+                <% else %>
+                  <%= link_to root_path, :class => "navbar-brand" do %>
+                    Stanford+UCSD | <strong><%= t :PeerStudio %></strong>
+                      <small class="title_slug">&ndash; Let's learn together!</small>
+                  <% end %>
+              <% end %>
+            <% end %>
+          <ul class="nav navbar-nav navbar-right">
+            <li> <%= link_to "Help", help_courses_path %> </li>
+          <% if user_signed_in? %>
+              
+                <li class="dropdown">
+                  <a class="dropdown-toggle" id="login_label" role="button" data-toggle="dropdown" data-target="#" href="<%= edit_user_registration_path %>">
+                    <%= current_user.name %>
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="login_label">
+                    <li><%= link_to "Account Settings", edit_user_registration_path %></li>
+                    <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+                  </ul>
+                </li>
+              
+            <% else %>
+                <li><%= link_to "Sign up / Sign in", new_user_session_path, :method => :get %></li>
+            <% end %>
+          </ul>
+    </nav>
+  </div>
   <div class="row">
     <div  id="sidebar" class="col-md-3 col-sm-4">
             <%= content_for?(:context_menu) ? content_for(:context_menu) : render(:partial => 'layouts/global_context_menu') %>
