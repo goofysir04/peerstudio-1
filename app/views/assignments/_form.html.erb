@@ -51,53 +51,51 @@
     </div>
   </div>
   
-    <div class="col-md-5 col-sm-6">
-      <ul class="rubric">
-        <%= f.fields_for :rubric_items do |r| %>
-          <li>
+  <div class="col-md-5 col-sm-6">
+    <ul class="rubric">
+      <%= f.fields_for :rubric_items do |r| %>
+        <li>
+          <div class="row-fluid">
             <div class="row-fluid">
-              <div class="row-fluid">
-                <div class="col-sm-11"><strong><%= r.text_field :short_title, placeholder: "Title", class: "form-control" %></strong></div>
-                <span class="badge col-sm-1"><%=r.text_field :max_label, class:"form-control", placeholder: "opt. max score"%></span>
-              </div>
-              <legend></legend>
-              <div class="row-fluid">
-                <%=r.text_area :title, placeholder: "An optional longer explanation", class: "form-control" %>
-              </div>
-              <table id="checkboxes-<%=r.object.id%>">
-                <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
-                  <tr>
-                  <td style="vertical-align:top;"><input type="checkbox" style ="margin:0 5px 0 0;" disabled="disabled"></td><td style="vertical-align:top;"><%= a.text_field :description %><%= a.text_field :score %></td>
-                  <td><%= a.link_to_remove "X" %></td>
-                  </tr>
-                <% end %>
-              </table>
-              <div class="row-fluid">
-                <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes-#{r.object.id}" } %>
-              </div>
-              <div class="row-fluid">
-                <input type="textarea" placeholder="How can I improve on this part?" class="form-control" rows="2"></input>
-              </div>
-              <div class="row-fluid">
-                <%= r.link_to_remove "Remove this rubric item" %>
-              </div>
-              <br/>
+              <div class="col-sm-11"><strong><%= r.text_field :short_title, placeholder: "Title", class: "form-control" %></strong></div>
+              <span class="badge col-sm-1"><%=r.text_field :max_label, class:"form-control", placeholder: "opt. max score"%></span>
             </div>
-          </li>
-        <% end %>
-        <%= f.link_to_add "Add a rubric item", :rubric_items %>
-      </ul>
+            <legend></legend>
+            <div class="row-fluid">
+              <%=r.text_area :title, placeholder: "An optional longer explanation", class: "form-control" %>
+            </div>
+            <div class="row-fluid form-inline" id="checkboxes-<%=r.object.id%>">
+              <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
+                <div class="fields row-fluid">
+                  <div class="form-group" style="width: 75%;"><input type="checkbox" disabled="disabled"><%= a.text_field :description, placeholder: "Enter a criteria. Keep it to one line if possible", class:"form-control", style: "width: 95%" %></div><div class="form-group" style="width: 7%;"><%= a.text_field :score, placeholder: "0", class:"form-control", style: "width: 100%" %></div><div class="form-group"><%= a.link_to_remove "Remove", class:"btn btn-default", tabindex: "-1"%></div>
+                </div>
+              <% end %>
+            </div>
+            <div class="row-fluid">
+              <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes-#{r.object.id}" }, class: "" %>
+            </div>
+            <div class="row-fluid">
+              <input type="textarea" placeholder="Space for student comments" class="form-control" disabled="disabled" rows="2"></input>
+            </div>
+            <div class="row-fluid">
+              <%= r.link_to_remove "Remove this rubric item" %>
+            </div>
+            <br/>
+          </div>
+        </li>
+      <% end %>
+      <%= f.link_to_add "Add a rubric item", :rubric_items %>
+    </ul>
 
-    </div>
+  </div>
   <div class="clearfix"></div>
-  
-
-    <div class="actions">
-      <%= f.submit class: "btn btn-primary" %>
-    </div>
+  <div class="actions">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
 <% end %>
   <script type="text/javascript">
   $(function() {
     $('.datetime-picker').datetimepicker({language: 'en', pickTime: true});});
+
   </script>
 
