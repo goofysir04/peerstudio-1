@@ -15,12 +15,6 @@
   
       <% content_for :context_menu do %>
       <div class="assignment-rubric">
-      <style type="text/css">
-      .rubric {margin: 0;}
-      .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
-      #reviews {min-height: 200px;}
-      </style>
-
       <div class="btn-group">
         <button type="button" href="#evaluation" class="btn btn-default active">Evaluation</button>
         <button type="button" href="#evaluation" class="btn btn-default">Previous reviews</button>
@@ -31,7 +25,7 @@
             <% @answer.assignment.rubric_items.each do |r| %>
             <% if r.open_at < Time.now and r.ends_at > Time.now %>
             <li>
-              <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
+              <strong><%= r.short_title %></strong> <span class="pull-right label"><%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
               <legend></legend>
               <%= sanitize r.title %>
               <table>

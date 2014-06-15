@@ -60,3 +60,7 @@
 .reviewer10 { 
 	background-color: #17becf;
 }
+
+.rubric {margin: 0;}
+.rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
+#reviews {min-height: 200px;}

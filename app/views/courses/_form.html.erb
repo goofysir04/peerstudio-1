@@ -71,10 +71,17 @@
     </div>
     <div class="checkbox">
       <%= f.label :open_enrollment do %>
-        <%= f.check_box :open_enrollment %> This class is now active (students can submit work)
+        <%= f.check_box :open_enrollment %> <strong>This class is now active</strong> (students can submit work)
       <% end %>
     </div>
-    <div class="actions">
+
+    <div class="form-group">
+      <%= f.label :forum_link do %>
+        Help forum URL <small>(Set up a forum on your class page for peer assessment questions, and save the link here)</small>
+      <%end%>
+      <%= f.url_field :forum_link, class:"form-control", placeholder:"https://..." %>
+    </div>
+    <div class="form-group">
       <%= f.submit class: "btn btn-primary" %>
     </div>
   </div>
