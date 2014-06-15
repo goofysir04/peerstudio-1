@@ -11,7 +11,7 @@
     </div>
   <% end %>
   <% content_for :context_menu do %>
-  <%= form_for([@answer,@review]) do |f| %>
+  <%= form_for([@review]) do |f| %>
   <p>Here's how this assignment should be assessed</p>
       <ul class="rubric">
         <% if @review.review_type== "paired"%>
@@ -22,7 +22,7 @@
           </li>
         <% end %>
         <%= f.fields_for :feedback_items do |r| %>
-        <% if r.object.rubric_item.open_at < Time.now and r.object.rubric_item.ends_at > Time.now %>
+        <% if (r.object.rubric_item.show_for_feedback? and !@answer.is_final?) or (r.object.rubric_item.show_for_final? and @answer.is_final?) %>
         <li>
           <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
           <legend></legend>
@@ -32,6 +32,7 @@
             <tr>
             <td style="vertical-align:top;"><%= b.check_box :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= b.label %></td>
             </tr>
+
           <% end %>
           </table>
           <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"form-control", size: "10x4" %>
@@ -42,10 +43,6 @@
         <li>
           <strong>Overall comments</strong> 
           <legend></legend>
-          <% if false and @review.review_type == "final"%> 
-            Here's <a href="https://www.dropbox.com/s/i2jqp0jg3u7uigj/BanhText.pdf" target="_blank">a good submission from last year</a>. What can the current submission copy from this submission to improve?
-          <% end %>
-          
           <%= f.text_area :comments, size: "10x5", class:"review_text form-control" %>
           <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
           <legend></legend>
