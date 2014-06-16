@@ -19,6 +19,8 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 set :default_env, { path: "/home/deploy/.rvm/gems/ruby-2.1.2/bin:/home/deploy/.rvm/gems/ruby-2.1.2@global/bin:/home/deploy/.rvm/rubies/ruby-2.1.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/deploy/.rvm/bin:$PATH" }
 # set :keep_releases, 5
+SSHKit.config.command_map[:rake]  = "bundle exec rake" #8
+SSHKit.config.command_map[:rails] = "bundle exec rails"
 
 namespace :deploy do
 
@@ -27,6 +29,10 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
+      within release_path do
+        execute :bundle, "exec thin restart -O -C config/thin.yml"
+        execute :touch, release_path.join('tmp/restart.txt')
+      end
     end
   end
 
@@ -40,6 +46,7 @@ namespace :deploy do
   end
 
   after :finishing, 'deploy:cleanup'
+  after :finishing, 'deploy:restart'
   # before :starting, :set_rvm do 
   #   run "source /home/deploy/.rvm/scripts/rvm"
   # end
