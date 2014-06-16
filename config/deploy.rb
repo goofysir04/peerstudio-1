@@ -14,8 +14,8 @@ set :repo_url, 'git@github.com:StanfordHCI/peerstudio.git'
 # set :log_level, :debug
 # set :pty, true
 
-set :linked_files, %w{config/database.yml}
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system db}
+set :linked_files, %w{config/database.yml db/prod.sqlite3}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 set :default_env, { path: "/home/deploy/.rvm/gems/ruby-2.1.2/bin:/home/deploy/.rvm/gems/ruby-2.1.2@global/bin:/home/deploy/.rvm/rubies/ruby-2.1.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/deploy/.rvm/bin:$PATH" }
 # set :keep_releases, 5
@@ -30,8 +30,8 @@ namespace :deploy do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
       within release_path do
-        execute :bundle, "exec thin restart -O -C config/thin.yml"
         execute :touch, release_path.join('tmp/restart.txt')
+        execute :bundle, "exec thin restart -O -C config/thin.yml"
       end
     end
   end
@@ -47,6 +47,7 @@ namespace :deploy do
 
   after :finishing, 'deploy:cleanup'
   after :finishing, 'deploy:restart'
+
   # before :starting, :set_rvm do 
   #   run "source /home/deploy/.rvm/scripts/rvm"
   # end
