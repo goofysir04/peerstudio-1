@@ -1,0 +1,15 @@
+---
+pid: /srv/www/peerstudio/application/shared/pids/thin.pid
+address: 0.0.0.0
+timeout: 30
+wait: 30
+port: 4011
+log: log/thin.log
+max_conns: 256
+require: []
+environment: production
+max_persistent_conns: 128
+servers: 1
+daemonize: true
+chdir: /srv/www/peerstudio/application/current
+tag: thin-peerstudio

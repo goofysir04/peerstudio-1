@@ -1,27 +1,19 @@
-set :application, 'diode'
-set :repo_url, 'git@github.com:StanfordHCI/diode.git'
+# require 'capistrano/rails'
+
+set :application, 'peerstudio'
+set :repo_url, 'git@github.com:StanfordHCI/peerstudio.git'
 
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
-set :deploy_to, '/srv/www/diode/application'
+# set :deploy_to, '/var/www/my_app'
 # set :scm, :git
-set :scm, :git
-set :branch, "master"
-# set :deploy_via, :export
-set :deploy_via, :remote_cache
-# set :pty, true
-# default_run_options[:pty] = true
- # Must be set for the password prompt
-
-# set :ssh_options, { :forward_agent => true }
-
 
 # set :format, :pretty
-set :log_level, :debug
+# set :log_level, :debug
+# set :pty, true
 
-
-set :linked_files, %w{config/database.yml}
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+# set :linked_files, %w{config/database.yml}
+# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 # set :keep_releases, 5
@@ -33,7 +25,6 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
-      
     end
   end
 
