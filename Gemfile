@@ -48,8 +48,8 @@ gem "omniauth"
 gem 'omniauth-openid', :git => 'git://github.com/intridea/omniauth-openid.git'
 gem "cancan"
 
-# gem "mysql2", group: :production
-gem "pg" #group: :production #only heroku
+gem "mysql2", group: :production
+gem "pg", group: :development #only heroku
 gem 'rails_12factor', group: :production #only heroku
 #create views
 # gem "schema_plus"
@@ -65,9 +65,10 @@ gem 'google-analytics-rails'
 
 # Use Capistrano for deployment
 group :development do
-	gem 'capistrano-bundler'
- 	gem 'capistrano',  '~> 3.1'
+	gem 'capistrano-bundler', '>= 1.1.0'
+ 	gem 'capistrano',  '~> 3.0'
 	gem 'capistrano-rails', '~> 1.1'
+	gem 'capistrano-rvm'
 end
 
 #For server/config

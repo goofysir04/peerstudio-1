@@ -1,7 +1,9 @@
-# require 'capistrano/rails'
+require 'capistrano/rails'
 
 set :application, 'peerstudio'
 set :repo_url, 'git@github.com:StanfordHCI/peerstudio.git'
+
+# set :rvm_ruby_version, '2.1.2'
 
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
@@ -15,7 +17,7 @@ set :repo_url, 'git@github.com:StanfordHCI/peerstudio.git'
 # set :linked_files, %w{config/database.yml}
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :default_env, { path: "/home/deploy/.rvm/gems/ruby-2.1.2/bin:/home/deploy/.rvm/gems/ruby-2.1.2@global/bin:/home/deploy/.rvm/rubies/ruby-2.1.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/deploy/.rvm/bin:$PATH" }
 # set :keep_releases, 5
 
 namespace :deploy do
@@ -38,5 +40,15 @@ namespace :deploy do
   end
 
   after :finishing, 'deploy:cleanup'
+  # before :starting, :set_rvm do 
+  #   run "source /home/deploy/.rvm/scripts/rvm"
+  # end
 
+  task :set_rvm do 
+    on roles(:all) do
+      execute "source /home/deploy/.rvm/scripts/rvm"
+    end
+  end
+
+  before :starting, :set_rvm
 end

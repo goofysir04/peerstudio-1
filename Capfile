@@ -1,4 +1,5 @@
 # Load DSL and Setup Up Stages
+# require 'capistrano/rvm'
 require 'capistrano/setup'
 
 # Includes default deployment tasks
@@ -6,6 +7,7 @@ require 'capistrano/deploy'
 
 #for rails
 require 'capistrano/rails'
+
 
 # Includes tasks from other gems included in your Gemfile
 #
