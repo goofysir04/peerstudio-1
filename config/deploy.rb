@@ -14,8 +14,8 @@ set :repo_url, 'git@github.com:StanfordHCI/peerstudio.git'
 # set :log_level, :debug
 # set :pty, true
 
-# set :linked_files, %w{config/database.yml}
-# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_files, %w{config/database.yml}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system db}
 
 set :default_env, { path: "/home/deploy/.rvm/gems/ruby-2.1.2/bin:/home/deploy/.rvm/gems/ruby-2.1.2@global/bin:/home/deploy/.rvm/rubies/ruby-2.1.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/deploy/.rvm/bin:$PATH" }
 # set :keep_releases, 5
@@ -49,6 +49,15 @@ namespace :deploy do
       execute "source /home/deploy/.rvm/scripts/rvm"
     end
   end
+
+  # namespace :db do 
+  #   desc "Make symlink for database yaml"
+  #   task :symlink do
+  #     run "ln -nfs #{shared_path}/config/database.yml #{latest_release}/config/database.yml"
+  #   end
+  # end
+
+  # after :finishing, 'deploy:update_code', "db:symlink"
 
   before :starting, :set_rvm
 end

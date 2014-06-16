@@ -74,6 +74,7 @@ end
 #For server/config
 gem 'thin'
 gem 'figaro'
+gem 'sqlite3' #just for testing
 
 gem 'delayed_job_active_record'
 gem 'daemons'
