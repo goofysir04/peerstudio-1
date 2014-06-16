@@ -183,7 +183,6 @@ GEM
       json (~> 1.4)
     redcarpet (3.0.0)
     ref (1.0.5)
-    rmagick (2.13.2)
     ruby-openid (2.3.0)
     sass (3.2.12)
     sass-rails (4.0.1)
@@ -272,7 +271,6 @@ DEPENDENCIES
   rails-bootstrap-markdown
   rails_12factor
   redcarpet
-  rmagick (= 2.13.2)
   s3_direct_upload!
   sass-rails (~> 4.0.0)
   sdoc
