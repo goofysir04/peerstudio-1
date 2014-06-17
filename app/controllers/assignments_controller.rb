@@ -27,6 +27,7 @@ class AssignmentsController < ApplicationController
     end
     @all_answers = @assignment.answers.reviewable.limit(10)
     @starred_answers = @assignment.answers.reviewable.where(starred: true)
+    render layout: "one_column"
   end
 
   def show_all_answers

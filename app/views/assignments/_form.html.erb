@@ -15,9 +15,7 @@
     <h1><%= f.text_field :title, placeholder: "Assignment title" %></h1>
     <div class="form-group">
       <%= f.label :description, "Assignment description (See example)" %>
-      <div class="editable" id="assignment_description_richtext" data-syncwith="assignment_description" placeholder: "Describe your assignment.">
-        <%= sanitize @assignment.description unless @assignment.description.nil? %>
-      </div>
+      <%= f.text_area :description, placeholder: "Describe your assignment.", class: "editable" %>
     </div>
   </div>
   <div class="row-fluid">

@@ -65,11 +65,8 @@
           </ul>
     </nav>
   </div>
-  <div class="row">
-    <div  id="sidebar" class="col-md-3 col-sm-4">
-            <%= content_for?(:context_menu) ? content_for(:context_menu) : render(:partial => 'layouts/global_context_menu') %>
-    </div>
-    <div  id="mainpage" class="col-md-9 col-sm-8">
+  <div class="row-fluid">
+    <div  id="mainpage" class="col-xs-12">
       <%= render :partial => 'layouts/notice', :locals => {:notice => notice, :alert => alert} %>
       <%= yield %>
     </div>

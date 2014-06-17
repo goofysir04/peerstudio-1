@@ -4,9 +4,22 @@
   </small>
 </p>
 </h1>
-<% if user_signed_in? %>
-<%= render partial: "task_box", locals: {task_list: @assignment.task_list, answers: @my_answers} %>
-<% end %>
+
+<div class="row-fluid">
+    <ul class="nav nav-stacked">
+    <li><a href="#my_answers">My drafts</a></li>
+    <li><a href="#my_grades">My grades</a></li>
+    <li><legend></lengend></li>
+    <li><%= link_to "Give your peers feedback", review_first_assignment_path(@assignment) %></li>
+    <li><%= link_to "Edit/Create your draft", new_assignment_answer_path(@assignment) %></li>
+    <% if user_signed_in? && current_user.admin? %>
+      <li>For instructors only</li>
+      <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>
+      <li><%= link_to 'Assignment statistics', stats_assignment_path(@assignment) %></li>
+    <% end %>
+  </ul>
+</div>
+
 <div id="assignment_description">
   <%= sanitize @assignment.description %>
 </div>
@@ -154,7 +167,9 @@
   <ul class="nav nav-stacked">
     <li><a href="#my_answers">My drafts</a></li>
     <li><a href="#my_grades">My grades</a></li>
-    <li><a href="#my_grades">Give your peers feedback</a></li>
+    <li><legend></lengend></li>
+    <li><%= link_to "Give your peers feedback", review_first_assignment_path(@assignment) %></li>
+    <li><%= link_to "Edit/Create your draft", new_assignment_answer_path(@assignment) %></li>
     <% if user_signed_in? && current_user.admin? %>
       <li>For instructors only</li>
       <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>

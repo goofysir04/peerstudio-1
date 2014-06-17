@@ -23,6 +23,11 @@ class AnswersController < ApplicationController
 
   # GET /answers/new
   def new
+    @latest_answer = Answer.where(assignment: @assignment, user: current_user, active: true).order('created_at desc').first
+
+    if !@latest_answer.nil?
+      redirect_to reflect_answer_path(@latest_answer) and return
+    end
     @answer = Answer.new
     @answer.assignment = @assignment
     @answer.active = false
