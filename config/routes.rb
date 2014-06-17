@@ -5,6 +5,7 @@ Humanmachine::Application.routes.draw do
     resources :assignments, shallow: true
     collection do 
       get 'help'
+      get 'about'
     end
   end
 

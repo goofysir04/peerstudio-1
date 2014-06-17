@@ -1,12 +1,12 @@
 <h1>
   <%= @assignment.title %>
-  <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> (<%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>) 
+  <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> 
   </small>
 </p>
 </h1>
 
-<div class="row-fluid">
-    <ul class="nav nav-stacked">
+<div class="row-fluid header-buttons">
+<!--   <ul class="nav nav-stacked">
     <li><a href="#my_answers">My drafts</a></li>
     <li><a href="#my_grades">My grades</a></li>
     <li><legend></lengend></li>
@@ -17,163 +17,170 @@
       <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>
       <li><%= link_to 'Assignment statistics', stats_assignment_path(@assignment) %></li>
     <% end %>
-  </ul>
-</div>
+  </ul> -->
 
-<div id="assignment_description">
-  <%= sanitize @assignment.description %>
+  <!-- The basic UI here is two big fat buttons, and a subsidiary menu for the lawyers -->
+  <div class="col-xs-6">
+    <%= link_to new_assignment_answer_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write" do %>
+    Write your answer <div class="deadline"> (Due <%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</div>
+    <% end %>
+  </div>
+  <div class="col-xs-5">
+    <%= link_to  review_first_assignment_path(@assignment), class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
+    Give feedback
+    <% end %>
+  </div>
+  <div class="btn-group col-xs-1">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <% if user_signed_in? && current_user.admin? %>
+        <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>
+        <li><%= link_to 'Assignment statistics', stats_assignment_path(@assignment) %></li>
+      <% end %>
+    </ul>
+  </div>
 </div>
-
-<% if @assignment.grades_released? %>
-<h3><%= link_to "Check your grade", grades_assignment_path(@assignment) %></h3>
-<% end %>
-<div id="assignment_answers">
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
-    <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
-    <% if user_signed_in? and current_user.admin? %>
-    <li><a href="#out_of_box_answers" data-toggle="tab">Out of box answers</a></li>
-    <% end %>
-    <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
-    <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
-    <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
-    <% end %>
-  </ul>
-  <div class="tab-content">
-      <div id="my_answers" class="tab-pane active">
-        <% if !user_signed_in? %>
-          <p>You must <%= link_to "sign in", new_user_session_path %> to see your submissions.</p>
-        <% else %>
+<div class="clearfix"></div>
+<div class="row-fluid">
+  <div id="assignment_description">
+    <%= sanitize @assignment.description %>
+  </div>
+  <div id="assignment_answers">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
+      <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
+      <% if user_signed_in? and current_user.admin? %>
+      <li><a href="#out_of_box_answers" data-toggle="tab">Out of box answers</a></li>
+      <% end %>
+      <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
+      <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
+      <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
+      <% end %>
+    </ul>
+    <div class="tab-content">
+        <div id="my_answers" class="tab-pane active">
+          <% if !user_signed_in? %>
+            <p>You must <%= link_to "sign in", new_user_session_path %> to see your submissions.</p>
+          <% else %>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Draft</th>
+                  <th>Preview</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if @my_answers %>
+                  <% @my_answers.each do |answer| %>
+                  <tr>
+                    <td><%= answer.revision_name %> </td>
+                    <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+                      <td>
+                      <% if answer.submitted? %>
+                      <span class="label label-important">Being reviewed</span> 
+                      <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
+                      <% else %>
+                    
+                      <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
+                      <% end %>
+                    </td>
+                    
+                  </tr>
+                  <% end %> 
+                <% end %>
+              </tbody>
+            </table>
+            <% next_due_milestone = @assignment.task_list.detect {|task| task[:open_at] < Time.now and task[:close_at] > Time.now} %>
+            <% if !next_due_milestone.blank? and @my_answers.tagged_with(next_due_milestone[:name]).blank? %>
+              <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create your #{next_due_milestone[:name]}", new_assignment_answer_path(@assignment, draft_type: next_due_milestone[:name]), :class=>"btn btn-success" %></p>
+            <% else %>
+              <p  style="text-align:center; padding:10px 0 10px 0">Update your draft above</p>
+            <% end %>
+          <% end %>
+        </div>
+        <div id="my_reviews" class="tab-pane">
+          <% if !user_signed_in?%>
+          You must sign in to give feedback.
+          <% else %>
+          <h3>Reviews of my work</h3>
           <table class="table">
             <thead>
               <tr>
-                <th>Draft</th>
+                <th>Draft title</th>
                 <th>Preview</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <% if @my_answers %>
-                <% @my_answers.each do |answer| %>
+              <% if @my_reviews %>
+                <% @my_reviews.each do |review| %>
                 <tr>
-                  <td><%= answer.revision_name %> </td>
-                  <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                    <td>
-                    <% if answer.submitted? %>
-                    <span class="label label-important">Being reviewed</span> 
-                    <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
-                    <% else %>
-                  
-                    <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
-                    <% end %>
-                  </td>
-                  
+                  <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+                  <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+                  <% if review.rating_completed? %>
+                    <td><span class="label label-success">Rating complete</span></td>
+                  <% else %>
+                    <td><span class="label label-warning">Unrated</span></td>
+                  <% end %>
+                  <td>
+                  <%= link_to "Read and Rate", rate_review_path(review), class:"btn btn-primary" %>
+                </td>
                 </tr>
                 <% end %> 
-              <% end %>
+              <% end %> 
             </tbody>
           </table>
-          <% next_due_milestone = @assignment.task_list.detect {|task| task[:open_at] < Time.now and task[:close_at] > Time.now} %>
-          <% if !next_due_milestone.blank? and @my_answers.tagged_with(next_due_milestone[:name]).blank? %>
-            <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create your #{next_due_milestone[:name]}", new_assignment_answer_path(@assignment, draft_type: next_due_milestone[:name]), :class=>"btn btn-success" %></p>
-          <% else %>
-            <p  style="text-align:center; padding:10px 0 10px 0">Update your draft above</p>
-          <% end %>
-        <% end %>
-      </div>
-      <div id="my_reviews" class="tab-pane">
-        <% if !user_signed_in?%>
-        You must sign in to give feedback.
-        <% else %>
-        <h3>Reviews of my work</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Draft title</th>
-              <th>Preview</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if @my_reviews %>
-              <% @my_reviews.each do |review| %>
+          <h3>Reviews I wrote</h3>
+          <table class="table">
+            <thead>
               <tr>
-                <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
-                <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                <% if review.rating_completed? %>
-                  <td><span class="label label-success">Rating complete</span></td>
-                <% else %>
-                  <td><span class="label label-warning">Unrated</span></td>
-                <% end %>
-                <td>
-                <%= link_to "Read and Rate", rate_review_path(review), class:"btn btn-primary" %>
-              </td>
+                <th>Draft title</th>
+                <th>Answer preview</th>
+                <th>Review type</th>
+                <th>Actions</th>
               </tr>
-              <% end %> 
-            <% end %> 
-          </tbody>
-        </table>
-        <h3>Reviews I wrote</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Draft title</th>
-              <th>Answer preview</th>
-              <th>Review type</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
 
-            <% if !@reviews_by_me.blank? %>
-              <% @reviews_by_me.each do |review| %>
-              <tr>
-                <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
-                <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                <td><%= review.review_type.capitalize unless review.review_type.nil? %> review 
-                  <% if review.review_type == "paired" and review.copilot_email == current_user.email %>
-                    (Copilot)
-                  <% end %>
-                </td>
-                <td>
-                    <%= link_to "Edit", edit_review_path(review), class:"btn" %> <%= link_to 'Delete review', review, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
-                </td>
-              </tr>
+              <% if !@reviews_by_me.blank? %>
+                <% @reviews_by_me.each do |review| %>
+                <tr>
+                  <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+                  <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
+                  <td><%= review.review_type.capitalize unless review.review_type.nil? %> review 
+                    <% if review.review_type == "paired" and review.copilot_email == current_user.email %>
+                      (Copilot)
+                    <% end %>
+                  </td>
+                  <td>
+                      <%= link_to "Edit", edit_review_path(review), class:"btn" %> <%= link_to 'Delete review', review, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
+                  </td>
+                </tr>
+                <% end %> 
               <% end %> 
-            <% end %> 
-          </tbody>
-        </table> 
-        <%= render partial: "new_review_box", locals:{assignment:@assignment} %>
-        <% end %>
-      </div>
-      <% if user_signed_in? and current_user.admin? %>
-        <div id="out_of_box_answers" class="tab-pane">
-          <%= render partial: "reviews/answers_with_reviews", locals: {answers: Answer.find(@out_of_box_answers.keys)} %>
+            </tbody>
+          </table> 
+          <%= render partial: "new_review_box", locals:{assignment:@assignment} %>
+          <% end %>
         </div>
-      <% end %>
-      <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
-      <div id="all_answers" class="tab-pane">
-        <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
-        <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Show more answers", show_all_answers_assignment_path(@assignment), class: "btn btn-primary", remote: true %></p>
-      </div>
-      <div id="starred_answers" class="tab-pane">
-        <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
-      </div>
-      <% end %>
+        <% if user_signed_in? and current_user.admin? %>
+          <div id="out_of_box_answers" class="tab-pane">
+            <%= render partial: "reviews/answers_with_reviews", locals: {answers: Answer.find(@out_of_box_answers.keys)} %>
+          </div>
+        <% end %>
+        <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
+        <div id="all_answers" class="tab-pane">
+          <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
+          <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Show more answers", show_all_answers_assignment_path(@assignment), class: "btn btn-primary", remote: true %></p>
+        </div>
+        <div id="starred_answers" class="tab-pane">
+          <%= render partial: "reviews/answers_with_reviews", locals: {answers: @starred_answers} %>
+        </div>
+        <% end %>
+    </div>
   </div>
 </div>
-<% content_for :context_menu do %>
-  <ul class="nav nav-stacked">
-    <li><a href="#my_answers">My drafts</a></li>
-    <li><a href="#my_grades">My grades</a></li>
-    <li><legend></lengend></li>
-    <li><%= link_to "Give your peers feedback", review_first_assignment_path(@assignment) %></li>
-    <li><%= link_to "Edit/Create your draft", new_assignment_answer_path(@assignment) %></li>
-    <% if user_signed_in? && current_user.admin? %>
-      <li>For instructors only</li>
-      <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>
-      <li><%= link_to 'Assignment statistics', stats_assignment_path(@assignment) %></li>
-    <% end %>
-  </ul>
-<% end %>
+

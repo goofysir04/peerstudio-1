@@ -23,10 +23,14 @@ class AnswersController < ApplicationController
 
   # GET /answers/new
   def new
-    @latest_answer = Answer.where(assignment: @assignment, user: current_user, active: true).order('created_at desc').first
+    @latest_answer = Answer.where(assignment: @assignment, user: current_user).order('updated_at desc').first
 
     if !@latest_answer.nil?
-      redirect_to reflect_answer_path(@latest_answer) and return
+      if !@latest_answer.submitted?
+        redirect_to edit_answer_path(@latest_answer), notice: "We took you to the draft you were already editing" and return
+      else
+        redirect_to answer_reviews_path(@latest_answer), notice: "Here are reviews to the last draft you submitted. Click 'Revise submission' to modify this draft" and return
+      end
     end
     @answer = Answer.new
     @answer.assignment = @assignment
@@ -36,7 +40,7 @@ class AnswersController < ApplicationController
     if assignment.course.students.exists?(current_user.id).nil?
       assignment.course.students << current_user
     end
-    draft_type = params[:draft_type].nil? ? nil : params.require(:draft_type)
+    draft_type = params[:draft_type].nil? ? "Final Draft" : params.require(:draft_type)
     @answer.revision_list = draft_type
     if @answer.save 
       redirect_to edit_answer_path(@answer)
