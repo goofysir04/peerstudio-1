@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617182452) do
+ActiveRecord::Schema.define(version: 20140617214959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -265,6 +265,16 @@ ActiveRecord::Schema.define(version: 20140617182452) do
   add_index "feedback_items", ["review_id"], name: "index_feedback_items_on_review_id", using: :btree
   add_index "feedback_items", ["rubric_item_id"], name: "fk__feedback_items_rubric_item_id", using: :btree
   add_index "feedback_items", ["rubric_item_id"], name: "index_feedback_items_on_rubric_item_id", using: :btree
+
+  create_table "feedback_preferences", force: true do |t|
+    t.integer  "answer_id"
+    t.integer  "rubric_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "feedback_preferences", ["answer_id"], name: "index_feedback_preferences_on_answer_id", using: :btree
+  add_index "feedback_preferences", ["rubric_item_id"], name: "index_feedback_preferences_on_rubric_item_id", using: :btree
 
   create_table "questions", force: true do |t|
     t.text     "title"

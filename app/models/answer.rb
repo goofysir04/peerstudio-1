@@ -21,7 +21,7 @@ class Answer < ActiveRecord::Base
 
   has_many :reviews, :dependent => :destroy
   has_many :feedback_items, through: :reviews
-
+  has_many :rubric_items, through: :feedback_preferences
   has_many :assessments
 
   acts_as_taggable_on :revisions

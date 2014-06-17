@@ -66,9 +66,9 @@ gem 'google-analytics-rails'
 # Use Capistrano for deployment
 group :development do
 	gem 'capistrano-bundler', '>= 1.1.0'
- 	gem 'capistrano',  '~> 3.0'
+ 	gem 'capistrano',  '~> 3.2'
 	gem 'capistrano-rails', '~> 1.1'
-	gem 'capistrano-rvm'
+	# gem 'capistrano-rvm'
 end
 
 #For server/config
