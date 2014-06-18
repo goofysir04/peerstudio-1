@@ -76,12 +76,11 @@
             </div>
             <legend></legend>
             <div class="row-fluid">
-              <strong>Show this rubric item during</strong> 
               <%= r.label :show_for_feedback, class:"checkbox-inline" do %>
-                <%= r.check_box :show_for_feedback %> Early feedback 
+                <%= r.check_box :show_for_feedback %> Recommend this for early feedback 
               <% end %>
               <%= r.label :show_for_final, class:"checkbox-inline" do %>
-                <%= r.check_box :show_for_final %> Final assessment (grades) 
+                <%= r.check_box :show_for_final %> Include in final assessment (grades) 
               <% end %>
             </div>
             <div class="row-fluid">
