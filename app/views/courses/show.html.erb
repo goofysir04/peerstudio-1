@@ -1,14 +1,3 @@
-<p id="notice"><%= notice %></p>
-
-<div class="row">
-  <ul style="float:left; margin-right: 10px;">
-  <%= render :partial => 'course_box', :locals=>{:course => @course} %>
-  </ul>
-  <% if user_signed_in? && current_user.admin? %>
-  <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p> 
-  <% end %>
-</div>
-
 <div class="row">
   <h2>Assignments</h2>
   <table class="table table-striped">
@@ -40,4 +29,9 @@
   </tbody>
 </table>
 
+</div>
+<div class="row">
+  <% if user_signed_in? && current_user.admin? %>
+  <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p> 
+  <% end %>
 </div>

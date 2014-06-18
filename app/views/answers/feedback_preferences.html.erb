@@ -1,12 +1,12 @@
 <h1>What would you most like feedback on?</h1>
 <p>Since this is an early draft, some parts may be more "under-construction" than others. Help your classmates focus what they give you feedback on. Select which rubric items you need most help with. </p>
 
-<ul class="rubric">
+<ul class="rubric" style="display:inline;">
   <% @answer.assignment.rubric_items.each do |r| %>
     <div class="col-xs-6">
       <li class="selectable-rubric">
         <div class="row-fluid">
-          <button class="btn btn-default need-help">I want feedback on this item.</button>
+          <button class="btn btn-default need-help btn-block">I want feedback on this item.</button>
         </div>
         <legend></legend>
         <div class="row-fluid">
@@ -25,13 +25,18 @@
         </div>
       </li>    
     </div>
-    
   <% end %>
 </ul>
+<div class="col-sm-6">
+  <div class="form-group">
+    <label for="request">Any special requests for your reviewers?</label>
+    <textarea class="form-control" placeholder="Can you tell me if I am going in the right direction for..."></textarea>
+  </div>
+</div>
 <div class="actions">        
   <div class="navbar-right">
+    <%= link_to "Cancel reviewing", edit_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
     <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn btn-success", :role=>"button", :method=>:post %>
-     <%= link_to "Cancel reviewing", edit_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
   </div>
 </div>
 

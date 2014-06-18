@@ -1,24 +1,41 @@
+<%= f.hidden_field :coursera_id, :value=>session[:coursera_id]%>
+<div class="row-fluid" style="min-height: 100px;">
+<h2> <span class="label label-default number-badge">1</span> Select a timezone <small>so we can show you deadlines in your local time</small></h2>
+<%= time_zone_select( :user, :time_zone, nil, :default => "Pacific Time (US & Canada)", :class =>"form-control") %>
+</div>
 
-    <%= f.hidden_field :coursera_id, :value=>session[:coursera_id]%>
-    <p> Select a timezone so we can show you times in your local time.</p>
-    <%= time_zone_select( :user, :time_zone, nil, :default => "Pacific Time (US & Canada)") %>
 
-    <br/>
+<script>
+$().ready(function() {
+  $("#user_time_zone").chosen();
+  $("#user_gender").chosen({disable_search_threshold: 10, allow_single_deselect: true});
+});
+$('[data-toggle=tooltip]').tooltip();
+</script>
+
+<hr/>
+
+<div class="row-fluid">
+  <h2> <span class="label label-default number-badge">2</span> Decide if you want to participate in our research <small>we'll be so happy if you do!</small></h2>
+
   
-  <script>
-  $().ready(function() {
-    $("#user_time_zone").chosen();
-    $("#user_gender").chosen({disable_search_threshold: 10, allow_single_deselect: true});
-  });
-  $('[data-toggle=tooltip]').tooltip();
-  </script>
+  <%= render :partial => 'consent_form' %><br/>
+  <a href="https://docs.google.com/document/d/1kZKBs2JXX9rFSQ4LzAy-XBOxNPPmHFS6l7CwXtP63JY/pub" target="_blank"><strong>Open in new window</strong></a><br/><br/>
+</div>
+    <span class="help-block">You can still use Peerstudio without participating in our research. But you can also choose to help us! And we'll be so grateful for your participation! :)</span>
+<div class="row-fluid">
+  <div class="form-group">
 
-  <div class="span10" style="margin-top:40px; margin-left:0px;">
-    <p><b><%= t :PeerStudio %></b> is part of a research project at Stanford University. You can still use the system without participating in our research, but you can choose to help us below, and we'll be so grateful! :) <a href="https://docs.google.com/document/d/1kZKBs2JXX9rFSQ4LzAy-XBOxNPPmHFS6l7CwXtP63JY/pub" target="_blank"><strong>Open in new window</strong></a></p>
-    <%= render :partial => 'consent_form' %>
-        <%= f.radio_button :consented, true, value: true -%><%= f.label :consented_true, style: "display: inline;" do %>
-        <strong>I am at least 18 years of age, and I consent to participating in this research study.</strong>
-        <% end %>
-    </br/>
-    <%= f.radio_button :consented, false, value: false %> <%= f.label :consented_false, "I do not consent to participating in this research study (or am under 18).", style: "display: inline;"  %>
+    <div class="radio">
+      <%= f.label :consented_true do %>
+        <%= f.radio_button :consented, true, value: true -%> <strong>I am at least 18 years of age, and I consent to participating in this research study.</strong>
+      <% end %>
+    </div>
+    <div class="radio">
+     <%= f.label :consented_false do %>
+      <%= f.radio_button :consented, false, value: false %> I do not consent to participating in this research study (or am under 18).
+     <% end %>
+    </div>
+    
   </div>
+</div>

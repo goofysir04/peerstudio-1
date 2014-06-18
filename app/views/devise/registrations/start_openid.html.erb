@@ -1,20 +1,15 @@
 
 <!-- This is to complete registrations from an open-id provider -->
-<style>
-  .form_field {
-    padding-bottom: 20px;
-  }
-</style>
 <%= form_for(resource, :as => resource_name, :url => complete_openid_registration_path) do |f| %>
-	<h1>Welcome <%= @name %>!</h1>
-  	<div class="span6" style="backround:#ffffff; margin-left: 0px;">
-	  <%= render :partial=>"optional_fields", :locals=>{:f=>f} %>
+	<div class="row-fluid">
+		<h1 class="script"><%= @name %>, Welcome to Peerstudio!</h1>
 	</div>
-	<div class="clearfix"></div>
-	
-
-	<div class="form-actions">
-  <%= f.submit "Sign up", :class => 'btn-large btn-primary' %> &nbsp;&nbsp;&nbsp; We will send all email to your <%=@provider.titleize%> email address, <strong><%=@email%>
+	<div class="row-fluid">
+	  <%= render :partial=>"optional_fields", :locals=>{:f=>f} %> 
+	</div>
+	<div class="row-fluid">
+		<%= f.submit "Sign up", :class => 'btn btn-large btn-primary' %> &nbsp;&nbsp;&nbsp; We will send all email to your <%=@provider.titleize%> email address, <strong><%=@email%>
+	</div>
 </div>
 
 <% end %>

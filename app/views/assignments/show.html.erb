@@ -6,18 +6,6 @@
 </h1>
 
 <div class="row-fluid header-buttons">
-<!--   <ul class="nav nav-stacked">
-    <li><a href="#my_answers">My drafts</a></li>
-    <li><a href="#my_grades">My grades</a></li>
-    <li><legend></lengend></li>
-    <li><%= link_to "Give your peers feedback", review_first_assignment_path(@assignment) %></li>
-    <li><%= link_to "Edit/Create your draft", new_assignment_answer_path(@assignment) %></li>
-    <% if user_signed_in? && current_user.admin? %>
-      <li>For instructors only</li>
-      <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>
-      <li><%= link_to 'Assignment statistics', stats_assignment_path(@assignment) %></li>
-    <% end %>
-  </ul> -->
 
   <!-- The basic UI here is two big fat buttons, and a subsidiary menu for the lawyers -->
   <div class="col-xs-6">
@@ -27,13 +15,19 @@
   </div>
   <div class="col-xs-5">
     <%= link_to  review_first_assignment_path(@assignment), class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
-    Give peers feedback
+    Give peers feedback 
+      <% unless @trigger.nil? %>
+        <div class="deadline">(Pending: <%= @trigger.count %> reviews)</div>
+      <% end %>
     <% end %>
   </div>
   <div class="btn-group col-xs-1">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Other <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
+      <li><a href="#my_answers">Cancel reviews for my draft</a></li>
+      <li><a href="#my_reviews">Edit my reviews</a></li>
+      <div class="divider"></div>
       <% if user_signed_in? && current_user.admin? %>
         <li><%= link_to 'Edit assignment', edit_assignment_path(@assignment) %></li>
         <li><%= link_to 'Assignment statistics', stats_assignment_path(@assignment) %></li>
@@ -163,7 +157,6 @@
               <% end %> 
             </tbody>
           </table> 
-          <%= render partial: "new_review_box", locals:{assignment:@assignment} %>
           <% end %>
         </div>
         <% if user_signed_in? and current_user.admin? %>

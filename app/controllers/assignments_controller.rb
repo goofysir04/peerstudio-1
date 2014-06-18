@@ -14,10 +14,12 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1.json
   def show
     if user_signed_in?
+      @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
       @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
       @my_reviews = Review.where(answer_id: @my_answers, active: true, assignment_id: @assignment.id)
       @reviews_by_me = Review.where(active: true, assignment_id: @assignment.id).where("user_id = ? or copilot_email = ?", current_user.id,current_user.email)
       @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
+      
       unless @out_of_box_answers_with_count.blank?
         @out_of_box_answers = @out_of_box_answers_with_count.reject {|k,v| v < 2 }
       end
@@ -137,7 +139,7 @@ class AssignmentsController < ApplicationController
     end
   end
 
-  def review_first
+def review_first
     @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
 
     unless params[:recent_review].nil?
