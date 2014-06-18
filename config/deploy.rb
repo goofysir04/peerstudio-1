@@ -16,6 +16,9 @@ set :repo_url, 'git@github.com:StanfordHCI/peerstudio.git'
 
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :migration_role, :db
+set :conditionally_migrate, :false
+
 
 set :default_env, { path: "/home/deploy/.rvm/gems/ruby-2.1.2/bin:/home/deploy/.rvm/gems/ruby-2.1.2@global/bin:/home/deploy/.rvm/rubies/ruby-2.1.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/deploy/.rvm/bin:$PATH" }
 # set :keep_releases, 5
@@ -30,6 +33,9 @@ namespace :deploy do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
       within release_path do
+        with rails_env: fetch(:rails_env) do
+            execute :rake, "db:migrate"
+        end
         execute :touch, release_path.join('tmp/restart.txt')
         execute :bundle, "exec thin restart -O -C config/thin.yml"
       end
@@ -68,4 +74,5 @@ namespace :deploy do
   # after :finishing, 'deploy:update_code', "db:symlink"
 
   before :starting, :set_rvm
+  after :updating, :migrate
 end

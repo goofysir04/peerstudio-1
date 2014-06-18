@@ -69,7 +69,7 @@
           <% end %>
           <div class="navbar-right">
             <% unless @answer.submitted? %>
-            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn btn-success", :role=>"button", :method=>:post %>
+            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn btn-success", :role=>"button", :method=>:get %>
             <% else %>
              <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
             <% end %>

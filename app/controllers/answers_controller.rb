@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, 
     :submit_for_feedback, :submit_for_grades, :unsubmit_for_feedback,
+    :feedback_preferences,
     :reflect, :clone]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
@@ -119,6 +120,10 @@ class AnswersController < ApplicationController
         format.js
       end
     end
+  end
+
+  def feedback_preferences
+    render layout: "one_column"
   end
 
   def unsubmit_for_feedback

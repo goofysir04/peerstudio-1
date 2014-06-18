@@ -82,6 +82,7 @@ Humanmachine::Application.routes.draw do
       post 'direct_upload_attachment'
       delete 'delete_attachment'
       get 'star' => 'answers#star'
+      get 'submit_for_feedback' => 'answers#feedback_preferences'
       post 'submit_for_feedback'
       post 'unsubmit_for_feedback'
       post 'submit_for_grades'
