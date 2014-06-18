@@ -14,7 +14,7 @@
     <% end %>
   </div>
   <div class="col-xs-5">
-    <%= link_to  review_first_assignment_path(@assignment), class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
+    <%= link_to create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
     Give peers feedback 
       <% unless @trigger.nil? %>
         <div class="deadline">(Pending: <%= @trigger.count %> reviews)</div>
@@ -22,7 +22,7 @@
     <% end %>
   </div>
   <div class="btn-group col-xs-1">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Other <span class="caret"></span>
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">More<span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
       <li><a href="#my_answers">Cancel reviews for my draft</a></li>

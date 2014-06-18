@@ -7,8 +7,8 @@ Reviewing <%= answer.assignment.title %>
 <div class="page-header">
 <h1> <%= answer.assignment.title %> <small><%= link_to "Show assignment instructions", answer.assignment %></small></h1>
 </div>
-<div class="row">
+<div class="row-fluid">
+  <div class="paper">
     <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
-
-    <%= render partial:"answers/attachments", locals: {answer: answer} %>
+  </div>
 </div>
