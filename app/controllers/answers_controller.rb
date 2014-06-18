@@ -26,7 +26,7 @@ class AnswersController < ApplicationController
   def new
     @latest_answer = Answer.where(assignment: @assignment, user: current_user).order('updated_at desc').first
 
-    if !@latest_answer.nil? and false
+    if !@latest_answer.nil?
       if !@latest_answer.submitted?
         redirect_to edit_answer_path(@latest_answer), notice: "We took you to the draft you were already editing" and return
       else
