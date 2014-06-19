@@ -1,6 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_filter :verify_authenticity_token, :only => [:coursera]
-  before_filter :set_return_path_on_sign_in_page
+  # before_filter :set_return_path_on_sign_in_page
 
   def facebook
     # You need to implement the method below in your model (e.g. app/models/user.rb)
@@ -16,7 +16,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
   
   def coursera
-    
     @user = User.find_for_authentication(:email => request.env["omniauth.auth"]["info"]["email"]) || current_user
     if !@user.nil?
       if @user.sign_in_count == 0
@@ -42,7 +41,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   private
 
-  def set_return_path_on_sign_in_page
-    request.env['omniauth.origin'] = session[:user_return_to] unless  session[:user_return_to].nil? 
-  end
+  # def set_return_path_on_sign_in_page
+  #   request.env['omniauth.origin'] = session[:user_return_to] unless  session[:user_return_to].nil? 
+  # end
 end
