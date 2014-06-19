@@ -2,7 +2,7 @@
 <!-- This is to complete registrations from an open-id provider -->
 <%= form_for(resource, :as => resource_name, :url => complete_openid_registration_path) do |f| %>
 	<div class="row-fluid">
-		<h1 class="script"><%= @name %>, Welcome to Peerstudio!</h1>
+		<h1 class="script">Hi, <%= @name %>!</h1>
 	</div>
 	<div class="row-fluid">
 	  <%= render :partial=>"optional_fields", :locals=>{:f=>f} %> 
