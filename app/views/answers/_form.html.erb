@@ -64,15 +64,18 @@
           <% if @answer.submitted? %>
           You submitted this answer for a review, so you can't change it anymore. 
           <% else %>
-          <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
+          <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger answer-save-status">Unsaved</em></span> <span class="answer_public_status"></span> 
           <% end %>
           <div class="navbar-right">
-            <% unless @answer.submitted? %>
-            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn btn-success", :role=>"button"%>
+            <% if @answer.submitted? %>
+            <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
             <% else %>
-             <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
+            <% seek_feedback_class = (@answer.assignment.due_at - Time.now > 1.day) ? "btn-primary": "btn-default" %>  
+            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :role=>"button"%> 
             <% end %>
-            <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-primary", :role=>"button" %>
+            <% unless @answer.is_final? %>
+             <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-default", :role=>"button", method: :post %>
+            <% end %>
         </div>
       
       </div>

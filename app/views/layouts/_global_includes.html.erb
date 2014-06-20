@@ -1,6 +1,6 @@
 <head>
   <title><%= content_for?(:title) ? content_for(:title) : "Stanford+UCSD | #{t :PeerStudio}" %></title>
-  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|PT+Sans:700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|PT+Sans:700|Rock+Salt' rel='stylesheet' type='text/css'/>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
@@ -11,8 +11,6 @@
     <meta property="og:url" content="<%= "#{request.protocol}#{request.host_with_port}#{request.fullpath}" %>"/>
     <meta property="og:site_name" content="peerstudio"/>
     <meta property="og:description" content="<%= (@project && !@project.description.blank?) ? @project.description.truncate(100) : "Collaborative human and machine grading." %>" />
-
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|Rock+Salt' rel='stylesheet' type='text/css'>
     <script type="text/javascript">
     console.log("return path = <%= session.keys || "None"%>");
     </script>

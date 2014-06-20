@@ -129,6 +129,7 @@ class AnswersController < ApplicationController
 
   def unsubmit_for_feedback
     @answer.submitted = false
+    @answer.is_final = false
     respond_to do |format|
       if @answer.save
         format.html {redirect_to assignment_path(@answer.assignment), notice: "We'll stop asking students to review your draft now. TODO implement this"}

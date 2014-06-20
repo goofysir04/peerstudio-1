@@ -76,6 +76,9 @@
   <% if show_revision_link %>
     <div class="form-controls">
       <%= link_to "Revise submission", reflect_answer_path(answer), class: "btn btn-primary"%>
+      <div class="pull-right">
+          <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path(answer), :class=>"btn btn-danger", :role=>"button", :method=>:post %>
+      </div>
     </div>
   <% end %>
   <br/>
