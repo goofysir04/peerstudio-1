@@ -1,6 +1,9 @@
 class AssignmentsController < ApplicationController
   # include Humanize
-  before_action :set_assignment, only: [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item, :review_first]
+  assignment_actions = [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item, :review_first]
+
+  before_action :set_assignment, only: assignment_actions
+  # add_breadcrumb :set_breadcrumb_link, only: assignment_actions
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
   before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
@@ -154,6 +157,7 @@ def review_first
     end
     #otherwise render
   end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_assignment
@@ -162,6 +166,11 @@ def review_first
 
     def set_course
       @course = Course.find(params[:course_id])
+    end
+
+    def set_breadcrumb_link
+      @navbar_links ||= []
+      @navbar_links << "<a href='#{assignment_path}'>Assignment</a>"
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -174,4 +183,5 @@ def review_first
         :id, :title, :short_title, :show_for_feedback, :show_for_final,
         :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
     end
+
 end

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # layout :layout_by_resource
   impersonates :user
 
+
 	def authenticate_user_is_admin!
     return true if Rails.env.development?
 		unless user_signed_in?
