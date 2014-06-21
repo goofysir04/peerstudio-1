@@ -89,6 +89,7 @@ updateProgressBars = () ->
 	setProgressBarWidths()
 
 setProgressBarWidths = () ->
+	return unless review_completion_metadata.completed_checkboxes
 	for checkbox_name in review_completion_metadata.completed_checkboxes
 		completedWidth = +$("##{checkbox_name}").data('score')/(+$("##{checkbox_name}").closest('li.compute-score').data('total-score'))*100 + "%"
 		if $("##{checkbox_name}").prop("checked") is true
@@ -177,7 +178,7 @@ checkFormCompleteness = () ->
 			$(item).closest('li.compute-score').addClass('incomplete-rubric')
 
 	$('#incomplete-review-modal').modal('show') unless review_complete
-	return false
+	return review_complete
 
 
 getReviewQuality = (text) ->
