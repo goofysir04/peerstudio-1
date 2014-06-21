@@ -20,6 +20,8 @@
 //= require bootstrap-datetimepicker
 //= require bootstrap-markdown-custom
 //= require jquery_nested_form
+//= require json2
+//= require bootstrap-slider.min
 
 //Disabled
 //= #require rails.validations

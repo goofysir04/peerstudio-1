@@ -32,11 +32,8 @@
 
           <table>
             <%if false %>
-              <%= r.collection_radio_buttons(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
-                <tr>
-                <td style="vertical-align:top;"><%= b.radio_button :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= b.label %></td>
-                </tr>
-              <% end %>
+              <%= r.collection_radio_buttons(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) %>
+
             <% else %>
               <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
                 <tr>
@@ -44,8 +41,8 @@
                 <td style="vertical-align:top;"><%= b.label %>
                   <div class="btn-group btn-toggle"> 
                     <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
-                    <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
                     <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
+                    <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
                   </div>
                   </td>
                 </tr>

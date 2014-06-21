@@ -49,6 +49,7 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1
   # PATCH/PUT /reviews/1.json
   def update
+    # raise params.inspect
     respond_to do |format|
       if !@review.active?
         #The review is not active, so this is an update of a pending review
