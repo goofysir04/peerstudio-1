@@ -163,6 +163,7 @@ class ReviewsController < ApplicationController
         :recognize_rating,
         :other_rating_comments,
         :reflection,
+        :completion_metadata,
         :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
     end
 

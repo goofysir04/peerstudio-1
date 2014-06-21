@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140618034058) do
+ActiveRecord::Schema.define(version: 20140621000732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -306,6 +306,7 @@ ActiveRecord::Schema.define(version: 20140618034058) do
     t.boolean  "rating_completed",      default: false
     t.text     "reflection"
     t.datetime "completed_at"
+    t.text     "completion_metadata"
   end
 
   add_index "reviews", ["answer_id"], name: "fk__reviews_answer_id", using: :btree

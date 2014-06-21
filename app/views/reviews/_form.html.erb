@@ -11,7 +11,7 @@
     </div>
   <% end %>
   <% content_for :context_menu do %>
-  <%= form_for([@review]) do |f| %>
+  <%= form_for(@review, html: {:"class"=>"review-form"}) do |f| %>
   <p>Here's how this assignment should be assessed</p>
       <ul class="rubric">
         <% if @review.review_type== "paired"%>
@@ -23,17 +23,34 @@
         <% end %>
         <%= f.fields_for :feedback_items do |r| %>
         <% if (r.object.rubric_item.show_for_feedback? and !@answer.is_final?) or (r.object.rubric_item.show_for_final? and @answer.is_final?) %>
-        <li>
+        <li class="compute-score">
           <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
-          <legend></legend>
-          <%= sanitize r.object.rubric_item.title %>
-          <table>
-          <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
-            <tr>
-            <td style="vertical-align:top;"><%= b.check_box :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= b.label %></td>
-            </tr>
+          
+          <div class="progress score-progress"></div>
 
-          <% end %>
+          <%= sanitize r.object.rubric_item.title %>
+
+          <table>
+            <%if false %>
+              <%= r.collection_radio_buttons(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
+                <tr>
+                <td style="vertical-align:top;"><%= b.radio_button :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= b.label %></td>
+                </tr>
+              <% end %>
+            <% else %>
+              <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
+                <tr>
+
+                <td style="vertical-align:top;"><%= b.label %>
+                  <div class="btn-group btn-toggle"> 
+                    <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
+                    <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
+                    <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
+                  </div>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
           </table>
           <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"form-control", size: "10x4" %>
           <%= r.hidden_field :rubric_item_id %>
@@ -55,8 +72,26 @@
       </ul>
       
       <div class="actions">
+        <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
         <%= f.submit "Submit review", class: "btn btn-primary" %>
       </div>
     <% end %>
-  <% end %>
+<% end %>
 
+<% content_for(:modals) do %>
+  <div class="modal" id="incomplete-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Review not complete</h4>
+        </div>
+        <div class="modal-body">
+          <p>You still have some items you haven't looked at. We've highlighted them so they're easy to find.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Complete the review</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<% end %>
