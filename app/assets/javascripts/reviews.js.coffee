@@ -13,6 +13,7 @@ $(document).ready () ->
 	if $('form.review-form').length > 0
 		replaceCheckboxesWithToggles()
 		updateProgressBars()
+		replaceScales()
 		$('form.review-form').submit checkFormCompleteness
 
 		$('.review_text').keyup () ->
@@ -101,7 +102,18 @@ setProgressBarWidths = () ->
 		$(".progress-bar[data-scored-item=#{checkbox_name}").attr('style', "width: #{completedWidth}").removeClass('progress-bar-danger').
 		removeClass('progress-bar-success').addClass(bar_type)
 
-
+replaceScales = () ->
+	$('input.scale-checkbox').prop('checked','true')
+	for el in $('input.scale-slider')
+		console.log "setting max to ", 1/(+$(el).data('score'))
+		$(el).slider(
+			min:0
+			max: 1
+			step: 1/(+$(el).data('score'))
+			value: (+$(el).val())
+			formater: (val) ->
+				return "#{val*(+$(el).data('score'))}"
+			)
 
 recalculateGrade = () ->
 	sum = 0

@@ -69,7 +69,7 @@
             <div class="row-fluid form-inline" id="checkboxes-<%=r.object.id%>">
               <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
                 <div class="fields row-fluid">
-                  <div class="form-group" style="width: 75%;"><input type="checkbox" disabled="disabled"><%= a.text_field :description, placeholder: "Enter a criteria. Keep it to one line if possible", class:"form-control", style: "width: 95%" %></div><div class="form-group" style="width: 7%;"><%= a.text_field :score, placeholder: "0", class:"form-control", style: "width: 100%" %></div><div class="form-group"><%= a.link_to_remove "Remove", class:"btn btn-default", tabindex: "-1"%></div>
+                  <div class="form-group" style="width: 75%;"><input type="checkbox" disabled="disabled"><%= a.text_field :description, placeholder: "Enter a criteria. Keep it to one line if possible", class:"form-control", style: "width: 95%" %></div><div class="form-group" style="width: 7%;"><%= a.text_field :score, placeholder: "0", class:"form-control", style: "width: 100%" %></div><div class="form-group"><%= a.link_to_remove "Remove", class:"btn btn-default", tabindex: "-1"%></div><div class="form-group"><%= a.text_field :attribute_type, class:"form-control", tabindex: "-1"%></div>
                 </div>
               <% end %>
             </div>
