@@ -36,6 +36,12 @@
                 <tr>
 
                 <td style="vertical-align:top;"><%= b.label %>
+                  <% unless b.object.example.blank? %>
+                    (<a href="#" class="see-example" data-example="example-<%=b.object.id%>">See example</a>)
+                    <div class="hidden" id="example-<%=b.object.id%>">
+                      <%= b.object.example %>
+                    </div>
+                  <% end %>
                     <% if b.object.attribute_type=="binary" %>
                       <div class="btn-group btn-toggle"> 
                         <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
@@ -88,6 +94,20 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Complete the review</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal" id="example-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Here's an example submission that would score well</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

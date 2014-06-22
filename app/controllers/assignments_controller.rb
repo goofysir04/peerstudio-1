@@ -181,7 +181,7 @@ def review_first
       params.permit(:recent_review)
       params.require(:assignment).permit(:title, :description, :template, :milestone_list, :due_at, :open_at, :rubric_items_attributes=>[
         :id, :title, :short_title, :show_for_feedback, :show_for_final,
-        :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :attribute_type, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
+        :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :attribute_type, :example, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
     end
 
 end

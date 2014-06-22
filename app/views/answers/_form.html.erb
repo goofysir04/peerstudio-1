@@ -31,7 +31,18 @@
               <table>
                 <% r.answer_attributes.each do |a_attr| %>
                   <tr>
-                    <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
+                    <td style="vertical-align:top;">
+                      <% if a_attr.attribute_type == "binary"%>
+                      <input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"><% end %>
+                    </td><td style="vertical-align:top;"><%= a_attr.description %>
+                  <% unless a_attr.example.blank? %>
+                    (<a href="#" class="see-example" data-example="example-<%=a_attr.id%>">See example</a>)
+                    <div class="hidden" id="example-<%=a_attr.id%>">
+                      <%= a_attr.example %>
+                    </div>
+                  <% end %>
+                </td>
+
                   </tr>
                 <% end %>
               </table>
@@ -86,7 +97,22 @@
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
 
-
+<% content_for(:modals) do %>
+<div class="modal" id="example-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Here's an example submission that would score well</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<% end %>
 
 
 

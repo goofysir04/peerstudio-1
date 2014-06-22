@@ -10,6 +10,8 @@ $(document).ready () ->
 		recalculateGrade()
 	#On page load, recalculateGrade
 	recalculateGrade()
+
+	$('a.see-example').click showExample
 	if $('form.review-form').length > 0
 		replaceCheckboxesWithToggles()
 		updateProgressBars()
@@ -19,6 +21,7 @@ $(document).ready () ->
 		$('.review_text').keyup () ->
 			getReviewQuality($(this).val())
 
+		
 		$('#other_review_types').click(() ->
 			alert "These review types are not yet open for this assignment."
 			return false)
@@ -117,6 +120,13 @@ replaceScales = () ->
 				label = $(element).data('options').split(',')[Math.round(val*($(element).data('options').split(',').length-1))]
 				return label + ""
 			)
+
+showExample = (el) ->
+	console.log $(this).data("example")
+	example_text = $("##{$(this).data("example")}").text()
+	$('#example-review-modal .modal-body').html(example_text)
+	$('#example-review-modal').modal('show')
+	return false
 
 recalculateGrade = () ->
 	sum = 0
