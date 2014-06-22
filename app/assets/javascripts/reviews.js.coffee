@@ -113,7 +113,8 @@ replaceScales = () ->
 			value: (+$(el).val())
 			# tooltip:'always'
 			formater: (val) ->
-				label = $(el).data('options').split(',')[Math.round(val*($(el).data('options').split(',').length-1))]
+				element = this.element 
+				label = $(element).data('options').split(',')[Math.round(val*($(element).data('options').split(',').length-1))]
 				return label + ""
 			)
 
