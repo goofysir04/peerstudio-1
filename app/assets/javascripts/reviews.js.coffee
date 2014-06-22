@@ -109,10 +109,11 @@ replaceScales = () ->
 		$(el).slider(
 			min:0
 			max: 1
-			step: 1/(+$(el).data('score'))
+			step: 1/($(el).data('options').split(',').length-1)
 			value: (+$(el).val())
+			# tooltip:'always'
 			formater: (val) ->
-				label = $(el).data('options').split(',')[Math.round(val*(+$(el).data('score')))]
+				label = $(el).data('options').split(',')[Math.round(val*($(el).data('options').split(',').length-1))]
 				return label + ""
 			)
 
