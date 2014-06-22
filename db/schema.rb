@@ -405,13 +405,13 @@ ActiveRecord::Schema.define(version: 20140621000732) do
     t.string   "provider"
     t.string   "uid"
     t.string   "gender"
+    t.boolean  "admin"
     t.integer  "cid"
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.boolean  "consented"
-    t.boolean  "admin",                  default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
