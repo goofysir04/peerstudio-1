@@ -42,7 +42,7 @@
                         <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
                       </div>
                     <% else %>
-                      <div class="scale">This should be a scale <%= b.check_box class:"scale-checkbox" %>
+                      <div class="scale"><%= b.check_box class:"scale-checkbox" %>
                         <input type="text" id="answer_attribute_weight_<%=b.object.id%>" name="review[answer_attribute_weights][<%=b.object.id%>][weight]" value="<%= @review.answer_attribute_weight(b.object.id)%>" data-score="<%=b.object.score %>" class="scale-slider"></input>
                       </div>
                     <% end %>
