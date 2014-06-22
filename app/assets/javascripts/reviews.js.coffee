@@ -112,7 +112,8 @@ replaceScales = () ->
 			step: 1/(+$(el).data('score'))
 			value: (+$(el).val())
 			formater: (val) ->
-				return "#{val*(+$(el).data('score'))}"
+				label = $(el).data('options').split(',')[Math.round(val*(+$(el).data('score')))]
+				return label + ""
 			)
 
 recalculateGrade = () ->
