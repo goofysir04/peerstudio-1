@@ -3,6 +3,7 @@ class Review < ActiveRecord::Base
   belongs_to :user
   belongs_to :assignment
   has_many :feedback_items, :dependent => :destroy
+  has_many :feedback_item_attributes, through: :feedback_items
 
   accepts_nested_attributes_for :feedback_items, allow_destroy: true
 
@@ -18,6 +19,23 @@ class Review < ActiveRecord::Base
 	end
 
 	return review_blank
+  end
+
+  def set_answer_attribute_weights!(weights)
+  	weights.each do |id, attrs|
+  		feedback_attribute = self.feedback_item_attributes.where(answer_attribute_id: id).first_or_create(answer_attribute_id: id)
+		feedback_attribute.weight = attrs[:weight]
+		feedback_attribute.save!  		
+  	end
+  end
+
+  def answer_attribute_weight(answer_attribute_id)
+  	feedback_attribute = self.feedback_item_attributes.where(answer_attribute_id: answer_attribute_id).first
+  	if feedback_attribute.blank?
+  		return 0
+  	else
+  		return feedback_attribute.weight
+  	end
   end
 
 end

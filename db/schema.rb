@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140621000732) do
+ActiveRecord::Schema.define(version: 20140622213422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,18 +47,12 @@ ActiveRecord::Schema.define(version: 20140621000732) do
     t.datetime "updated_at"
     t.text     "description"
     t.integer  "rubric_item_id"
+    t.string   "attribute_type", default: "binary"
+    t.text     "example"
   end
 
   add_index "answer_attributes", ["question_id"], name: "index_answer_attributes_on_question_id", using: :btree
   add_index "answer_attributes", ["rubric_item_id"], name: "fk__answer_attributes_rubric_item_id", using: :btree
-
-  create_table "answer_attributes_feedback_items", id: false, force: true do |t|
-    t.integer "answer_attribute_id"
-    t.integer "feedback_item_id"
-  end
-
-  add_index "answer_attributes_feedback_items", ["answer_attribute_id"], name: "fk__answer_attributes_feedback_items_answer_attribute_id", using: :btree
-  add_index "answer_attributes_feedback_items", ["feedback_item_id"], name: "fk__answer_attributes_feedback_items_feedback_item_id", using: :btree
 
   create_table "answers", force: true do |t|
     t.text     "response"
@@ -251,6 +245,17 @@ ActiveRecord::Schema.define(version: 20140621000732) do
   add_index "evaluations", ["assessment_id"], name: "index_evaluations_on_assessment_id", using: :btree
   add_index "evaluations", ["question_id"], name: "index_evaluations_on_question_id", using: :btree
   add_index "evaluations", ["user_id"], name: "index_evaluations_on_user_id", using: :btree
+
+  create_table "feedback_item_attributes", force: true do |t|
+    t.integer  "answer_attribute_id"
+    t.integer  "feedback_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "weight",              default: 1.0
+  end
+
+  add_index "feedback_item_attributes", ["answer_attribute_id"], name: "fk__answer_attributes_feedback_items_answer_attribute_id", using: :btree
+  add_index "feedback_item_attributes", ["feedback_item_id"], name: "fk__answer_attributes_feedback_items_feedback_item_id", using: :btree
 
   create_table "feedback_items", force: true do |t|
     t.integer  "review_id"

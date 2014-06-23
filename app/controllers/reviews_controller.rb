@@ -60,7 +60,8 @@ class ReviewsController < ApplicationController
         trigger = TriggerAction.add_trigger(current_user, @answer.assignment, count: -1, trigger:"review_required")
         trigger.save!
       end
-      if @review.update(review_params.merge(active: true, completed_at: Time.now))
+      if @review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
+        @review.set_answer_attribute_weights!(review_params[:answer_attribute_weights])
         format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Ok, we saved that review!' }
         format.json { head :no_content }
       else
@@ -165,7 +166,10 @@ class ReviewsController < ApplicationController
         :other_rating_comments,
         :reflection,
         :completion_metadata,
-        :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
+        :copilot_email, 
+        :answer_attribute_weights => [:weight],
+        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, 
+          :answer_attribute_ids=>[]])
     end
 
     def create_review_for_answer(answer, type=nil)

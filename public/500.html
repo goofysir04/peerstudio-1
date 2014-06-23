@@ -3,7 +3,7 @@
 <head>
   <title>We're so sorry, something went wrong :( (500)</title>
   <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600|PT+Sans:700|Rock+Salt' rel='stylesheet' type='text/css'/>
-  <style>
+<style>
   html { 
     background: url(//ucsdhutchins.s3.amazonaws.com/f39af078-e5e6-42cc-adb4-889ac6173361.jpg) no-repeat center center fixed; 
     -webkit-background-size: cover;
@@ -24,8 +24,22 @@
 .error a {
   color: white;
 }
+
+@media all and (max-width: 1400px) {
+  .error {
+    max-width: 250px;
+  }
+}
+
+@media all and (max-width: 600px) {
+  .error {
+    width: 100%;
+    font-weight: 400;
+    background: #000;
+    opacity: 0.5;
+  }
+}
   </style>
-</head>
 
 <body>
   <!-- This file lives in public/500.html -->

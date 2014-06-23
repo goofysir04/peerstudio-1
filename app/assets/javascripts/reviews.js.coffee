@@ -10,14 +10,18 @@ $(document).ready () ->
 		recalculateGrade()
 	#On page load, recalculateGrade
 	recalculateGrade()
+
+	$('a.see-example').click showExample
 	if $('form.review-form').length > 0
 		replaceCheckboxesWithToggles()
 		updateProgressBars()
+		replaceScales()
 		$('form.review-form').submit checkFormCompleteness
 
 		$('.review_text').keyup () ->
 			getReviewQuality($(this).val())
 
+		
 		$('#other_review_types').click(() ->
 			alert "These review types are not yet open for this assignment."
 			return false)
@@ -101,7 +105,28 @@ setProgressBarWidths = () ->
 		$(".progress-bar[data-scored-item=#{checkbox_name}").attr('style', "width: #{completedWidth}").removeClass('progress-bar-danger').
 		removeClass('progress-bar-success').addClass(bar_type)
 
+replaceScales = () ->
+	$('input.scale-checkbox').prop('checked','true')
+	for el in $('input.scale-slider')
+		console.log "setting max to ", 1/(+$(el).data('score'))
+		$(el).slider(
+			min:0
+			max: 1
+			step: 1/($(el).data('options').split(',').length-1)
+			value: (+$(el).val())
+			# tooltip:'always'
+			formater: (val) ->
+				element = this.element 
+				label = $(element).data('options').split(',')[Math.round(val*($(element).data('options').split(',').length-1))]
+				return label + ""
+			)
 
+showExample = (el) ->
+	console.log $(this).data("example")
+	example_text = $("##{$(this).data("example")}").text()
+	$('#example-review-modal .modal-body').html(example_text)
+	$('#example-review-modal').modal('show')
+	return false
 
 recalculateGrade = () ->
 	sum = 0

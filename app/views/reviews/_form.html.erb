@@ -22,37 +22,44 @@
           </li>
         <% end %>
         <%= f.fields_for :feedback_items do |r| %>
-        <% if (r.object.rubric_item.show_for_feedback? and !@answer.is_final?) or (r.object.rubric_item.show_for_final? and @answer.is_final?) %>
-        <li class="compute-score">
-          <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
-          
-          <div class="progress score-progress"></div>
+          <% next if r.object.rubric_item.nil? %>
+          <li class="compute-score">
+            <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
+            
+            <div class="progress score-progress"></div>
 
-          <%= sanitize r.object.rubric_item.title %>
+            <%= sanitize r.object.rubric_item.title %>
 
-          <table>
-            <%if false %>
-              <%= r.collection_radio_buttons(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) %>
-
-            <% else %>
+            <table>
+                
               <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
                 <tr>
 
                 <td style="vertical-align:top;"><%= b.label %>
-                  <div class="btn-group btn-toggle"> 
-                    <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
-                    <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
-                    <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
-                  </div>
+                  <% unless b.object.example.blank? %>
+                    (<a href="#" class="see-example" data-example="example-<%=b.object.id%>">See example</a>)
+                    <div class="hidden" id="example-<%=b.object.id%>">
+                      <%= b.object.example %>
+                    </div>
+                  <% end %>
+                    <% if b.object.attribute_type=="binary" %>
+                      <div class="btn-group btn-toggle"> 
+                        <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
+                        <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
+                        <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
+                      </div>
+                    <% else %>
+                      <div class="scale"><%= b.check_box class:"scale-checkbox" %>
+                        <input type="text" id="answer_attribute_weight_<%=b.object.id%>" name="review[answer_attribute_weights][<%=b.object.id%>][weight]" value="<%= @review.answer_attribute_weight(b.object.id)%>" data-score="<%=b.object.score %>" data-options="<%= b.object.attribute_type%>" class="scale-slider"></input>
+                      </div>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
-            <% end %>
-          </table>
-          <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"form-control", size: "10x4" %>
-          <%= r.hidden_field :rubric_item_id %>
-        </li>
-        <% end %>
+            </table>
+            <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"form-control", size: "10x4" %>
+            <%= r.hidden_field :rubric_item_id %>
+          </li>
         <% end %>
         <li>
           <strong>Overall comments</strong> 
@@ -87,6 +94,20 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Complete the review</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal" id="example-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Here's an example submission that would score well</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
