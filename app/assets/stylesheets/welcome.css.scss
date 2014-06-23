@@ -1,3 +1,94 @@
 // Place all the styles related to the Welcome controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.jumbotron {
+  background: transparent;
+  height: 194px;
+  max-height: 432px;
+
+  h1, p {
+    color: #fff;
+  }
+
+  h1 {
+    font-family: 'Rock Salt', cursive;
+  }
+}
+
+#jumbotron-image-container {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  z-index: -10; 
+  height: 244px;
+  max-height: 480px; 
+  overflow: hidden;
+}
+
+.jumbotron-fade {
+  position: absolute; 
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+}
+
+#jumbotron-image {
+  width: 100%;
+}
+
+.featurette-divider {
+  margin: 40px 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+}
+
+.lead {
+  color: #5a5a5a;
+}
+
+blockquote {
+  padding: 0; 
+  border-left: none;
+}
+
+blockquote .lead {
+  color: #333;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .featurette-heading {
+    font-size: 40px;
+  }
+
+  .jumbotron {
+    height: 432px;
+  }
+
+  #jumbotron-image-container {
+    height: 480px;
+  }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  
+}

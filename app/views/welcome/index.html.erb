@@ -1,2 +1,79 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<% content_for :jumbotron do %>
+  <div class="jumbotron">
+    <div class="container">
+      <div id="jumbotron-image-container">
+        <!-- Photo from Christopher Holden (https://www.flickr.com/photos/maximalideal/4736067734) -->
+        <%= image_tag("jumbotron.jpg", :id => "jumbotron-image") %>
+        <div class="jumbotron-fade"></div>
+      </div>
+      <h1>PeerStudio</h1>
+      <p>Cute tagline here</p>
+    </div>
+  </div>
+<% end %>
+
+<div class="container marketing">
+
+  <div class="row">
+    <div class="col-md-7">
+      <h2 class="featurette-heading">Get (and give) fast, iterative feedback</h2>
+      <p class="lead">PeerStudio engages students not only in creative activity, but in the review and evaluation of the work of their peers.</p>
+    </div>
+    <div class="col-md-5">
+      <img class="img-responsive" src="http://placehold.it/500x250&text=Hello world" />
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row">
+    <div class="col-md-5">
+      <img class="img-responsive" src="http://placehold.it/500x250&text=Hello world" />
+    </div>
+    <div class="col-md-7">
+      <h2 class="featurette-heading">Focus on actionable ways to improve</h2>
+      <p class="lead">PeerStudio provides the support students need to create the very best work they can.</p>
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row">
+    <div class="col-lg-6" style="border-right:1px solid #eee">
+      <div class="row">
+        <div class="col-lg-3">
+          <%= image_tag("hutchins.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
+        </div>
+        <div class="col-lg-9">
+          <blockquote>
+            <p class="lead">I think it captures exactly what we want the experience of writing to be.</p>
+            <footer>Ed Hutchins, UCSD</footer>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-lg-3">
+          <%= image_tag("irani.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
+        </div>
+        <div class="col-lg-9">
+          <blockquote>
+            <p class="lead">They get to see what other student draft work looks like... It seems to really engage them and spark their imagination!</p>
+            <footer>Lilly Irani, UCSD</footer>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="featurette-heading text-center">Want to learn more?</h2>
+      <p class="lead text-center">Instructors, <%= mail_to "peerstudio@cs.stanford.edu", "contact us", subject: "Using PeerStudio in my class" %> to use PeerStudio in your class.</p>
+    </div>
+  </div>
+
+</div>
