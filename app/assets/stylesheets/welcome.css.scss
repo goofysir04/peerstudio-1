@@ -4,15 +4,20 @@
 
 .jumbotron {
   background: transparent;
-  height: 194px;
-  max-height: 432px;
+  height: 480px;
+  max-height: 480px;
 
-  h1, p {
+  h1, h3 {
     color: #fff;
   }
 
   h1 {
     font-family: 'Rock Salt', cursive;
+  }
+
+  .bottom {
+    position: absolute;
+    top: 254px;
   }
 }
 
@@ -21,7 +26,7 @@
   top: 0; 
   left: 0; 
   z-index: -10; 
-  height: 244px;
+  height: 224px;
   max-height: 480px; 
   overflow: hidden;
 }
@@ -75,7 +80,15 @@ blockquote .lead {
   }
 
   .jumbotron {
-    height: 432px;
+    height: 480px;
+
+    p {
+      color: #fff;
+    }
+
+    .bottom {
+      top: 342px;
+    }
   }
 
   #jumbotron-image-container {

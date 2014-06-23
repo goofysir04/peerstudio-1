@@ -107,12 +107,13 @@ Humanmachine::Application.routes.draw do
   end
 
   #root 'grading#index'
-  #root 'courses#index'
-  authenticated do
-    root :to => 'courses#index', as: :authenticated
-  end
+  root 'courses#index'
+  # authenticated do
+  #   root :to => 'courses#index', as: :authenticated
+  # end
+  # root :to => 'welcome#index'
+  get 'welcome' => 'welcome#index'
 
-  root :to => 'welcome#index'
 
   # Example resource route with options:
   #   resources :products do
