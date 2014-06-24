@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+<%= render :partial=>'layouts/global_includes' %>
+<body>
+<div id="fb-root"></div>
+<div id="wrapper">
+  <%= render :partial => 'layouts/navbar' %>
+  <div class="row-fluid">
+    <div id="mainpage" style="width:100%; padding-top:51px;">
+      <%= content_for(:jumbotron) if content_for?(:jumbotron) %>
+      <%= render :partial => 'layouts/notice', :locals => {:notice => notice, :alert => alert} %>
+      <%= yield %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">$('.dropdown-toggle').dropdown();</script>
+
+
+</body>
+
+</html>

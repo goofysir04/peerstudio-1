@@ -1,5 +1,6 @@
 Humanmachine::Application.routes.draw do
 
+  get "welcome/index"
   get "uploads/create"
   resources :courses do
     resources :assignments, shallow: true
@@ -107,6 +108,12 @@ Humanmachine::Application.routes.draw do
 
   #root 'grading#index'
   root 'courses#index'
+  # authenticated do
+  #   root :to => 'courses#index', as: :authenticated
+  # end
+  # root :to => 'welcome#index'
+  get 'welcome' => 'welcome#index'
+
 
   # Example resource route with options:
   #   resources :products do
