@@ -9,8 +9,11 @@
       <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
       <div class="bottom">
         <p>Courses using PeerStudio</p>
-        <a class="btn btn-lg btn-primary" href="http://thiscourse.com/ucsd/cogs102b/wi14/" role="button" target="_blank">Cognitive Ethnography, UCSD</a>
-        <a class="btn btn-lg btn-primary" href="http://thiscourse.com/ucsd/comm106i/sp14/" role="button" target="_blank">Internet Industries, UCSD</a>
+        <% @courses.each do |course| %>
+          <% unless course.ended? %>
+            <a class="btn btn-lg btn-primary" href="<%=course_path(course) %>" role="button"><%= course.title %>, <%= course.institution %></a>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>
