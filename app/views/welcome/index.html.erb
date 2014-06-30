@@ -1,0 +1,85 @@
+<% content_for :jumbotron do %>
+  <div class="jumbotron" style="position:relative;">
+    <div class="container">
+      <div id="jumbotron-image-container">
+        <%= image_tag("jumbotron.jpg", :id => "jumbotron-image") %>
+        <div class="jumbotron-fade"></div>
+      </div>
+      <h1>PeerStudio</h1>
+      <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
+      <div class="bottom">
+        <p>Courses using PeerStudio</p>
+        <% @courses.each do |course| %>
+          <% unless course.ended? %>
+            <a class="btn btn-lg btn-primary" href="<%=course_path(course) %>" role="button"><%= course.title %>, <%= course.institution %></a>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="container marketing">
+
+  <div class="row">
+    <div class="col-md-7">
+      <h2 class="featurette-heading">Get (and give) fast, iterative feedback</h2>
+      <p class="lead">PeerStudio engages students not only in creative activity, but in the review and evaluation of the work of their peers. It creates a guided process where students work on open ended work, and get and give structured feedback to their classmates. Feedback givers benefit from seeing the different perspectives of their classmates, feedback receivers get detailed feedback faster than staff can provide. </p>
+    </div>
+    <div class="col-md-5">
+      <%= image_tag("getfeedback.jpg", :class => "img-responsive") %>
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row">
+    <div class="col-md-5">
+      <%= image_tag("waystoimprove.jpg", :class => "img-responsive") %>
+    </div>
+    <div class="col-md-7">
+      <h2 class="featurette-heading">Supporting instructors to be coaches</h2>
+      <p class="lead">When peers lead the feedback and assessment process, it frees instructors to set the standards for high-qualtity work, and coach students to work towards achieving them. Peerstudio highlights unclear standards and gaps in students' understanding to help instructors in their new role.</p>
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+  <div class="row">
+    <div class="col-lg-6" style="border-right:1px solid #eee">
+      <div class="row">
+        <div class="col-lg-3">
+          <%= image_tag("hutchins.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
+        </div>
+        <div class="col-lg-9">
+          <blockquote>
+            <p class="lead">PeerStudio focuses on providing the support students need to create the very best projects they can.</p>
+            <footer>Edwin Hutchins, Professor in Cognitive Science, UCSD</footer>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-lg-3">
+          <%= image_tag("irani.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
+        </div>
+        <div class="col-lg-9">
+          <blockquote>
+            <p class="lead">PeerStudio got my students writing, teaching, talking, and moving in class. They came to me surprised to read their peers' work, challenged to offer constructive feedback, and excited to edit their writing craft. Structured but open-ended rubrics let me scaffold the process, allowing them to develop a sensibility for what quality work looks like. </p>
+            <footer>Lilly Irani, Assistant Professor in Communication, UCSD</footer>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="featurette-heading text-center">Want to learn more?</h2>
+      <p class="lead text-center">Instructors, <%= mail_to "peerstudio@cs.stanford.edu", "contact us", subject: "Using PeerStudio in my class" %> to use PeerStudio in your class.</p>
+    </div>
+  </div>
+
+</div>

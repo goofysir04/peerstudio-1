@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, 
     :submit_for_feedback, :submit_for_grades, :unsubmit_for_feedback,
+    :feedback_preferences,
     :reflect, :clone]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
@@ -23,15 +24,25 @@ class AnswersController < ApplicationController
 
   # GET /answers/new
   def new
+    @latest_answer = Answer.where(assignment: @assignment, user: current_user).order('updated_at desc').first
+
+    if !@latest_answer.nil?
+      if !@latest_answer.submitted?
+        redirect_to edit_answer_path(@latest_answer), notice: "We took you to the draft you were already editing" and return
+      else
+        redirect_to answer_reviews_path(@latest_answer), notice: "Here are reviews to the last draft you submitted. Click 'Revise submission' to modify this draft" and return
+      end
+    end
     @answer = Answer.new
     @answer.assignment = @assignment
     @answer.active = false
     @answer.user = current_user
+    @answer.response = @assignment.template unless @assignment.template.blank?
     assignment = Assignment.find(params[:assignment_id])
     if assignment.course.students.exists?(current_user.id).nil?
       assignment.course.students << current_user
     end
-    draft_type = params[:draft_type].nil? ? nil : params.require(:draft_type)
+    draft_type = params[:draft_type].nil? ? "Final Draft" : params.require(:draft_type)
     @answer.revision_list = draft_type
     if @answer.save 
       redirect_to edit_answer_path(@answer)
@@ -112,8 +123,13 @@ class AnswersController < ApplicationController
     end
   end
 
+  def feedback_preferences
+    render layout: "one_column"
+  end
+
   def unsubmit_for_feedback
     @answer.submitted = false
+    @answer.is_final = false
     respond_to do |format|
       if @answer.save
         format.html {redirect_to assignment_path(@answer.assignment), notice: "We'll stop asking students to review your draft now. TODO implement this"}

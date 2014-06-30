@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613202939) do
+ActiveRecord::Schema.define(version: 20140622213422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,18 +47,12 @@ ActiveRecord::Schema.define(version: 20140613202939) do
     t.datetime "updated_at"
     t.text     "description"
     t.integer  "rubric_item_id"
+    t.string   "attribute_type", default: "binary"
+    t.text     "example"
   end
 
   add_index "answer_attributes", ["question_id"], name: "index_answer_attributes_on_question_id", using: :btree
   add_index "answer_attributes", ["rubric_item_id"], name: "fk__answer_attributes_rubric_item_id", using: :btree
-
-  create_table "answer_attributes_feedback_items", id: false, force: true do |t|
-    t.integer "answer_attribute_id"
-    t.integer "feedback_item_id"
-  end
-
-  add_index "answer_attributes_feedback_items", ["answer_attribute_id"], name: "fk__answer_attributes_feedback_items_answer_attribute_id", using: :btree
-  add_index "answer_attributes_feedback_items", ["feedback_item_id"], name: "fk__answer_attributes_feedback_items_feedback_item_id", using: :btree
 
   create_table "answers", force: true do |t|
     t.text     "response"
@@ -153,6 +147,7 @@ ActiveRecord::Schema.define(version: 20140613202939) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "grades_released", default: false
+    t.text     "template"
   end
 
   add_index "assignments", ["course_id"], name: "fk__assignments_course_id", using: :btree
@@ -200,6 +195,7 @@ ActiveRecord::Schema.define(version: 20140613202939) do
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
+    t.text     "forum_link"
   end
 
   add_index "courses", ["user_id"], name: "fk__courses_user_id", using: :btree
@@ -250,6 +246,17 @@ ActiveRecord::Schema.define(version: 20140613202939) do
   add_index "evaluations", ["question_id"], name: "index_evaluations_on_question_id", using: :btree
   add_index "evaluations", ["user_id"], name: "index_evaluations_on_user_id", using: :btree
 
+  create_table "feedback_item_attributes", force: true do |t|
+    t.integer  "answer_attribute_id"
+    t.integer  "feedback_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "weight",              default: 1.0
+  end
+
+  add_index "feedback_item_attributes", ["answer_attribute_id"], name: "fk__answer_attributes_feedback_items_answer_attribute_id", using: :btree
+  add_index "feedback_item_attributes", ["feedback_item_id"], name: "fk__answer_attributes_feedback_items_feedback_item_id", using: :btree
+
   create_table "feedback_items", force: true do |t|
     t.integer  "review_id"
     t.integer  "rubric_item_id"
@@ -264,6 +271,16 @@ ActiveRecord::Schema.define(version: 20140613202939) do
   add_index "feedback_items", ["review_id"], name: "index_feedback_items_on_review_id", using: :btree
   add_index "feedback_items", ["rubric_item_id"], name: "fk__feedback_items_rubric_item_id", using: :btree
   add_index "feedback_items", ["rubric_item_id"], name: "index_feedback_items_on_rubric_item_id", using: :btree
+
+  create_table "feedback_preferences", force: true do |t|
+    t.integer  "answer_id"
+    t.integer  "rubric_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "feedback_preferences", ["answer_id"], name: "index_feedback_preferences_on_answer_id", using: :btree
+  add_index "feedback_preferences", ["rubric_item_id"], name: "index_feedback_preferences_on_rubric_item_id", using: :btree
 
   create_table "questions", force: true do |t|
     t.text     "title"
@@ -294,6 +311,7 @@ ActiveRecord::Schema.define(version: 20140613202939) do
     t.boolean  "rating_completed",      default: false
     t.text     "reflection"
     t.datetime "completed_at"
+    t.text     "completion_metadata"
   end
 
   add_index "reviews", ["answer_id"], name: "fk__reviews_answer_id", using: :btree
@@ -317,8 +335,8 @@ ActiveRecord::Schema.define(version: 20140613202939) do
     t.text     "title"
     t.string   "short_title"
     t.datetime "ends_at"
-    t.boolean  "final_only",    default: false
-    t.float    "min",           default: 0.0
+    t.boolean  "final_only",        default: false
+    t.float    "min",               default: 0.0
     t.float    "max"
     t.string   "min_label"
     t.string   "max_label"
@@ -328,6 +346,9 @@ ActiveRecord::Schema.define(version: 20140613202939) do
     t.datetime "updated_at"
     t.text     "common_wishes"
     t.datetime "open_at"
+    t.boolean  "show_for_feedback", default: true
+    t.boolean  "show_for_final",    default: true
+    t.boolean  "show_as_radio",     default: false
   end
 
   add_index "rubric_items", ["assignment_id"], name: "fk__rubric_items_assignment_id", using: :btree

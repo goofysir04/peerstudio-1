@@ -11,12 +11,8 @@
     </div>
   <% end %>
   <% content_for :context_menu do %>
-  <%= form_for([@answer,@review]) do |f| %>
+  <%= form_for(@review, html: {:"class"=>"review-form"}) do |f| %>
   <p>Here's how this assignment should be assessed</p>
-      <style type="text/css">
-      .rubric {margin: 0;}
-      .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
-      </style>
       <ul class="rubric">
         <% if @review.review_type== "paired"%>
           <li>
@@ -26,36 +22,50 @@
           </li>
         <% end %>
         <%= f.fields_for :feedback_items do |r| %>
-        <% if r.object.rubric_item.open_at < Time.now and r.object.rubric_item.ends_at > Time.now %>
-        <li>
-          <strong><%= r.object.rubric_item.short_title %></strong> <!-- <span class="pull-right label">Max: <%=r.object.rubric_item.max %> <%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span> -->
-          <legend></legend>
-          <%= sanitize r.object.rubric_item.title %>
-          <table>
-          <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
-            <tr>
-            <td style="vertical-align:top;"><%= b.check_box :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= b.label %></td>
-            </tr>
-          <% end %>
-          </table>
-          <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"input-block-level", size: "10x4" %>
-          <%= r.hidden_field :rubric_item_id %>
-          <% if @review.answer.assignment.due_at < Time.now %>
-            <legend></legend>
-            <%= r.number_field :score %>
-          <% end %>
-        </li>
-        <% end %>
+          <% next if r.object.rubric_item.nil? %>
+          <li class="compute-score">
+            <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
+            
+            <div class="progress score-progress"></div>
+
+            <%= sanitize r.object.rubric_item.title %>
+
+            <table>
+                
+              <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
+                <tr>
+
+                <td style="vertical-align:top;"><%= b.label %>
+                  <% unless b.object.example.blank? %>
+                    (<a href="#" class="see-example" data-example="example-<%=b.object.id%>">See example</a>)
+                    <div class="hidden" id="example-<%=b.object.id%>">
+                      <%= b.object.example %>
+                    </div>
+                  <% end %>
+                    <% if b.object.attribute_type=="binary" %>
+                      <div class="btn-group btn-toggle"> 
+                        <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
+                        <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
+                        <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
+                      </div>
+                    <% else %>
+                      <div class="scale"><%= b.check_box class:"scale-checkbox" %>
+                        <input type="text" id="answer_attribute_weight_<%=b.object.id%>" name="review[answer_attribute_weights][<%=b.object.id%>][weight]" value="<%= @review.answer_attribute_weight(b.object.id)%>" data-score="<%=b.object.score %>" data-options="<%= b.object.attribute_type%>" class="scale-slider"></input>
+                      </div>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+            <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"form-control", size: "10x4" %>
+            <%= r.hidden_field :rubric_item_id %>
+          </li>
         <% end %>
         <li>
           <strong>Overall comments</strong> 
           <legend></legend>
-          <% if false and @review.review_type == "final"%> 
-            Here's <a href="https://www.dropbox.com/s/i2jqp0jg3u7uigj/BanhText.pdf" target="_blank">a good submission from last year</a>. What can the current submission copy from this submission to improve?
-          <% end %>
-          
-          <%= f.text_area :comments, size: "10x5", class:"review_text input-block-level" %>
-          <div class="alert" id="review_tips">Review tips appear here as you begin typing.</div>
+          <%= f.text_area :comments, size: "10x5", class:"review_text form-control" %>
+          <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
           <legend></legend>
           <table>
             <tr>
@@ -66,8 +76,40 @@
       </ul>
       
       <div class="actions">
-        <%= f.submit class: "btn btn-primary" %>
+        <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
+        <%= f.submit "Submit review", class: "btn btn-primary" %>
       </div>
     <% end %>
-  <% end %>
+<% end %>
 
+<% content_for(:modals) do %>
+  <div class="modal" id="incomplete-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Review not complete</h4>
+        </div>
+        <div class="modal-body">
+          <p>You still have some items you haven't looked at. We've highlighted them so they're easy to find.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Complete the review</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal" id="example-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Here's an example submission that would score well</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<% end %>

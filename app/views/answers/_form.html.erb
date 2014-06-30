@@ -15,12 +15,6 @@
   
       <% content_for :context_menu do %>
       <div class="assignment-rubric">
-      <style type="text/css">
-      .rubric {margin: 0;}
-      .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
-      #reviews {min-height: 200px;}
-      </style>
-
       <div class="btn-group">
         <button type="button" href="#evaluation" class="btn btn-default active">Evaluation</button>
         <button type="button" href="#evaluation" class="btn btn-default">Previous reviews</button>
@@ -29,20 +23,30 @@
         <div class="assignment-rubric-static"%>
           <ul class="rubric">
             <% @answer.assignment.rubric_items.each do |r| %>
-            <% if r.open_at < Time.now and r.ends_at > Time.now %>
+            
             <li>
-              <strong><%= r.short_title %></strong> <span class="pull-right label">Max: <%=r.max %> <%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
+              <strong><%= r.short_title %> <%= "- not included in final grade" unless r.show_for_final? %></strong> <span class="pull-right label"><%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
               <legend></legend>
               <%= sanitize r.title %>
               <table>
                 <% r.answer_attributes.each do |a_attr| %>
                   <tr>
-                    <td style="vertical-align:top;"><input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"></td><td style="vertical-align:top;"><%= a_attr.description %></td>
+                    <td style="vertical-align:top;">
+                      <% if a_attr.attribute_type == "binary"%>
+                      <input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"><% end %>
+                    </td><td style="vertical-align:top;"><%= a_attr.description %>
+                  <% unless a_attr.example.blank? %>
+                    (<a href="#" class="see-example" data-example="example-<%=a_attr.id%>">See example</a>)
+                    <div class="hidden" id="example-<%=a_attr.id%>">
+                      <%= a_attr.example %>
+                    </div>
+                  <% end %>
+                </td>
+
                   </tr>
                 <% end %>
               </table>
             </li>
-            <% end %>
             <% end %>
           </ul>    
         </div>
@@ -66,22 +70,23 @@
     </div>
   <% end %>
   <div class="row-fluid">
-      <%= form_for([@assignment,@answer], remote: true) do |f| %>
-      <legend><%= @answer.revision_name %></legend>
-      
+      <%= form_for([@assignment,@answer], remote: true) do |f| %>      
         <div class="actions">
           <% if @answer.submitted? %>
           You submitted this answer for a review, so you can't change it anymore. 
           <% else %>
-          <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger label-warning answer-save-status">Unsaved</em></span> <span class="answer_public_status"> 
+          <%= f.submit "Save Draft", class: "btn btn-default"%> <span class="label label-danger answer-save-status">Unsaved</em></span> <span class="answer_public_status"></span> 
           <% end %>
           <div class="navbar-right">
-            <% unless @answer.submitted? %>
-            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn btn-success", :role=>"button", :method=>:post %>
+            <% if @answer.submitted? %>
+            <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
             <% else %>
-             <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
+            <% seek_feedback_class = (@answer.assignment.due_at - Time.now > 1.day) ? "btn-primary": "btn-default" %>  
+            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :role=>"button"%> 
             <% end %>
-            <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-primary", :role=>"button" %>
+            <% unless @answer.is_final? %>
+             <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-default", :role=>"button", method: :post %>
+            <% end %>
         </div>
       
       </div>
@@ -92,7 +97,22 @@
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
 
-
+<% content_for(:modals) do %>
+<div class="modal" id="example-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Here's an example submission that would score well</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<% end %>
 
 
 

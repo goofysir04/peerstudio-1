@@ -25,6 +25,7 @@ class ReviewsController < ApplicationController
 
   # GET /reviews/1/edit
   def edit
+    @answer = @review.answer
   end
 
   # POST /reviews
@@ -48,6 +49,7 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1
   # PATCH/PUT /reviews/1.json
   def update
+    # raise params.inspect
     respond_to do |format|
       if !@review.active?
         #The review is not active, so this is an update of a pending review
@@ -58,7 +60,8 @@ class ReviewsController < ApplicationController
         trigger = TriggerAction.add_trigger(current_user, @answer.assignment, count: -1, trigger:"review_required")
         trigger.save!
       end
-      if @review.update(review_params.merge(active: true, completed_at: Time.now))
+      if @review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
+        @review.set_answer_attribute_weights!(review_params[:answer_attribute_weights])
         format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Ok, we saved that review!' }
         format.json { head :no_content }
       else
@@ -162,7 +165,11 @@ class ReviewsController < ApplicationController
         :recognize_rating,
         :other_rating_comments,
         :reflection,
-        :copilot_email, :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, :answer_attribute_ids=>[]])
+        :completion_metadata,
+        :copilot_email, 
+        :answer_attribute_weights => [:weight],
+        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, 
+          :answer_attribute_ids=>[]])
     end
 
     def create_review_for_answer(answer, type=nil)

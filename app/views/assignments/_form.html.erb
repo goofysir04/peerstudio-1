@@ -1,4 +1,4 @@
-<%= nested_form_for [@course,@assignment], :html=>{:class => "form-horizontal"} do |f| %>
+<%= nested_form_for [@course,@assignment] do |f| %>
   <% if @assignment.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
@@ -11,213 +11,105 @@
     </div>
   <% end %>
 
-  <div class="control-group">
-    <div class="control-label">
-      <%= f.label :title %>
-    </div>
-    <div class="controls">
-      <%= f.text_field :title %>
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="control-label">
-      <%= f.label :description %>
-    </div>
-    <div class="controls">
-      <%= f.hidden_field :description, :id=>'assignment_description' %>
-      <div class="editable" id="assignment_description_richtext" data-syncwith="assignment_description" style="margin-left:165px">
-        <%= sanitize @assignment.description unless @assignment.description.nil? %>
-      </div>
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="control-label">
-      <%= f.label :due_at %>
-    </div>
-    <div class="controls">
-      <div class="input-append date datetime-picker">
-        <%= f.text_field :due_at, :value => f.object.due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-      </div>
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="control-label">
-      <%= f.label :open_at %>
-    </div>
-    <div class="controls">
-        <div class="input-append date datetime-picker">
-        <%= f.text_field :open_at, :value => f.object.open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-      </div>
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="control-label">
-      <%= f.label :milestone_list %>
-    </div>
-    <div class="controls">
-      <%= f.text_field :milestone_list %>
-    </div>
-  </div>
-  <%= f.fields_for :taggings do |t| %>
-
-    <legend></legend>
-    <div class="edit_section_title">
-      <h4><%= Tag.find(t.object.tag_id).name %></h4>
-    </div>
-    
-    <div class="control-group">
-      <div class="control-label">
-        <%= t.label :open_at %>
-      </div>
-      <div class="controls">
-        <div class="input-append date datetime-picker">
-          <%= t.text_field :open_at, :value => t.object.open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-        </div>
-        When should students start working on this milestone?
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= t.label :close_at %>
-      </div>
-      <div class="controls">
-        <div class="input-append date datetime-picker">
-          <%= t.text_field :close_at, :value => t.object.close_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-        </div>
-        When should students submit this milestone?
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= t.label :review_open_at %>
-      </div>
-      <div class="controls">
-        <div class="input-append date datetime-picker">
-          <%= t.text_field :review_open_at, :value => t.object.review_open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-        </div>
-        When should students start reviewing this milestone?
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= t.label :review_close_at %>
-      </div>
-      <div class="controls">
-        <div class="input-append date datetime-picker">
-          <%= t.text_field :review_close_at, :value => t.object.review_close_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-        </div>
-        When should students finish reviewing this milestone?
-      </div>
+  <div class="row-fluid">
+    <h1><%= f.text_field :title, placeholder: "Assignment title" %></h1>
+    <div class="form-group">
+      <%= f.label :description, "Assignment description (See example)" %>
+      <%= f.text_area :description, placeholder: "Describe your assignment.", class: "editable" %>
     </div>
 
-  <% end %>
-<section class="project_edit_section">
+    <div class="form-group">
+      <%= f.label :template, "Assignment template (See example)" %>
+      <%= f.text_area :template, placeholder: "Title\nArgument\nEvidence\nConclusion.", class: "editable" %>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <%= f.label :due_at %>
+        <div class="input-append date datetime-picker">
+          <%= f.text_field :due_at, :value => f.object.due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <%= f.label :open_at %>
+        <div class="controls">
+          <div class="input-append date datetime-picker">
+            <%= f.text_field :open_at, :value => f.object.open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+            <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row-fluid">
     <div class="edit_section_title">
       <h3>Rubric items
       <small>What questions should students be evaluated on?</small>
       </h3>
+      <p>Remember, you can choose whether rubric criteria are shown for early feedback, for assessment, or both (default) </p>
     </div>
-  <%= f.fields_for :rubric_items do |r| %>
+  </div>
+  
+  <div class="col-md-5 col-sm-6">
+    <ul class="rubric">
+      <%= f.fields_for :rubric_items do |r| %>
+        <li>
+          <div class="row-fluid">
+            <div class="row-fluid">
+              <div class="col-sm-11"><strong><%= r.text_field :short_title, placeholder: "Title", class: "form-control" %></strong></div>
+              <span class="badge col-sm-1"><%=r.text_field :max_label, class:"form-control", placeholder: "opt. max score"%></span>
+            </div>
+            <div class="row-fluid">
+              <%=r.text_area :title, placeholder: "An optional longer explanation", class: "form-control" %>
+            </div>
+            <div class="row-fluid form-inline" id="checkboxes-<%=r.object.id%>">
+              <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
+                <div class="fields row-fluid">
+                  <div class="form-group" style="width: 75%;"><input type="checkbox" disabled="disabled"><%= a.text_field :description, placeholder: "Enter a criteria. Keep it to one line if possible", class:"form-control", style: "width: 95%" %></div><div class="form-group" style="width: 7%;"><%= a.text_field :score, placeholder: "0", class:"form-control", style: "width: 100%" %></div><div class="form-group"><%= a.link_to_remove "Remove", class:"btn btn-default", tabindex: "-1"%></div><div class="form-group"><%= a.text_field :attribute_type, class:"form-control", tabindex: "-1"%>
+                  <%= a.text_area :example, class:"editable" %>
+                </div>
 
-    <div class="control-group">
-      <div class="control-label">
-        <%= r.label :short_title %>
-      </div>
-      <div class="controls">
-        <%= r.text_field :short_title %>
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= r.label :open_at %>
-      </div>
-      <div class="controls">
-        <div class="input-append date datetime-picker">
-          <%= r.text_field :open_at, :value => r.object.open_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-        </div>
-        Students will only be able to get feedback on this item after this date. 
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= r.label :ends_at %>
-      </div>
-      <div class="controls">
-        <div class="input-append date datetime-picker">
-          <%= r.text_field :ends_at, :value => r.object.ends_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
-          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-        </div>
-        Students will only be able to get feedback on this item if they submit by this date. 
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= r.label :min do %>
-        Min Score
-        <% end %>
-      </div>
-      <div class="controls">
-        <%= r.text_field :min %>
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= r.label :max do %>
-        Max Score
-        <% end %>
-      </div>
-      <div class="controls">
-        <%= r.text_field :max %>
-      </div>
-    </div>
+                </div>
+              <% end %>
+            </div>
+            <div class="row-fluid">
+              <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes-#{r.object.id}" }, class: "" %>
+            </div>
+            <div class="row-fluid">
+              <input type="textarea" placeholder="Space for student comments" class="form-control" disabled="disabled" rows="2"></input>
+            </div>
+            <legend></legend>
+            <div class="row-fluid">
+              <%= r.label :show_for_feedback, class:"checkbox-inline" do %>
+                <%= r.check_box :show_for_feedback %> Recommend this for early feedback 
+              <% end %>
+              <%= r.label :show_for_final, class:"checkbox-inline" do %>
+                <%= r.check_box :show_for_final %> Include in final assessment (grades) 
+              <% end %>
+            </div>
+            <div class="row-fluid">
+              <%= r.link_to_remove "Remove this rubric item" %>
+            </div>
+            <br/>
+          </div>
+        </li>
+      <% end %>
+      <%= f.link_to_add "Add a rubric item", :rubric_items %>
+    </ul>
 
-    <div class="control-group">
-      <div class="control-label">
-        <strong>Checkboxes</strong>
-      </div>
-      <div class="controls">
-        <table id="checkboxes-<%=r.object.id%>">
-          <tr class="header">
-            <td>Checkbox title</td>
-            <td>Score</td>
-            <td>&nbsp;</td>
-          </tr>
-          <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
-          <tr class="fields">
-            <td><%= a.text_field :description %></td>
-            <td><%= a.text_field :score %></td>
-            <td><%= a.link_to_remove "Remove this checkbox" %></td>
-          </tr>
-          <% end %>
-        </table>
-        <%= r.link_to_add "Add a checkbox", :answer_attributes, :data => { :target => "#checkboxes-#{r.object.id}" } %>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <div class="controls">
-        <%= r.link_to_remove "Remove this rubric item" %>
-      </div>
-    </div>
-
-    <legend></legend>
-  <% end %>
-  <%= f.link_to_add "Add a rubric item", :rubric_items %>
-  <legend></legend>
-</section>
+  </div>
+  <div class="clearfix"></div>
   <div class="actions">
     <%= f.submit class: "btn btn-primary" %>
   </div>
-
+<% end %>
   <script type="text/javascript">
   $(function() {
     $('.datetime-picker').datetimepicker({language: 'en', pickTime: true});});
+
   </script>
-<% end %>
+

@@ -1,6 +1,6 @@
 MANDRILL_API_KEY_TEST ||= ENV['MANDRILL_API_KEY_TEST'] #This is the test key. It doesn't actually send emails.
 MANDRILL_API_KEY ||= ENV['MANDRILL_API_KEY'] #This is the Developer key. IT SENDS EMAIL!
-DEFAULT_FROM_EMAIL ||= "\"Peerstudio Accounts\" <accounts@peerstudio.org>"
+DEFAULT_FROM_EMAIL ||= "\"Peerstudio\" <accounts@peerstudio.org>"
 DEFAULT_TO_EMAIL ||= "test_user@your.domain"
 ACTION_MAILER_DELIVERY_METHOD ||= :smtp
 ACTION_MAILER_SMTP_SETTINGS ||= {

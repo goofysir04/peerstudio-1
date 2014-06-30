@@ -1,5 +1,7 @@
 class FeedbackItem < ActiveRecord::Base
   belongs_to :review
   belongs_to :rubric_item
-  has_and_belongs_to_many :answer_attributes
+  has_many :answer_attributes, through: :feedback_item_attributes
+  has_many :feedback_item_attributes
 end
+

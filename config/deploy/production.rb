@@ -1,35 +1,32 @@
 set :stage, :production
 
-
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
-# role :all, %w{ubuntu@54.203.252.80}
-
-role :web, %w{ubuntu@54.203.252.80}
-role :db,  %w{ubuntu@54.203.252.80}
-role :app,  %w{ubuntu@54.203.252.80}
+role :app, %w{deploy@example.com}
+role :web, %w{deploy@example.com}
+role :db,  %w{deploy@example.com}
 
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server
 # definition into the server list. The second argument
-# something that quacks like a has can be used to set
+# something that quacks like a hash can be used to set
 # extended properties on the server.
-# server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
+server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 
+set :deploy_to, '/srv/www/peerstudio'
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
 # you can see them in [net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start)
 # set it globally
- set :ssh_options, {
- 	user: 'ubuntu',
-   keys: [File.join(ENV["HOME"], ".ssh", "id_rsa"), File.join(ENV["HOME"], ".ssh","DiscourseKey.pem"), File.join(ENV["HOME"], ".ssh","github_rsa")],
-   # forward_agent: true,
-   auth_methods: %w(publickey password)
- }
+#  set :ssh_options, {
+#    keys: %w(/home/rlisowski/.ssh/id_rsa),
+#    forward_agent: false,
+#    auth_methods: %w(password)
+#  }
 # and/or per server
 # server 'example.com',
 #   user: 'user_name',

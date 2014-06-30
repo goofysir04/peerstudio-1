@@ -21,29 +21,13 @@
       </div>
       
       <div class="clearfix"></div>
+      <%= render :partial=>"optional_fields", :locals=>{:f=>f} %> 
       
-      <div class="span6"  style="margin-left:0px; padding-top:20px; padding-bottom: 20px;">
-        <legend>Configure Time Zone</legend>
-          <%= time_zone_select( :user, :time_zone, nil, :default => "Pacific Time (US & Canada)") %>
-        <br/>
-      </div>
-    </div>
-    <div class="clearfix"></div>
-  <div class="span10" style="margin-top:40px; margin-left:0px;">
-    <p><b><%= t :PeerStudio %></b> is part of a research project at Stanford University. You can still use the system without participating in our research, but you can choose to help us below, and we'll be so grateful! :) <a href="https://docs.google.com/document/d/1kZKBs2JXX9rFSQ4LzAy-XBOxNPPmHFS6l7CwXtP63JY/pub" target="_blank"><strong>Open in new window</strong></a></p>
-    <%= render :partial => 'consent_form' %>
-        <%= f.radio_button :consented, true, value: true -%><%= f.label :consented_true, style: "display: inline;" do %>
-        <strong>I am at least 18 years of age, and I consent to participating in this research study.</strong>
-        <% end %>
-    </br/>
-    <%= f.radio_button :consented, false, value: false %> <%= f.label :consented_false, "I do not consent to participating in this research study (or am under 18).", style: "display: inline;"  %>
-  </div>
-
     <div class="clearfix"></div>
 
 
     <div class="form-actions">
-      <%= f.submit "Update Settings", :class => 'btn-large btn-primary' %>&nbsp; or <%= link_to "Go Back", :back %>
+      <%= f.submit "Update Settings", :class => ' btn btn-large btn-primary' %>&nbsp; or <%= link_to "Go Back", :back %>
       <div style="float:right;">
         <strong>Unhappy?&nbsp;&nbsp;</strong><%= link_to "Delete my account", registration_path(resource_name), confirm: "Are you sure? Your account data will be permanently lost!", data: { "confirm-title" => "Delete my account", "confirm-cancel" => "Cancel", "confirm-proceed" => "Yes, delete my account" }, :method => :delete %>
       </div>

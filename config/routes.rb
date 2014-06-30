@@ -1,10 +1,12 @@
 Humanmachine::Application.routes.draw do
 
+  get "welcome/index"
   get "uploads/create"
   resources :courses do
     resources :assignments, shallow: true
     collection do 
       get 'help'
+      get 'about'
     end
   end
 
@@ -81,6 +83,7 @@ Humanmachine::Application.routes.draw do
       post 'direct_upload_attachment'
       delete 'delete_attachment'
       get 'star' => 'answers#star'
+      get 'submit_for_feedback' => 'answers#feedback_preferences'
       post 'submit_for_feedback'
       post 'unsubmit_for_feedback'
       post 'submit_for_grades'
@@ -104,7 +107,13 @@ Humanmachine::Application.routes.draw do
   end
 
   #root 'grading#index'
-  root 'courses#index'
+  # root 'courses#index'
+  authenticated do
+    root :to => 'courses#index', as: :authenticated
+  end
+  root :to => 'welcome#index'
+  # get 'welcome' => 'welcome#index'
+
 
   # Example resource route with options:
   #   resources :products do

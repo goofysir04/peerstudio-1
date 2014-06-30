@@ -230,7 +230,7 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   config.omniauth :open_id, 
-    :store => OpenID::Store::Filesystem.new('/tmp'), 
+    :store => OpenID::Store::Filesystem.new('./tmp'), 
     :name => 'coursera', 
     :identifier => 'https://accounts.coursera.org/openid/v1', 
     :require => 'omniauth-openid'

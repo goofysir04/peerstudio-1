@@ -6,6 +6,7 @@ class RubricItem < ActiveRecord::Base
 
   default_scope :order=>'ends_at ASC, open_at ASC, created_at ASC'
 
-  validates :ends_at, presence: true
-  validates :open_at, presence: true
+  has_many :answers, through: :feedback_preferences
+  # validates :ends_at, presence: true
+  # validates :open_at, presence: true
 end

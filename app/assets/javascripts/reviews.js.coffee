@@ -2,6 +2,8 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+review_completion_metadata = {}
+
 $(document).ready () ->
 	$('.rubric_item:checkbox').click () ->
 		console.log "You clicked, haha"
@@ -9,14 +11,122 @@ $(document).ready () ->
 	#On page load, recalculateGrade
 	recalculateGrade()
 
-	$('.review_text').keyup () ->
-		getReviewQuality($(this).val())
+	$('a.see-example').click showExample
+	if $('form.review-form').length > 0
+		replaceCheckboxesWithToggles()
+		updateProgressBars()
+		replaceScales()
+		$('form.review-form').submit checkFormCompleteness
 
-	$('#other_review_types').click(() ->
-		alert "These review types are not yet open for this assignment."
-		return false)
+		$('.review_text').keyup () ->
+			getReviewQuality($(this).val())
+
+		
+		$('#other_review_types').click(() ->
+			alert "These review types are not yet open for this assignment."
+			return false)
 
 	# debugTokenList()
+
+
+replaceCheckboxesWithToggles = ()->
+	return if $('input.toggle-checkbox').length is 0
+	$('.btn-checkbox-yes,.btn-checkbox-no').click syncCheckboxOnToggle
+
+	server_metadata = $('#review_completion_metadata').val() + ""
+	try
+		review_completion_metadata = JSON.parse(server_metadata)
+	catch e
+		console.log("couldn't parse")
+	
+	for box in $('input.toggle-checkbox')
+		if box.checked
+			$(box).siblings('.btn-checkbox-yes').addClass('active btn-success')
+			$(box).siblings('.btn-checkbox-no').removeClass('active')
+		else
+			$(box).siblings('.btn-checkbox-yes').removeClass('active btn-success')
+			if review_completion_metadata.completed_checkboxes? and $(box).attr('id') in review_completion_metadata.completed_checkboxes
+				#Only set as unchecked if it exists in our collection	
+				$(box).siblings('.btn-checkbox-no').addClass('active btn-danger')
+
+syncCheckbox = (box) ->
+	if box.prop('checked') is true
+			$(box).siblings('.btn-checkbox-yes').addClass('active btn-success')
+			$(box).siblings('.btn-checkbox-no').removeClass('active btn-danger')
+		else
+			$(box).siblings('.btn-checkbox-yes').removeClass('active btn-success')
+			if review_completion_metadata.completed_checkboxes? and $(box).attr('id') in review_completion_metadata.completed_checkboxes
+				#Only set as unchecked if it exists in our collection	
+				$(box).siblings('.btn-checkbox-no').addClass('active btn-danger')
+
+syncCheckboxOnToggle = () ->
+	console.log "Syncing"
+	el = $(this)
+	if el.hasClass('btn-checkbox-yes')
+		console.log "setting"
+		el.siblings('input.toggle-checkbox').prop('checked', true)
+	else
+		console.log "unsetting"
+		el.siblings('input.toggle-checkbox').prop('checked', false)
+
+	#Append to the review_completion_metadata
+	unless review_completion_metadata.completed_checkboxes?
+		review_completion_metadata.completed_checkboxes = []
+	linkedCheckbox = el.siblings('input.toggle-checkbox').first()
+	review_completion_metadata.completed_checkboxes.push linkedCheckbox.attr('id') unless linkedCheckbox.attr('id') in review_completion_metadata.completed_checkboxes
+	$('#review_completion_metadata').val(JSON.stringify(review_completion_metadata))
+	syncCheckbox(linkedCheckbox)
+	setProgressBarWidths()
+	return false
+
+updateProgressBars = () ->
+	#First find all scored items, calculate their total score, and set it
+	for scoredItem in $('li.compute-score')
+		score = 0
+		for item in $(scoredItem).find('input[data-score]')
+			itemScore = (+$(item).data('score'))
+			score+= itemScore
+			#Also create the progress bars that we need
+			itemName = $(item).attr('id')
+			$(scoredItem).find('.score-progress').append("<div class='progress-bar' style='width: 0%' data-scored-item='#{itemName}'></div>")
+		$(scoredItem).attr('data-total-score', score)
+	setProgressBarWidths()
+
+setProgressBarWidths = () ->
+	return unless review_completion_metadata.completed_checkboxes
+	for checkbox_name in review_completion_metadata.completed_checkboxes
+		completedWidth = +$("##{checkbox_name}").data('score')/(+$("##{checkbox_name}").closest('li.compute-score').data('total-score'))*100 + "%"
+		if $("##{checkbox_name}").prop("checked") is true
+			bar_type = "progress-bar-success"
+			console.log "success"
+		else
+			bar_type = "progress-bar-danger"
+			console.log "fail"
+		$(".progress-bar[data-scored-item=#{checkbox_name}").attr('style', "width: #{completedWidth}").removeClass('progress-bar-danger').
+		removeClass('progress-bar-success').addClass(bar_type)
+
+replaceScales = () ->
+	$('input.scale-checkbox').prop('checked','true')
+	for el in $('input.scale-slider')
+		console.log "setting max to ", 1/(+$(el).data('score'))
+		$(el).slider(
+			min:0
+			max: 1
+			step: 1/($(el).data('options').split(',').length-1)
+			value: (+$(el).val())
+			# tooltip:'always'
+			formater: (val) ->
+				element = this.element 
+				label = $(element).data('options').split(',')[Math.round(val*($(element).data('options').split(',').length-1))]
+				return label + ""
+			)
+
+showExample = (el) ->
+	console.log $(this).data("example")
+	example_text = $("##{$(this).data("example")}").text()
+	$('#example-review-modal .modal-body').html(example_text)
+	$('#example-review-modal').modal('show')
+	return false
 
 recalculateGrade = () ->
 	sum = 0
@@ -80,6 +190,20 @@ token_list = {
 	"realHackersReadSourceCode": {regex: new RegExp("realHackersReadSourceCode"), score: 0, feedback: "Howdy hacker! It seems like you've found our review-writing advice columns.\nWant to help us make education better? Drop us a line at talkabout [at] cs.stanford.edu and say how you found us!"}
 }
 
+
+checkFormCompleteness = () ->
+
+	review_complete = true
+
+	for item in $('input.toggle-checkbox')
+		console.log "checking #{$(item).attr('id')}"
+		unless $(item).attr('id') in review_completion_metadata.completed_checkboxes
+			review_complete = false
+			console.log "not complete"
+			$(item).closest('li.compute-score').addClass('incomplete-rubric')
+
+	$('#incomplete-review-modal').modal('show') unless review_complete
+	return review_complete
 
 
 getReviewQuality = (text) ->

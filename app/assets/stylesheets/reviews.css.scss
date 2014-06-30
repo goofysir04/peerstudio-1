@@ -60,3 +60,16 @@
 .reviewer10 { 
 	background-color: #17becf;
 }
+
+.rubric {margin: 0; padding: 0;}
+.rubric li {list-style-type: none; background-color:#e7e7e7; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:0.5em;}
+#reviews {min-height: 200px;}
+
+input.toggle-checkbox,input.scale-checkbox {display:none;}
+.progress.score-progress {height: 5px;}
+
+li.incomplete-rubric {border: 1px solid red;}
+
+.slider-selection {
+	background: #0f0;
+}

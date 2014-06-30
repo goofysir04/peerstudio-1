@@ -6,16 +6,6 @@ GIT
       omniauth (~> 1.0)
       rack-openid (~> 1.3.1)
 
-GIT
-  remote: git://github.com/waynehoover/s3_direct_upload.git
-  revision: a069078f4b1c85ebbeec844614d0f352b1a85430
-  specs:
-    s3_direct_upload (0.1.6)
-      coffee-rails (>= 3.1)
-      jquery-fileupload-rails (~> 0.4.1)
-      rails (>= 3.1)
-      sass-rails (>= 3.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -50,27 +40,23 @@ GEM
       json
     arel (4.0.1)
     atomic (1.1.14)
-    aws-sdk (1.29.1)
+    aws-sdk (1.42.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
-      uuidtools (~> 2.1)
     bcrypt-ruby (3.1.2)
     bootstrap-datetimepicker-rails (0.0.11)
     builder (3.1.4)
     cancan (1.6.10)
-    capistrano (3.0.1)
+    capistrano (3.2.1)
       i18n
       rake (>= 10.0.0)
-      sshkit (>= 0.0.23)
+      sshkit (~> 1.3)
     capistrano-bundler (1.1.1)
       capistrano (~> 3.0)
       sshkit (>= 1.2.0)
     capistrano-rails (1.1.0)
       capistrano (>= 3.0.0)
       capistrano-bundler (>= 1.0.0)
-    capistrano-rvm (0.1.0)
-      capistrano (~> 3.0)
-      sshkit (~> 1.2.0)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.3)
@@ -82,6 +68,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    colorize (0.7.3)
     commonjs (0.2.7)
     daemons (1.1.9)
     delayed_job (4.0.0)
@@ -96,7 +83,11 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     erubis (2.7.0)
+    eventmachine (1.0.3)
     execjs (2.0.2)
+    figaro (0.7.0)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
     google-analytics-rails (0.0.4)
     hashie (2.0.5)
     hike (1.2.3)
@@ -104,9 +95,6 @@ GEM
     jbuilder (1.5.3)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
-    jquery-fileupload-rails (0.4.1)
-      actionpack (>= 3.1)
-      railties (>= 3.1)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -128,12 +116,13 @@ GEM
     mini_portile (0.5.2)
     minitest (4.7.5)
     multi_json (1.8.2)
+    mysql2 (0.3.16)
     nested_form (0.3.2)
-    net-scp (1.1.2)
+    net-scp (1.2.1)
       net-ssh (>= 2.6.5)
-    net-ssh (2.7.0)
+    net-ssh (2.9.1)
     newrelic_rpm (3.7.3.199)
-    nokogiri (1.6.0)
+    nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
@@ -173,12 +162,11 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     raindrops (0.12.0)
-    rake (10.1.0)
+    rake (10.3.2)
     rdoc (3.12.2)
       json (~> 1.4)
     redcarpet (3.0.0)
     ref (1.0.5)
-    rmagick (2.13.2)
     ruby-openid (2.3.0)
     sass (3.2.12)
     sass-rails (4.0.1)
@@ -197,21 +185,21 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    sqlite3 (1.3.8)
-    sshkit (1.2.0)
+    sshkit (1.5.1)
+      colorize
       net-scp (>= 1.1.2)
-      net-ssh
-      term-ansicolor
-    term-ansicolor (1.2.2)
-      tins (~> 0.8)
+      net-ssh (>= 2.8.0)
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
       ref
+    thin (1.6.2)
+      daemons (>= 1.0.9)
+      eventmachine (>= 1.0.0)
+      rack (>= 1.0.0)
     thor (0.18.1)
     thread_safe (0.1.3)
       atomic
     tilt (1.4.1)
-    tins (0.13.1)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -225,7 +213,6 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
-    uuidtools (2.1.4)
     validates_email_format_of (1.5.3)
     warden (1.2.3)
       rack (>= 1.0)
@@ -237,21 +224,23 @@ PLATFORMS
 DEPENDENCIES
   acts-as-taggable-on
   airbrake
-  aws-sdk
+  aws-sdk (~> 1.42)
   bootstrap-datetimepicker-rails
   cancan
-  capistrano-bundler
-  capistrano-rails
-  capistrano-rvm
+  capistrano (~> 3.2)
+  capistrano-bundler (>= 1.1.0)
+  capistrano-rails (~> 1.1)
   coffee-rails (~> 4.0.0)
   daemons
   delayed_job_active_record
   devise
+  figaro
   google-analytics-rails
   jbuilder (~> 1.2)
   jquery-rails
   jquery-turbolinks
   less-rails (= 2.3.3)
+  mysql2
   nested_form
   newrelic_rpm
   omniauth
@@ -263,12 +252,10 @@ DEPENDENCIES
   rails-bootstrap-markdown
   rails_12factor
   redcarpet
-  rmagick (= 2.13.2)
-  s3_direct_upload!
   sass-rails (~> 4.0.0)
   sdoc
-  sqlite3
   therubyracer
+  thin
   turbolinks
   uglifier (>= 1.3.0)
   unicorn

@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.0'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3', group: :development
+# gem 'sqlite3', group: :development
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
@@ -48,8 +48,8 @@ gem "omniauth"
 gem 'omniauth-openid', :git => 'git://github.com/intridea/omniauth-openid.git'
 gem "cancan"
 
-# gem "mysql2", group: :production
-gem "pg" #group: :production #only heroku
+gem "mysql2", group: :production
+gem "pg", group: :development #only heroku
 gem 'rails_12factor', group: :production #only heroku
 #create views
 # gem "schema_plus"
@@ -65,10 +65,16 @@ gem 'google-analytics-rails'
 
 # Use Capistrano for deployment
 group :development do
-	gem 'capistrano-bundler'
- 	gem 'capistrano-rvm'
- 	gem 'capistrano-rails'
+	gem 'capistrano-bundler', '>= 1.1.0'
+ 	gem 'capistrano',  '~> 3.2'
+	gem 'capistrano-rails', '~> 1.1'
+	# gem 'capistrano-rvm'
 end
+
+#For server/config
+gem 'thin'
+gem 'figaro'
+# gem 'sqlite3' #just for testing
 
 gem 'delayed_job_active_record'
 gem 'daemons'
@@ -83,11 +89,11 @@ gem 'airbrake'
 #For editor and uploads
 gem "paperclip"
 # gem "ckeditor", :github => "galetahub/ckeditor"
-gem "aws-sdk"
-gem 's3_direct_upload', :git => "git://github.com/waynehoover/s3_direct_upload.git" # direct upload (CORS) form helper and assets
+gem "aws-sdk", '~>1.42'
+# gem 's3_direct_upload', :git => "git://github.com/waynehoover/s3_direct_upload.git" # direct upload (CORS) form helper and assets
 
 
-gem 'rmagick', '2.13.2'
+# gem 'rmagick', '2.13.2'
 
 #For heroku testing
 gem "unicorn"
@@ -105,6 +111,7 @@ gem 'acts-as-taggable-on'
 gem 'nested_form'
 
 gem 'newrelic_rpm'
+
 
 
 #for pushing grades to coursera
