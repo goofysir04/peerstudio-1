@@ -7,6 +7,9 @@
       </div>
       <h1>PeerStudio</h1>
       <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
+      <%= mail_to "peerstudio@cs.stanford.edu", subject: "Using PeerStudio in my class" do %>
+        <span class="btn btn-lg btn-primary" role="button"> Instructors, contact us to use PeerStudio in your class. </span>
+      <% end %>
       <div class="bottom">
         <p>Courses using PeerStudio</p>
         <% @courses.each do |course| %>
@@ -24,7 +27,7 @@
   <div class="row">
     <div class="col-md-7">
       <h2 class="featurette-heading">Get (and give) fast, iterative feedback</h2>
-      <p class="lead">PeerStudio engages students not only in creative activity, but in the review and evaluation of the work of their peers. It creates a guided process where students work on open ended work, and get and give structured feedback to their classmates. Feedback givers benefit from seeing the different perspectives of their classmates, feedback receivers get detailed feedback faster than staff can provide. </p>
+      <p class="lead">PeerStudio engages students not only in creative activity, but in the review and evaluation of the work of their peers. It creates a guided process where students work on open ended work, and get and give structured feedback to their classmates. Feedback givers benefit from seeing the different perspectives of their classmates, feedback receivers get detailed feedback faster than staff can provide.  </p>
     </div>
     <div class="col-md-5">
       <%= image_tag("getfeedback.jpg", :class => "img-responsive") %>
