@@ -5,21 +5,26 @@
         <%= image_tag("jumbotron.jpg", :id => "jumbotron-image") %>
         <div class="jumbotron-fade"></div>
       </div>
-      <h1>PeerStudio</h1>
-      <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
-      <%= mail_to "peerstudio@cs.stanford.edu", subject: "Using PeerStudio in my class" do %>
-        <span class="btn btn-lg btn-primary" role="button"> Instructors, contact us to use PeerStudio in your class. </span>
-      <% end %>
-      <% if !@courses.blank? %>
-        <div class="bottom">
-          <p>Courses using PeerStudio</p>
-            <% @courses.each do |course| %>
-              <% unless course.ended?%>
-                <a class="btn btn-lg btn-primary" href="<%=course_path(course) %>" role="button"><%= course.title %>, <%= course.institution %></a>
+      <div style="inline-block; float:left;">
+        <h1>PeerStudio</h1>
+        <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
+        <%= mail_to "peerstudio@cs.stanford.edu", subject: "Using PeerStudio in my class" do %>
+          <span class="btn btn-lg btn-primary" role="button"> Instructors, contact us to use PeerStudio in your class. </span>
+        <% end %>
+        <% if !@courses.blank? %>
+          <div class="bottom">
+            <p>Courses using PeerStudio</p>
+              <% @courses.each do |course| %>
+                <% unless course.ended?%>
+                  <a class="btn btn-lg btn-primary" href="<%=course_path(course) %>" role="button"><%= course.title %>, <%= course.institution %></a>
+                <% end %>
               <% end %>
-            <% end %>
-        </div>
-      <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div style="inline-block;">
+        <iframe src="//www.youtube.com/embed/lh1YLxs7cgU?rel=0" frameborder="0" allowfullscreen="" style="float:right; width: 560px; height: 350px;"></iframe>
+      </div>
     </div>
   </div>
 <% end %>
