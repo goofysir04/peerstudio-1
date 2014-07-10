@@ -113,6 +113,7 @@ gem 'nested_form'
 gem 'newrelic_rpm'
 
 
+gem 'ims-lti'
 
 #for pushing grades to coursera
 # gem "always_verify_ssl_certificates"
