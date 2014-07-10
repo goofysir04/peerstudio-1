@@ -21,4 +21,5 @@ analysis/
 /config/application.yml
 
 #Ignore annoying derpy thing
-app/assets/stylesheets/welcome.css.scss~
+*.*~
+
