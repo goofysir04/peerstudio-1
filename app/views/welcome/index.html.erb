@@ -5,15 +5,25 @@
         <%= image_tag("jumbotron.jpg", :id => "jumbotron-image") %>
         <div class="jumbotron-fade"></div>
       </div>
-      <h1>PeerStudio</h1>
-      <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
-      <div class="bottom">
-        <p>Courses using PeerStudio</p>
-        <% @courses.each do |course| %>
-          <% unless course.ended? %>
-            <a class="btn btn-lg btn-primary" href="<%=course_path(course) %>" role="button"><%= course.title %>, <%= course.institution %></a>
-          <% end %>
+      <div style="inline-block; float:left;">
+        <h1>PeerStudio</h1>
+        <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
+        <%= mail_to "peerstudio@cs.stanford.edu", subject: "Using PeerStudio in my class" do %>
+          <span class="btn btn-lg btn-primary" role="button"> Instructors, contact us to use PeerStudio in your class. </span>
         <% end %>
+        <% if !@courses.blank? %>
+          <div class="bottom">
+            <p>Courses using PeerStudio</p>
+              <% @courses.each do |course| %>
+                <% unless course.ended?%>
+                  <a class="btn btn-lg btn-primary" href="<%=course_path(course) %>" role="button"><%= course.title %>, <%= course.institution %></a>
+                <% end %>
+              <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div style="inline-block;">
+        <iframe src="//www.youtube.com/embed/lh1YLxs7cgU?rel=0" frameborder="0" allowfullscreen="" style="float:right; width: 560px; height: 350px;"></iframe>
       </div>
     </div>
   </div>
@@ -23,11 +33,11 @@
 
   <div class="row">
     <div class="col-md-7">
-      <h2 class="featurette-heading">Get (and give) fast, iterative feedback</h2>
-      <p class="lead">PeerStudio engages students not only in creative activity, but in the review and evaluation of the work of their peers. It creates a guided process where students work on open ended work, and get and give structured feedback to their classmates. Feedback givers benefit from seeing the different perspectives of their classmates, feedback receivers get detailed feedback faster than staff can provide. </p>
+      <h2 class="featurette-heading">Get (and give) fast, iterative feedback, both in-person and online</h2>
+      <p class="lead">PeerStudio engages students not only in creative activity, but in the review and evaluation of the work of their peers -- through both in-person classes and MOOCs. It creates a guided process where students work on open ended work, and get and give structured feedback to their classmates. Feedback givers benefit from seeing the different perspectives of their classmates, feedback receivers get detailed feedback faster than staff can provide. </p>
     </div>
     <div class="col-md-5">
-      <%= image_tag("getfeedback.jpg", :class => "img-responsive") %>
+      <span class="helper"></span><%= image_tag("getfeedback.jpg", :class => "img-responsive") %>
     </div>
   </div>
 
@@ -38,8 +48,8 @@
       <%= image_tag("waystoimprove.jpg", :class => "img-responsive") %>
     </div>
     <div class="col-md-7">
-      <h2 class="featurette-heading">Supporting instructors to be coaches</h2>
-      <p class="lead">When peers lead the feedback and assessment process, it frees instructors to set the standards for high-qualtity work, and coach students to work towards achieving them. Peerstudio highlights unclear standards and gaps in students' understanding to help instructors in their new role.</p>
+      <h2 class="featurette-heading">Supporting instructors as coaches</h2>
+      <p class="lead">When peers lead the feedback and assessment process, it frees instructors to set the standards for high-quality work, and coach students to work towards achieving them. Peerstudio highlights unclear standards and gaps in students' understanding to help instructors in their new role.</p>
     </div>
   </div>
 
