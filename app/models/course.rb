@@ -8,4 +8,12 @@ class Course < ActiveRecord::Base
   def ended?
   	!self.open_enrollment
   end
+
+  def regenerate_consumer_secret
+  	SecureRandom.base64(32)
+  end
+  def regenerate_consumer_secret!
+  	self.consumer_secret = self.regenerate_consumer_secret #Generate a secure 32-byte string
+  	self.save!
+  end
 end

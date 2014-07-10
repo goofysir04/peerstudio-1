@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
   # before_filter authenticate_user! except: :index
-  before_action :set_course, only: [:show, :edit, :update, :destroy]
+  before_action :set_course, only: [:show, :edit, :update, :destroy, :regenerate_consumer_secret]
 
   # GET /courses
   # GET /courses.json
@@ -67,6 +67,11 @@ class CoursesController < ApplicationController
     render layout: "one_column"
   end
 
+  def regenerate_consumer_secret
+    @course.regenerate_consumer_secret!
+    redirect_to edit_course_path(@course)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
@@ -75,6 +80,7 @@ class CoursesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_params
-      params.require(:course).permit(:title, :institution, :hidden, :open_enrollment, :user_id, :photo)
+      params.require(:course).permit(:title, :institution, :hidden, :open_enrollment, :user_id, :photo,
+        :consumer_key)
     end
 end

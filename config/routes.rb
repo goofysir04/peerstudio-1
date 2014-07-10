@@ -8,6 +8,9 @@ Humanmachine::Application.routes.draw do
       get 'help'
       get 'about'
     end
+    member do
+      post 'regenerate_consumer_secret'
+    end
   end
 
   resources :assignments do
