@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710183645) do
+ActiveRecord::Schema.define(version: 20140711233311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -224,6 +224,10 @@ ActiveRecord::Schema.define(version: 20140710183645) do
     t.integer  "course_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "lis_result_sourcedid"
+    t.string   "lti_user_id"
+    t.string   "roles"
+    t.text     "raw_lti_params"
   end
 
   add_index "enrollments", ["course_id"], name: "fk__enrollments_course_id", using: :btree

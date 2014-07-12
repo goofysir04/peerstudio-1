@@ -10,6 +10,7 @@ Humanmachine::Application.routes.draw do
     end
     member do
       post 'regenerate_consumer_secret'
+      post 'enroll_lti'
     end
   end
 
