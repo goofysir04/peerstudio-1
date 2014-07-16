@@ -57,7 +57,8 @@
                 </tr>
               <% end %>
             </table>
-            <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"form-control", size: "10x4" %>
+            <%= r.label :like_feedback, "Suggest ways to improve the the points you selected \"No\" to make them \"Yes\" quality.", style: "margin-top:2em" %>
+            <%= r.text_area :like_feedback, placeholder: "Start typing your suggestions...", class:"form-control expandable" %>
             <%= r.hidden_field :rubric_item_id %>
           </li>
         <% end %>
