@@ -4,7 +4,7 @@
 
 review_completion_metadata = {}
 
-$(document).ready () ->
+ready = () ->
 	$('.rubric_item:checkbox').click () ->
 		console.log "You clicked, haha"
 		recalculateGrade()
@@ -26,8 +26,31 @@ $(document).ready () ->
 			alert "These review types are not yet open for this assignment."
 			return false)
 
+		$('div.syncHighlighting section').hover syncHighlighting
+		$('div.syncHighlighting section').click syncPersistentHighlighting
+
 	# debugTokenList()
 
+syncHighlighting = () ->
+	classesToHighlight = findClassesToHighlight(this)
+	return if classesToHighlight is ""
+	#Remove all existing highlighting
+	$('div.syncHighlighting section').removeClass "highlighted"
+	$("div.syncHighlighting section#{classesToHighlight}").addClass "highlighted"
+
+syncPersistentHighlighting = () ->
+	classesToHighlight = findClassesToHighlight(this)
+	return if classesToHighlight is ""
+	#Remove all existing highlighting
+	removeHighlightingOnly =  $(this).hasClass('persistentHighlighted')  
+	$('div.syncHighlighting section').removeClass "persistentHighlighted"
+	$("div.syncHighlighting section#{classesToHighlight}").addClass "persistentHighlighted" unless removeHighlightingOnly
+
+findClassesToHighlight = (element) ->
+	return "" if $(element).attr('class') is ""
+	classesToHighlight = "." + $(element).attr('class').replace(/\s/g,'.')
+	console.log "Stop hovering dammit: #{classesToHighlight}"
+	return classesToHighlight
 
 replaceCheckboxesWithToggles = ()->
 	return if $('input.toggle-checkbox').length is 0
@@ -238,3 +261,4 @@ debugTokenList = () ->
 		txt += ("#{token}... : #{matcher.score}\n")
 	console.log txt
 
+$(document).on 'ready page:load', ready
