@@ -15,11 +15,14 @@
     font-family: 'Rock Salt', cursive;
   }
 
-.col-md-5 {
-    float:none;
-    display:inline-block;
-    vertical-align:middle;
-    margin-right:-4px;
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+img {
+    vertical-align: middle;
 }
   
   .bottom {
