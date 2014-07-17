@@ -22,7 +22,8 @@ class Review < ActiveRecord::Base
   end
 
   def set_answer_attribute_weights!(weights)
-  	weights.each do |id, attrs|
+  	return if weights.nil?
+    weights.each do |id, attrs|
   		feedback_attribute = self.feedback_item_attributes.where(answer_attribute_id: id).first_or_create(answer_attribute_id: id)
 		feedback_attribute.weight = attrs[:weight]
 		feedback_attribute.save!  		
