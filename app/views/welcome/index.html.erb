@@ -8,7 +8,7 @@
       <div style="inline-block; float:left;">
         <h1>PeerStudio</h1>
         <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
-        <%= mail_to "peerstudio@cs.stanford.edu", subject: "Using PeerStudio in my class" do %>
+        <%= mail_to "hello@peerstudio.org", subject: "Using PeerStudio in my class" do %>
           <span class="btn btn-lg btn-primary" role="button"> Instructors, contact us to use PeerStudio in your class. </span>
         <% end %>
         <% if !@courses.blank? %>
@@ -87,8 +87,8 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2 class="featurette-heading text-center">Want to learn more?</h2>
-      <p class="lead text-center">Instructors, <%= mail_to "hello@peerstudio.org", "contact us", subject: "Using PeerStudio in my class" %> to use PeerStudio in your class.</p>
+      <h2 class="featurette-heading text-center">Want to use Peerstudio in your class?</h2>
+      <p class="lead text-center">Email us at <%= mail_to "hello@peerstudio.org", "hello@peerstudio.org", subject: "Using PeerStudio in my class" %> to use PeerStudio.</p>
     </div>
   </div>
 
