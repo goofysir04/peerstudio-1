@@ -327,7 +327,7 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.boolean  "show_for_feedback", default: true
     t.boolean  "show_for_final",    default: true
     t.boolean  "show_as_radio",     default: false
-    t.boolean  "miscommunication",  default: false
+    
   end
 
   add_index "rubric_items", ["assignment_id"], name: "index_rubric_items_on_assignment_id", using: :btree
