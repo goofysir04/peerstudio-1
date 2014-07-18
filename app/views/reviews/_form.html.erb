@@ -12,7 +12,6 @@
   <% end %>
   <% content_for :context_menu do %>
   <%= form_for(@review, html: {:"class"=>"review-form"}) do |f| %>
-  <p>Here's how this assignment should be assessed</p>
       <ul class="rubric">
         <% if @review.review_type== "paired"%>
           <li>

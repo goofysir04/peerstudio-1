@@ -9,9 +9,9 @@
       </ul>
     </div>
   <% end %>
-    <div class="page-header">
-    <h1> <%= @answer.assignment.title %> <small><%= link_to "Show assignment instructions", @answer.assignment %></small></h1>
-    </div>
+    <% content_for :local_nav do %>
+      <li><%= link_to "Show assignment instructions", @answer.assignment, target: "_blank" %></li>
+    <% end -%>
   
       <% content_for :context_menu do %>
       <div class="assignment-rubric">
