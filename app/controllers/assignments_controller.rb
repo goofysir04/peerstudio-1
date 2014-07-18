@@ -154,8 +154,10 @@ def review_first
       #this means that either the required reviews were completed, or that we never had a trigger. 
       #In either case, check if there are
       redirect_to root_path
-    end
+    else
     #otherwise render
+      render layout: "one_column"
+    end
   end
 
   private
