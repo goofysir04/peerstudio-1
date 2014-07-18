@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140716222505) do
+ActiveRecord::Schema.define(version: 20140717235746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -272,6 +272,7 @@ ActiveRecord::Schema.define(version: 20140716222505) do
     t.float    "score"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "miscommunication", default: false
   end
 
   add_index "feedback_items", ["review_id"], name: "fk__feedback_items_review_id", using: :btree

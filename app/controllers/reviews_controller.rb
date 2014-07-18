@@ -168,7 +168,7 @@ class ReviewsController < ApplicationController
         :completion_metadata,
         :copilot_email, 
         :answer_attribute_weights => [:weight],
-        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, 
+        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :miscommunication, :score, :review_id, 
           :answer_attribute_ids=>[]])
     end
 

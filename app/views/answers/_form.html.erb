@@ -14,9 +14,6 @@
     <% end -%>
   
       <% content_for :context_menu do %>
-      
-      
-
       <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#evaluation" role="tab" data-toggle="tab">Assessment</a></li>
         <li><a href="#reviews" role="tab" data-toggle="tab">Reviews</a></li>
@@ -92,6 +89,7 @@
         <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
       <% end %>
 </div>
+
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
 
