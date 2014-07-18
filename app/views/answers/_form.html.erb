@@ -23,17 +23,18 @@
         <div class="assignment-rubric-static"%>
           <ul class="rubric">
             <% @answer.assignment.rubric_items.each do |r| %>
-            
-            <li>
+            <li class="compute-progress">
               <strong><%= r.short_title %> <%= "- not included in final grade" unless r.show_for_final? %></strong> <span class="pull-right label"><%= "(#{r.max_label})" unless r.max_label.blank?%></span><br/>
               <legend></legend>
+
+              <div class="progress score-progress"></div>
               <%= sanitize r.title %>
               <table>
                 <% r.answer_attributes.each do |a_attr| %>
                   <tr>
                     <td style="vertical-align:top;">
                       <% if a_attr.attribute_type == "binary"%>
-                      <input type="checkbox" disabled="disabled" style="margin:0 5px 0 0;"><% end %>
+                      <input type="checkbox" class="clickable" id="attr-<%=a_attr.id %>" style="margin:0 5px 0 0;"><% end %>
                     </td><td style="vertical-align:top;"><%= a_attr.description %>
                   <% unless a_attr.example.blank? %>
                     (<a href="#" class="see-example" data-example="example-<%=a_attr.id%>">See example</a>)
@@ -94,6 +95,7 @@
         <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
       <% end %>
 </div>
+
 <script type="text/javascript">
 $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});</script>
 

@@ -12,7 +12,6 @@
   <% end %>
   <% content_for :context_menu do %>
   <%= form_for(@review, html: {:"class"=>"review-form"}) do |f| %>
-  <p>Here's how this assignment should be assessed</p>
       <ul class="rubric">
         <% if @review.review_type== "paired"%>
           <li>
@@ -56,15 +55,20 @@
                   </td>
                 </tr>
               <% end %>
-            </table>
-            <%= r.label :like_feedback, "Suggest ways to improve the the points you selected \"No\" to make them \"Yes\" quality.", style: "margin-top:2em" %>
-            <%= r.text_area :like_feedback, placeholder: "Start typing your suggestions...", class:"form-control expandable" %>
+            <table>
+            <tr><div style="padding-top:1em;">
+<td style="vertical-align:top; padding: 0 4px 0 0;"><%= r.check_box :miscommunication %> </td>              <td style="vertical-align:top;"><%= r.label :miscommunication, "This section of the student submission was unclear." %></td></div>
+            </tr>
+          </table>
+            <%= r.label :like_feedback, "Suggest improvements for this section. Be specific; use explanations and examples!", style: "margin-top:1em" %>
+            <%= r.text_area :like_feedback, size: "10x3", placeholder: "Your work could improve _______ by doing __________. An example of this is __________.", class:"form-control expandable" %>
             <%= r.hidden_field :rubric_item_id %>
           </li>
         <% end %>
         <li>
           <strong>Overall comments</strong> 
           <legend></legend>
+          <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples!"%>
           <%= f.text_area :comments, size: "10x5", class:"review_text form-control" %>
           <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
           <legend></legend>
