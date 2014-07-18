@@ -3,22 +3,24 @@ Reviewing <%= answer.assignment.title %>
 <% end %>
 
 <%= yield %>
+<% content_for :local_nav do %>
+    <li><%= link_to answer.assignment.title, answer.assignment %></li>
+<% end %>
 
-<div class="page-header">
-<h1> <%= answer.assignment.title %> <small><%= link_to "Show assignment instructions", answer.assignment %></small></h1>
-
-</div>
 <div class="row-fluid syncHighlighting">
 
 <% if !answer.assignment.example.nil?%>
+  
+
   <div class="paper col-md-6">
-  	<h3>Here's an example of excellent work</h3>
-  	<p>Compare the student work on the right with this example, and see how your classmate can do better. </p>
-    <div style="opacity: 0.6;"><%= sanitize Format.markdown answer.assignment.example %></div>
+  	<h3>Give feedback on this submission</h3>
+    <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
   </div>
 
   <div class="paper col-md-6">
-    <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
+  	<h3>Here's an example of excellent work
+  	<small>Compare work to this example to suggest improvements</small></h3>
+    <div style="opacity: 0.6;"><%= sanitize Format.markdown answer.assignment.example %></div>
   </div>
 <% else %>
   <div class="paper">
