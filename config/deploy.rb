@@ -38,6 +38,9 @@ namespace :deploy do
         end
         execute :touch, release_path.join('tmp/restart.txt')
         execute :bundle, "exec thin restart -O -C config/thin.yml"
+        with rails_env: fetch(:rails_env) do
+            execute :bundle, "exec bin/delayed_job restart"
+        end
       end
     end
   end
