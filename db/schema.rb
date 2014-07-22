@@ -33,10 +33,8 @@ ActiveRecord::Schema.define(version: 20140717235746) do
   end
 
   add_index "action_items", ["answer_id"], name: "index_action_items_on_answer_id", using: :btree
-  add_index "action_items", ["assignment_id"], name: "fk__action_items_assignment_id", using: :btree
   add_index "action_items", ["assignment_id"], name: "index_action_items_on_assignment_id", using: :btree
   add_index "action_items", ["review_id"], name: "index_action_items_on_review_id", using: :btree
-  add_index "action_items", ["user_id"], name: "fk__action_items_user_id", using: :btree
   add_index "action_items", ["user_id"], name: "index_action_items_on_user_id", using: :btree
 
   create_table "answer_attributes", force: true do |t|
@@ -52,7 +50,6 @@ ActiveRecord::Schema.define(version: 20140717235746) do
   end
 
   add_index "answer_attributes", ["question_id"], name: "index_answer_attributes_on_question_id", using: :btree
-  add_index "answer_attributes", ["rubric_item_id"], name: "fk__answer_attributes_rubric_item_id", using: :btree
 
   create_table "answers", force: true do |t|
     t.text     "response"
@@ -80,7 +77,6 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.text     "reflection"
   end
 
-  add_index "answers", ["assignment_id"], name: "fk__answers_assignment_id", using: :btree
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
   add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
 
@@ -98,9 +94,7 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.text     "answer_text"
   end
 
-  add_index "appeals", ["answer_id"], name: "fk__appeals_answer_id", using: :btree
   add_index "appeals", ["answer_id"], name: "index_appeals_on_answer_id", using: :btree
-  add_index "appeals", ["question_id"], name: "fk__appeals_question_id", using: :btree
   add_index "appeals", ["question_id"], name: "index_appeals_on_question_id", using: :btree
 
   create_table "assessments", force: true do |t|
@@ -130,11 +124,8 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.integer  "total_reviews",  default: 0
   end
 
-  add_index "assignment_grades", ["assignment_id"], name: "fk__assignment_grades_assignment_id", using: :btree
   add_index "assignment_grades", ["assignment_id"], name: "index_assignment_grades_on_assignment_id", using: :btree
-  add_index "assignment_grades", ["rubric_item_id"], name: "fk__assignment_grades_rubric_item_id", using: :btree
   add_index "assignment_grades", ["rubric_item_id"], name: "index_assignment_grades_on_rubric_item_id", using: :btree
-  add_index "assignment_grades", ["user_id"], name: "fk__assignment_grades_user_id", using: :btree
   add_index "assignment_grades", ["user_id"], name: "index_assignment_grades_on_user_id", using: :btree
 
   create_table "assignments", force: true do |t|
@@ -151,9 +142,7 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.text     "example"
   end
 
-  add_index "assignments", ["course_id"], name: "fk__assignments_course_id", using: :btree
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree
-  add_index "assignments", ["user_id"], name: "fk__assignments_user_id", using: :btree
   add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 
   create_table "attached_assets", force: true do |t|
@@ -197,11 +186,8 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.text     "forum_link"
-    t.text     "consumer_key"
-    t.text     "consumer_secret"
   end
 
-  add_index "courses", ["user_id"], name: "fk__courses_user_id", using: :btree
   add_index "courses", ["user_id"], name: "index_courses_on_user_id", using: :btree
 
   create_table "delayed_jobs", force: true do |t|
@@ -225,14 +211,7 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.integer  "course_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "lis_result_sourcedid"
-    t.string   "lti_user_id"
-    t.string   "roles"
-    t.text     "raw_lti_params"
   end
-
-  add_index "enrollments", ["course_id"], name: "fk__enrollments_course_id", using: :btree
-  add_index "enrollments", ["user_id"], name: "fk__enrollments_user_id", using: :btree
 
   create_table "evaluations", force: true do |t|
     t.integer  "question_id"
@@ -261,9 +240,6 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.float    "weight",              default: 1.0
   end
 
-  add_index "feedback_item_attributes", ["answer_attribute_id"], name: "fk__answer_attributes_feedback_items_answer_attribute_id", using: :btree
-  add_index "feedback_item_attributes", ["feedback_item_id"], name: "fk__answer_attributes_feedback_items_feedback_item_id", using: :btree
-
   create_table "feedback_items", force: true do |t|
     t.integer  "review_id"
     t.integer  "rubric_item_id"
@@ -275,9 +251,7 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.boolean  "miscommunication", default: false
   end
 
-  add_index "feedback_items", ["review_id"], name: "fk__feedback_items_review_id", using: :btree
   add_index "feedback_items", ["review_id"], name: "index_feedback_items_on_review_id", using: :btree
-  add_index "feedback_items", ["rubric_item_id"], name: "fk__feedback_items_rubric_item_id", using: :btree
   add_index "feedback_items", ["rubric_item_id"], name: "index_feedback_items_on_rubric_item_id", using: :btree
 
   create_table "feedback_preferences", force: true do |t|
@@ -322,11 +296,8 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.text     "completion_metadata"
   end
 
-  add_index "reviews", ["answer_id"], name: "fk__reviews_answer_id", using: :btree
   add_index "reviews", ["answer_id"], name: "index_reviews_on_answer_id", using: :btree
-  add_index "reviews", ["assignment_id"], name: "fk__reviews_assignment_id", using: :btree
   add_index "reviews", ["assignment_id"], name: "index_reviews_on_assignment_id", using: :btree
-  add_index "reviews", ["user_id"], name: "fk__reviews_user_id", using: :btree
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
 
   create_table "revisions", force: true do |t|
@@ -336,7 +307,6 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.datetime "updated_at"
   end
 
-  add_index "revisions", ["user_id"], name: "fk__revisions_user_id", using: :btree
   add_index "revisions", ["user_id"], name: "index_revisions_on_user_id", using: :btree
 
   create_table "rubric_items", force: true do |t|
@@ -357,11 +327,10 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.boolean  "show_for_feedback", default: true
     t.boolean  "show_for_final",    default: true
     t.boolean  "show_as_radio",     default: false
+    t.boolean  "miscommunication",  default: false
   end
 
-  add_index "rubric_items", ["assignment_id"], name: "fk__rubric_items_assignment_id", using: :btree
   add_index "rubric_items", ["assignment_id"], name: "index_rubric_items_on_assignment_id", using: :btree
-  add_index "rubric_items", ["user_id"], name: "fk__rubric_items_user_id", using: :btree
   add_index "rubric_items", ["user_id"], name: "index_rubric_items_on_user_id", using: :btree
 
   create_table "taggings", force: true do |t|
@@ -379,7 +348,6 @@ ActiveRecord::Schema.define(version: 20140717235746) do
   end
 
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
-  add_index "taggings", ["tag_id"], name: "fk__taggings_tag_id", using: :btree
 
   create_table "tags", force: true do |t|
     t.string "name"

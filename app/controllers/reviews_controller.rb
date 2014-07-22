@@ -51,16 +51,17 @@ class ReviewsController < ApplicationController
   def update
     # raise params.inspect
     respond_to do |format|
+      @answer = @review.answer
+       puts @answer_writer
       if !@review.active?
         #The review is not active, so this is an update of a pending review
-        @answer = @review.answer
         @answer.increment!(:total_evaluations)
         @answer.decrement!(:pending_reviews) unless @answer.pending_reviews == 0
-
         trigger = TriggerAction.add_trigger(current_user, @answer.assignment, count: -1, trigger:"review_required")
         trigger.save!
       end
       if @review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
+        ReviewMailer.delay.reviewed_email(@answer)
         @review.set_answer_attribute_weights!(review_params[:answer_attribute_weights])
         format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Ok, we saved that review!' }
         format.json { head :no_content }
