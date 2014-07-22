@@ -1,5 +1,5 @@
 class ReviewMailer < ActionMailer::Base
-  default from: "hello@peerstudio.org"
+  default from: "reviews@peerstudio.org"
 
 	def reviewed_email(answer)
 		@user = User.find(answer.user_id)

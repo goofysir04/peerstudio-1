@@ -52,7 +52,6 @@ class ReviewsController < ApplicationController
     # raise params.inspect
     respond_to do |format|
       @answer = @review.answer
-       puts @answer_writer
       if !@review.active?
         #The review is not active, so this is an update of a pending review
         @answer.increment!(:total_evaluations)
