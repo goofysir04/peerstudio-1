@@ -1,21 +1,9 @@
 class ReviewMailer < ActionMailer::Base
   default from: "hello@peerstudio.org"
 
-	def reviewed_email(user)
-		@user = user
-		@reviewed_work = 'https://www.peerstudio.org' #change this!!!! 
+	def reviewed_email(answer)
+		@user = User.find(answer.user_id)
+		@reviewed_work = Assignment.find(answer.assignment_id)
 		mail(to: @user.email, subject: 'Someone reviewed your work!')
 	end
-
-	def test_email(user)
-		@user = user
-		@url = 'www.google.com'
-		mail(to: @user.email, subject: 'this is a test')
-	end
-
-  # def welcome_email(user)
-  #   @user = user
-  #   @url  = 'http://example.com/login'
-  #   mail(to: @user.email, subject: 'Welcome to My Awesome Site')
-  # end
 end

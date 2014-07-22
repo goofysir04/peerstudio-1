@@ -1,1 +1,2 @@
-Your work was reviewed! Follow this link to see your reviewed work: <%= @reviewed_work %>
+Your work for <%= @reviewed_work.title %> was reviewed!
+ <%= link_to "View your reviews", @reviewed_work, {:style => "color:#ffffff;text-decoration:none"} %> 
