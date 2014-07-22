@@ -1,6 +1,7 @@
 class CoursesController < ApplicationController
   # before_filter authenticate_user! except: :index
   before_action :set_course, only: [:show, :edit, :update, :destroy]
+  layout "one_column"
 
   # GET /courses
   # GET /courses.json
