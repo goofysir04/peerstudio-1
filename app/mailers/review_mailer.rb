@@ -5,7 +5,12 @@ class ReviewMailer < ActionMailer::Base
 		@user = user
 		@reviewed_work = 'https://www.peerstudio.org' #change this!!!! 
 		mail(to: @user.email, subject: 'Someone reviewed your work!')
+	end
 
+	def test_email(user)
+		@user = user
+		@url = 'www.google.com'
+		mail(to: @user.email, subject: 'this is a test')
 	end
 
   # def welcome_email(user)
