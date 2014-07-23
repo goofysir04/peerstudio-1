@@ -154,6 +154,10 @@ def review_first
       #this means that either the required reviews were completed, or that we never had a trigger. 
       #In either case, check if there are
       redirect_to root_path
+      #"you're all done...do you want to volunteer to review other people blah blah "
+      #reviewed volunteered added to pending_action ^^^^^^^^ (answers submit)
+      #then, once you have x number of people volunteered, you pick a random subset and whenever
+      #someone else submits, send an email
     else
     #otherwise render
       render layout: "one_column"

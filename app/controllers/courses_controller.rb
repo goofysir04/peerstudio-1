@@ -12,6 +12,7 @@ class CoursesController < ApplicationController
   # GET /courses/1
   # GET /courses/1.json
   def show
+    @closest_assign = Course.closest_open(params[:id])
   end
 
   # GET /courses/new

@@ -16,9 +16,6 @@
   <div class="col-xs-5">
     <%= link_to create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
     Give peers feedback 
-      <% unless @trigger.nil? %>
-        <div class="deadline">(Pending: <%= @trigger.count %> reviews)</div>
-      <% end %>
     <% end %>
   </div>
   <div class="btn-group col-xs-1">
