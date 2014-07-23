@@ -54,7 +54,7 @@
         <tr <% if assignment.ended? %> class= "closed" <%end%>>
           <td><%= link_to assignment.title, assignment %></td>
           <td><%= truncate (sanitize assignment.description), length: 200, escape: false %></td>
-          <td> <%= (assignment.due_at).strftime "%b %e, %l:%M %p" %></td>
+          <td> <%if assignment.ended?%>Closed<% else%> <%= (assignment.due_at).strftime "%b %e, %l:%M %p" %><%end%></td>
           <% if user_signed_in? && current_user.admin? %>
           <td><%= link_to 'Edit', edit_assignment_path(assignment) %></td>
           <td><%= link_to 'Destroy', assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
