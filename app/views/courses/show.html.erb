@@ -3,45 +3,30 @@
     font-size: 1.3em;
     font-style: italic;
   }
+
+  .closed {
+    opacity:0.5;
+  }
 </style>
 
   <% if @closest_assign.nil? %>
     <h1>No assignments open at this moment.</h1>
   <% else %>
   <h1><%= link_to @closest_assign.title, @closest_assign %>
-  <small>  Due on <%= (@closest_assign.due_at).strftime "%b %e, %l:%M %p" %> </h1>
+  <small> due_date(@closest_assign.due_at)</h1>
   </small>
 
 <div class="row-fluid header-buttons">
-<div class="row-fluid">
-  <div id="assignment_description">
-    <%= truncate (sanitize @closest_assign.description), length: 500, escape: false %>
-  </div>
-</div>
-
-  <!-- The basic UI here is two big fat buttons, and a subsidiary menu for the lawyers -->
-  <div class="btn-group">
-    <button type="button" class="btn btn-default">    
-      <%= link_to "Write your answer", new_assignment_answer_path(@closest_assign) %>
-    </button>
+  <div class="row-fluid">
+    <div id="assignment_description">
+      <%= truncate (sanitize @closest_assign.description), length: 500, escape: false %> <%= link_to "(More)" , @closest_assign %>
+    </div>
   </div>
   <div class="btn-group">
-    <button type="button" class="btn btn-default">    
-      <%= link_to create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post do %> Give peers feedback <% end %>
-    </button>
+      <%= link_to "Write your answer", new_assignment_answer_path(@closest_assign), class: "btn btn-default" %>
   </div>
-  <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">More<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="#my_answers">Cancel reviews for my draft</a></li>
-      <li><a href="#my_reviews">Edit my reviews</a></li>
-      <div class="divider"></div>
-      <% if user_signed_in? && current_user.admin? %>
-        <li><%= link_to 'Edit assignment', edit_assignment_path(@closest_assign) %></li>
-        <li><%= link_to 'Assignment statistics', stats_assignment_path(@closest_assign) %></li>
-      <% end %>
-    </ul>
+  <div class="btn-group">   
+      <%= link_to create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), class: "btn btn-default", method: :post do %> Give peers feedback <% end %>
   </div>
 </div>
   <div class="clearfix"></div>
@@ -64,19 +49,8 @@
   </thead>
 
   <tbody>
-    <% @course.assignments.each do |assignment| %>
-      <% if assignment != @closest_assign %>
-        <tr>
-          <td><%= link_to assignment.title, assignment %></td>
-          <td><%= truncate (sanitize assignment.description), length: 200, escape: false %></td>
-          <td> <%= (assignment.due_at).strftime "%b %e, %l:%M %p" %></td>
-          <% if user_signed_in? && current_user.admin? %>
-          <td><%= link_to 'Edit', edit_assignment_path(assignment) %></td>
-          <td><%= link_to 'Destroy', assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <% end %>
-        </tr>
-      <% end %>
-    <% end %>
+    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at > ? ', Time.now).order('due_at asc').offset(1)%>
+    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at < ? ', Time.now).order('due_at asc')%>
   </tbody>
 </table>
 

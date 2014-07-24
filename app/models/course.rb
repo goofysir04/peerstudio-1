@@ -9,26 +9,8 @@ class Course < ActiveRecord::Base
   	!self.open_enrollment
   end
 
-  def self.closest_open(id)
-    open_assignments_list = []
-    assignments = Assignment.where("course_id = ?", id)
-    for a in assignments
-      if !a.ended?
-        open_assignments_list << a
-      end
-    end
-    if open_assignments_list.empty? 
-      return nil
-    else
-      closest = open_assignments_list[0].due_at - DateTime.current()
-      closest_class = open_assignments_list[0]
-      for a in open_assignments_list
-        if (a.due_at - DateTime.current()) <= closest
-          closest_class = a
-          closest = a.due_at - DateTime.current()
-        end
-      end
-      return closest_class
-    end
+  def closest_open(id)
+  	assignment = self.assignments.where('due_at > ?', Time.now).order('due_at asc').limit(1).first
+  	return assignment
   end
 end
