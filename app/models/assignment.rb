@@ -23,7 +23,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def ended?
-    self.due_at < DateTime.current()
+    self.due_at < Time.now
   end
 
 end

@@ -9,8 +9,8 @@ class Course < ActiveRecord::Base
   	!self.open_enrollment
   end
 
-  def self.closest_open(id)
-  	courses = Course.find(id).assignments.order('due_at asc').select{|a| !a.ended?}
-  	return courses[0]
+  def closest_open(id)
+  	assignment = self.assignments.where('due_at > ?', Time.now).order('due_at asc').limit(1).first
+  	return assignment
   end
 end

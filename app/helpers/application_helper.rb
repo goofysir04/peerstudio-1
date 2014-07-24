@@ -23,4 +23,8 @@ module ApplicationHelper
 	def devise_mapping
 		@devise_mapping ||= Devise.mappings[:user]
 	end
+
+	def due_date(date)
+		return "Due on " + date.strftime("%b %e, %l:%M %p") 
+	end
 end
