@@ -46,7 +46,7 @@
                 INSTRUCTOR
               </td>
               <td>
-                <%=@course.user.name%>
+                <%= f.text_field :instructor_name, class:"form-control", placeholder: "Courtney Noh" %>
               </td>
             </tr>
             <tr>
@@ -72,6 +72,11 @@
     <div class="checkbox">
       <%= f.label :open_enrollment do %>
         <%= f.check_box :open_enrollment %> <strong>This class is now active</strong> (students can submit work)
+      <% end %>
+    </div>
+        <div class="checkbox">
+      <%= f.label :early_feedback_only do %>
+        <%= f.check_box :early_feedback_only %> <strong>Only use PeerStudio for early feedback </strong> (students submit final work elsewhere)
       <% end %>
     </div>
 

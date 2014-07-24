@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140717235746) do
+ActiveRecord::Schema.define(version: 20140724213813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,8 +176,8 @@ ActiveRecord::Schema.define(version: 20140717235746) do
   create_table "courses", force: true do |t|
     t.text     "title"
     t.text     "institution"
-    t.boolean  "hidden",             default: true
-    t.boolean  "open_enrollment",    default: false
+    t.boolean  "hidden",              default: true
+    t.boolean  "open_enrollment",     default: false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -186,6 +186,8 @@ ActiveRecord::Schema.define(version: 20140717235746) do
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.text     "forum_link"
+    t.text     "instructor_name"
+    t.boolean  "early_feedback_only", default: false
   end
 
   add_index "courses", ["user_id"], name: "index_courses_on_user_id", using: :btree

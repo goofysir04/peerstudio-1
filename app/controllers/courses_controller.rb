@@ -6,7 +6,7 @@ class CoursesController < ApplicationController
   # GET /courses
   # GET /courses.json
   def index
-    @courses = Course.where(hidden: false)
+    @courses = Course.where(hidden: false).order('created_at desc')
   end
 
   # GET /courses/1
@@ -77,6 +77,6 @@ class CoursesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_params
-      params.require(:course).permit(:title, :institution, :hidden, :open_enrollment, :user_id, :photo)
+      params.require(:course).permit(:title, :institution, :hidden, :open_enrollment, :user_id, :photo, :instructor_name, :early_feedback_only)
     end
 end

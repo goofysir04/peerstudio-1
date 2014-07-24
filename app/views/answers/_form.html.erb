@@ -79,7 +79,7 @@
             <% seek_feedback_class = (@answer.assignment.due_at - Time.now > 1.day) ? "btn-primary": "btn-default" %>  
             <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :role=>"button"%> 
             <% end %>
-            <% unless @answer.is_final? %>
+            <% unless @answer.is_final? or @answer.assignment.course.early_feedback_only? %>
              <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-default", :role=>"button", method: :post %>
             <% end %>
         </div>
