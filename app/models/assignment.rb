@@ -21,4 +21,9 @@ class Assignment < ActiveRecord::Base
   	end
     return task_list
   end
+
+  def ended?
+    self.due_at < DateTime.current()
+  end
+
 end

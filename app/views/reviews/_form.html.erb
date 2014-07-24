@@ -56,8 +56,11 @@
                 </tr>
               <% end %>
             <table>
-            <tr><div style="padding-top:1em;">
-<td style="vertical-align:top; padding: 0 4px 0 0;"><%= r.check_box :miscommunication %> </td>              <td style="vertical-align:top;"><%= r.label :miscommunication, "This section of the student submission was unclear." %></td></div>
+            <tr>
+              <div style="padding-top:1em;">
+                <td style="vertical-align:top; padding: 0 4px 0 0;"><%= r.check_box :miscommunication %> </td>
+                <td style="vertical-align:top;"><%= r.label :miscommunication, "This section of the student submission was unclear." %><small> You can suggest improvements at the end of the entire rubric, in "Overall Comments".</small></td>
+              </div>
             </tr>
           </table>
             <%= r.label :like_feedback, "Suggest improvements for this section. Be specific; use explanations and examples!", style: "margin-top:1em" %>

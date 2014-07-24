@@ -1,5 +1,5 @@
 <h1>Please select a course to begin</h1>
-<ul class="thumbnails">
+<ul class="thumbnails" style="padding-left:0px;">
     <% @courses.each do |course| %>
       <%= render :partial => 'course_box', :locals => { :course => course } %>
     <% end %>

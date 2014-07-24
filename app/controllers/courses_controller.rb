@@ -1,6 +1,7 @@
 class CoursesController < ApplicationController
   # before_filter authenticate_user! except: :index
   before_action :set_course, only: [:show, :edit, :update, :destroy]
+  layout "one_column"
 
   # GET /courses
   # GET /courses.json
@@ -11,6 +12,7 @@ class CoursesController < ApplicationController
   # GET /courses/1
   # GET /courses/1.json
   def show
+    @closest_assign = Course.closest_open(params[:id])
   end
 
   # GET /courses/new
