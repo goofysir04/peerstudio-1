@@ -13,7 +13,7 @@
     <h1>No assignments open at this moment.</h1>
   <% else %>
   <h1><%= link_to @closest_assign.title, @closest_assign %>
-  <small> due_date(@closest_assign.due_at)</h1>
+  <small> <%=due_date(@closest_assign.due_at) %></h1>
   </small>
 
 <div class="row-fluid header-buttons">
