@@ -74,6 +74,11 @@
         <%= f.check_box :open_enrollment %> <strong>This class is now active</strong> (students can submit work)
       <% end %>
     </div>
+        <div class="checkbox">
+      <%= f.label :early_feedback_only do %>
+        <%= f.check_box :early_feedback_only %> <strong>This class has only early peer feedback capabilities</strong> (no final evaluation feedback)
+      <% end %>
+    </div>
 
     <div class="form-group">
       <%= f.label :forum_link do %>
