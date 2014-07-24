@@ -6,7 +6,7 @@ class CoursesController < ApplicationController
   # GET /courses
   # GET /courses.json
   def index
-    @courses = Course.where(hidden: false)
+    @courses = Course.where(hidden: false).order('created_at desc')
   end
 
   # GET /courses/1
