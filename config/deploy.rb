@@ -18,6 +18,7 @@ set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 set :migration_role, :db
 set :conditionally_migrate, :false
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 
 set :default_env, { path: "/home/deploy/.rvm/gems/ruby-2.1.2/bin:/home/deploy/.rvm/gems/ruby-2.1.2@global/bin:/home/deploy/.rvm/rubies/ruby-2.1.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/deploy/.rvm/bin:$PATH" }

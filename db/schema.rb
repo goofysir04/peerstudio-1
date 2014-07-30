@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724213813) do
+ActiveRecord::Schema.define(version: 20140725224547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20140724213813) do
     t.boolean  "is_final",            default: false
     t.integer  "previous_version_id"
     t.text     "reflection"
+    t.datetime "submitted_at"
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
@@ -360,11 +361,12 @@ ActiveRecord::Schema.define(version: 20140724213813) do
   create_table "trigger_actions", force: true do |t|
     t.string   "trigger"
     t.string   "description"
-    t.integer  "count",         default: 0
+    t.integer  "count",           default: 0
     t.integer  "user_id"
     t.integer  "assignment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_email_time"
   end
 
   add_index "trigger_actions", ["assignment_id"], name: "index_trigger_actions_on_assignment_id", using: :btree

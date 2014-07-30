@@ -7,6 +7,7 @@ class Assignment < ActiveRecord::Base
 
   acts_as_taggable_on :milestones
   accepts_nested_attributes_for :taggings, :allow_destroy => true
+  scope :active, -> { where("due_at > ?", Time.now)}
 
   def task_list
     task_list = []
