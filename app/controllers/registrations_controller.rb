@@ -2,7 +2,7 @@ class RegistrationsController < Devise::RegistrationsController
 
 
   def create
-      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :name, :consented)}
+      devise_parameter_sanitizer.for(:sign_up,:complete_openid) { |u| u.permit(:email, :password, :password_confirmation, :name, :consented)}
       super
   end
   
@@ -40,6 +40,7 @@ class RegistrationsController < Devise::RegistrationsController
     
     self.resource = resource_class.new()
     clean_up_passwords(self.resource)
+    render layout: "one_column"
   end
 
   def complete_openid
@@ -57,7 +58,7 @@ class RegistrationsController < Devise::RegistrationsController
     if @user.save #if user is saved or unchanged
       sign_in_and_redirect @user, :event => :authentication
     else
-      flash[:alert] = "There was a problem signing in. Please contact us, and mention your claimed id as #{session["devise.openid_data"]["uid"]}"
+      flash[:alert] =  @user.errors.full_messages.to_sentence
       redirect_to start_openid_registration_path
     end
   end
