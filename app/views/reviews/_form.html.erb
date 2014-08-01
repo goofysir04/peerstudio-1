@@ -12,7 +12,7 @@
   <% end %>
   <% content_for :context_menu do %>
   <%= form_for(@review, html: {:"class"=>"review-form"}) do |f| %>
-      <ul class="rubric">
+      <ul class="rubric" id="review-rubric">
         <% if @review.review_type== "paired"%>
           <li>
               <strong>Who is your pair reviewing partner?</strong>
@@ -68,7 +68,7 @@
             <%= r.hidden_field :rubric_item_id %>
           </li>
         <% end %>
-        <li>
+        <li id="overall-comments">
           <strong>Overall comments</strong> 
           <legend></legend>
           <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples!"%>
@@ -77,13 +77,13 @@
           <legend></legend>
           <table>
             <tr>
-              <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an excellent, out of the box submission." %></td>
+              <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an excellent, out of the box submission.", id: "out-of-box" %></td>
             </tr>
           </table>
         </li>
       </ul>
       
-      <div class="actions">
+      <div class="actions" id="submit-button">
         <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
         <%= f.submit "Submit review", class: "btn btn-primary" %>
       </div>
