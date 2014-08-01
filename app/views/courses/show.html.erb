@@ -10,9 +10,9 @@
 </style>
 
   <% if @closest_assign.nil? %>
-    <h1>No assignments open at this moment.</h1>
+    <h1 id="assignment_title">No assignments open at this moment.</h1>
   <% else %>
-  <h1><%= link_to @closest_assign.title, @closest_assign %>
+  <h1 id="assignment_title"><%= link_to @closest_assign.title, @closest_assign %>
   <small> <%=due_date(@closest_assign.due_at) %></h1>
   </small>
 
@@ -35,7 +35,7 @@
 
 <div style="padding-left:20px">
 <div class="row">
-  <h1>Other assignments</h1>
+  <h1 id="other_assignments">Other assignments</h1>
   <table class="table">
   <thead>
     <tr>

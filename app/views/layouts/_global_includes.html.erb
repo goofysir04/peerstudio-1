@@ -3,6 +3,8 @@
   <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|PT+Sans:700|Rock+Salt' rel='stylesheet' type='text/css'/>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "hopscotch" %>
+
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="<%= content_for?(:title) ? content_for(:title) : "Stanford | PeerStudio" %>"/>
