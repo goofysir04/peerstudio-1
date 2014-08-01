@@ -57,6 +57,13 @@ class ReviewsController < ApplicationController
         @answer.increment!(:total_evaluations)
         @answer.decrement!(:pending_reviews) unless @answer.pending_reviews == 0
         trigger = TriggerAction.add_trigger(current_user, @answer.assignment, count: -1, trigger:"review_required")
+        if trigger.count == 0
+          email_trigger = TriggerAction.where(["trigger = ?, user = ?, assignment = ?","email_count", current_user, @answer.assignment])
+          if email_trigger.nil?
+            email_trigger_save = TriggerAction.add_trigger(current_user, @answer.assignment, count: 4, trigger: "email_count")
+            email_trigger_save.save!
+          end
+        end
         trigger.save!
       end
       if @review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))

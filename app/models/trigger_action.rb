@@ -14,4 +14,5 @@ class TriggerAction < ActiveRecord::Base
   	trigger.increment(:count, options[:count])
   	return trigger
   end
+
 end

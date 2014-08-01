@@ -7,4 +7,10 @@ class ReviewMailer < ActionMailer::Base
 		@answer = answer
 		mail(to: @user.email, subject: 'Someone reviewed your work!')
 	end
+
+	def need_review_email(user, assign)
+		@user = user
+		@assignment = assign
+		mail(to: @user.email, subject: 'Hey, can you help me out?')
+	end
 end
