@@ -1,6 +1,7 @@
+
 <% content_for :context_menu do %>
-  <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: feedback_items_by_rubric_item, answer: answer} %>
   <% if show_revision_link %>
+  <br/>
     <div class="form-controls">
       <%= link_to "Revise submission", reflect_answer_path(answer), class: "btn btn-primary"%>
       <div class="pull-right">
@@ -8,5 +9,7 @@
       </div>
     </div>
   <% end %>
+
+  <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: feedback_items_by_rubric_item, answer: answer} %>
   <br/>
 <% end %>
