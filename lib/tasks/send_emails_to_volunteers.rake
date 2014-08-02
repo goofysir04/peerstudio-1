@@ -19,10 +19,10 @@ namespace :assignment do
 				thirty_min_ans = assign.answers.where(submitted: true).where("submitted_at <= ?", 30.minutes.ago)
 				if !thirty_min_ans.empty?
 					#here, we find people who still need to give reviews
-					have_to_review_still = TriggerAction.where(["trigger = ? and count > ? and ((last_email_time IS NOT ? and last_email_time < ?) or last_email_time IS ?)", "review_required", 0, nil, 12.hours.ago, nil]).order(random_function).limit(4)
+					have_to_review_still = TriggerAction.where(["assignment_id = ? and trigger = ? and count > ? and last_email_time IS NULL or last_email_time < ?", assign.id, "review_required", 0, 12.hours.ago]).order(random_function).limit(4)
 					if have_to_review_still.empty? #nil didn't work, so used empty
 						#if no one needs to give reviews, we move onto volunteers, aka people who don't need to give any more reviews
-						volunteers = TriggerAction.where(["trigger = ? and count > ? and ((last_email_time IS NOT ? and last_email_time < ?) or last_email_time IS ?)", "email_count", 0, nil, 12.hours.ago, nil]).order(random_function).limit(4)
+						volunteers = TriggerAction.where(["assignment_id = ? and trigger = ? and count > ? and last_email_time IS NULL or last_email_time < ?", assign.id, "email_count", 0, 12.hours.ago]).order(random_function).limit(4)
 						volunteers.each do |vol| #send email, set last_email_time, decrement "email_count"
 							ReviewMailer.delay.need_review_email(vol.user, assign)
 							vol.count = vol.count - 1
