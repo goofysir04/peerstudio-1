@@ -24,6 +24,7 @@ namespace :assignment do
 						#if no one needs to give reviews, we move onto volunteers, aka people who don't need to give any more reviews
 						volunteers = TriggerAction.where(["assignment_id = ? and `trigger` = ? and count > ? and last_email_time IS NULL or last_email_time < ?", assign.id, "email_count", 0, 12.hours.ago]).order(random_function).limit(4)
 						volunteers.each do |vol| #send email, set last_email_time, decrement "email_count"
+							logger.info "Sending emails to people who volunteered: #{vol.user.id}"
 							ReviewMailer.delay.need_review_email(vol.user, assign)
 							vol.count = vol.count - 1
 							vol.last_email_time = Time.now
@@ -31,6 +32,7 @@ namespace :assignment do
 						end
 					else 
 						have_to_review_still.each do |h|
+							logger.info "Sending emails to people who need it: #{h.user.id}"
 							ReviewMailer.delay.need_review_email(h.user, assign)
 							h.last_email_time = Time.now
 							h.save!
