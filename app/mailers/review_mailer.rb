@@ -11,6 +11,6 @@ class ReviewMailer < ActionMailer::Base
 	def need_review_email(user, assign)
 		@user = user
 		@assignment = assign
-		mail(to: @user.email, subject: 'Hey, can you help me out?')
+		mail(to: @user.email, subject: 'A MOOC-mate needs your help!')
 	end
 end

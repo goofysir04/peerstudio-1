@@ -13,7 +13,11 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" id="emailHeader">
                             <tr>
                                 <td align="center" valign="top" style="color:#505050;font-family:Helvetica,Arial,sans-serif;font-size:15px;padding-top:40px;padding-right:40px;padding-bottom:30px;padding-left:40px;text-align:center">
-                                  <h1>Hey <%= @user.name%>, can you give me feedback for my submission on <br/><i><%= @assignment.title %></i><br/>? I'd really appreciate it! </h1>
+                                  <p>Hey <%= @user.name%>!</p>
+
+                                  <h1>A mooc-mate needs help with their submission on<br/><i><%= @assignment.title %></i><br/>!</h1>
+
+                                  <p>Remember that you need to give two peers feedback before you can see your own, so helping your mooc-mate helps you!</p>
                                 </td>
                             </tr>
                         </table>
@@ -28,6 +32,7 @@
                             </td>
                         </tr>
                     </table>
+                    <div style="color:#606060;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">I'll really appreciate it!</div>
                   </td>
                 </tr>          
                 <tr>
