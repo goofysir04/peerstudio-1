@@ -104,9 +104,9 @@ class ReviewsController < ApplicationController
     @reviewed_answers << 0 if @reviewed_answers.blank?
     case review_type
     when "exchange"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, user_id: @submitter.id, assignment_id: params[:id])
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, submitted:true, user_id: @submitter.id, assignment_id: params[:id])
     when "paired"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", [@submitter.id, current_user.id], @reviewed_answers)
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true,  submitted:true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", [@submitter.id, current_user.id], @reviewed_answers)
     when "final"
       @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, submitted:true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
     else
