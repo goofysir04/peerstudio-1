@@ -24,7 +24,7 @@ class AnswersController < ApplicationController
 
   # GET /answers/new
   def new
-    @latest_answer = Answer.where(assignment: @assignment, user: current_user).order('updated_at desc').first
+    @latest_answer = Answer.where(assignment: @assignment, user: current_user, reviewing_completed: false).order('updated_at desc').first
 
     if !@latest_answer.nil?
       if !@latest_answer.submitted?
@@ -131,6 +131,7 @@ class AnswersController < ApplicationController
   def unsubmit_for_feedback
     @answer.submitted = false
     @answer.is_final = false
+    @answer.reviewing_completed = true
     respond_to do |format|
       if @answer.save
         format.html {redirect_to assignment_path(@answer.assignment), notice: "We'll stop asking students to review your draft now. TODO implement this"}
@@ -187,6 +188,9 @@ class AnswersController < ApplicationController
         response: @answer.response, revision_list: @answer.revision_list,
         active: false)
       @cloned_answer.save!
+
+      @answer.reviewing_completed = true
+      @answer.save!
     end
 
     respond_to do |format|
@@ -200,7 +204,6 @@ class AnswersController < ApplicationController
         format.js {flash[:alert] = @answer.errors.full_messages.join(","); render} 
       end
     end
-    
   end
 
   def reflect
