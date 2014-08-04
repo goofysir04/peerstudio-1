@@ -33,6 +33,43 @@ introtour =
       content: "We'll have a template set up for you to draft a great answer."
       target: "write"
       placement: "bottom"
+      onNext: ->
+        window.location = "/answers/23/edit" #5, because first assignment for Barb's class
+        return
+    }
+    {
+      title: "Write your answer here!"
+      content: "We have a template ready for you to use. Use the template to guide the direction of your work."
+      target: "answer_response"
+      placement: "left"
+    }
+    {
+      title: "Use this rubric to evaluate your work as you draft your answer."
+      target: "assessment-tab"
+      placement: "bottom"
+    }
+    {
+      title: "Click here to view any reviews you may have gotten on this work."
+      target: "review-tab"
+      placement: "bottom"
+    }
+    {
+      title: "Click here to save your draft, especially before submitting your work!"
+      content: "We have an autosave feature implemented, but it can never hurt to be safe :)"
+      target:  "save-draft-btn"
+      placement: "right"
+    }
+    {
+      title: "Click here to submit your work for early feedback!"
+      content: "By getting feedback from your peers before turning in your work, you can iterate on your work, and continue improving!"
+      target: "early-feedback-btn"
+      placement: "left"
+    }
+    {
+      title: "Click here to submit your final draft for review!"
+      content: "You won't be able to make any changes after submitting this. If you want feedback on your work before turning in this final draft, click the 'Get Early Feedback' button!"
+      target: "final-feedback-btn"
+      placement: "bottom"
     }
     {
       title: "Review your peers!"
@@ -52,6 +89,7 @@ introtour =
       target: "write"
       placement: "bottom"
     }
+    skipIfNoElement: true
   ]
 
 init = ->
