@@ -14,7 +14,7 @@
     <% end %>
   </div>
   <div class="col-xs-5">
-    <%= link_to create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
+    <%= link_to create_typed_review_assignment_path(assignment_id:@assignment,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
     Give peers feedback 
     <% end %>
   </div>
