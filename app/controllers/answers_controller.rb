@@ -30,7 +30,7 @@ class AnswersController < ApplicationController
       if !@latest_answer.submitted?
         redirect_to edit_answer_path(@latest_answer), notice: "We took you to the draft you were already editing" and return
       else
-        redirect_to answer_reviews_path(@latest_answer), notice: "Here are reviews to the last draft you submitted. Click 'Revise submission' to modify this draft" and return
+        redirect_to answer_reviews_path(@latest_answer), notice: "You have a new review on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
       end
     end
     @answer = Answer.new
