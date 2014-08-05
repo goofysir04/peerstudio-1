@@ -16,7 +16,7 @@ namespace :assignment do
 		
 		if !assignments.nil? 
 			assignments.each do |assign|
-				thirty_min_ans = assign.answers.where(submitted: true).where("submitted_at <= ?", 30.minutes.ago)
+				thirty_min_ans = assign.answers.where(submitted: true, total_evaluations: 0, review_completed: false).where("submitted_at <= ?", 30.minutes.ago)
 				if !thirty_min_ans.empty?
 					#here, we find people who still need to give reviews
 					have_to_review_still = TriggerAction.where(["assignment_id = ? and `trigger` = ? and count > ? and last_email_time IS NULL or last_email_time < ?", assign.id, "review_required", 0, 12.hours.ago]).order(random_function).limit(4)
