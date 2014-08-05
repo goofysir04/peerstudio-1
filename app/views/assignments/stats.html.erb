@@ -11,6 +11,23 @@
 			paired_reviews_copiloted = Review.where(assignment_id: @assignment.id, active: true, review_type: "paired").group(:copilot_email).count
 			%>
 
+<h2>In the last day</h2>
+	<table class="table">
+		<tr>
+			<td>Submissions</td><td><%= @submissions_last_day_lagging %></td>
+		</tr>
+		<tr>
+			<td>Reviews completed</td><td><%= @submissions_last_day_lagging %></td>
+		</tr>
+		<tr>
+			<td>Revisions started</td><td><%= @revisions_last_day_lagging %></td>
+		</tr>
+		<tr>
+			<td>Total submissions</td><td><%= @submissions_total_submitted %></td>
+		</tr>
+	</table>
+
+
 <h2>What needs your attention?</h2>
 
 <table class="table">
