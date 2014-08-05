@@ -15,8 +15,8 @@
   
       <% content_for :context_menu do %>
       <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#evaluation" role="tab" data-toggle="tab" id ="assessment-tab">Assessment</a></li>
-        <li><a href="#reviews" role="tab" data-toggle="tab" id="review-tab">Reviews</a></li>
+        <li class="active"><a href="#evaluation" role="tab" data-toggle="tab">Assessment</a></li>
+        <li><a href="#reviews" role="tab" data-toggle="tab">Reviews</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="evaluation">
@@ -70,17 +70,17 @@
           <% if @answer.submitted? %>
           You submitted this answer for a review, so you can't change it anymore. 
           <% else %>
-          <%= f.submit "Save Draft", class: "btn btn-default", id: "save-draft-btn"%> <em style="color: #999;"><span class="answer-save-status">Unsaved</span></em> <span class="answer_public_status"></span> 
+          <%= f.submit "Save Draft", class: "btn btn-default"%> <em style="color: #999;"><span class="answer-save-status">Unsaved</span></em> <span class="answer_public_status"></span> 
           <% end %>
           <div class="navbar-right">
             <% if @answer.submitted? %>
             <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
             <% else %>
             <% seek_feedback_class = (@answer.assignment.due_at - Time.now > 1.day) ? "btn-primary": "btn-default" %>  
-            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :role=>"button", :id=>"early-feedback-btn"%> 
+            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :role=>"button"%> 
             <% end %>
             <% unless @answer.is_final? or @answer.assignment.course.early_feedback_only? %>
-             <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-default", :id=>"final-feedback-btn", :role=>"button", method: :post %>
+             <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-default", :role=>"button", method: :post %>
             <% end %>
         </div>
       
