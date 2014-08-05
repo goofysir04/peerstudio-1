@@ -25,6 +25,23 @@
 		<tr>
 			<td>Total submissions</td><td><%= @submissions_total_submitted %></td>
 		</tr>
+
+		<tr>
+			<td>Top reviewers</td>
+			<td>
+				<% @top_reviewers.each do |reviewer| %>
+					<%= mail_to reviewer[0].email, reviewer[0].name %> (<%= reviewer[1] %>)
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td>Top reviewers all time</td>
+			<td>
+				<% @top_reviewers_lagged.each do |reviewer| %>
+					<%= mail_to reviewer[0].email, reviewer[0].name %> (<%= reviewer[1] %>)
+				<% end %>
+			</td>
+		</tr>
 	</table>
 
 

@@ -107,6 +107,9 @@ class AssignmentsController < ApplicationController
     @submissions_last_day_lagging = @assignment.answers.where("submitted_at > ?", Time.now-1.day).count
     @revisions_last_day_lagging = @assignment.answers.where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count
 
+    @top_reviewers_lagged = Review.where(assignment: @assignment).where('completed_at > ?', Time.now-1.day).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
+    @top_reviewers = Review.where(assignment: @assignment).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
+
     @submissions_total_submitted = @assignment.answers(submitted: true).count
   end
 
