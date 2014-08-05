@@ -57,7 +57,6 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Draft</th>
                   <th>Preview</th>
                   <th>Actions</th>
                 </tr>
@@ -66,7 +65,6 @@
                 <% if @my_answers %>
                   <% @my_answers.each do |answer| %>
                   <tr>
-                    <td><%= answer.revision_name %> </td>
                     <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                       <td>
                       <% if answer.submitted? %>
@@ -99,7 +97,6 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Draft title</th>
                 <th>Preview</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -109,7 +106,7 @@
               <% if @my_reviews %>
                 <% @my_reviews.each do |review| %>
                 <tr>
-                  <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+                  
                   <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                   <% if review.rating_completed? %>
                     <td><span class="label label-success">Rating complete</span></td>
@@ -128,9 +125,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Draft title</th>
                 <th>Answer preview</th>
-                <th>Review type</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -139,13 +134,7 @@
               <% if !@reviews_by_me.blank? %>
                 <% @reviews_by_me.each do |review| %>
                 <tr>
-                  <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
                   <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                  <td><%= review.review_type.capitalize unless review.review_type.nil? %> review 
-                    <% if review.review_type == "paired" and review.copilot_email == current_user.email %>
-                      (Copilot)
-                    <% end %>
-                  </td>
                   <td>
                       <%= link_to "Edit", edit_review_path(review), class:"btn" %> <%= link_to 'Delete review', review, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                   </td>
