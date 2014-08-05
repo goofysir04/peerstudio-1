@@ -12,7 +12,7 @@
           <% next if comment.nil? %>
             <div class="row">
               <div class="col-sm-2 col-md-3">
-                <div class="reviewer-label reviewer<%= i %>"></div>
+                <div class="glyphicon glyphicon-user reviewer<%= i %>"></div>
               </div>
               <div class="col-sm-10 col-md-9">
                 <p><%= comment %></p>
@@ -38,14 +38,14 @@
                     Yes:
                     <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                       <% if !f.answer_attributes.include?(a_attr) %>
-                        <div class="reviewer-label reviewer<%= i%10 %> reviewer-fail"></div>
+                        <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail"></div>
                       <% end %>
                     <% end %>
                     <br/>
                     No:
                     <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                       <% if f.answer_attributes.include?(a_attr) %>
-                        <div class="reviewer-label reviewer<%= i%10 %> reviewer-success"></div>
+                        <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success"></div>
                       <% end %>
                     <% end %>
                   </div>
