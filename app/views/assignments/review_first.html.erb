@@ -2,10 +2,13 @@
       <li><%= link_to @assignment.title, @assignment %></li>
     <% end -%>
 <h1>Give feedback to get feedback :)</h1>
-
+<% if @trigger.nil? %>
 <p>Here's how reviewing works. When you ask your classmates for feedback, you also promise to review work by two of your classmates. To help you keep this promise, we only show you your own feedback after you finish two reviews. </p>
 
 <p><strong>You have to complete <%= @trigger.count %> more reviews before we can show you your feedback.</strong></p>
+<% else %>
+<p>You have finished your required reviews, so we have unlocked your reviews for you! On the other hand, we'd invite you to continue reviewing. Thanks for helping your classmates!</p>
+<% end %>
 
 <div class="controls">
 	<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %> 

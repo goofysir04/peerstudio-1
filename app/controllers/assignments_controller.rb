@@ -158,16 +158,8 @@ def review_first
     unless params[:recent_review].nil?
       @recent_review = Review.find(params[:recent_review])  
     end
-
-
-    if @trigger.nil? 
-      #this means that either the required reviews were completed, or that we never had a trigger. 
-      #In either case, check if there are
-      redirect_to root_path
-    else
     #otherwise render
-      render layout: "one_column"
-    end
+    render layout: "one_column"
   end
 
   private
