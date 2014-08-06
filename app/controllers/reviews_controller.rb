@@ -132,6 +132,8 @@ class ReviewsController < ApplicationController
     unless @review.comments.blank?
       (@feedback_items_by_rubric_item["comments"] ||= []) << @review.comments
     end
+
+    render layout: "one_column"
   end
 
   def create_rating
