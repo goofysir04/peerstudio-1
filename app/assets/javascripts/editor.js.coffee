@@ -13,7 +13,7 @@ $(document).on 'ready page:load', ->
             console.log "WE MADE IT!"
     $('.editable').redactor({s3: '/uploads/create.js'})
 
-    if($('#answer_form').length > 0)
+    if($('#save-draft').length > 0)
         lastUpdated = 0
         updateInterval = 10
         saveInterval = 60

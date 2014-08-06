@@ -70,7 +70,7 @@
           <% if @answer.submitted? %>
           You submitted this answer for a review, so you can't change it anymore. 
           <% else %>
-          <%= f.submit "Save Draft", class: "btn btn-default"%> <em style="color: #999;"><span class="answer-save-status">Unsaved</span></em> <span class="answer_public_status"></span> 
+          <%= f.submit "Save Draft", class: "btn btn-default", id: "save-draft"%> <em style="color: #999;"><span class="answer-save-status">Unsaved</span></em> <span class="answer_public_status"></span> 
           <% end %>
           <div class="navbar-right">
             <% if @answer.submitted? %>

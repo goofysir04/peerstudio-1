@@ -112,7 +112,7 @@ class AnswersController < ApplicationController
     @answer.submitted_at = Time.now
     trigger = TriggerAction.add_trigger(current_user, @answer.assignment, trigger: "review_required", count: 2)
     respond_to do |format|
-      if @answer.save and trigger.save
+      if @answer.update(answer_params) and @answer.save and trigger.save
         format.html {redirect_to review_first_assignment_path(@answer.assignment)}
         format.json { head :no_content }
         format.js
@@ -236,6 +236,6 @@ class AnswersController < ApplicationController
       params.permit(:assignment_id)
       params.permit(:page)
       params.require(:answer).permit(:response, :revision_name, :revision_list, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id,
-        :reflection)
+        :reflection, :review_request)
     end
 end
