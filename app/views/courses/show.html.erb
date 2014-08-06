@@ -14,6 +14,7 @@
   <% else %>
   <h1 id="assignment_title"><%= link_to @closest_assign.title, @closest_assign %>
   <small> <%=due_date(@closest_assign.due_at) %></h1>
+    <h3 id="timer-element"></h3>
     <% if user_signed_in? and current_user.admin? %>
             <td><%= link_to 'Destroy', @closest_assign, method: :delete, data: { confirm: 'Are you sure?' } %></td>
     <% end %>
