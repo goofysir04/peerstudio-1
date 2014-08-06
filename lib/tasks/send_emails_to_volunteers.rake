@@ -32,7 +32,7 @@ namespace :assignment do
 						end
 					else 
 						have_to_review_still.each do |h|
-							logger.info "Sending emails to people who need it: #{h.user.id}"
+							logger.info "Sending emails to people who need it: #{h.user_id}"
 							ReviewMailer.delay.need_review_email(h.user, assign)
 							h.last_email_time = Time.now
 							h.save!
