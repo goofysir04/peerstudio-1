@@ -2,7 +2,7 @@
       <li><%= link_to @assignment.title, @assignment %></li>
     <% end -%>
 <h1>Give feedback to get feedback :)</h1>
-<% if @trigger.nil? %>
+<% unless @trigger.nil? %>
 <p>Here's how reviewing works. When you ask your classmates for feedback, you also promise to review work by two of your classmates. To help you keep this promise, we only show you your own feedback after you finish two reviews. </p>
 
 <p><strong>You have to complete <%= @trigger.count %> more reviews before we can show you your feedback.</strong></p>
