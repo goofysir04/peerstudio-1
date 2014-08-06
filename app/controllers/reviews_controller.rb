@@ -68,6 +68,7 @@ class ReviewsController < ApplicationController
       end
       if @review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
         ReviewMailer.delay.reviewed_email(@answer)
+        #add "last emailed" column
         @review.set_answer_attribute_weights!(review_params[:answer_attribute_weights])
         format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Ok, we saved that review!' }
         format.json { head :no_content }
