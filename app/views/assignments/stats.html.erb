@@ -25,9 +25,12 @@
 		<tr>
 			<td>Total submissions</td><td><%= @submissions_total_submitted %></td>
 		</tr>
+		<tr>
+			<td>Unreviewed right now</td><td><%= @unreviewed_right_now %></td>
+		</tr>
 
 		<tr>
-			<td>Top reviewers</td>
+			<td>Top reviewers all time</td>
 			<td>
 				<% @top_reviewers.each do |reviewer| %>
 					<%= mail_to reviewer[0].email, reviewer[0].name %> (<%= reviewer[1] %>)
@@ -35,7 +38,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Top reviewers all time</td>
+			<td>Top reviewers past 24 hours</td>
 			<td>
 				<% @top_reviewers_lagged.each do |reviewer| %>
 					<%= mail_to reviewer[0].email, reviewer[0].name %> (<%= reviewer[1] %>)

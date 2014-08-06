@@ -109,6 +109,7 @@ class AssignmentsController < ApplicationController
 
     @top_reviewers_lagged = Review.where(assignment: @assignment).where('completed_at > ?', Time.now-1.day).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
     @top_reviewers = Review.where(assignment: @assignment).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
+    @unreviewed_right_now = @assignment.answers.where(submitted: true, total_evaluations: 0, review_completed:false).count
 
     @submissions_total_submitted = @assignment.answers(submitted: true).count
   end
@@ -157,16 +158,8 @@ def review_first
     unless params[:recent_review].nil?
       @recent_review = Review.find(params[:recent_review])  
     end
-
-
-    if @trigger.nil? 
-      #this means that either the required reviews were completed, or that we never had a trigger. 
-      #In either case, check if there are
-      redirect_to root_path
-    else
     #otherwise render
-      render layout: "one_column"
-    end
+    render layout: "one_column"
   end
 
   private
