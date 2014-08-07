@@ -21,6 +21,9 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-35198919-5', 'auto');
+  <% if user_signed_in? %>
+    ga('create', 'UA-XXXX-Y', { 'userId': '<%= non_pii_user_id %>' });
+  <% end %>
   ga('require', 'displayfeatures');
   ga('send', 'pageview');
 
