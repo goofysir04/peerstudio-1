@@ -30,17 +30,7 @@ class AnswersController < ApplicationController
       if !@latest_answer.submitted?
         redirect_to edit_answer_path(@latest_answer), notice: "We took you to the draft you were already editing" and return
       else
-        @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
-
-        if @trigger.nil?
-          redirect_to answer_reviews_path(@latest_answer), notice: "You have a new review on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
-        else
-          if Answer.reviewable_answers(@latest_answer.assignment_id, current_user.id, "Final Draft") >0
-            redirect_to review_first_assignment_path(@latest_answer.assignment) and return
-          else
-            redirect_to answer_reviews_path(@latest_answer) and return
-          end
-        end
+        redirect_to answer_reviews_path(@latest_answer), notice: "You have a new review on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
       end
     end
     @answer = Answer.new
@@ -66,6 +56,7 @@ class AnswersController < ApplicationController
     unless @answer.user == current_user or current_user.admin?
       redirect_to assignment_path(@answer.assignment), alert: "You can only edit your own answers!" and return
     end
+    @trigger = TriggerAction.pending_action("review_required", current_user, @answer.assignment)
   end
   # POST /answers
   # POST /answers.json
@@ -144,7 +135,7 @@ class AnswersController < ApplicationController
     @answer.review_completed = true
     respond_to do |format|
       if @answer.save
-        format.html {redirect_to assignment_path(@answer.assignment), notice: "We'll stop asking students to review your draft now. TODO implement this"}
+        format.html {redirect_to assignment_path(@answer.assignment), notice: "We'll stop asking students to review your draft now."}
         format.json { head :no_content }
         format.js
       else

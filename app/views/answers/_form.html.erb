@@ -58,7 +58,7 @@
             <h3>No reviews yet.</h3> 
             <p>To get feedback on this answer, click "Get feedback on draft"</p>
           <% else %>
-            <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: @answer.previous_version.feedback_items_by_rubric_item, answer: @answer.previous_version} %>
+            <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: @answer.previous_version.feedback_items_by_rubric_item, answer: @answer.previous_version, trigger: @trigger} %>
           <% end %>
         </div>
       </div>

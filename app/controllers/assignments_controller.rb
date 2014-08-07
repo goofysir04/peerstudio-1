@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
   # add_breadcrumb :set_breadcrumb_link, only: assignment_actions
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
-  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
+  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades, :edit]
   # GET /assignments
   # GET /assignments.json
   def index

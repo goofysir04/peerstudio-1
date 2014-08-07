@@ -5,6 +5,7 @@ class ReviewsController < ApplicationController
   # GET /reviews.json
   def index
     @answer = Answer.find(params[:answer_id])
+    @trigger = TriggerAction.pending_action("review_required", current_user, @answer.assignment)
   end
 
   # GET /reviews/1

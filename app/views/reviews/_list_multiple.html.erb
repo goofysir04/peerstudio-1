@@ -1,6 +1,6 @@
 
 <% content_for :context_menu do %>
-  <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: feedback_items_by_rubric_item, answer: answer} %>
+  <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: feedback_items_by_rubric_item, answer: answer, trigger: @trigger} %>
   <br/>
   <% if show_revision_link %>
     <div class="form-controls">

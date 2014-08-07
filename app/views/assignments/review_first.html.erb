@@ -11,7 +11,7 @@
 <% end %>
 
 <div class="controls">
-	<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %> 
+	<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %> 
 	<% unless @recent_review.nil? %>
 		| <%= link_to "Edit your review", edit_review_path(@recent_review),class: "btn btn-default" %> 
 	<% end %>
