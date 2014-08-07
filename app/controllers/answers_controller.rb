@@ -30,7 +30,17 @@ class AnswersController < ApplicationController
       if !@latest_answer.submitted?
         redirect_to edit_answer_path(@latest_answer), notice: "We took you to the draft you were already editing" and return
       else
-        redirect_to answer_reviews_path(@latest_answer), notice: "You have a new review on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
+        @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
+
+        if @trigger.nil?
+          redirect_to answer_reviews_path(@latest_answer), notice: "You have a new review on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
+        else
+          if Answer.reviewable_answers(@latest_answer.assignment_id, current_user.id, "Final Draft") >0
+            redirect_to review_first_assignment_path(@latest_answer.assignment) and return
+          else
+            redirect_to answer_reviews_path(@latest_answer) and return
+          end
+        end
       end
     end
     @answer = Answer.new

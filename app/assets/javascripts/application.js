@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require turbolinks
 //= require bootstrap.min
 //= require_tree .
 //= require chosen.jquery
@@ -22,7 +21,7 @@
 //= require jquery_nested_form
 //= require json2
 //= require bootstrap-slider.min
-
+//= require turbolinks
 //Disabled
 //= #require rails.validations
 // require bootstrap-datepicker

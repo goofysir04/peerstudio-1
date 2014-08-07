@@ -153,6 +153,16 @@ class Answer < ActiveRecord::Base
     return final_grade
   end
 
+
+  def self.reviewable_answers(assignment_id,user_id,revision_name)
+    reviewed_already = Review.where(user_id: user_id, active: true)
+    reviewed_answers = reviewed_already.map {|r| r.answer_id}
+      # raise @reviewed_answers.inspect
+    reviewed_answers << 0 if reviewed_answers.blank?
+    answers = Answer.tagged_with(revision_name).where(active: true, submitted:true, assignment_id: assignment_id).where("user_id NOT in (?) and answers.id NOT in (?)", user_id, reviewed_answers)
+    return answers.count
+  end
+
   def self.push_grades(user_id, max_push_count)
     answers = Answer.where("user_id = ? and push_count <= ?", user_id, max_push_count)
     uri = URI.parse "https://class.coursera.org/hci-004/assignment/api/update_score"

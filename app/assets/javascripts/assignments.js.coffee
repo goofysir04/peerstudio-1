@@ -7,7 +7,7 @@
 #   local: ['timtrueman', 'JakeHarding', 'vskarich']
 # })
 
-$(document).ready () ->
+$(document).on 'ready page:load', () ->
 	$("#typed_review_type").change(()->
 		$("#typed_review_email").show().attr("placeholder","Choose a review type first")
 		$("#start_review").val("Start review")
