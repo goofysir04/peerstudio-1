@@ -159,7 +159,7 @@ class Answer < ActiveRecord::Base
     reviewed_answers = reviewed_already.map {|r| r.answer_id}
       # raise @reviewed_answers.inspect
     reviewed_answers << 0 if reviewed_answers.blank?
-    answers = Answer.tagged_with(revision_name).where(active: true, submitted:true, assignment_id: assignment_id).where("user_id NOT in (?) and answers.id NOT in (?)", user_id, reviewed_answers)
+    answers = Answer.tagged_with(revision_name).where(active: true, submitted:true, assignment_id: assignment_id, is_blank_submission: false).where("user_id NOT in (?) and answers.id NOT in (?)", user_id, reviewed_answers)
     return answers.count
   end
 

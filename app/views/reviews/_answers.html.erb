@@ -12,12 +12,13 @@ Reviewing <%= answer.assignment.title %>
 
 <% if !answer.assignment.example.nil?%>
   
-
-  <div class="paper col-md-6">
-  	<h3 id="student-work">Give feedback on this submission</h3>
-    <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
+  <div class="col-md-6">
+    <div class="paper">
+    	<h3 id="student-work">Give feedback on this submission</h3>
+      <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
+    </div>
+    <%= link_to "This submission is blank!", report_blank_answer_path, method: :post, confirm: "If you report this submission as blank, we will not ask others to review it. Are you sure it is blank?", class: "btn btn-default" %>
   </div>
-
   <div class="paper col-md-6">
   	<h3 id="excellent-work">Here's an example of excellent work
   	<small>Compare work to this example to suggest improvements</small></h3>
