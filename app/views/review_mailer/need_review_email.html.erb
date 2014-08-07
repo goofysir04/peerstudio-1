@@ -15,7 +15,7 @@
                                 <td align="center" valign="top" style="color:#505050;font-family:Helvetica,Arial,sans-serif;font-size:15px;padding-top:40px;padding-right:40px;padding-bottom:30px;padding-left:40px;text-align:center">
                                   <p>Hey <%= @user.name%>!</p>
 
-                                  <h1>A mooc-mate needs help with their submission on<br/><i><%= @assignment.title %></i><br/>!</h1>
+                                  <h2>A mooc-mate needs help with their submission on<br/><i><%= @assignment.title %></i><br/>!</h2>
 
                                   <p>Remember that you need to give two peers feedback before you can see your own, so helping your mooc-mate helps you!</p>
                                 </td>
@@ -27,9 +27,9 @@
                   <td align="center" valign="middle" style="padding-right:40px;padding-bottom:40px;padding-left:40px">
                     <table border="0" cellpadding="0" cellspacing="0" style="background-color:#6dc6dd;border-collapse:separate!important;border-radius:3px">
                         <tr>
-                            <td align="center" valign="middle" style="color:#ffffff;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;line-height:100%;padding-top:18px;padding-right:15px;padding-bottom:15px;padding-left:15px">
-                              <%= link_to "Review my work?", assignment_url(@assignment), {:style => "color:#ffffff;text-decoration:none"} %>
-                            </td>
+                          <td>
+                            <%= link_to "Review my work?", assignment_url(@assignment). class:"btn btn-large btn-info"%>
+                          </td>
                         </tr>
                     </table>
                     <div style="color:#606060;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">I'll really appreciate it!</div>
