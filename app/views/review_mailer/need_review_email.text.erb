@@ -1,5 +1,9 @@
 Hey <%= @user.name%>!
 
-A mooc-mate needs help with their submission on <%= @assignment.title %>. Could you please give them feedback? They'd really appreciate it! 
+<%= if @numofReviews == 0 %>
+We see that you've given no reviews yet for <i><%= @assignment.title %></i>. Give <b>two</b> MOOC-mates feedback to gain access to any reviews you've received!
+<% else %>
+So far, you've given <%= @numOfReviews %> reviews for <i><%= @assignment.title %></i>, and your MOOC-mates appreciate your help!
+<% end%>
 
 Here's a link to the assignment: <%= assignment_url(@assignment) %>. Remember that you need to give two peers feedback before you can see your own, so helping your mooc-mate helps you!

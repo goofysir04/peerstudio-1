@@ -6,7 +6,7 @@ namespace :assignment do
 		
 		if !reviews.nil? 
 			reviews.each do |r|
-				ReviewMailer.delay.superstar_reviewers_email(User.find(r.user_id))
+				ReviewMailer.delay.superstar_reviewers_email(User.find(r.user_id), r)
 			end
 		end
 	end

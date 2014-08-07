@@ -14,8 +14,13 @@
                             <tr>
                                 <td align="center" valign="top" style="color:#505050;font-family:Helvetica,Arial,sans-serif;font-size:15px;padding-top:40px;padding-right:40px;padding-bottom:30px;padding-left:40px;text-align:center">
                                   <p>Hey <%= @user.name%>!</p>
-
-                                  <h2>So far, you've given <%= @numOfReviews %> reviews for <i><%= @assignment.title %></i>, and your MOOC-mates appreciate your help!</h2>
+                                  <h2>
+                                  <%= if @numofReviews == 0 %>
+                                  We see that you've given no reviews yet for <i><%= @assignment.title %></i>. Give <b>two</b> MOOC-mates feedback to gain access to any reviews you've received!
+                                  <% else %>
+                                  So far, you've given <%= @numOfReviews %> reviews for <i><%= @assignment.title %></i>, and your MOOC-mates appreciate your help!
+                                  <% end%>
+                                  </h2>
                                 </td>
                             </tr>
                         </table>
