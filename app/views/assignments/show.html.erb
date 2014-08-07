@@ -68,7 +68,7 @@
                     <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                       <td>
                       <% if answer.submitted? %>
-                      <span class="label label-important">Being reviewed</span> 
+                      <span class="label label-success">Being reviewed</span> 
                       <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
                       <% else %>
                     

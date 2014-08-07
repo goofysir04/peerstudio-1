@@ -92,6 +92,7 @@
       <div class="actions" id="submit-button">
         <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
         <%= f.submit "Submit review", class: "btn btn-primary" %>
+        <%= link_to "This submission is blank!", report_blank_answer_path(@review), method: :post, confirm: "If you report this submission as blank, we will not ask others to review it. Are you sure it is blank?", class: "btn btn-danger" %>
       </div>
     <% end %>
 <% end %>
