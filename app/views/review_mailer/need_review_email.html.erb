@@ -15,9 +15,7 @@
                                 <td align="center" valign="top" style="color:#505050;font-family:Helvetica,Arial,sans-serif;font-size:15px;padding-top:40px;padding-right:40px;padding-bottom:30px;padding-left:40px;text-align:center">
                                   <p>Hey <%= @user.name%>!</p>
 
-                                  <h2>A mooc-mate needs help with their submission on<br/><i><%= @assignment.title %></i><br/>!</h2>
-
-                                  <p>Remember that you need to give two peers feedback before you can see your own, so helping your mooc-mate helps you!</p>
+                                  <h2>So far, you've given <%= @numOfReviews %> reviews for <i><%= @assignment.title %></i>, and your MOOC-mates appreciate your help!</h2>
                                 </td>
                             </tr>
                         </table>
@@ -28,11 +26,11 @@
                     <table border="0" cellpadding="0" cellspacing="0" style="background-color:#6dc6dd;border-collapse:separate!important;border-radius:3px">
                         <tr>
                           <td>
-                            <%= link_to "Review my work?", assignment_url(@assignment). class:"btn btn-large btn-info"%>
+                            <%= link_to "Help another MOOC-mate out?", assignment_url(@assignment). class:"btn btn-large btn-info"%>
                           </td>
                         </tr>
                     </table>
-                    <div style="color:#606060;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">I'll really appreciate it!</div>
+                    <div style="color:#606060;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">Remember that you must give two MOOC-mates feedback before you can see your own, so helping your MOOC-mate helps you!</div>
                   </td>
                 </tr>          
                 <tr>
