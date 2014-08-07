@@ -54,7 +54,8 @@ findClassesToHighlight = (element) ->
 
 replaceCheckboxesWithToggles = ()->
 	return if $('input.toggle-checkbox').length is 0
-	$('.btn-checkbox-yes,.btn-checkbox-no').click syncCheckboxOnToggle
+	$('.btn-checkbox-yes,.btn-checkbox-no').click(syncCheckboxOnToggle)
+
 
 	server_metadata = $('#review_completion_metadata').val() + ""
 	try
@@ -82,7 +83,7 @@ syncCheckbox = (box) ->
 				#Only set as unchecked if it exists in our collection	
 				$(box).siblings('.btn-checkbox-no').addClass('active btn-danger')
 
-syncCheckboxOnToggle = () ->
+syncCheckboxOnToggle = (e) ->
 	console.log "Syncing"
 	el = $(this)
 	if el.hasClass('btn-checkbox-yes')
@@ -125,7 +126,7 @@ setProgressBarWidths = () ->
 		else
 			bar_type = "progress-bar-danger"
 			console.log "fail"
-		$(".progress-bar[data-scored-item=#{checkbox_name}").attr('style', "width: #{completedWidth}").removeClass('progress-bar-danger').
+		$(".progress-bar[data-scored-item=#{checkbox_name}]").attr('style', "width: #{completedWidth}").removeClass('progress-bar-danger').
 		removeClass('progress-bar-success').addClass(bar_type)
 
 replaceScales = () ->
