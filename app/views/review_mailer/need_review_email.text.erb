@@ -1,9 +1,18 @@
 Hey <%= @user.name%>!
-
-<%= if @numofReviews == 0 %>
-We see that you've given no reviews yet for <i><%= @assignment.title %></i>. Give <b>two</b> MOOC-mates feedback to gain access to any reviews you've received!
+<% if @numofReviews == 0 %>
+We see that you've given no reviews yet for <%= @assignment.title %>. Give <b>two</b> MOOC-mates feedback to gain access to any reviews you've received!
 <% else %>
 So far, you've given <%= @numOfReviews %> reviews for <i><%= @assignment.title %></i>, and your MOOC-mates appreciate your help!
 <% end%>
+</h2>
+
+<% if !@reviewRequests.nil? %>
+You can continue to help your MOOC-mates by fulflling some of their requests:
+<ul>
+<% @reviewRequests.each do |r| %>
+<li style="text-align:left;">"<%= r %>"</li>
+<% end %>
+</ul>
+<% end %>
 
 Here's a link to the assignment: <%= assignment_url(@assignment) %>. Remember that you need to give two peers feedback before you can see your own, so helping your mooc-mate helps you!
