@@ -120,7 +120,7 @@ class ReviewsController < ApplicationController
       redirect_to assignment_path(params[:id]), alert: "We didn't find any drafts to review" and return 
     end
 
-    @answer = @answers.order("(pending_reviews + total_evaluations) ASC").first
+    @answer = @answers.order("(pending_reviews + total_evaluations) ASC, submitted_at desc").first
     @review = create_review_for_answer(@answer, params[:typed_review][:type])
 
     if review_type == "paired"
