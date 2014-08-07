@@ -187,7 +187,7 @@ class AnswersController < ApplicationController
     if @cloned_answer.nil?
       @cloned_answer = Answer.new(user: current_user, assignment: @answer.assignment, previous_version: @answer, 
         response: @answer.response, revision_list: @answer.revision_list,
-        active: false)
+        active: false, submitted: false)
       @cloned_answer.save!
 
       @answer.review_completed = true
