@@ -27,6 +27,8 @@ class ReviewsController < ApplicationController
   # GET /reviews/1/edit
   def edit
     @answer = @review.answer
+
+    @latest_reviewer_answer = Answer.where(assignment: @answer.assignment, user: current_user).order('updated_at desc').first
   end
 
   # POST /reviews

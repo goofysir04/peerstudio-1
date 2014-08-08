@@ -70,7 +70,7 @@
             </tr>
           </table>
             <%= r.label :like_feedback, "Suggest improvements for this section. Be specific; use explanations and examples!", style: "margin-top:1em" %>
-            <%= r.text_area :like_feedback, size: "10x3", placeholder: "Your work could improve _______ by doing __________. An example of this is __________.", class:"form-control expandable" %>
+            <%= r.text_area :like_feedback, size: "10x3", placeholder: "Your work could improve _______ by doing __________. An example of this is __________.", class:"form-control expandable comment-quality-checked" %>
             <%= r.hidden_field :rubric_item_id %>
           </li>
         <% end %>
@@ -78,7 +78,7 @@
           <strong>Overall comments</strong> 
           <legend></legend>
           <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples!"%>
-          <%= f.text_area :comments, size: "10x5", class:"review_text form-control" %>
+          <%= f.text_area :comments, size: "10x5", class:"review_text form-control comment-quality-checked" %>
           <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
           <legend></legend>
           <table>
@@ -123,6 +123,43 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal" id="phoned-in-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">This community values substantive comments!</h4>
+        </div>
+        <div class="modal-body">
+          <p>Which comment do you think would help you improve your work most?</p>
+          <% unless @latest_reviewer_answer.nil?%>
+            <div class="row-fluid well">
+                <% answer_excerpt = excerpt @latest_reviewer_answer.response, 'me |myself | I |', radius: 40
+                   answer_excerpt = @latest_reviewer_answer.response.truncate(100) + '...'  if answer_excerpt.blank? 
+                 %>
+               <%= Format.markdown answer_excerpt %>
+            </div>
+          <%  end %>
+          <div class="row-fluid">
+            <div class="col-sm-5">
+              <blockquote style="display: table-cell; vertical-align: middle;">"Good essay"</blockquote>
+            </div>
+            <div class="col-sm-2">
+              or
+            </div>
+            <div class="col-sm-5">
+              <blockquote>"I think you have a clear overview of your difficulties, but perhaps it's worth trying to dig more deeply to understand why you have these difficulties? Perhaps you should..."</blockquote>
+            </div>
+          </div>
+          <div class="fluid">
+            <p>Peerstudio is a community that values helpful, substantive reviews. To get great reviews, we all need to write great reviews. Could you take a moment to expand on your comments?</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Expand on comments</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

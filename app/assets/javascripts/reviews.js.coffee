@@ -216,9 +216,7 @@ token_list = {
 
 
 checkFormCompleteness = () ->
-
 	review_complete = true
-
 	for item in $('input.toggle-checkbox')
 		console.log "checking #{$(item).attr('id')}"
 		unless $(item).attr('id') in review_completion_metadata.completed_checkboxes
@@ -227,8 +225,18 @@ checkFormCompleteness = () ->
 			$(item).closest('li.compute-score').addClass('incomplete-rubric')
 
 	$('#incomplete-review-modal').modal('show') unless review_complete
-	return review_complete
 
+	if review_complete
+		#Check if they're phoning it in. 
+		comments_are_good = comments_are_substantive()
+		$('#phoned-in-review-modal').modal('show') unless comments_are_substantive()	
+	return review_complete and comments_are_good
+
+comments_are_substantive = () ->
+	lengthOfComments = 0
+	for el in $('.comment-quality-checked')
+		lengthOfComments += $(el).val().length
+	return lengthOfComments > 20
 
 getReviewQuality = (text) ->
 	content_score = 0 
