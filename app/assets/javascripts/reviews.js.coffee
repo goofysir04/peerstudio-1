@@ -67,6 +67,8 @@ replaceCheckboxesWithToggles = ()->
 	catch e
 		console.log("couldn't parse")
 	
+	unless review_completion_metadata.completed_checkboxes?
+		review_completion_metadata.completed_checkboxes = []
 	for box in $('input.toggle-checkbox')
 		if box.checked
 			$(box).siblings('.btn-checkbox-yes').addClass('active btn-success')
