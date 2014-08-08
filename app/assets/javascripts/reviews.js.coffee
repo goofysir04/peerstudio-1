@@ -190,8 +190,8 @@ token_list = {
 	"eviden" : {regex: new RegExp("\\s" + "eviden","gi"), score: 1} #evident, evidence, evidentially,...
 	"experience" : {regex: new RegExp("\\s" + "experience","gi"), score: 1} 
 	"explanat" : {regex: new RegExp("\\s" + "explanat","gi"), score: 2}
-	"grammat" : {regex: new RegExp("\\s" + "grammat","gi"), score: -1, feedback: "Don't comment on grammar"} #don't talk about grammar
-	"grammar" : {regex: new RegExp("\\s" + "grammar","gi"), score: -1, feedback: "Don't comment on grammar"}
+	# "grammat" : {regex: new RegExp("\\s" + "grammat","gi"), score: -1, feedback: "Don't comment on grammar"} #don't talk about grammar
+	# "grammar" : {regex: new RegExp("\\s" + "grammar","gi"), score: -1, feedback: "Don't comment on grammar"}
 	"lecture" : {regex: new RegExp("\\s" + "lecture","gi"), score: 2}
 	"like" : {regex: new RegExp("\\s" + "like","gi"), score: 2}
 	"link" : {regex: new RegExp("\\s" + "link","gi"), score: 1}
