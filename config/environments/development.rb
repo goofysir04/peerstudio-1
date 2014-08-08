@@ -47,6 +47,4 @@ Humanmachine::Application.configure do
   }
 
   $stdout.sync = true
-
-  config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
 end
