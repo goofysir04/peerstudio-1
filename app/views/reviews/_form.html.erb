@@ -11,7 +11,7 @@
     </div>
   <% end %>
   <% content_for :context_menu do %>
-  <%= form_for(@review, html: {:"class"=>"review-form"}) do |f| %>
+  <%= form_for(@review, html: {:"class"=>"review-form", :id => "review-checked-form"}) do |f| %>
       <ul class="rubric" id="review-rubric">
         <% if @review.review_type== "paired"%>
           <li>
@@ -155,11 +155,12 @@
             </div>
           </div>
           <div class="fluid">
-            <p>Peerstudio is a community that values helpful, substantive reviews. To get great reviews, we all need to write great reviews. Could you take a moment to expand on your comments?</p>
+            <p>Peerstudio is a community that values helpful, substantive reviews. <strong>To get great reviews, we all need to write great reviews.</strong> Could you take a moment to expand on your comments?</p>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Expand on comments</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal">Yes, I'll expand on my comments</button>
+          <button type="button" class="btn btn-default" id="force-subimt-review">Submit anyway (course staff notified)</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

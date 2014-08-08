@@ -3,6 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 review_completion_metadata = {}
+force_submit = false
 
 ready = () ->
 	$('.rubric_item:checkbox').click () ->
@@ -21,6 +22,9 @@ ready = () ->
 		$('.review_text').keyup () ->
 			getReviewQuality($(this).val())
 
+		$('#force-subimt-review').click () ->
+			force_submit = true
+			$("form#review-checked-form").submit()
 		
 		$('#other_review_types').click(() ->
 			alert "These review types are not yet open for this assignment."
@@ -216,6 +220,7 @@ token_list = {
 
 
 checkFormCompleteness = () ->
+	return true if force_submit
 	review_complete = true
 	for item in $('input.toggle-checkbox')
 		console.log "checking #{$(item).attr('id')}"
