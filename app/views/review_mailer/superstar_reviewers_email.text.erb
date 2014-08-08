@@ -1,6 +1,5 @@
-Hey <%= @user.name%>! Thanks for submitting a great review! Your MOOC-mate found it accurate, insightful, and helpful. 
-<% if !@review.other_rating_comments.nil? %> 
-More accurately, your MOOC-mate stated the following about your review: "<%=@review.other_rating_comments %>".
-<% end%> 
-Keep up the great work! 
-<%= link_to "To see your review, click here!", review_url(@review)%>
+Hey <%= @user.name%>!
+
+Thank you for your great reviews! Your MOOC-mates found them very helpful and insightful.
+<%if !@review.other_rating_comments.nil? %> Here are a few of their comments: <div style="font-weight:lighter;">"<%=@review.other_rating_comments %>"</div><% end%>
+<%= link_to "Review some more?", assignment_url(@assignment)%>
