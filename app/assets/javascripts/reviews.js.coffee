@@ -235,7 +235,7 @@ checkFormCompleteness = () ->
 		#Check if they're phoning it in. 
 		comments_are_good = comments_are_substantive()
 		$('#phoned-in-review-modal').modal('show') unless comments_are_substantive()	
-	return review_complete and comments_are_good
+	return (review_complete and comments_are_good)
 
 comments_are_substantive = () ->
 	lengthOfComments = 0
