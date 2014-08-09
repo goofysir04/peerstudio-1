@@ -16,11 +16,13 @@
 			<td>Unreviewed right now</td><td><%= @unreviewed_right_now %></td>
 		</tr>
 		<tr>
-			<td>Oldest unreviewed answer submitted</td>
+			<td>Unreviewed answer submitted</td>
 			<td>
-			<% unless @oldest_unreviewed.nil? %>
-				<%= time_ago_in_words @oldest_unreviewed.submitted_at %> ago
-			<% end %>
+				<ul>
+					<% @unreviewed_answers.each do |a| %>
+						<li><%= time_ago_in_words a.submitted_at %> ago</li>
+					<% end %>
+				</ul>
 		</td>
 		</tr>
 		<tr>
