@@ -1,0 +1,139 @@
+<% grades = (AssignmentGrade.where(assignment: @assignment).group(:user_id).sum(:credit)) 
+	grades = Hash[*grades.map {|user, grade| [user,grade.round]}.flatten] 
+	review_by_type = Review.where(assignment_id: @assignment.id, active: true).group(:user_id, :review_type).select(:user_id, :review_type).count
+	review_by_answer = Review.where(assignment_id: @assignment.id, active: true).group(:answer_id).select(:answer_id).count
+
+	answers = {}
+	@milestones.each do |m|
+		answers[m] = Answer.tagged_with(m).where(active: true, assignment_id: @assignment.id).select('answers.id','user_id')
+	end
+
+	paired_reviews_copiloted = Review.where(assignment_id: @assignment.id, active: true, review_type: "paired").group(:copilot_email).count
+%>
+
+<h2>What needs your attention?</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Fixed</th>
+			<th>Affected student</th>
+			<th>Action required</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @action_items.group_by(&:reason_code).each do |reason_code, items| %>
+			<% case reason_code 
+				 when "TOO_FEW_REVIEWS" %>
+				 <tr class="info"><td colspan="4">Too few reviews</td></tr>
+				 <% when "BLANK_REVIEW" %>
+				 <tr class="info"><td colspan="4">Review was blank</td></tr>
+				 <% when "BAD_REVIEW" %>
+				 <tr class="info"><td colspan="4">Review was rated poorly</td>
+				 <% when "POOR_AGREEMENT" %>
+				 <tr class="info"><td colspan="4">Poor inter-rater agreement. This usually suggests that students don't have a consensus about what this question asks about.</td>
+				 </tr>
+			<% end %>
+			<% items.each do |a| %>
+
+				<tr <%= "class=faded" if a.resolved? %> id=<%= "action-item-#{a.id}"%>>
+					<td><%= check_box_tag 'resolved', a.resolved?, a.resolved?,
+							data: {remote: true, method: :post,
+									url: resolve_action_item_assignment_path(@assignment, item: a.id) }
+					 %></td>
+					<td>
+						<% if a.user.blank? %>
+							Everyone
+						<% else %>
+						<%= a.user.name %> (<%= a.user.email %>) </td>
+						<% end %>
+						<% case a.reason_code 
+						 when "TOO_FEW_REVIEWS" %>
+						 <td><%= a.reason %></td>
+						 <td>
+							<%= link_to "Submission", edit_answer_path(a.answer) %> | <%= link_to "Regrade", grades_assignment_path(@assignment, user: a.user_id) %>
+						 </td>
+						<% when "BLANK_REVIEW" %>
+							<td>Review by <%= a.review.user.name %> (<%= a.review.user.email %>). This assignment has a total of <%= review_by_answer[a.answer.id]%> reviews. </td>
+							<td><%= link_to "Edit review", edit_review_path(a.review) %></td>
+						<% when "BAD_REVIEW" %> 
+							<td><p>Review by <%= a.review.user.name %> (<%= a.review.user.email %>).</p> <p>The reviewed student wrote: <%= truncate a.review.other_rating_comments,:length => 200, :separator => ' ' %></p></td>
+							<td><%= link_to "See/Rate review", rate_review_path(a.review) %></td>
+						<% when "POOR_AGREEMENT" %>
+							<td><p><%= a.reason %></td>
+							<td><%= link_to "Edit assignment", edit_assignment_path(@assignment) %></td>
+						<% end %>
+					</td>
+				</tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table>
+
+<h2>Class stats</h2>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Student name</th>
+			<th>Reviews performed: Exchange</th>
+			<th>Paired</th>
+			<th>Final</th>
+
+			<% @milestones.each do |m| %>
+				<th><%= m %> </th>
+			<% end %>
+			<th>Grade</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<% @students.order('name').each do |s| %>
+			<tr>
+				<td><%= s.name %> (<%= s.email %>)</td>
+				<% exchange_reviews_count = review_by_type[[s.id, "exchange"]] %>
+				<% if exchange_reviews_count.nil? or (exchange_reviews_count == 0) %>
+					<td style="background-color: rgb(244,109,67);">
+					None</td>
+				<% else %>
+					<td><%= exchange_reviews_count %></td>
+				<% end %>
+				<% paired_reviews_count =  (review_by_type[[s.id, "paired"]] or 0) + (paired_reviews_copiloted[s.email] or 0) %>
+				<% if paired_reviews_count == 0 %>
+					<td style="background-color: rgb(244,109,67);">
+					None</td>
+				<% else %>
+					<td><%= paired_reviews_count %></td>
+				<% end %>
+				<% final_reviews_count = review_by_type[[s.id, "final"]]  %>
+				<% if final_reviews_count.nil? or final_reviews_count == 0 %>
+					<td style="background-color: rgb(244,109,67);">
+					None</td>
+				<% else %>
+					<td><%= final_reviews_count %></td>
+				<% end %>
+
+				<% @milestones.each do |m| %>
+				<% answer = (answers[m].select {|answer| answer.user_id == s.id}).first
+			
+				%>
+					<% if answer.nil? %>
+					<td style="background-color: rgb(244,109,67);">Not Submitted</td>
+					<% else %>
+						<% if review_by_answer[answer.id].nil? or review_by_answer[answer.id] == 0 %>
+							<td style="background-color: rgb(255,255,191);"><%= link_to "Submitted", answer_reviews_path(answer)%>; No reviews</td>
+						<% else %>
+							<td style="background-color: #8cc665;"><%= link_to "Submitted", answer_reviews_path(answer)%>; <%= review_by_answer[answer.id] %> reviews</td>
+						<% end %>
+					<% end %>
+				</td>
+				<% end %>
+				<td><%= grades[s.id] %> <%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<h2>Export</h2>
+<%= link_to "Download gradebook", export_grades_assignment_path(@assignment, format: "csv"), class: "btn" %>
+

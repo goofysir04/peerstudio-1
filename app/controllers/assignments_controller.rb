@@ -98,10 +98,11 @@ class AssignmentsController < ApplicationController
   end
 
   def stats
-    @students = @assignment.course.students
-    @milestones = @assignment.milestones
+    # Data for more stats
+    # @students = @assignment.course.students
+    # @milestones = @assignment.milestones
 
-    @action_items = ActionItem.where(assignment: @assignment)
+    # @action_items = ActionItem.where(assignment: @assignment)
 
     @reviews_last_day_lagging = Review.where(assignment: @assignment).where("completed_at > ?", Time.now-1.day).count
     @submissions_last_day_lagging = @assignment.answers.where("submitted_at > ?", Time.now-1.day).count
@@ -110,7 +111,7 @@ class AssignmentsController < ApplicationController
     @top_reviewers_lagged = Review.where(assignment: @assignment).where('completed_at > ?', Time.now-1.day).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
     @top_reviewers = Review.where(assignment: @assignment).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
     @unreviewed_right_now = @assignment.answers.where(submitted: true, total_evaluations: 0, active: true, review_completed:false).count
-
+    @oldest_unreviewed = @assignment.answers.where(submitted: true, total_evaluations: 0, active: true, review_completed:false).order('submitted_at asc').first
     @submissions_total_submitted = @assignment.answers(submitted: true).count
   end
 
