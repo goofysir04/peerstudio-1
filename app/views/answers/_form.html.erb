@@ -67,7 +67,7 @@
   <div class="row-fluid">
       <%= form_for([@assignment,@answer], remote: true, html: {id: "answer_form"}) do |f| %>      
         <div class="actions">
-          <% if @answer.submitted? %>
+          <% if @answer.submitted? or @answer.review_completed? %>
           You submitted this answer for a review, so you can't change it anymore. 
           <% else %>
           <%= f.submit "Save Draft", class: "btn btn-default", id: "save-draft"%> <em style="color: #999;"><span class="answer-save-status">Unsaved</span></em> <span class="answer_public_status"></span> 

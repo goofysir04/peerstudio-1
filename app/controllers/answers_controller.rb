@@ -130,7 +130,7 @@ class AnswersController < ApplicationController
   end
 
   def unsubmit_for_feedback
-    @answer.submitted = false
+    # @answer.submitted = false
     @answer.is_final = false
     @answer.review_completed = true
     respond_to do |format|
