@@ -232,7 +232,7 @@ class ReviewsController < ApplicationController
     def save_review_and_attributes!(review)
       last_completed_at = review.completed_at
       if review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
-        if last_completed_at < 5.minutes.ago
+        if last_completed_at.nil? or last_completed_at < 5.minutes.ago
           ReviewMailer.delay.reviewed_email(review.answer)
         end
         #add "last emailed" column
