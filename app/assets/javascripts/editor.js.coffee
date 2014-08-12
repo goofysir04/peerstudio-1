@@ -27,6 +27,17 @@ $(document).on 'ready page:load', ->
             lastUpdated = 0
             ), saveInterval*1000
 
+        $('#submit-for-feedback').click () ->
+            next_url = $(this).attr('href')
+            $('#answer_form').on 'ajax:success', () ->
+                console.log "finished saving, submitting for feedback"
+                window.location= next_url
+            $('#answer_form').on 'ajax:error', (e,status,error) ->
+                console.log error
+                alert("We had trouble saving your draft. Please try again in a while.")
+            console.log "saving now"
+            $('#answer_form').submit()
+            return false
 
     $('.expandable').on('keyup', () ->
         this.style.overflow = 'hidden'
