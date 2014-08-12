@@ -113,6 +113,7 @@ class AssignmentsController < ApplicationController
     @unreviewed_right_now = @assignment.answers.where(submitted: true, total_evaluations: 0, active: true, review_completed:false).count
     @unreviewed_answers = @assignment.answers.where(submitted: true, total_evaluations: 0, active: true, review_completed:false).order('submitted_at asc')
     @submissions_total_submitted = @assignment.answers(submitted: true).count
+    @total_users_submitted = @assignment.answers(submitted: true).select(:user_id).distinct.count
   end
 
   def grades
