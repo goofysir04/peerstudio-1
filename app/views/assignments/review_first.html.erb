@@ -4,6 +4,8 @@
 <h1>Give feedback to get feedback :)</h1>
 <% if @trigger.nil? %>
 <p>You have finished your required reviews, so we have unlocked your reviews for you! On the other hand, we'd invite you to continue reviewing. Thanks for helping your classmates!</p>
+
+<p>We will email you at <strong><%= current_user.email %> when your work has been reviewed. On average, students receive feedback in <strong>4 hours or less</strong>.</p>
 <% else %>
 <p>Here's how reviewing works. When you ask your classmates for feedback, you also promise to review work by two of your classmates. To help you keep this promise, we only show you your own feedback after you finish two reviews. </p>
 
