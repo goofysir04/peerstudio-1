@@ -113,7 +113,7 @@ class AnswersController < ApplicationController
     @answer.submitted_at = Time.now
     trigger = TriggerAction.add_trigger(current_user, @answer.assignment, trigger: "review_required", count: 2)
     respond_to do |format|
-      if @answer.update(answer_params) and @answer.save and trigger.save
+      if @answer.update(answer_params.merge(active: true)) and @answer.save and trigger.save
         format.html {redirect_to review_first_assignment_path(@answer.assignment)}
         format.json { head :no_content }
         format.js
@@ -135,6 +135,8 @@ class AnswersController < ApplicationController
     @answer.review_completed = true
     respond_to do |format|
       if @answer.save
+        trigger = TriggerAction.add_trigger(current_user, @answer.assignment, trigger: "review_required", count: -2)
+        trigger.save!
         format.html {redirect_to assignment_path(@answer.assignment), notice: "We'll stop asking students to review your draft now."}
         format.json { head :no_content }
         format.js
