@@ -1,5 +1,7 @@
 class ReviewsController < ApplicationController
   before_action :set_review, only: [:show, :edit, :update, :destroy, :rate, :create_rating, :report_blank]
+  before_action :set_answer, only: :review_answer
+  before_filter :authenticate_user_is_admin!, only: :review_answer
   before_filter :authenticate_user!
   # GET /reviews
   # GET /reviews.json
@@ -158,7 +160,15 @@ class ReviewsController < ApplicationController
         format.json { render json: @review.errors, status: :unprocessable_entity }
       end
     end
+  end
 
+  def review_answer
+    @review = create_review_for_answer(@answer, "final")
+    if @review.save
+      redirect_to edit_review_path @review
+    else
+      redirect_to @answer.assignment, alert: @review.errors.full_messages.join(",")
+    end
   end
 
   private
@@ -186,6 +196,9 @@ class ReviewsController < ApplicationController
           :answer_attribute_ids=>[]])
     end
 
+    def set_answer
+      @answer = Answer.find(params[:answer_id])
+    end
     def create_review_for_answer(answer, type=nil)
       reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment, review_type: type, active:true)
       # if !reviews.empty? and type != "final"

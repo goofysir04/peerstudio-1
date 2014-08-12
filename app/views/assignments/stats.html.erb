@@ -20,7 +20,7 @@
 			<td>
 				<ul>
 					<% @unreviewed_answers.each do |a| %>
-						<li><%= time_ago_in_words a.submitted_at %> ago</li>
+						<li><%= link_to "#{time_ago_in_words a.submitted_at} ago", review_answer_path(a), method: :post%></li>
 					<% end %>
 				</ul>
 		</td>

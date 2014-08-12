@@ -98,6 +98,7 @@ Humanmachine::Application.routes.draw do
   get 'reviews/:id/rate' => "reviews#rate", as: :rate_review
   post 'reviews/:id/rate' => "reviews#create_rating", as: :create_rate_review
   post 'reviews/:id/blank' => "reviews#report_blank", as: :report_blank_answer
+  post 'reviews/:answer_id/review_answer' => "reviews#review_answer", as: :review_answer
 
   resources :questions do
     #resources :answer_attributes
