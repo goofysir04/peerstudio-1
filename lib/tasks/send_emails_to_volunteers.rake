@@ -33,7 +33,7 @@ namespace :assignment do
 					else 
 						have_to_review_still.each do |h|
 							logger.info "Sending emails to people who need it: #{h.user_id}"
-							unless h.user.opted_out_help_email?
+							if !h.user.nil? and !h.user.opted_out_help_email?
 								ReviewMailer.delay.need_review_email(h.user, assign)
 							end
 							h.last_email_time = Time.now
