@@ -15,8 +15,14 @@
                                 <td align="center" valign="top" style="color:#505050;font-family:Helvetica,Arial,sans-serif;font-size:15px;padding-top:40px;padding-right:40px;padding-bottom:30px;padding-left:40px;text-align:left">
                                   <h3>Hey <%= @user.name%>!</h3>
 
-                                  <h3>Thank you for your great reviews! Your MOOC-mates found them very helpful and insightful.</h3> 
-                                  <h3><%if !@review.other_rating_comments.nil? %> Here are a few of their comments: <div style="font-weight:lighter;">"<%=@review.other_rating_comments %>"</div><% end%></h3>
+                                  <h3>Thank you for your great reviews! Your MOOC-mates found them very helpful and insightful.
+                                    
+                                  <%if !@reviewsWithComments.nil? %> Here are a few of their comments: 
+                                    <%@reviewsWithComments.each do |r| %>
+                                      <div style="font-weight:lighter;">"<%=r.other_rating_comments %>"</div>
+                                    <% end%>
+                                  <% end%>
+                                  </h3>
                                 </td>
                             </tr>
                         </table>
