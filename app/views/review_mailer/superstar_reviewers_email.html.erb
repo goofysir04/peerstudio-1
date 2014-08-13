@@ -17,7 +17,7 @@
 
                                   <h3>Thank you for your great reviews! Your MOOC-mates found them very helpful and insightful.
                                     
-                                  <%if !@reviewsWithComments.nil? %> Here are a few of their comments: 
+                                  <%if !@reviewsWithComments.empty? %> Here are a few of their comments: 
                                     <%@reviewsWithComments.each do |r| %>
                                       <div style="font-weight:lighter;">"<%=r.other_rating_comments %>"</div>
                                     <% end%>
