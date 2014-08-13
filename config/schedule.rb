@@ -30,4 +30,6 @@ every :day do
 	rake "assignment:send_emails_to_superstar_reviewers"
 end
 
-# a way to offset this thing an hour off?
+every :day do
+	rake "assignment:send_emails_to_started_answers"
+end
