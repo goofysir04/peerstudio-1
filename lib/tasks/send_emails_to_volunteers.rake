@@ -1,7 +1,22 @@
 namespace :assignment do 
-	task :send_emails_to_volunteers => :environment do
+	task :remind_to_submit => :environment do
 		logger = Rails.logger
 		assignments = Assignment.active
+		logger.info "Sending emails to remind people to submit to Coursera"
+		if !assignments.nil? 
+			assignments.each do |assignment|
+				answers = assignment.answers.select(:user_id).distinct
+				answers.each do |answer|
+					logger.info "Sending email to remind #{answer.user_id}"
+					ReviewMailer.delay.submit_on_coursera(answer.user_id, assignment.id)
+				end
+			end
+		end
+	end
+
+	task :send_emails_to_volunteers => :environment do
+		logger = Rails.logger
+		assignments = Assignment.active.where('due_at < ?', Time.now+1.days)
 		logger.info "Sending emails to people who need it + volunteers"
 
 		#Different database servers on development and production

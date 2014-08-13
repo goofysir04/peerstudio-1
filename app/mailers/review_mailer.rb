@@ -13,4 +13,13 @@ class ReviewMailer < ActionMailer::Base
 		@assignment = assign
 		mail(to: @user.email, subject: 'A MOOC-mate needs your help!')
 	end
+
+	def submit_on_coursera(user_id, assignment_id)
+		@user = User.find(user_id)
+		@assignment = Assignment.find(assignment_id)
+		@answer= Answer.where(assignment: @assignment, user: @user, review_completed: false).order('updated_at desc').first
+		if !@answer.nil?
+			mail(to: @user.email, subject: "Remember to submit your assignment on Coursera")
+		end
+	end
 end

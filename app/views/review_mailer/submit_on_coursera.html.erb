@@ -1,0 +1,26 @@
+<p>Hey <%= @user.name%>!</p>
+
+<p>Remember, your assignment "<%= @assignment.title %>" is due TODAY. I hope you got great feedback from your mooc-mates on Peerstudio. </p>
+
+<p>Your essay will only be graded if you submit it on Coursera, not just on Peerstudio. So, if you haven't already, you should submit on Coursera RIGHT NOW. </p>
+
+<p>To help you out, here's what you need to know:</p>
+
+<ol>
+<li>Here's a link to your latest draft: <%= link_to answer_reviews_url(@answer), answer_reviews_url(@answer) %>. You should copy your answer from here.</li>
+
+<li>Go to the <a href="https://class.coursera.org/learning-001/human_grading/view/courses/972423/assessments/2/submissions">Coursera page</a></li>
+
+<li>Paste your essay in and click "Submit for grading"</li>
+</ol>
+
+<p>It is your responsibility to submit your assignment on time so that you can get your grade. It only takes a few minutes, so I strongly recommend you do it now.</p>
+
+<p>Good luck,<br/>
+Chinmay from Peerstudio</p>
+
+<%unless @answer.response.blank?%>
+	<p>PS: For your convenience, here's your latest draft.</p>
+
+	<%= Format.markdown @answer.response %>
+<% end %>
