@@ -16,7 +16,7 @@
     <% if @assignment.ended?%>
       <%= link_to assignment_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write" do %> Closed <%end%>
     <% else %>
-      <%= link_to assignment_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write" do %> Write your answer <div class="deadline"> (Due <%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</div>
+      <%= link_to new_assignment_answer_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write" do %> Write your answer <div class="deadline"> (Due <%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</div>
       <% end %>
     <% end %>
   </div>
