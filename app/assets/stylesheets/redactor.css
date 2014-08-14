@@ -480,7 +480,7 @@ body .redactor_air .redactor_toolbar {
   content: "\e60e";
 }
 .re-image:before {
-  content: "\1f4ce";
+  content: "\e60f";
 }
 .re-fullscreen:before {
   content: "\e610";
