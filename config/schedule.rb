@@ -33,3 +33,7 @@ end
 every :day do
 	rake "assignment:send_emails_to_started_answers"
 end
+
+every :day do
+	rake "assignment:send_emails_to_unrevised_answers"
+end

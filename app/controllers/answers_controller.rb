@@ -239,6 +239,6 @@ class AnswersController < ApplicationController
       params.permit(:assignment_id)
       params.permit(:page)
       params.require(:answer).permit(:response, :revision_name, :revision_list, :question_id, :user_id, :predicted_score, :current_score, :evaluations_wanted, :total_evaluations, :confidence, :assignment_id,
-        :reflection, :review_request)
+        :reflection, :review_request, :revision_email_sent)
     end
 end

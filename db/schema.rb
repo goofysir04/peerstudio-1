@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20140812140151) do
     t.boolean  "review_completed",    default: false
     t.text     "review_request"
     t.boolean  "is_blank_submission", default: false
+    t.boolean  "revision_email_sent", default: false
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
