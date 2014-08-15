@@ -1,7 +1,7 @@
 namespace :assignment do 
 	task :remind_to_submit => :environment do
 		logger = Rails.logger
-		assignments = Assignment.active
+		assignments = Assignment.active.where('due_at < ?', Time.now+2.days)
 		logger.info "Sending emails to remind people to submit to Coursera"
 		if !assignments.nil? 
 			assignments.each do |assignment|
