@@ -139,7 +139,7 @@
 			imageUploadParam: 'file', // input name
 			imageResizable: true,
 
-			fileUpload: false, // url
+			fileUpload: true, // url
 			fileUploadParam: 'file', // input name
 			clipboardUpload: true, // or false
 			clipboardUploadUrl: false, // url
