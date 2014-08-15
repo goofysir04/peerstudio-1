@@ -18,11 +18,11 @@
                                     <% if @numOfReviews == 0 %>
                                       Write your first review for <i><%= @assignment.title %></i>!
                                     <% else %>
-                                      <%= @numOfReviews %> MOOC-mates appreciated your help on <i><%= @assignment.title %></i>!
+                                      <%= @numOfReviews %> MOOC-mates appreciate your help on <i><%= @assignment.title %></i>!
                                   <% end%>
                                   </h2>
                                   <% if !@reviewRequests.nil? %>
-                                    <h3>Help <%if @numOfReviews ==0 %>your<%else%>more<% end %> MOOC-mates with some of their concerns:
+                                    <h3>Help <%if @numOfReviews ==0 %>your<%else%>other<% end %> MOOC-mates with some of their concerns:
                                       <ul style="font-weight:lighter;list-style-type:none;">
                                         <% @reviewRequests.each do |r| %>
                                           <li style="padding-top: 3px;">"<%=r%>"</li>
@@ -40,7 +40,7 @@
                     <table border="0" cellpadding="0" cellspacing="0" style="background-color:#6dc6dd;border-collapse:separate!important;border-radius:3px">
                         <tr>
                           <td>
-                            <%= link_to "Help another MOOC-mate out?", assignment_url(@assignment), class:"btn btn-large btn-info"%>
+                            <%= link_to "Help your MOOC-mate out?", assignment_url(@assignment), class:"btn btn-large btn-info"%>
                           </td>
                         </tr>
                     </table>
