@@ -14,39 +14,31 @@
                             <tr>
                                 <td align="center" valign="top" style="color:#505050;font-family:Helvetica,Arial,sans-serif;font-size:15px;padding-top:40px;padding-right:40px;padding-bottom:30px;padding-left:40px;text-align:left">
                                   <h3>Hey <%= @user.name%>!</h3>
-                                  <h2>
-                                    <% if @numOfReviews == 0 %>
-                                      Write your first review for <i><%= @assignment.title %></i>!
-                                    <% else %>
-                                      <%= @numOfReviews %> MOOC-mates appreciate your help on <i><%= @assignment.title %></i>!
+
+                                  <h3>Thank you for your great reviews! Your MOOC-mates rated them to be both helpful and insightful.
+                                    
+                                  <%if !@reviewsWithComments.empty? %> Here are a few of their comments: 
+                                    <%@reviewsWithComments.each do |r| %>
+                                      <div style="font-weight:lighter;">"<%=r.other_rating_comments %>"</div>
+                                    <% end%>
                                   <% end%>
-                                  </h2>
-                                  <% if !@reviewRequests.nil? %>
-                                    <h3>Help <%if @numOfReviews ==0 %>your<%else%>other<% end %> MOOC-mates with some of their concerns:
-                                      <ul style="font-weight:lighter;list-style-type:none;">
-                                        <% @reviewRequests.each do |r| %>
-                                          <li style="padding-top: 3px;">"<%=r%>"</li>
-                                        <% end %>
-                                      </ul>
-                                    </h3>
-                                  <% end %>
+                                  </h3>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                </tr>
+                </tr>    
                 <tr>
                   <td align="center" valign="middle" style="padding-right:40px;padding-bottom:40px;padding-left:40px">
                     <table border="0" cellpadding="0" cellspacing="0" style="background-color:#6dc6dd;border-collapse:separate!important;border-radius:3px">
                         <tr>
                           <td>
-                            <%= link_to "Help your MOOC-mate out?", assignment_url(@assignment), class:"btn btn-large btn-info"%>
+                            <%= link_to "Review some more?", assignment_url(@assignment), class:"btn btn-large btn-info"%>
                           </td>
                         </tr>
                     </table>
-                    <div style="color:#606060;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">Remember that you must give two MOOC-mates feedback before you can see your own, so helping your MOOC-mate helps you!</div>
                   </td>
-                </tr>          
+                </tr>       
                 <tr>
                     <td align="center" valign="top">
                         <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailFooter" style="color:#505050;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">
@@ -58,17 +50,6 @@
                         </table>
                     </td>
                 </tr>
-                <tr>
-                  <td align="center" valign="top" style="padding-bottom:30px">
-                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="footerDisclosure" style="color:#606060;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">
-                      <tr>
-                        <td>
-                          <small>You received this message because you signed up for a course on <strong>PeerStudio</strong>. If you would like to opt-out of future notification emails, reply to this email saying so.</small>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr> 
             </table>
         </td>
     </tr>
