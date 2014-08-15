@@ -1,0 +1,9 @@
+Hey <%= @user.name%>!
+
+Thank you for your great reviews! Your MOOC-mates rated them to be both helpful and insightful.
+<%if !@reviewsWithComments.empty? %> Here are a few of their comments: 
+	<%@reviewsWithComments.each do |r| %>
+		"<%=r.other_rating_comments %>"
+	<% end%>
+<% end%>
+Review some more?  <%= assignment_url(@assignment)%>

@@ -1,5 +1,16 @@
 Hey <%= @user.name%>!
+<% if @numOfReviews == 0 %>
+	Write your first review for <%= @assignment.title %>!
+<% else %>
+	<%= @numOfReviews %> MOOC-mates appreciate your help on <%= @assignment.title %>!
+<% end%>
 
-A mooc-mate needs help with their submission on <%= @assignment.title %>. Could you please give them feedback? They'd really appreciate it! 
+<% if !@reviewRequests.nil? %>
+	Help <%if @numOfReviews ==0 %>your<%else%>other<% end %> MOOC-mates with some of their concerns:
+	<% @reviewRequests.each do |r| %>
+		"<%=r%>"
+	<% end %>
+<% end %>
 
-Here's a link to the assignment: <%= assignment_url(@assignment) %>. Remember that you need to give two peers feedback before you can see your own, so helping your mooc-mate helps you!
+<%= link_to "Help your MOOC-mate out?", assignment_url(@assignment)%>
+Remember that you must give two MOOC-mates feedback before you can see your own, so helping your MOOC-mate helps you!
