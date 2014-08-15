@@ -2,6 +2,7 @@ Humanmachine::Application.routes.draw do
 
   get "welcome/index"
   get "welcome/contact"
+  get "welcome/tos"
   get "uploads/create"
   resources :courses do
     resources :assignments, shallow: true
