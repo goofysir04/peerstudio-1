@@ -28,7 +28,7 @@
 <div class="clearfix"></div>
 
 <div class="form-actions">
-  <%= f.submit "Sign up", :class => 'btn btn-large btn-primary' %> &nbsp;&nbsp;&nbsp; We will send all email to your <%=@provider.titleize%> email address, <strong><%=@email%>. By signing up, you agree to the <%= link_to "Terms of Service and Privacy Policy", welcome_tos_path %>
+  <%= f.submit "Sign up", :class => 'btn btn-large btn-primary' %> &nbsp;&nbsp;&nbsp; By signing up, you agree to the <%= link_to "Terms of Service and Privacy Policy", welcome_tos_path %>
   <div style="float:right;">
     <%= render "devise/shared/links" %>
   </div>
