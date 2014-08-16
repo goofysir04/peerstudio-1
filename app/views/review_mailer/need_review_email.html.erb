@@ -3,7 +3,7 @@
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
-	 <body>
+   <body>
     <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="background-color:#f2f2f2">
     <tr>
         <td align="center" valign="top" style="padding-top:30px;padding-bottom:30px">
@@ -22,7 +22,7 @@
                                   <% end%>
                                   </h2>
                                   <% if !@reviewRequests.nil? %>
-                                    <h3>Help <%if @numOfReviews ==0 %>your<%else%>other<% end %> MOOC-mates with some of their concerns:
+                                    <h3>Help <%if @numOfReviews == 0 %>your<%else%>other<% end %> MOOC-mates with some of their concerns:
                                       <ul style="font-weight:lighter;list-style-type:none;">
                                         <% @reviewRequests.each do |r| %>
                                           <li style="padding-top: 3px;">"<%=r%>"</li>
@@ -40,7 +40,7 @@
                     <table border="0" cellpadding="0" cellspacing="0" style="background-color:#6dc6dd;border-collapse:separate!important;border-radius:3px">
                         <tr>
                           <td>
-                            <%= link_to "Help your MOOC-mate out?", assignment_url(@assignment), class: "btn btn-large btn-primary"%>
+                            <%= button_to "Help your MOOC-mate out?", assignment_url(@assignment), method: "get", class: "btn btn-large btn-info"%>
                           </td>
                         </tr>
                     </table>
