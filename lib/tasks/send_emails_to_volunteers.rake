@@ -43,19 +43,19 @@ namespace :assignment do
 							logger.info "Sending emails to people who volunteered: #{vol.user.id}"
 							unless h.user.opted_out_help_email?
 								ReviewMailer.delay.need_review_email(vol.user, assign, review_requests)
+								vol.count = vol.count - 1
+								vol.last_email_time = Time.now
+								vol.save!
 							end							
-							vol.count = vol.count - 1
-							vol.last_email_time = Time.now
-							vol.save!
 						end
 					else 
 						have_to_review_still.each do |h|
 							logger.info "Sending emails to people who need it: #{h.user_id}"
 							unless h.user.opted_out_help_email?
 								ReviewMailer.delay.need_review_email(h.user, assign, review_requests)
+								h.last_email_time = Time.now
+								h.save!
 							end
-							h.last_email_time = Time.now
-							h.save!
 						end
 					end
 				end
