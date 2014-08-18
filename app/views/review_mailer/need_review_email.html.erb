@@ -39,9 +39,9 @@
                   <td align="center" valign="middle" style="padding-right:40px;padding-bottom:40px;padding-left:40px">
                     <table border="0" cellpadding="0" cellspacing="0" style="background-color:#6dc6dd;border-collapse:separate!important;border-radius:3px">
                         <tr>
-                          <td>
-                            <%= button_to "Help your MOOC-mate out?", assignment_url(@assignment), method: "get", class: "btn btn-large btn-info"%>
-                          </td>
+                            <td align="center" valign="middle" style="color:#ffffff;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;line-height:100%;padding-top:18px;padding-right:15px;padding-bottom:15px;padding-left:15px">
+                              <%= link_to "Help your MOOC-mate out?", assignment_url(@assignment), {:style => "color:#ffffff;text-decoration:none"} %>
+                            </td>
                         </tr>
                     </table>
                     <div style="color:#606060;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:125%">Remember that you must give two MOOC-mates feedback before you can see your own, so helping your MOOC-mate helps you!</div>
