@@ -33,6 +33,12 @@ class AnswersController < ApplicationController
         redirect_to answer_reviews_path(@latest_answer), notice: "You have a new review on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
       end
     end
+    #else
+    #if in waitlist, don't allow to create
+    if current_user.experimental_condition == "waitlist"
+      redirect_to waitlist_assignment_path(@assignment) and return
+    end
+
     @answer = Answer.new
     @answer.assignment = @assignment
     @answer.active = false

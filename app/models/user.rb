@@ -14,15 +14,33 @@ class User < ActiveRecord::Base
 	has_many :assessments
 	has_many :verifications
 
+  #This was for the L@S paper. 
 	def experimental_condition
-		if id%5 == 0
-			return "baseline"
-		elsif id%2 == 0
-			return "verify"
-		else
-			return "identify"
-		end	
+		# if id%5 == 0
+		# 	return "baseline"
+		# elsif id%2 == 0
+		# 	return "verify"
+		# else
+		# 	return "identify"
+		# end	
+    if !self.experimental_group.blank?
+      return self.experimental_group
+    end
+
+    if id%5==0
+      self.experimental_group = "waitlist"
+      self.save!
+    elsif id%2 == 0
+      self.experimental_group =  "fastlane"
+      self.save!
+    else
+      self.experimental_group = "normal"
+      self.save!
+    end
+
+    return self.experimental_group
  	end
+
 
 
  	class ImportJob <  Struct.new(:file_text)
