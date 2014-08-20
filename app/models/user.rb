@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 	has_many :verifications
 
   #This was for the L@S paper. 
-	def experimental_condition
+	def get_and_store_experimental_condition!
 		# if id%5 == 0
 		# 	return "baseline"
 		# elsif id%2 == 0
@@ -23,23 +23,22 @@ class User < ActiveRecord::Base
 		# else
 		# 	return "identify"
 		# end	
-    if !self.experimental_group.blank?
-      return self.experimental_group
-    end
-
-    if id%5==0
-      self.experimental_group = "waitlist"
-      self.save!
-    elsif id%2 == 0
-      self.experimental_group =  "fastlane"
-      self.save!
-    else
-      self.experimental_group = "normal"
+    if self.experimental_group.blank?
+      self.experimental_group = self.experimental_condition
       self.save!
     end
-
     return self.experimental_group
  	end
+
+  def experimental_condition
+    if id%5==0
+      return "waitlist"
+    elsif id%2 == 0
+      return "fastlane"
+    else
+      return "normal"
+    end
+  end
 
 
 

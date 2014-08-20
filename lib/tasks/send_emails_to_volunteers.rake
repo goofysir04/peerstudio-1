@@ -34,11 +34,11 @@ namespace :assignment do
 				thirty_min_ans = assign.answers.where(submitted: true, total_evaluations: 0, review_completed: false).where("submitted_at <= ?", 30.minutes.ago)
 				if thirty_min_ans.count == 0 
 					#here, we find people who still need to give reviews
-					have_to_review_still = TriggerAction.where(["assignment_id = ? and `trigger` = ? and count > ? and last_email_time IS NULL or last_email_time < ?", assign.id, "review_required", 0, 12.hours.ago]).order(random_function).limit(4)
+					have_to_review_still = TriggerAction.where(["assignment_id = ? and `trigger` = ? and count > ? and (last_email_time IS NULL or last_email_time < ?)", assign.id, "review_required", 0, 12.hours.ago]).order(random_function).limit(4)
 					review_requests = thirty_min_ans.where('review_request is not NULL').map {|a| a.review_request}
 					if have_to_review_still.empty? #nil didn't work, so used empty
 						#if no one needs to give reviews, we move onto volunteers, aka people who don't need to give any more reviews
-						volunteers = TriggerAction.where(["assignment_id = ? and `trigger` = ? and count > ? and last_email_time IS NULL or last_email_time < ?", assign.id, "email_count", 0, 12.hours.ago]).order(random_function).limit(4)
+						volunteers = TriggerAction.where(["assignment_id = ? and `trigger` = ? and count > ? and (last_email_time IS NULL or last_email_time < ?)", assign.id, "email_count", 0, 12.hours.ago]).order(random_function).limit(4)
 						volunteers.each do |vol| #send email, set last_email_time, decrement "email_count"
 							logger.info "Sending emails to people who volunteered: #{vol.user.id}"
 							unless vol.nil? or vol.user.opted_out_help_email?

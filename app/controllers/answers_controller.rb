@@ -35,7 +35,7 @@ class AnswersController < ApplicationController
     end
     #else
     #if in waitlist, don't allow to create
-    if current_user.experimental_condition == "waitlist"
+    if current_user.get_and_store_experimental_condition! == "waitlist"
       redirect_to waitlist_assignment_path(@assignment) and return
     end
 
