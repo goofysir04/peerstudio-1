@@ -33,9 +33,11 @@ class User < ActiveRecord::Base
   def experimental_condition
     if id%5==0
       return "waitlist"
-    elsif id%2 == 0
-      return "fastlane"
-    else
+    elsif id%5 == 1
+      return "review_only"
+    elsif id% 5 == 2
+      return "submit_only"
+    else 
       return "normal"
     end
   end

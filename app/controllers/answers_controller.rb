@@ -24,6 +24,9 @@ class AnswersController < ApplicationController
 
   # GET /answers/new
   def new
+
+    current_user.tried_answering = true
+    current_user.save!
     @latest_answer = Answer.where(assignment: @assignment, user: current_user, review_completed: false).order('updated_at desc').first
 
     if !@latest_answer.nil?

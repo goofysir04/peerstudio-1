@@ -98,6 +98,14 @@ class ReviewsController < ApplicationController
   #Create a new review with a particular type 
   # such as paired, exchange, final etc
   def create_with_type
+
+    current_user.tried_reviewing = true
+    current_user.save!
+
+    if current_user.experimental_condition == "waitlist"
+      redirect_to waitlist_assignment_path(params[:id]) and return
+    end
+
     @submitter = User.find_by_email(params[:typed_review][:email])
     review_type = params[:typed_review][:type]
     if @submitter.nil? and review_type != "final"
