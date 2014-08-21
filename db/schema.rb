@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140821002229) do
+ActiveRecord::Schema.define(version: 20140821042854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20140821002229) do
     t.text     "review_request"
     t.boolean  "is_blank_submission", default: false
     t.boolean  "revision_email_sent", default: false
+    t.boolean  "useful_feedback"
   end
 
   add_index "answers", ["assignment_id"], name: "fk__answers_assignment_id", using: :btree
