@@ -10,7 +10,7 @@ Reviewing <%= answer.assignment.title %>
 
 <div class="row-fluid syncHighlighting">
 
-<% if !answer.assignment.example.nil?%>
+<% if !answer.assignment.example.blank?%>
   
   <div class="col-md-6">
     <div class="paper">
