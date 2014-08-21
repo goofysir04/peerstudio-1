@@ -13,7 +13,7 @@ class ReviewMailer < ActionMailer::Base
 		@assignment = assign
 		@reviewRequests = reviewRequests
 		@numOfReviews = Review.where(["user_id = ? and assignment_id = ? and completed_at IS NOT NULL", user.id, assign.id]).count
-		mail(to: @user.email, subject: 'A MOOC-mate needs your help!')
+		mail(to: @user.email, subject: "A MOOC-mate needs your help on #{@assignment.title}!")
 	end
 	
 	def submit_on_coursera(user_id, assignment_id)
