@@ -8,6 +8,11 @@ class ReviewsController < ApplicationController
   def index
     @answer = Answer.find(params[:answer_id])
     @trigger = TriggerAction.pending_action("review_required", current_user, @answer.assignment)
+
+    if @trigger.nil? and @answer.reviews_first_seen_at.nil?
+      @answer.reviews_first_seen_at = Time.now
+      @answer.save!
+    end
   end
 
   # GET /reviews/1

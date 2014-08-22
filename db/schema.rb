@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140821042854) do
+ActiveRecord::Schema.define(version: 20140822174417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,30 +60,31 @@ ActiveRecord::Schema.define(version: 20140821042854) do
     t.integer  "user_id"
     t.float    "predicted_score"
     t.float    "current_score"
-    t.integer  "evaluations_wanted",  default: 0
-    t.integer  "total_evaluations",   default: 0
+    t.integer  "evaluations_wanted",    default: 0
+    t.integer  "total_evaluations",     default: 0
     t.float    "confidence"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state",               default: "identify"
-    t.string   "evaluation_type",     default: "default"
-    t.boolean  "staff_graded",        default: false
-    t.integer  "push_count",          default: 0
+    t.string   "state",                 default: "identify"
+    t.string   "evaluation_type",       default: "default"
+    t.boolean  "staff_graded",          default: false
+    t.integer  "push_count",            default: 0
     t.string   "base_revision_name"
     t.integer  "assignment_id"
-    t.boolean  "active",              default: true
-    t.boolean  "starred",             default: false
-    t.integer  "pending_reviews",     default: 0
-    t.boolean  "submitted",           default: false
-    t.boolean  "is_final",            default: false
+    t.boolean  "active",                default: true
+    t.boolean  "starred",               default: false
+    t.integer  "pending_reviews",       default: 0
+    t.boolean  "submitted",             default: false
+    t.boolean  "is_final",              default: false
     t.integer  "previous_version_id"
     t.text     "reflection"
     t.datetime "submitted_at"
-    t.boolean  "review_completed",    default: false
+    t.boolean  "review_completed",      default: false
     t.text     "review_request"
-    t.boolean  "is_blank_submission", default: false
-    t.boolean  "revision_email_sent", default: false
+    t.boolean  "is_blank_submission",   default: false
+    t.boolean  "revision_email_sent",   default: false
     t.boolean  "useful_feedback"
+    t.datetime "reviews_first_seen_at"
   end
 
   add_index "answers", ["assignment_id"], name: "fk__answers_assignment_id", using: :btree
