@@ -48,4 +48,16 @@ class ReviewMailer < ActionMailer::Base
 		emailTitle = @user.name + ", use your feedback today!"
 		mail(to: @user.email, subject: emailTitle)
 	end
+
+	def send_reminder_to_start(user, assignment)
+		@user = user
+		@assignment = assignment
+		mail(to: @user.email, subject: "Do you want feedback on #{@assignment.title}?")
+	end
+
+	def send_waitlist_reminder(user, assignment)
+		@user = user
+		@assignment = assignment
+		mail(to: @user.email, subject: "Reminder to get started on #{@assignment.title}")
+	end
 end
