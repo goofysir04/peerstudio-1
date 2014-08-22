@@ -30,7 +30,7 @@ namespace :assignment do
 		a = Assignment.find(9)
 		enrollments = Enrollment.where(course: a.course).select("user_id").map { |e| e.user_id }
 		users_that_havent_enrolled = User.where(provider: "coursera").where(" id not in (?)", enrollments)
-		users_that_havent_started.each do |user|
+		users_that_havent_enrolled.each do |user|
 			next if user.nil?
 			if a.answers.where(user: user).count > 0
 				logger.info "Skipping user: #{user.email} because they've already started."
@@ -38,10 +38,10 @@ namespace :assignment do
 			end
 			if user.experimental_condition == "waitlist"
 				logger.info "Sending a wait list reminder"
-				ReviewMailer.delay.send_waitlist_reminder(user_id, a.id)
+				ReviewMailer.delay.send_waitlist_reminder(user.id, a.id)
 			else
 				logger.info "Sending an activated reminder"
-				ReviewMailer.delay.send_reminder_to_start(user_id, a.id)
+				ReviewMailer.delay.send_reminder_to_start(user.id, a.id)
 			end
 		end
 	end

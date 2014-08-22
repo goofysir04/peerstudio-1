@@ -31,6 +31,10 @@ class User < ActiveRecord::Base
  	end
 
   def experimental_condition
+    if !self.experimental_group.blank?
+      return self.experimental_group
+    end
+    
     if id%5==0
       return "waitlist"
     elsif id%5 == 1
