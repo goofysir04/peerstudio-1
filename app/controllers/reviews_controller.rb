@@ -59,7 +59,7 @@ class ReviewsController < ApplicationController
       @answer= @review.answer
       process_review_triggers_and_answer!(@review)
       if save_review_and_attributes!(@review)
-        format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Ok, we saved that review!' }
+        format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Thanks, we sent that review to your classmate!' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
