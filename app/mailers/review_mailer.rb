@@ -60,4 +60,32 @@ class ReviewMailer < ActionMailer::Base
 		@assignment = Assignment.find(assignment_id)
 		mail(to: @user.email, subject: "Reminder to get started on #{@assignment.title}")
 	end
+
+	def blank_email_notice(answer, user_id, assignment_id)
+		@user = User.find(user_id)
+		@answer = answer
+		@assignment = Assignment.find(assignment_id)
+		mail(to: @user.email, subject: "#{@user.name}, you turned in a blank submission!")
+	end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

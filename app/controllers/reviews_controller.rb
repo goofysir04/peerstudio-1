@@ -81,6 +81,7 @@ class ReviewsController < ApplicationController
       @answer.save!
       process_review_triggers_and_answer!(@review)
       if (@review.update(active: true))
+        ReviewMailer.delay.blank_email_notice(@answer, @answer.user_id, @review.assignment_id)
         format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Thanks, we\'ll stop asking others to review that submission!' }
         format.json { head :no_content }
       else
