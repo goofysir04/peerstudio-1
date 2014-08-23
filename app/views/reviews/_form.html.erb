@@ -137,8 +137,7 @@
           <p>Which comment do you think would help you improve your work most?</p>
           <% unless @latest_reviewer_answer.nil?%>
             <div class="row-fluid well">
-                <% answer_excerpt = excerpt @latest_reviewer_answer.response, 'me |myself | I |', radius: 40
-                   answer_excerpt = @latest_reviewer_answer.response.truncate(100) + '...'  if answer_excerpt.blank? 
+                <% answer_excerpt = @latest_reviewer_answer.response.truncate(350) + '...'  if answer_excerpt.blank? 
                  %>
                <%= Format.markdown answer_excerpt %>
             </div>
@@ -160,7 +159,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-success" data-dismiss="modal">Yes, I'll expand on my comments</button>
-          <button type="button" class="btn btn-default" id="force-subimt-review">Submit anyway (course staff notified)</button>
+          <button type="button" class="btn btn-default" id="force-subimt-review">Submit anyway</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
