@@ -106,6 +106,7 @@ class AssignmentsController < ApplicationController
 
     @reviews_last_day_lagging = Review.where(assignment: @assignment).where("completed_at > ?", Time.now-1.day).count
     @submissions_last_day_lagging = @assignment.answers.where("submitted_at > ?", Time.now-1.day).count
+    @submissions_last_day_havent_seen_reviews = @assignment.answers.where("submitted_at > ?", Time.now-1.day).where(reviews_first_seen_at: nil).where('total_evaluations > ?',0).count
     @revisions_last_day_lagging = @assignment.answers.where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count
     @revisions_with_useful_feedback = @assignment.answers.where(useful_feedback: true).where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count
     @revisions_with_no_useful_feedback = @assignment.answers.where(useful_feedback: false).where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count

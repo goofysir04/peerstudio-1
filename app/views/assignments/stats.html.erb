@@ -1,7 +1,7 @@
 <h2>Stats</h2>
 	<table class="table">
 		<tr>
-			<td>Submissions past 24 hours</td><td><%= @submissions_last_day_lagging %> </td>
+			<td>Submissions past 24 hours</td><td><%= @submissions_last_day_lagging %> (<%= @submissions_last_day_havent_seen_reviews %> have unopened reviews.)</td>
 		</tr>
 		<tr>
 			<td>Reviews completed past 24 hours</td><td><%= @reviews_last_day_lagging %></td>
