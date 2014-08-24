@@ -22,7 +22,7 @@ class AssignmentsController < ApplicationController
       @my_reviews = Review.where(answer_id: @my_answers, active: true, assignment_id: @assignment.id)
       @reviews_by_me = Review.where(active: true, assignment_id: @assignment.id).where("user_id = ? or copilot_email = ?", current_user.id,current_user.email)
       @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
-      
+
       unless @out_of_box_answers_with_count.blank?
         @out_of_box_answers = @out_of_box_answers_with_count.reject {|k,v| v < 2 }
       end
@@ -37,7 +37,7 @@ class AssignmentsController < ApplicationController
 
   def show_all_answers
     @all_answers = @assignment.answers.reviewable
-    respond_to do |format| 
+    respond_to do |format|
       format.js
     end
   end
@@ -107,6 +107,7 @@ class AssignmentsController < ApplicationController
     @reviews_last_day_lagging = Review.where(assignment: @assignment).where("completed_at > ?", Time.now-1.day).count
     @submissions_last_day_lagging = @assignment.answers.where("submitted_at > ?", Time.now-1.day).count
     @revisions_last_day_lagging = @assignment.answers.where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count
+    @revisions_with_useful_feedback = @assignment.answers.where(useful_feedback: true).where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count
 
     @top_reviewers_lagged = Review.where(assignment: @assignment).where('completed_at > ?', Time.now-1.day).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
     @top_reviewers = Review.where(assignment: @assignment).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
@@ -117,7 +118,7 @@ class AssignmentsController < ApplicationController
   end
 
   def grades
-    if current_user.admin? 
+    if current_user.admin?
       @permitted_user = params[:user].nil? ? current_user : User.find(params.require(:user))
     else
       redirect_to @assignment and return unless @assignment.grades_released?
@@ -158,7 +159,7 @@ def review_first
     @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
 
     unless params[:recent_review].nil?
-      @recent_review = Review.find(params[:recent_review])  
+      @recent_review = Review.find(params[:recent_review])
     end
     #otherwise render
     render layout: "one_column"

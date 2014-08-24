@@ -30,13 +30,13 @@
           <% next if r.object.rubric_item.nil? %>
           <li class="compute-score">
             <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
-            
+
             <div class="progress score-progress"></div>
 
             <%= sanitize r.object.rubric_item.title %>
 
             <table>
-                
+
               <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
                 <tr>
 
@@ -48,7 +48,7 @@
                     </div>
                   <% end %>
                     <% if b.object.attribute_type=="binary" %>
-                      <div class="btn-group btn-toggle"> 
+                      <div class="btn-group btn-toggle">
                         <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
                         <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
                         <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
@@ -75,10 +75,10 @@
           </li>
         <% end %>
         <li id="overall-comments">
-          <strong>Overall comments</strong> 
+          <strong>Overall comments</strong>
           <legend></legend>
-          <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples, and remember to be positive and encouraging :)"%>
-          <%= f.text_area :comments, size: "10x5", class:"review_text form-control comment-quality-checked" %>
+          <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples."%>
+          <%= f.text_area :comments, size: "10x5", class:"review_text form-control comment-quality-checked", placeholder:"Remember to be positive and encouraging :)" %>
           <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
           <legend></legend>
           <table>
@@ -88,7 +88,7 @@
           </table>
         </li>
       </ul>
-      
+
       <div class="actions" id="submit-button">
         <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
         <%= f.submit "Submit review", class: "btn btn-primary" %>
@@ -137,7 +137,7 @@
           <p>Which comment do you think would help you improve your work most?</p>
           <% unless @latest_reviewer_answer.nil?%>
             <div class="row-fluid well">
-                <% answer_excerpt = @latest_reviewer_answer.response.truncate(350) + '...'  if answer_excerpt.blank? 
+                <% answer_excerpt = @latest_reviewer_answer.response.truncate(350) + '...'  if answer_excerpt.blank?
                  %>
                <%= Format.markdown answer_excerpt %>
             </div>
