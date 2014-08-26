@@ -1,10 +1,10 @@
 <h1>
   <%= @assignment.title %>
-  <small>  
+  <small>
     <% if @assignment.ended?%>
     Closed
     <% else %>
-    Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> 
+    Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %>
     <% end %>
   </small>
 </p>
@@ -25,7 +25,7 @@
       <%= link_to assignment_path(@assignment), class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %> Closed <%end%>
     <% else %>
       <%= link_to create_typed_review_assignment_path(assignment_id:@assignment,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
-      Give peers feedback 
+      Give peers feedback
       <% end %>
     <% end %>
   </div>
@@ -45,8 +45,8 @@
 </div>
 <div class="clearfix"></div>
 <% if !@assignment.ended?%>
- <h3 style="font-weight:300; display:none;" id="countdown-banner"> Submit a draft within <span id="time-left" style="color: #428bca; font-weight:bolder;">4 hours</span> and get feedback by <span id="feedback-time">10 PM</span> <span id="feedback-day">tonight</span>. <small>(You can improve your essay and submit again!)</small></h3>
- <% end %>
+ <%= render partial: "courses/reviewing_delay", locals:{assignment: @assignment} %>
+<% end %>
 
 <div class="row-fluid">
   <div id="assignment_description">
@@ -83,16 +83,16 @@
                     <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                       <td>
                       <% if answer.submitted? %>
-                      <span class="label label-success">Being reviewed</span> 
+                      <span class="label label-success">Being reviewed</span>
                       <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
                       <% else %>
-                    
+
                       <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                       <% end %>
                     </td>
-                    
+
                   </tr>
-                  <% end %> 
+                  <% end %>
                 <% end %>
               </tbody>
             </table>
@@ -121,7 +121,7 @@
               <% if @my_reviews %>
                 <% @my_reviews.each do |review| %>
                 <tr>
-                  
+
                   <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                   <% if review.rating_completed? %>
                     <td><span class="label label-success">Rating complete</span></td>
@@ -132,8 +132,8 @@
                   <%= link_to "Read and Rate", rate_review_path(review), class:"btn btn-primary" %>
                 </td>
                 </tr>
-                <% end %> 
-              <% end %> 
+                <% end %>
+              <% end %>
             </tbody>
           </table>
           <h3>Reviews I wrote</h3>
@@ -154,10 +154,10 @@
                       <%= link_to "Edit", edit_review_path(review), class:"btn" %> <%= link_to 'Delete review', review, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                   </td>
                 </tr>
-                <% end %> 
-              <% end %> 
+                <% end %>
+              <% end %>
             </tbody>
-          </table> 
+          </table>
           <% end %>
         </div>
         <% if user_signed_in? and current_user.admin? %>
@@ -177,4 +177,3 @@
     </div>
   </div>
 </div>
-

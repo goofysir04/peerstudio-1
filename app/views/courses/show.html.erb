@@ -28,10 +28,10 @@
   <div class="btn-group">
       <%= link_to "Write your answer", new_assignment_answer_path(@closest_assign), class: "btn btn-default" %>
   </div>
-  <div class="btn-group">   
+  <div class="btn-group">
       <%= link_to create_typed_review_assignment_path(@closest_assign, assignment_id:@closest_assign,typed_review:{type:"final", revision:"Final Draft"}), class: "btn btn-default", method: :post do %> Give peers feedback <% end %>
   </div>
-  <h3 style="font-weight:300; display:none;" id="countdown-banner"> Submit a draft within <span id="time-left" style="color: #428bca; font-weight:bolder;">4 hours</span> and get feedback by <span id="feedback-time">10 PM</span> <span id="feedback-day">tonight</span>. <small>(You can improve your essay and submit again!)</small></h3>
+  <%= render partial: "reviewing_delay", locals: {assignment: @closest_assign} %>
 </div>
   <div class="clearfix"></div>
 <% end %>
@@ -46,7 +46,7 @@
       <th>Title</th>
       <th>Description</th>
       <th>Due on</th>
-      <% if user_signed_in? && current_user.admin? %> 
+      <% if user_signed_in? && current_user.admin? %>
       <th colspan="2"><%= link_to "Add assignment", new_course_assignment_path(@course), class: "btn btn-success"%> </th>
       <% end %>
     </tr>
@@ -61,7 +61,7 @@
 </div>
 <div class="row">
   <% if user_signed_in? && current_user.admin? %>
-  <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p> 
+  <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p>
   <% end %>
 </div>
 </div>

@@ -55,7 +55,7 @@
               </td>
               <td>
                 <%= f.text_field :institution, class:"form-control", placeholder: "Stanford University" %>
-              </td>        
+              </td>
             </tr>
           </table>
         </div>
@@ -67,6 +67,16 @@
     <div class="checkbox">
       <%= f.label :hidden do %>
         <%= f.check_box :hidden %> <strong>This course is hidden</strong> (Don't show it on the PeerStudio homepage)
+      <% end %>
+    </div>
+
+    <div class="checkbox">
+      <%= f.label :show_timer do %>
+        <%= f.check_box :show_timer %> <strong>Show students an estimate of reviewing delay</strong>
+        <div class="well">
+          <p>Preview:</p>
+            <%= render partial: "reviewing_delay", locals:{assignment: nil} %>
+        </div>
       <% end %>
     </div>
     <div class="checkbox">
