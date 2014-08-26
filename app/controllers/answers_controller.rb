@@ -151,7 +151,7 @@ class AnswersController < ApplicationController
       if @answer.save
         trigger = TriggerAction.add_trigger(current_user, @answer.assignment, trigger: "review_required", count: -2)
         trigger.save!
-        format.html {redirect_to assignment_path(@answer.assignment), notice: "We'll stop asking students to review your draft now."}
+        format.html {redirect_to reflect_answer_path(@answer), notice: "We'll stop asking students to review your draft now."}
         format.json { head :no_content }
         format.js
       else
