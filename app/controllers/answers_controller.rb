@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star, 
+  before_action :set_answer, only: [:show, :edit, :update, :destroy,:star,
     :submit_for_feedback, :submit_for_grades, :unsubmit_for_feedback,
     :feedback_preferences,
     :reflect, :clone]
@@ -42,18 +42,23 @@ class AnswersController < ApplicationController
       redirect_to waitlist_assignment_path(@assignment) and return
     end
 
-    @answer = Answer.new
-    @answer.assignment = @assignment
-    @answer.active = false
-    @answer.user = current_user
-    @answer.response = @assignment.template unless @assignment.template.blank?
+    @latest_answer_unreviewed = Answer.where(assignment: @assignment, user: current_user, review_completed: true).order('updated_at desc').first
+    if @latest_answer_unreviewed.nil?
+      @answer = Answer.new
+      @answer.assignment = @assignment
+      @answer.active = false
+      @answer.user = current_user
+      @answer.response = @assignment.template unless @assignment.template.blank?
+    else
+      redirect_to reflect_answer_path(@latest_answer_unreviewed) and return
+    end
     assignment = Assignment.find(params[:assignment_id])
     if assignment.course.students.exists?(current_user.id).nil?
       assignment.course.students << current_user
     end
     draft_type = params[:draft_type].nil? ? "Final Draft" : params.require(:draft_type)
     @answer.revision_list = draft_type
-    if @answer.save 
+    if @answer.save
       redirect_to edit_answer_path(@answer)
     else
       redirect_to root_path, alert: "We couldn't create an answer now. Please try again, or report a bug."
@@ -73,7 +78,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
     @answer.assignment = Assignment.find(params[:assignment_id])
     @answer.user = current_user
-    
+
     respond_to do |format|
       if @answer.save
         format.html { redirect_to (@answer.assignment or @answer), notice: 'Answer was successfully created.' }
@@ -101,7 +106,7 @@ class AnswersController < ApplicationController
       else
         format.html { render action: 'edit' }
         format.json { render json: @answer.errors, status: :unprocessable_entity }
-        format.js {flash[:alert] = @answer.errors.full_messages.join(","); render} 
+        format.js {flash[:alert] = @answer.errors.full_messages.join(","); render}
       end
     end
   end
@@ -196,7 +201,7 @@ class AnswersController < ApplicationController
   def clone
     @cloned_answer = @answer.next_version
     if @cloned_answer.nil?
-      @cloned_answer = Answer.new(user: current_user, assignment: @answer.assignment, previous_version: @answer, 
+      @cloned_answer = Answer.new(user: current_user, assignment: @answer.assignment, previous_version: @answer,
         response: @answer.response, revision_list: @answer.revision_list,
         active: false, submitted: false)
       @cloned_answer.save!
@@ -213,13 +218,13 @@ class AnswersController < ApplicationController
       else
         format.html { render action: 'edit' }
         format.json { render json: @answer.errors, status: :unprocessable_entity }
-        format.js {flash[:alert] = @answer.errors.full_messages.join(","); render} 
+        format.js {flash[:alert] = @answer.errors.full_messages.join(","); render}
       end
     end
   end
 
   def reflect
-    
+
   end
 
   #toggles star
