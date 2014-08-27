@@ -1,9 +1,9 @@
-namespace :assignment do 
+namespace :assignment do
 	task :remind_to_submit => :environment do
 		logger = Rails.logger
-		assignments = Assignment.active.where('due_at < ?', Time.now+2.days)
+		assignments = Assignment.active.where('due_at < ?', Time.now+2.days).where(course_id: 4)
 		logger.info "Sending emails to remind people to submit to Coursera"
-		if !assignments.nil? 
+		if !assignments.nil?
 			assignments.each do |assignment|
 				answers = assignment.answers.select(:user_id).distinct
 				answers.each do |answer|
@@ -20,7 +20,7 @@ namespace :assignment do
 		logger.info "Sending emails to people who need it + volunteers"
 
 		#Different database servers on development and production
-		if Rails.env.development? 
+		if Rails.env.development?
 			random_function = "RANDOM()" #postgresql
 		elsif Rails.env.production?
 			random_function = "RAND()" #mysql
@@ -29,10 +29,10 @@ namespace :assignment do
 			random_function = "created_at"
 		end
 
-		if !assignments.nil? 
+		if !assignments.nil?
 			assignments.each do |assign|
 				thirty_min_ans = assign.answers.where(submitted: true, total_evaluations: 0, review_completed: false).where("submitted_at <= ?", 30.minutes.ago)
-				if thirty_min_ans.count > 0 
+				if thirty_min_ans.count > 0
 					logger.info "Found unreviewed answers: #{thirty_min_ans.count}"
 					#here, we find people who still need to give reviews
 					have_to_review_still = TriggerAction.where(assignment_id:assign.id,trigger: "review_required").where(["count > ? and (last_email_time IS NULL or last_email_time < ?)", 0, 12.hours.ago]).order(random_function).limit(4)
@@ -49,7 +49,7 @@ namespace :assignment do
 									vol.last_email_time = Time.now
 									vol.save!
 								end
-							end							
+							end
 						end
 					else
 						logger.info "Sending emails to people who need it (required)"
@@ -69,4 +69,3 @@ namespace :assignment do
 		end
 	end
 end
-
