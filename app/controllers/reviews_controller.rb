@@ -107,8 +107,9 @@ class ReviewsController < ApplicationController
 
     current_user.tried_reviewing = true
     current_user.save!
-
-    if current_user.experimental_condition(Assignment.find(params[:id]).course) == "waitlist"
+    
+    @assignment = Assignment.find(params[:id])
+    if current_user.experimental_condition(@assignment.course) == "waitlist"
       redirect_to waitlist_assignment_path(params[:id]) and return
     end
 
