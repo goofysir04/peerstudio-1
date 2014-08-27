@@ -12,7 +12,7 @@ namespace :assignment do
 					logger.info "Skipping user: #{enrollment.user.email} because they've already started."
 					next
 				end
-				if enrollment.user.experimental_condition == "waitlist"
+				if enrollment.user.experimental_condition(a.course) == "waitlist"
 					logger.info "Sending a wait list reminder"
 					ReviewMailer.delay.send_waitlist_reminder(enrollment.user_id, a.id)
 				else
@@ -36,7 +36,7 @@ namespace :assignment do
 				logger.info "Skipping user: #{user.email} because they've already started."
 				next
 			end
-			if user.experimental_condition == "waitlist"
+			if user.experimental_condition(a.course) == "waitlist"
 				logger.info "Sending a wait list reminder"
 				ReviewMailer.delay.send_waitlist_reminder(user.id, a.id)
 			else

@@ -43,7 +43,7 @@ namespace :assignment do
 						volunteers.each do |vol| #send email, set last_email_time, decrement "email_count"
 							logger.info "Sending emails to people who volunteered: #{vol.user.id}"
 							unless vol.nil? or vol.user.opted_out_help_email?
-								unless vol.user.experimental_condition == "waitlist"
+								unless vol.user.experimental_condition(assign.course) == "waitlist"
 									ReviewMailer.delay.need_review_email(vol.user, assign, review_requests)
 									vol.count = vol.count - 1
 									vol.last_email_time = Time.now
@@ -56,7 +56,7 @@ namespace :assignment do
 						have_to_review_still.each do |h|
 							logger.info "Sending emails to people who need it: #{h.user_id}"
 							unless h.nil? or h.user.opted_out_help_email?
-								unless h.user.experimental_condition == "waitlist"
+								unless h.user.experimental_condition(assign.course) == "waitlist"
 									ReviewMailer.delay.need_review_email(h.user, assign, review_requests)
 									h.last_email_time = Time.now
 									h.save!
