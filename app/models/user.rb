@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
 	has_many :assessments
 	has_many :verifications
 
-  #This was for the L@S paper. 
+  #This was for the L@S paper.
 	def get_and_store_experimental_condition!(course)
 		# if id%5 == 0
 		# 	return "baseline"
@@ -22,7 +22,11 @@ class User < ActiveRecord::Base
 		# 	return "verify"
 		# else
 		# 	return "identify"
-		# end	
+		# end
+    if !course.waitlist_condition
+      return "normal"
+    end
+    
     if self.experimental_group.blank?
       self.experimental_group = self.experimental_condition(course)
       self.save!
@@ -43,7 +47,7 @@ class User < ActiveRecord::Base
       return "review_only"
     elsif id% 5 == 2
       return "submit_only"
-    else 
+    else
       return "normal"
     end
   end
@@ -60,7 +64,7 @@ class User < ActiveRecord::Base
         #this is a dummy password
           owning_user = User.new :password => Devise.friendly_token[0,20], :email=> row["email"]
         end
-        
+
         owning_user.cid= row["coursera_id"]
         owning_user.save!
         # print "Answer saved"
@@ -73,5 +77,5 @@ class User < ActiveRecord::Base
   def self.import(file)
     raise "Unknown file type" if File.extname(file.original_filename) != ".csv"
     Delayed::Job.enqueue ImportJob.new(file.read)
-  end 
+  end
 end
