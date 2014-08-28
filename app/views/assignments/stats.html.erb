@@ -52,12 +52,13 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 		<thead>
 			<tr>
 				<th>Student name</th>
-				<th>Reviews performed</th>
+
 				<th>Drafts submitted</th>
 				<th>
 					Final submission
 				</th>
 				<th>Grade</th>
+				<th>Reviews performed</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -65,13 +66,6 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 			<% @students.order('name').each do |s| %>
 				<tr>
 					<td><%= s.name %> (<%= s.email %>)</td>
-					<% final_reviews_count = @review_count[s.id]  %>
-					<% if final_reviews_count.nil? or final_reviews_count == 0 %>
-						<td style="background-color: rgb(244,109,67);">
-						None</td>
-					<% else %>
-						<td><%= final_reviews_count %></td>
-					<% end %>
 					<% answer_count = @submitted_answers[s.id] %>
 					<% if answer_count.nil? or answer_count == 0 %>
 						<td style="background-color: rgb(244,109,67);">Not Submitted</td>
@@ -82,7 +76,7 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 							<% if final.nil? %>
 								<td style="background-color: rgb(244,109,67);">Not Submitted</td>
 							<% elsif final.total_evaluations == 0  %>
-								<td style="background-color: rgb(255,255,191);"><%= link_to "Unreviewed", review_answer_path(final), method: :post %></td>
+								<td style="background-color: rgb(255,255,191);"><%= link_to "Not yet reviewed/graded", review_answer_path(final), method: :post %></td>
 							<% else %>
 								<td><%= link_to "#{final.total_evaluations} reviews", review_answer_path(final), method: :post %></td>
 							<% end %>
@@ -91,6 +85,14 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 							<td>No grade yet</td>
 						<% else %>
 							<td><%= grades[s.id] %> <%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
+						<% end %>
+
+						<% final_reviews_count = @review_count[s.id]  %>
+						<% if final_reviews_count.nil? or final_reviews_count == 0 %>
+							<td style="background-color: rgb(244,109,67);">
+							None</td>
+						<% else %>
+							<td><%= final_reviews_count %></td>
 						<% end %>
 				</tr>
 			<% end %>
