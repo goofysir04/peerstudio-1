@@ -81,6 +81,8 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 								<td><%= link_to "#{final.total_evaluations} reviews", answer_reviews_path(final), method: :post %>
 								<% if @reviews_by_instructors.include?(final.id) %>
 									(Staff reviewed)
+								<% else %>
+									<%= link_to "Review as staff", review_answer_path(final), method: :post %>
 								<% end %>
 								</td>
 							<% end %>
