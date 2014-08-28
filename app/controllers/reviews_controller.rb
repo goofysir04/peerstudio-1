@@ -7,6 +7,12 @@ class ReviewsController < ApplicationController
   # GET /reviews.json
   def index
     @answer = Answer.find(params[:answer_id])
+
+    if @answer.assignment.course.students.exists?(current_user.id).nil?
+      redirect_to assignment_path(@answer.assignment), alert: "Reviews in this class are only open to enrolled students" and return
+    end
+
+
     @trigger = TriggerAction.pending_action("review_required", current_user, @answer.assignment)
 
     if @trigger.nil? and @answer.reviews_first_seen_at.nil?
@@ -101,13 +107,13 @@ class ReviewsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  #Create a new review with a particular type 
+  #Create a new review with a particular type
   # such as paired, exchange, final etc
   def create_with_type
 
     current_user.tried_reviewing = true
     current_user.save!
-    
+
     @assignment = Assignment.find(params[:id])
     if current_user.experimental_condition(@assignment.course) == "waitlist"
       redirect_to waitlist_assignment_path(params[:id]) and return
@@ -118,8 +124,8 @@ class ReviewsController < ApplicationController
     if @submitter.nil? and review_type != "final"
       redirect_to assignment_path(params[:id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return
     end
-    redirect_to assignment_path(params[:id]), alert: "You can't review yourself!" and return if @submitter==current_user 
-    
+    redirect_to assignment_path(params[:id]), alert: "You can't review yourself!" and return if @submitter==current_user
+
     @reviewed_already = Review.where(user: current_user, active: true)
     @reviewed_answers = @reviewed_already.map {|r| r.answer_id}
       # raise @reviewed_answers.inspect
@@ -132,11 +138,11 @@ class ReviewsController < ApplicationController
     when "final"
       @answers = Answer.where(active: true, submitted:true, review_completed:false, assignment_id: params[:id], is_blank_submission: false).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
     else
-      redirect_to assignment_path(params[:id]), alert: "That review type has not opened yet." and return 
+      redirect_to assignment_path(params[:id]), alert: "That review type has not opened yet." and return
     end
 
     if @answers.empty?
-      redirect_to assignment_path(params[:id]), alert: "We didn't find any drafts to review" and return 
+      redirect_to assignment_path(params[:id]), alert: "We didn't find any drafts to review" and return
     end
 
     @answer = @answers.order("(pending_reviews + total_evaluations) ASC, submitted_at desc").first
@@ -144,7 +150,7 @@ class ReviewsController < ApplicationController
 
     if review_type == "paired"
       @review.copilot_email = @submitter.email
-    end 
+    end
     @review.save!
     redirect_to edit_review_path(@review)
   end
@@ -198,16 +204,16 @@ class ReviewsController < ApplicationController
       params.permit(:assignment_id)
       params.permit(:typed_review).permit(:email,:type, :revision)
 
-      params.require(:review).permit(:answer_id, :comments, :out_of_box_answer, 
+      params.require(:review).permit(:answer_id, :comments, :out_of_box_answer,
         :accurate_rating,
         :concrete_rating,
         :recognize_rating,
         :other_rating_comments,
         :reflection,
         :completion_metadata,
-        :copilot_email, 
+        :copilot_email,
         :answer_attribute_weights => [:weight],
-        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :miscommunication, :score, :review_id, 
+        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :miscommunication, :score, :review_id,
           :answer_attribute_ids=>[]])
     end
 
@@ -231,7 +237,7 @@ class ReviewsController < ApplicationController
 
       review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
       #Set to false to be sure you actually do the review before it's considered active
-      review.active = false 
+      review.active = false
       answer.assignment.rubric_items.each do |item|
         review.feedback_items.build(rubric_item: item)
       end
