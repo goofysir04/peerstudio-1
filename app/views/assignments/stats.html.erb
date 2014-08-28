@@ -43,3 +43,59 @@
 		</tr>
 	</table>
 <!-- More stats in more_stats page -->
+
+<% if @total_users_submitted > 300 %>
+Detailed stats are unavailable because you have more than 300 students. Contact <%= mail_to "hello@peerstudio.org", "hello@peerstudio.org"%> to raise this limit.
+<% else %>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Student name</th>
+				<th>Reviews performed</th>
+				<th>Drafts submitted</th>
+				<th>
+					Final submission
+				</th>
+				<th>Grade</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			<% @students.order('name').each do |s| %>
+				<tr>
+					<td><%= s.name %> (<%= s.email %>)</td>
+					<% final_reviews_count = @review_count[s.id]  %>
+					<% if final_reviews_count.nil? or final_reviews_count == 0 %>
+						<td style="background-color: rgb(244,109,67);">
+						None</td>
+					<% else %>
+						<td><%= final_reviews_count %></td>
+					<% end %>
+					<% answer_count = @submitted_answers[s.id] %>
+					<% if answer_count.nil? or answer_count == 0 %>
+						<td style="background-color: rgb(244,109,67);">Not Submitted</td>
+					<% else %>
+						<td><%= answer_count %></td>
+					<% end %>
+							<% final = Answer.where(assignment: @assignment, submitted: true, is_final: true, user:s).order("submitted_at desc").first %>
+							<% if final.nil? %>
+								<td style="background-color: rgb(244,109,67);">Not Submitted</td>
+							<% elsif final.total_evaluations == 0  %>
+								<td style="background-color: rgb(255,255,191);"><%= link_to "Unreviewed", review_answer_path(final), method: :post %></td>
+							<% else %>
+								<td><%= link_to "#{final.total_evaluations} reviews", review_answer_path(final), method: :post %></td>
+							<% end %>
+						</td>
+						<% if @grades.nil? %>
+							<td>No grade yet</td>
+						<% else %>
+							<td><%= grades[s.id] %> <%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
+						<% end %>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+<h2>Export</h2>
+<%= link_to "Download gradebook", export_grades_assignment_path(@assignment, format: "csv"), class: "btn" %> (Not available yet)
