@@ -122,6 +122,9 @@ class AssignmentsController < ApplicationController
       @students = @assignment.course.students
       @review_count = Review.where(assignment: @assignment).group(:user_id).count
       @submitted_answers = Answer.where(assignment: @assignment, submitted: true).group(:user_id).count
+
+      @admins = User.where(admin: true)
+      @reviews_by_instructors = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.map {|r| r.answer_id}
     end
 
     render layout: "one_column"
