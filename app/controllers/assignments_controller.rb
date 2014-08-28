@@ -117,7 +117,7 @@ class AssignmentsController < ApplicationController
     @submissions_total_submitted = @assignment.answers(submitted: true).count
     @total_users_submitted = @assignment.answers(submitted: true).select(:user_id).distinct.count
 
-    if @total_users_submitted < 200
+    if @total_users_submitted <= 300
       # Add individual student stats
       @students = @assignment.course.students
       @review_count = Review.where(assignment: @assignment).group(:user_id).count
