@@ -20,6 +20,9 @@
               <%= f.email_field :copilot_email, class:"input-block-level", placeholder:"your-partner@ucsd.edu" %>
           </li>
         <% end %>
+        <% if current_user.admin? %>
+          Submission by <%= @review.answer.user.name %> <<%= @review.answer.user.email %>> (Only staff can see names.)
+        <% end %>
         <% unless @review.answer.review_request.blank? %>
           <div class="well">
             <strong>Student's review request:</strong>
