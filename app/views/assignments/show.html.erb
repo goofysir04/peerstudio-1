@@ -50,7 +50,7 @@
 
 <div class="row-fluid">
 
-  <% if @my_answers.nil? %>
+  <% if @my_answers.empty? %>
     <div id="assignment_description">
       <%= sanitize @assignment.description %>
     </div>
@@ -187,7 +187,7 @@
         <% end %>
     </div>
   </div>
-    <% if !@my_answers.nil? %>
+    <% if !@my_answers.empty? %>
     <div id="assignment_description">
       <h3>Assignment Description</h3>
       <%= sanitize @assignment.description %>
