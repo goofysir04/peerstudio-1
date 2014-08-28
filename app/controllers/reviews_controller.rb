@@ -9,7 +9,7 @@ class ReviewsController < ApplicationController
     @answer = Answer.find(params[:answer_id])
 
     if @answer.assignment.course.students.exists?(current_user.id).nil?
-      redirect_to assignment_path(@answer.assignment), alert: "Reviews in this class are only open to enrolled students" and return
+      redirect_to assignment_path(@answer.assignment), alert: "Reviews in this class are only open to enrolled students, so first create a draft of your own submission (you don't need to submit.)" and return
     end
 
 
