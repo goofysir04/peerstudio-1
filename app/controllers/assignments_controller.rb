@@ -123,6 +123,8 @@ class AssignmentsController < ApplicationController
       @review_count = Review.where(assignment: @assignment).group(:user_id).count
       @submitted_answers = Answer.where(assignment: @assignment, submitted: true).group(:user_id).count
     end
+
+    render layout: "one_column"
   end
 
   def grades
