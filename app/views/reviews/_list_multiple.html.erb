@@ -5,9 +5,15 @@
   <% if show_revision_link %>
     <div class="form-controls">
       <%= link_to "Revise submission", reflect_answer_path(answer), class: "btn btn-primary"%>
-      <div class="pull-right">
-          <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path(answer), :class=>"btn btn-danger", :role=>"button", :method=>:post %>
-      </div>
+      <% if !answer.review_completed? %>
+        <div class="pull-right">
+            <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path(answer), :class=>"btn btn-danger", :role=>"button", :method=>:post %>
+        </div>
+      <% else %>
+        <div class="pull-right">
+            No longer being reviewed
+        </div>
+      <% end %>
     </div>
   <% end %>
   <br/><br/>

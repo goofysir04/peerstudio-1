@@ -83,11 +83,15 @@
                     <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                       <td>
                       <% if answer.submitted? %>
-                      <span class="label label-success">Being reviewed</span>
+                        <% if answer.review_completed? %>
+                          <span class="label label-info">Review completed</span>
+                        <% else %>
+                          <span class="label label-success">Being reviewed</span>
+                        <% end %>
                       <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
                       <% else %>
-
-                      <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
+                        <span class="label label-warning">Editing</span>
+                        <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                       <% end %>
                     </td>
 
