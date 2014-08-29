@@ -39,15 +39,15 @@
                       <p><%= a_attr.description %></p>
                       Yes:
                       <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                        <% if !f.answer_attributes.include?(a_attr) %>
-                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail"></div>
+                        <% if f.answer_attributes.include?(a_attr) %>
+                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success"></div>
                         <% end %>
                       <% end %>
                       &nbsp;
                       No:
                       <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                        <% if f.answer_attributes.include?(a_attr) %>
-                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success"></div>
+                        <% if !f.answer_attributes.include?(a_attr) %>
+                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail"></div>
                         <% end %>
                       <% end %>
                     </div>
