@@ -54,7 +54,7 @@
       <% if user_signed_in? and current_user.admin? %>
       <li><a href="#out_of_box_answers" data-toggle="tab">Exceptional answers</a></li>
       <% end %>
-      <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
+      <% if @assignment.ended? %>
       <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
       <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
       <% end %>
@@ -170,7 +170,7 @@
             <%= render partial: "reviews/answers_with_reviews", locals: {answers: Answer.find(@out_of_box_answers.keys)} %>
           </div>
         <% end %>
-        <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
+        <% if @assignment.ended?%>
         <div id="all_answers" class="tab-pane">
           <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
           <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Show more answers", show_all_answers_assignment_path(@assignment), class: "btn btn-primary", remote: true %></p>
