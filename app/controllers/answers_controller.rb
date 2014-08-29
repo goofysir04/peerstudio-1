@@ -179,6 +179,26 @@ class AnswersController < ApplicationController
     end
   end
   #To import csv answers
+
+  def upgrade
+    #from submitted for early feedback to submitted for final feedback
+    @answer = Answer.find(params[:id])
+    @answer.submitted = true
+    @answer.is_final = true
+    @answer.submitted_at = Time.now
+    respond_to do |format|
+      if @answer.save
+        format.html {redirect_to assignment_path(@answer.assignment), notice: "Your draft was submitted to be graded"}
+        format.json { head :no_content }
+        format.js
+      else
+        format.html {redirect_to answer_path(@answer), alert: "We couldn't submit your assignment because " + @answer.errors.full_messages.join(". ")}
+        format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
+  end
+
   def upload
     Answer.import(params[:file])
     redirect_to answers_path, :notice => "File imported"
