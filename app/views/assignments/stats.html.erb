@@ -78,7 +78,7 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 							<% elsif final.total_evaluations == 0  %>
 								<td style="background-color: rgb(255,255,191);"><%= link_to "Not yet reviewed/graded", review_answer_path(final), method: :post %></td>
 							<% else %>
-								<td><%= link_to "#{final.total_evaluations} reviews", answer_reviews_path(final), method: :post %>
+								<td><%= link_to "#{final.total_evaluations} reviews", answer_reviews_path(final) %>
 								<% if @reviews_by_instructors.include?(final.id) %>
 									(Staff reviewed)
 								<% else %>
