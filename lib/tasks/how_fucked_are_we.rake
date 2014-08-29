@@ -1,7 +1,7 @@
 namespace :analysis do
 	task :how_fucked_are_we => :environment do
 		logger = Rails.logger
-		@assignment = Assignment.find(3)
+		@assignment = Assignment.find(9)
 		@answers = Answer.where(assignment: @assignment, submitted: true)
 		@answers.each do |a|
 			feedback_items_by_rubric_item = a.feedback_items_by_rubric_item
