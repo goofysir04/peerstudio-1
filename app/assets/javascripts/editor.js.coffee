@@ -39,6 +39,17 @@ $(document).on 'ready page:load', ->
             $('#answer_form').submit()
             return false
 
+    $('#submit-final').click () ->
+        console.log "saving.."
+        $('#answer_form').on 'ajax:success', () ->
+           console.log "finished saving, submitting for feedback"
+           $('#warn-final-modal').modal('show')
+        $('#answer_form').on 'ajax:error', (e,status,error) ->
+            console.log error
+            alert("We had trouble saving your draft. Please try again in a while.")
+        $('#answer_form').submit()
+        return false       
+
     $('.expandable').on('keyup', () ->
         this.style.overflow = 'hidden'
         this.style.height = this.style.min_height

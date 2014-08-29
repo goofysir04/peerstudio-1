@@ -80,7 +80,7 @@
             <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :id=>"submit-for-feedback", :role=>"button", :"data-no-turbolink" => true%> 
             <% end %>
             <% unless @answer.is_final? or @answer.assignment.course.early_feedback_only? %>
-             <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-default", :role=>"button", method: :post %>
+             <button class="btn btn-default" id="submit-final">Submit for grading as final</button>
             <% end %>
         </div>
       
@@ -103,7 +103,26 @@ $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});
         <div class="modal-body">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Back to your work</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div class="modal" id="warn-final-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">When you submit as final, you can't modify your draft</h4>
+        </div>
+        <div class="modal-body">
+          <p>Final submissions are graded, and you can also only submit one final draft. So only submit your best work! </p>
+
+          <p><strong>There is no undo!</strong></p>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-primary", :role=>"button", method: :post %>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
