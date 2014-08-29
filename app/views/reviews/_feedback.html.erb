@@ -24,7 +24,7 @@
       <% end %>
       <% answer.assignment.rubric_items.each do |r| %>
         <li>
-          <strong><%= r.short_title %></strong> 
+          <strong><%= r.short_title %></strong>
           <!-- <span class="pull-right label">Max: <%=r.max %><%= "(#{r.max_label})" unless r.max_label.blank?%></span> -->
           <br/>
           <legend></legend>
@@ -35,14 +35,15 @@
             <div class="row-fluid">
                 <% answer.assignment.rubric_items.find(r.id).answer_attributes.each do |a_attr| %>
                   <div class="row">
-                    <div class="col-sm-2 col-md-3">
+                    <div class="col-sm-12">
+                      <p><%= a_attr.description %></p>
                       Yes:
                       <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                         <% if !f.answer_attributes.include?(a_attr) %>
                           <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail"></div>
                         <% end %>
                       <% end %>
-                      <br/>
+                      &nbsp;
                       No:
                       <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                         <% if f.answer_attributes.include?(a_attr) %>
@@ -50,14 +51,12 @@
                         <% end %>
                       <% end %>
                     </div>
-                    <div class="col-sm-10 col-md-9">
-                      <p><%= a_attr.description %></p>
-                    </div>
                   </div>
+                  <legend></legend>
                 <% end %>
               Comments <br/>
               <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                
+
                   <% unless f.like_feedback.blank? %>
                     <div class="col-sm-2 col-md-3">
                       <div class="reviewer-label reviewer<%= i %>"></div>
@@ -77,10 +76,10 @@
     <div class="well">
       <h2>Reviews locked!</h2>
       <p>
-        To see your reviews, you need review others first. You have <strong><%= trigger.count %> reviews</strong> to complete before you can see your own review. 
+        To see your reviews, you need review others first. You have <strong><%= trigger.count %> reviews</strong> to complete before you can see your own review.
       </p>
 
-        <%= link_to "Give feedback now", create_typed_review_assignment_path(answer.assignment_id,assignment_id:answer.assignment_id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %> 
+        <%= link_to "Give feedback now", create_typed_review_assignment_path(answer.assignment_id,assignment_id:answer.assignment_id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %>
 
     </div>
-  <% end %>  
+  <% end %>
