@@ -88,6 +88,8 @@
                         <%= link_to "See reviews", answer_reviews_path(answer) %>
                       <% else %>
                         <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
+                          ||  
+                        <%= link_to "Submit for final?", upgrade_answer_path(answer), method: :post %>
                       <% end %>
                       
                       <% else %>

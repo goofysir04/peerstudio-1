@@ -92,6 +92,7 @@ Humanmachine::Application.routes.draw do
       post 'submit_for_grades'
       get 'reflect'
       post 'clone'
+      post 'upgrade'
     end
     resources :reviews, shallow: true
   end
