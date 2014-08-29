@@ -13,20 +13,12 @@
 
   <!-- The basic UI here is two big fat buttons, and a subsidiary menu for the lawyers -->
   <div class="col-xs-6">
-    <% if @assignment.ended?%>
-      <%= link_to assignment_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write" do %> Closed <%end%>
-    <% else %>
-      <%= link_to new_assignment_answer_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write" do %> Create/edit your draft <div class="deadline"> (Due <%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</div>
-      <% end %>
+    <%= link_to new_assignment_answer_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write", data: {:"show-late-warning" => @assignment.ended?} do %> Create/edit your draft <div class="deadline"> (Due <%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</div>
     <% end %>
   </div>
   <div class="col-xs-5">
-    <% if @assignment.ended?%>
-      <%= link_to assignment_path(@assignment), class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %> Closed <%end%>
-    <% else %>
-      <%= link_to create_typed_review_assignment_path(assignment_id:@assignment,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
-      Give peers feedback
-      <% end %>
+    <%= link_to create_typed_review_assignment_path(assignment_id:@assignment,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback", data: {:"show-late-warning" => @assignment.ended?} do %>
+    Give peers feedback
     <% end %>
   </div>
   <div class="btn-group col-xs-1">
@@ -194,3 +186,38 @@
     </div>
   <% end %>
 </div>
+
+<% content_for(:modals) do %>
+  <div class="modal" id="submit-late-work">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">You're submitting after the deadline!</h4>
+        </div>
+        <div class="modal-body">
+          <p> Submitting work after the deadline will inform staff!</p>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Create draft anyway", new_assignment_answer_path(@assignment), class: "btn btn-default"%>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal" id="review-late-work">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">You're reviewing after the deadline!</h4>
+        </div>
+        <div class="modal-body">
+          <p> Reviewing work after the deadline will inform staff!</p>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Review anyway", create_typed_review_assignment_path(assignment_id:@assignment,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-default"%>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<% end %>
