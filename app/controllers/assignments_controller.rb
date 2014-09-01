@@ -124,7 +124,8 @@ class AssignmentsController < ApplicationController
       @submitted_answers = Answer.where(assignment: @assignment, submitted: true).group(:user_id).count
 
       @admins = User.where(admin: true)
-      @reviews_by_instructors = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.map {|r| r.answer_id}
+      @reviews_by_instructors = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
+      @unreviewed_by_staff = @assignment.answers.where(submitted: true, is_final: true).count - @reviews_by_instructors.count
     end
 
     render layout: "one_column"
@@ -175,6 +176,11 @@ def review_first
       @recent_review = Review.find(params[:recent_review])
     end
     #otherwise render
+    if current_user.admin?
+      @admins = User.where(admin: true)
+      @reviewed_by_staff = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
+      @next_staff_submission = @assignment.answers.where(submitted: true, is_final: true).where.not(id: @reviewed_by_staff).first
+    end
     render layout: "one_column"
   end
 

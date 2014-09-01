@@ -6,7 +6,7 @@
 <h1>Thanks for your help :)</h1>
 <p>You have finished your required reviews, so we have unlocked your reviews for you. If you want to see more of your classmates awesome work and help them out, you can continue reviewing! Thanks for helping your classmates!</p>
 
-<p>We will email you at <strong><%= current_user.email %> when your work has been reviewed. On average, students receive feedback in <strong>4 hours or less</strong>.</p>
+<p>We will email you at <strong><%= current_user.email %></strong> when your work has been reviewed. On average, students receive feedback in <strong>4 hours or less</strong>.</p>
 <% else %>
 <h1>Give feedback to get feedback :)</h1>
 <p>Here's how reviewing works. When you ask your classmates for feedback, you also promise to review work by two of your classmates. To help you keep this promise, we only show you your own feedback after you finish two reviews. </p>
@@ -15,7 +15,18 @@
 <% end %>
 
 <div class="controls">
-	<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %> 
+
+	<% if current_user.admin? %>
+		<%unless @next_staff_submission.blank? %>
+			<%= link_to "Give staff feedback", review_answer_path(@next_staff_submission), method: :post, class: "btn btn-primary" %>
+		<% else %>
+			No more ungraded submissions.
+		<% end %>
+
+		<%= link_to "Give non-graded feedback", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-default" %> 
+	<% else %>
+		<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %> 
+	<% end %>		
 	<% unless @recent_review.nil? %>
 		| <%= link_to "Edit your review", edit_review_path(@recent_review),class: "btn btn-default" %> 
 	<% end %>
