@@ -27,6 +27,7 @@ class Answer < ActiveRecord::Base
   acts_as_taggable_on :revisions
 
   validate :revisions_are_valid
+  validate :only_one_final, on: :update
 
   scope :reviewable, -> {where(submitted:true, active: true)}
   
@@ -72,6 +73,14 @@ class Answer < ActiveRecord::Base
       errors.add :revision_list, "You already have more than ten drafts that are #{self.revision_list}. You can't create any more."
     end
   end
+
+  def only_one_final
+    other_final_answers = Answer.where(assignment: self.assignment, user: self.user, is_final: true).where.not(id: self.id)
+    if other_final_answers.count > 0
+      errors.add :is_final, "You can only submit one draft as your final for each assignment"
+    end
+  end
+  
   def next_version
     if Answer.where(previous_version: self).exists?
       return Answer.where(previous_version: self).first
