@@ -43,36 +43,36 @@ namespace :grading do
 		Enrollment.where(course: assignment.course).each do |enrollment|
 			student = enrollment.user
 			#First set participation credit
-			assignment.milestones.each do |m|
-				answer = Answer.tagged_with(m).where(assignment: assignment, active:true, user: student)
-				if answer.count > 0
-					# puts "Found answer for student #{student.name} and milestone #{m}"
-					# AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit: #{m}", credit: milestone_credit)
-				end
-			end
+			# assignment.milestones.each do |m|
+			# 	answer = Answer.tagged_with(m).where(assignment: assignment, active:true, user: student)
+			# 	if answer.count > 0
+			# 		# puts "Found answer for student #{student.name} and milestone #{m}"
+			# 		# AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit: #{m}", credit: milestone_credit)
+			# 	end
+			# end
 
 			# transcript = Answer.tagged_with("Transcript Writeup").where(assignment: assignment, active:true, user: student)
 			# if(transcript.count > 0)
 			# 	AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Completion: Transcript and index", credit: 7)	
 			# end
 
-			Review.where(user: student, assignment: assignment, active: true).group(:review_type).count.each do |review_type, review_count|
-				if review_type == "exchange"
-					AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit for exchange review", credit: exchange_review_credit, marked_reviews: review_count)
-				end
+			# Review.where(user: student, assignment: assignment, active: true).group(:review_type).count.each do |review_type, review_count|
+			# 	if review_type == "exchange"
+			# 		AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit for exchange review", credit: exchange_review_credit, marked_reviews: review_count)
+			# 	end
 
-				if review_type == "final" and review_count >= final_review_threshold
-					AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit for final review", credit: final_review_credit, marked_reviews: review_count)
-				end
-			end
+			# 	if review_type == "final" and review_count >= final_review_threshold
+			# 		AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit for final review", credit: final_review_credit, marked_reviews: review_count)
+			# 	end
+			# end
 
-			paired_reviews = Review.where("(user_id = ? or copilot_email= ?) and review_type='paired' and active = ? and assignment_id=?", student.id, student.email, true, assignment.id)
-			if paired_reviews.count > paired_review_threshold
-				AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit for paired review", credit: paired_review_credit, marked_reviews: paired_reviews.count)
-			end
+			# paired_reviews = Review.where("(user_id = ? or copilot_email= ?) and review_type='paired' and active = ? and assignment_id=?", student.id, student.email, true, assignment.id)
+			# if paired_reviews.count > paired_review_threshold
+			# 	AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Participation credit for paired review", credit: paired_review_credit, marked_reviews: paired_reviews.count)
+			# end
 
 			##grades for assignment rubrics
-			final_answer = Answer.where(user: student, active: true, assignment_id: assignment_id).tagged_with(final_draft_name).first
+			final_answer = Answer.where(user: student, submitted: true, assignment_id: assignment_id, is_final: true).order('submitted_at desc').first
 			if !final_answer.nil?
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
 				assignment.rubric_items.each do |rubric|
