@@ -27,13 +27,13 @@ class AnswersController < ApplicationController
 
     current_user.tried_answering = true
     current_user.save!
-    @latest_answer = Answer.where(assignment: @assignment, user: current_user, review_completed: false).order('updated_at desc').first
+    @latest_answer = Answer.where(assignment: @assignment, user: current_user, review_completed: false).order('created_at desc').first
 
     if !@latest_answer.nil?
       if !@latest_answer.submitted?
         redirect_to edit_answer_path(@latest_answer), notice: "We took you to the draft you were already editing" and return
       else
-        redirect_to answer_reviews_path(@latest_answer), notice: "You have a new review on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
+        redirect_to answer_reviews_path(@latest_answer), notice: "Here are the reviews on your last submitted submission. If you have enough feedback, click 'Stop Reviewing'." and return
       end
     end
     #else
