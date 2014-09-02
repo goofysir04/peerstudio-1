@@ -40,6 +40,7 @@ namespace :grading do
 		puts "Regrading Assignment #{assignment_id}"
 		assignment = Assignment.find(assignment_id)
 		AssignmentGrade.destroy_all(assignment_id: assignment.id)
+		admins = User.where(admin: true)
 		Enrollment.where(course: assignment.course).each do |enrollment|
 			student = enrollment.user
 			#First set participation credit
@@ -75,6 +76,13 @@ namespace :grading do
 			final_answer = Answer.where(user: student, submitted: true, assignment_id: assignment_id, is_final: true).order('submitted_at desc').first
 			if !final_answer.nil?
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
+
+				staff_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id, user: admins)
+				grade_type = "Peer grade"
+				if !staff_reviews.blank?
+					final_reviews = staff_reviews
+					grade_type = "Staff grade"
+				end
 				assignment.rubric_items.each do |rubric|
 					rubric.answer_attributes.each do |answer_attribute|
 						marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
@@ -89,8 +97,9 @@ namespace :grading do
 						if answer_attribute.id==70
 							attribute_credit = 1
 						end
+
 						AssignmentGrade.create(user: student, assignment: assignment, 
-							grade_type: "#{rubric.short_title}: #{answer_attribute.description}", 
+							grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
 							credit: attribute_credit, 
 							marked_reviews: marked_count, 
 							total_reviews: final_reviews.count, 
