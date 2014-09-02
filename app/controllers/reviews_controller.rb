@@ -39,6 +39,10 @@ class ReviewsController < ApplicationController
 
   # GET /reviews/1/edit
   def edit
+    unless @review.user == current_user or current_user.admin?
+      redirect_to @review.assignment, alert: "You can only edit reviews you wrote."
+    end
+
     @answer = @review.answer
 
     @latest_reviewer_answer = Answer.where(assignment: @answer.assignment, user: current_user).order('updated_at desc').first
@@ -65,6 +69,10 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1
   # PATCH/PUT /reviews/1.json
   def update
+    unless @review.user == current_user or current_user.admin?
+      redirect_to @review.assignment, alert: "You can only edit reviews you wrote."
+    end
+    
     # raise params.inspect
     respond_to do |format|
       @answer= @review.answer
