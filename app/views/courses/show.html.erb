@@ -48,7 +48,6 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Description</th>
       <th>Due on</th>
       <% if user_signed_in? && current_user.admin? %>
       <th colspan="2"><%= link_to "Add assignment", new_course_assignment_path(@course), class: "btn btn-success"%> </th>
