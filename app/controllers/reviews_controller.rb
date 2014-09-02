@@ -156,6 +156,7 @@ class ReviewsController < ApplicationController
   end
 
   def rate
+    @trigger = TriggerAction.pending_action("review_required", current_user, @review.assignment)
     @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
     unless @review.comments.blank?
       (@feedback_items_by_rubric_item["comments"] ||= []) << @review.comments

@@ -1,1 +1,11 @@
-<%= render partial: "list", layout:"answer_for_rating", :locals=>{answer: @review.answer,feedback_items_by_rubric_item: @feedback_items_by_rubric_item} %>
+<% if @trigger.nil? %>
+	<%= render partial: "list", layout:"answer_for_rating", :locals=>{answer: @review.answer,feedback_items_by_rubric_item: @feedback_items_by_rubric_item} %>
+<% else %>
+    <div class="well">
+      <h2>Reviews locked!</h2>
+      <p>
+        To see your reviews, you need review others first. You have <strong><%= @trigger.count %> reviews</strong> to complete before you can see your own review.
+      </p>
+        <%= link_to "Give feedback now", create_typed_review_assignment_path(@review.assignment_id,assignment_id:@review.assignment_id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %>
+    </div>
+<% end %>
