@@ -122,7 +122,7 @@ $().ready(function(){  $('[data-toggle=popover]').popover({trigger:'hover'});});
         </div>
         <div class="modal-footer">
           <%= link_to "Submit for grading as final", submit_for_grades_answer_path, :class=>"btn btn-primary", :role=>"button", method: :post %>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel-submit-grade">Cancel</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

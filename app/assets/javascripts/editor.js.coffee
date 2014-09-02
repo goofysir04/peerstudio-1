@@ -41,14 +41,19 @@ $(document).on 'ready page:load', ->
 
     $('#submit-final').click () ->
         console.log "saving.."
-        $('#answer_form').on 'ajax:success', () ->
+        $('#answer_form').on 'ajax:success.submit-warning', () ->
            console.log "finished saving, submitting for feedback"
            $('#warn-final-modal').modal('show')
-        $('#answer_form').on 'ajax:error', (e,status,error) ->
+        $('#answer_form').on 'ajax:error.submit-warning', (e,status,error) ->
             console.log error
             alert("We had trouble saving your draft. Please try again in a while.")
         $('#answer_form').submit()
         return false       
+
+    $('#cancel-submit-grade').click () ->
+        console.log "Canceling submit"
+        $('#answer_form').off '.submit-warning'
+
 
     $('.expandable').on('keyup', () ->
         this.style.overflow = 'hidden'
