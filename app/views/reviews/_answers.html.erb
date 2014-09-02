@@ -15,7 +15,7 @@ Reviewing <%= answer.assignment.title %>
   <div class="col-md-6">
     <div class="paper">
     	<h3 id="student-work">Give feedback on this submission</h3>
-      <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
+      <%= sanitize answer.response unless answer.response.nil? %>
     </div>
   </div>
   <div class="paper col-md-6">
