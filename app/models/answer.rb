@@ -76,7 +76,7 @@ class Answer < ActiveRecord::Base
 
   def only_one_final
     other_final_answers = Answer.where(assignment: self.assignment, user: self.user, is_final: true).where.not(id: self.id)
-    if other_final_answers.count > 0
+    if other_final_answers.count > 0 and self.is_final?
       errors.add :is_final, "You can only submit one draft as your final for each assignment"
     end
   end
