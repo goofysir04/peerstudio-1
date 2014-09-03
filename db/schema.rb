@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140827174829) do
+ActiveRecord::Schema.define(version: 20140903004643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(version: 20140827174829) do
     t.text     "grade_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "credit",         default: 0.0
+    t.decimal  "credit",         default: 0.0
     t.integer  "marked_reviews", default: 0
     t.integer  "total_reviews",  default: 0
   end
