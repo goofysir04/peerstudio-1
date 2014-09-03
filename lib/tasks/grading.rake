@@ -86,10 +86,12 @@ namespace :grading do
 				assignment.rubric_items.each do |rubric|
 					rubric.answer_attributes.each do |answer_attribute|
 						marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+
+						attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
 						attribute_credit = (if final_reviews.count >= 3 
-											 marked_count >= 2 ? answer_attribute.score : 0
+											 marked_count >= 2 ? attribute_score : 0
 											elsif final_reviews.count > 0 and final_reviews.count < 3
-											 ((answer_attribute.score * marked_count/final_reviews.count))
+											 ((attribute_score * marked_count/final_reviews.count))
 											else
 												0
 											end)
