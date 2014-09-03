@@ -43,6 +43,7 @@ namespace :grading do
 		admins = User.where(admin: true)
 		Enrollment.where(course: assignment.course).each do |enrollment|
 			student = enrollment.user
+			next if student.nil?
 			#First set participation credit
 			# assignment.milestones.each do |m|
 			# 	answer = Answer.tagged_with(m).where(assignment: assignment, active:true, user: student)
