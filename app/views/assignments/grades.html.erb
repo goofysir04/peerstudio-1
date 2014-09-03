@@ -26,6 +26,6 @@
 				<% end %>
 			</tr>
 		<% end %>
-		<tr><td><strong>Total</strong></td><td><%= (@grades.inject(0) { |acc, grade| acc+grade.credit }).round %></td>
+		<tr><td><strong>Total</strong></td><td><%= (@grades.inject(0) { |acc, grade| acc+grade.credit }).round(2) %></td>
 	</tbody>
 </table>

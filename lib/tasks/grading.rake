@@ -97,10 +97,6 @@ namespace :grading do
 												0
 											end)
 
-						if answer_attribute.id==70
-							attribute_credit = 1
-						end
-
 						AssignmentGrade.create(user: student, assignment: assignment, 
 							grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
 							credit: attribute_credit, 

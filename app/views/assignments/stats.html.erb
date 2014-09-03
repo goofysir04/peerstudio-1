@@ -98,7 +98,13 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 						<% if @grades.nil? %>
 							<td>No grade yet</td>
 						<% else %>
-							<td><%= @grades[s.id] %> <%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
+							<td>
+								<% if @grades[s.id].blank? %>
+									No grade 
+								<% else %>
+									<%= @grades[s.id].round(2) %> 
+								<% end %>
+								<%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
 						<% end %>
 
 						<% final_reviews_count = @review_count[s.id]  %>
