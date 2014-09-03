@@ -73,7 +73,7 @@ namespace :grading do
 			# end
 
 			##grades for assignment rubrics
-			final_answer = Answer.where(user: student, submitted: true, assignment_id: assignment_id, is_final: true).order('submitted_at desc').first
+			final_answer = Answer.where(user_id: student.id, submitted: true, assignment_id: assignment_id, is_final: true).order('submitted_at desc').first
 			if !final_answer.nil?
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
 
