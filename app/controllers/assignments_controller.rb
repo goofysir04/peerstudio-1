@@ -126,6 +126,8 @@ class AssignmentsController < ApplicationController
       @admins = User.where(admin: true)
       @reviews_by_instructors = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
       @unreviewed_by_staff = @assignment.answers.where(submitted: true, is_final: true).count - @reviews_by_instructors.count
+
+      @grades = AssignmentGrade.where(assignment: @assignment).group(:user_id).sum(:credit)
     end
 
     render layout: "one_column"

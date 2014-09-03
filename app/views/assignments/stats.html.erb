@@ -98,7 +98,7 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 						<% if @grades.nil? %>
 							<td>No grade yet</td>
 						<% else %>
-							<td><%= grades[s.id] %> <%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
+							<td><%= @grades[s.id] %> <%= link_to "Regrade", grades_assignment_path(@assignment, user: s.id) %></td>
 						<% end %>
 
 						<% final_reviews_count = @review_count[s.id]  %>
@@ -114,4 +114,4 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 	</table>
 <% end %>
 <h2>Export</h2>
-<%= link_to "Download gradebook", export_grades_assignment_path(@assignment, format: "csv"), class: "btn" %> (Not available yet)
+<%= link_to "Download gradebook", export_grades_assignment_path(@assignment, format: "csv"), class: "btn" %> 
