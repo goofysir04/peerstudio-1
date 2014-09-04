@@ -45,7 +45,7 @@
     <strong>Overall feedback:</strong>
     <% feedback_items_by_rubric_item["comments"].each.with_index(1) do |comment,i| %>
       <% next if comment.nil? %>
-      <p><strong>Comment</strong> <%= comment %> </p>
+      <p><strong>Comment</strong> <%= Format.markdown comment %> </p>
     <% end %>
   </li>
   <% end %>

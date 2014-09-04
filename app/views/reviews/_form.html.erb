@@ -31,12 +31,13 @@
         <% end %>
         <!-- Alternative review, de-emphasize rubrics, use comment boxes -->
         <br/>
-        <% if @review.id % 2 == 0  %>
+        <% if @review.id % 2 == 1 and current_user.consented? and !current_user.admin? %>
         <%= f.hidden_field :comments %>
+        <%= f.hidden_field :review_method, value: "prompts" %>
           <div id="alternate-review">
             <div class="row-fluid feedback-progress">
               <label class="review-prompt">What did you like about this submission?</label>
-              <textarea class="form-control review-response"></textarea>
+              <textarea class="form-control review-response expandable"></textarea>
               <div class="row-fluid">
                 <div class="tips well"></div>
               </div>

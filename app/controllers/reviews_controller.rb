@@ -165,7 +165,11 @@ class ReviewsController < ApplicationController
 
   def rate
     @trigger = TriggerAction.pending_action("review_required", current_user, @review.assignment)
-    @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
+    if @review.review_method == "normal"
+      @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
+    else
+      @feedback_items_by_rubric_item = {}
+    end
     unless @review.comments.blank?
       (@feedback_items_by_rubric_item["comments"] ||= []) << @review.comments
     end
@@ -221,6 +225,7 @@ class ReviewsController < ApplicationController
         :reflection,
         :completion_metadata,
         :copilot_email,
+        :review_method,
         :answer_attribute_weights => [:weight],
         :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :miscommunication, :score, :review_id,
           :answer_attribute_ids=>[]])

@@ -76,7 +76,7 @@ namespace :grading do
 			##grades for assignment rubrics
 			final_answer = Answer.where(user_id: student.id, submitted: true, assignment_id: assignment_id, is_final: true).order('submitted_at desc').first
 			if !final_answer.nil?
-				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
+				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id, review_method: "normal")
 
 				staff_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id, user_id: admins)
 				grade_type = "Peer grade"

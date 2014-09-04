@@ -263,6 +263,8 @@ token_list = {
 
 
 checkFormCompleteness = () ->
+	if $('#alternate-review').length > 0
+		saveCurrentPrompt()
 	return true if force_submit or ($('#alternate-review').length > 0)
 	review_complete = true
 	for item in $('input.toggle-checkbox')
@@ -326,7 +328,7 @@ saveCurrentPrompt = () ->
 	feedback = ""
 	for prompt in feedbackPrompts
 		if prompt.response? and prompt.response.length > 0
-			feedback += "#{prompt.translation}\n#{prompt.response}\n"
+			feedback += "\*#{prompt.translation}\*\n\n#{prompt.response}\n\n"
 	$('#review_comments').val(feedback)
 	saveServerData()
 
