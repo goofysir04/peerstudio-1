@@ -12,7 +12,7 @@ $(document).on 'ready page:load', ->
         if $('.clickable:checked').length == $('.clickable').length
             console.log "WE MADE IT!"
     $('.editable').redactor({s3: '/uploads/create.js'})
-
+    lastUpdated = 0
     $('#answer_form').on 'ajax:success', () ->
         lastUpdated = 0
     $('#answer_form').on 'ajax:error', (e,status,error) ->
@@ -21,7 +21,6 @@ $(document).on 'ready page:load', ->
 
 
     if($('#save-draft').length > 0)
-        lastUpdated = 0
         updateInterval = 10
         saveInterval = 60
         window.setInterval (() ->
