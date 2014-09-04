@@ -7,6 +7,11 @@ force_submit = false
 
 feedbackPrompts = [
 	{
+		prompt: "As you read this submission, note down your thoughts below<br/><small>We'll ask you for specific comments next</small>"
+		translation: "Notes while reading:"
+		tips: []
+	}
+	{
 		prompt: "What do you like most about this submission?"
 		translation: "I like:"
 		tips: ["You chose great examples - did a good job explaining the positives and areas for improvement."
