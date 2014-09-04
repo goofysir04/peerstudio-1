@@ -31,7 +31,7 @@
         <% end %>
         <!-- Alternative review, de-emphasize rubrics, use comment boxes -->
         <br/>
-        <% if @review.id % 2 == 1 and current_user.consented? and !current_user.admin? %>
+        <% if @review.id % 2 == 1 and current_user.consented? %>
         <%= f.hidden_field :comments %>
         <%= f.hidden_field :review_method, value: "prompts" %>
           <div id="alternate-review">
@@ -55,6 +55,7 @@
             </div>
             
             <legend></legend>
+            <p><small>You are seeing a different version of the reviewing interface because your classmate already has other feedback based on the rubric. </small></p>
           </div>
 
         <!-- This is the standard review, which uses rubrics. -->

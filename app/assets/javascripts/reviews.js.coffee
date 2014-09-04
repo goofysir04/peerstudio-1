@@ -17,7 +17,7 @@ feedbackPrompts = [
 		tips: []
 	}
 	{
-		prompt: "What are your suggestions for improving?"
+		prompt: "What are your suggestions for improving this work?"
 		translation: "Other suggestions:"
 		tips: []
 	}
