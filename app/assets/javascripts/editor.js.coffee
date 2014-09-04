@@ -13,6 +13,13 @@ $(document).on 'ready page:load', ->
             console.log "WE MADE IT!"
     $('.editable').redactor({s3: '/uploads/create.js'})
 
+    $('#answer_form').on 'ajax:success', () ->
+        lastUpdated = 0
+    $('#answer_form').on 'ajax:error', (e,status,error) ->
+        console.log error
+        alert("There was a problem saving your draft. Please make a backup, and try again in a bit.")
+
+
     if($('#save-draft').length > 0)
         lastUpdated = 0
         updateInterval = 10
@@ -24,7 +31,6 @@ $(document).on 'ready page:load', ->
 
         window.setInterval (() ->
             $('#answer_form').submit()
-            lastUpdated = 0
             ), saveInterval*1000
 
         $('#submit-for-feedback').click () ->
