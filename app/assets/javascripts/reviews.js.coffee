@@ -17,14 +17,14 @@ feedbackPrompts = [
 		tips: []
 	}
 	{
-		prompt: "What are your suggestions for improving this work?"
+		prompt: "What are your suggestions for improving this submission?"
 		translation: "Other suggestions:"
 		tips: []
 	}
 	{
-		prompt: "Finally, what's one small change that would make this submission much better?"
+		prompt: "Finally, what's the simplest change that would make this submission much better?"
 		translation: "One simple idea for improvement:"
-		tips: []
+		tips: ["Talk about the intended audience for the visualization", "Make make what to improve in the visualizations more concrete by adding an example question that they can't answer well."]
 	}
 ]
 
@@ -342,21 +342,23 @@ showCurrentPrompt = () ->
 		$('.finished-review').show()
 		$('.feedback-progress').hide()
 		$('#next-prompt').hide()
+		$('#submit-form').show()
 		return
 	else
 		$('#next-prompt').show()
 		$('.finished-review').hide()
 		$('.feedback-progress').show()
+		$('#submit-form').hide()
 
 	currentPrompt = feedbackPrompts[currentPromptId]
-	$('#alternate-review .review-prompt').html(currentPrompt.prompt)
+	$('#alternate-review .review-prompt').html("<span class='label label-default number-badge'>#{currentPromptId+1}</span> #{currentPrompt.prompt}")
 	$('#alternate-review .review-response').val(currentPrompt.response or "") 
 
 	if currentPrompt.tips.length is 0 
 		$('#alternate-review .tips').hide()
 	else
 		$('#alternate-review .tips').show()
-		$('#alternate-review .tips').html("Example: <ul><li>#{currentPrompt.tips.join('</li><li>')}</li></ul>")
+		$('#alternate-review .tips').html("Examples: <blockquote>#{currentPrompt.tips.join('</blockquote><blockquote>')}</blockquote>")
 
 
 showNextPrompt = () ->

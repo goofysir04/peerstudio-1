@@ -36,10 +36,10 @@
         <%= f.hidden_field :review_method, value: "prompts" %>
           <div id="alternate-review">
             <div class="row-fluid feedback-progress">
-              <label class="review-prompt">What did you like about this submission?</label>
+              <h3 class="review-prompt">What did you like about this submission?</h3>
               <textarea class="form-control review-response expandable" rows="6"></textarea>
               <div class="row-fluid">
-                <div class="tips well"></div>
+                <div class="tips"></div>
               </div>
 
             </div>
@@ -125,7 +125,7 @@
       <% end %>
       <div class="actions" id="submit-button">
         <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
-        <%= f.submit "Submit review", class: "btn btn-primary" %>
+        <%= f.submit "Submit review", class: "btn btn-primary", id: "submit-form" %>
         <%= link_to "This submission is blank!", report_blank_answer_path(@review), method: :post, confirm: "If you report this submission as blank, we will not ask others to review it. Are you sure it is blank?", class: "btn btn-danger" %>
       </div>
     <% end %>
