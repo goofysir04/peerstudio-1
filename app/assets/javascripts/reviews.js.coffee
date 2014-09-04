@@ -9,17 +9,20 @@ feedbackPrompts = [
 	{
 		prompt: "What do you like most about this submission?"
 		translation: "I like:"
-		tips: []
+		tips: ["You chose great examples - did a good job explaining the positives and areas for improvement."
+				" You do a very good job of describing that the visualization expects a good deal of background knowledge..."
+		]
 	}
 	{
 		prompt: "What questions are you left with?"
 		translation: "Open/unresolved questions:"
-		tips: []
+		tips: ["Who created this visualization? Why and for whom was it created?",
+				"What assumptions do these visualizations make?"]
 	}
 	{
 		prompt: "What are your suggestions for improving this submission?"
 		translation: "Other suggestions:"
-		tips: []
+		tips: ["Try to also include what makes the visualizations hard to read or why you wanted to modify the parts you mentioned."]
 	}
 	{
 		prompt: "Finally, what's the simplest change that would make this submission much better?"
