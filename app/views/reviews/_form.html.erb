@@ -29,72 +29,103 @@
             <p><%= @review.answer.review_request %></p>
           </div>
         <% end %>
-        <%= f.fields_for :feedback_items do |r| %>
-          <% next if r.object.rubric_item.nil? %>
-          <li class="compute-score">
-            <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
+        <!-- Alternative review, de-emphasize rubrics, use comment boxes -->
+        <br/>
+        <% if @review.id % 2 == 1 and current_user.consented? and !current_user.admin? %>
+        <%= f.hidden_field :comments %>
+        <%= f.hidden_field :review_method, value: "prompts" %>
+          <div id="alternate-review">
+            <div class="row-fluid feedback-progress">
+              <h3 class="review-prompt">What did you like about this submission?</h3>
+              <textarea class="form-control review-response expandable" rows="6"></textarea>
+              <div class="row-fluid">
+                <div class="tips"></div>
+              </div>
 
-            <div class="progress score-progress"></div>
+            </div>
 
-            <%= sanitize r.object.rubric_item.title %>
+            <div class="row-fluid finished-review" style="display:none;">
+              <h3>Thank you!</h3>
+              <p>That's all the questions we have. Please click "Submit review" below.</p>
+            </div>
 
-            <table>
+            <div class="row-fluid actions">
+                <button id="previous-prompt" class="btn btn-default" style="display:none;">Previous</button>
+                <button id="next-prompt" class="btn btn-primary pull-right">Continue</button>
+            </div>
+            
+            <legend></legend>
+            <p><small>You are seeing this reviewing interface because your classmate already has other feedback based on the rubric. </small></p>
+          </div>
 
-              <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
-                <tr>
+        <!-- This is the standard review, which uses rubrics. -->
+        <% else %>
+          <%= f.fields_for :feedback_items do |r| %>
+            <% next if r.object.rubric_item.nil? %>
+            <li class="compute-score">
+              <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
 
-                <td style="vertical-align:top;"><%= b.label %>
-                  <% unless b.object.example.blank? %>
-                    (<a href="#" class="see-example" data-example="example-<%=b.object.id%>">See example</a>)
-                    <div class="hidden" id="example-<%=b.object.id%>">
-                      <%= b.object.example %>
-                    </div>
-                  <% end %>
-                    <% if b.object.attribute_type=="binary" %>
-                      <div class="btn-group btn-toggle">
-                        <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
-                        <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
-                        <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
-                      </div>
-                    <% else %>
-                      <div class="scale"><%= b.check_box class:"scale-checkbox" %>
-                        <input type="text" id="answer_attribute_weight_<%=b.object.id%>" name="review[answer_attribute_weights][<%=b.object.id%>][weight]" value="<%= @review.answer_attribute_weight(b.object.id)%>" data-score="<%=b.object.score %>" data-options="<%= b.object.attribute_type%>" class="scale-slider"></input>
+              <div class="progress score-progress"></div>
+
+              <%= sanitize r.object.rubric_item.title %>
+
+              <table>
+
+                <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
+                  <tr>
+
+                  <td style="vertical-align:top;"><%= b.label %>
+                    <% unless b.object.example.blank? %>
+                      (<a href="#" class="see-example" data-example="example-<%=b.object.id%>">See example</a>)
+                      <div class="hidden" id="example-<%=b.object.id%>">
+                        <%= b.object.example %>
                       </div>
                     <% end %>
-                  </td>
-                </tr>
-              <% end %>
+                      <% if b.object.attribute_type=="binary" %>
+                        <div class="btn-group btn-toggle">
+                          <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
+                          <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
+                          <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
+                        </div>
+                      <% else %>
+                        <div class="scale"><%= b.check_box class:"scale-checkbox" %>
+                          <input type="text" id="answer_attribute_weight_<%=b.object.id%>" name="review[answer_attribute_weights][<%=b.object.id%>][weight]" value="<%= @review.answer_attribute_weight(b.object.id)%>" data-score="<%=b.object.score %>" data-options="<%= b.object.attribute_type%>" class="scale-slider"></input>
+                        </div>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              <table>
+              <tr>
+                <div style="padding-top:1em;">
+                  <td style="vertical-align:top; padding: 0 4px 0 0;"><%= r.check_box :miscommunication %> </td>
+                  <td style="vertical-align:top;"><%= r.label :miscommunication, "This section of the student submission was unclear." %><small> You can suggest improvements at the end of the entire rubric, in "Overall Comments".</small></td>
+                </div>
+              </tr>
+            </table>
+              <%= r.label :like_feedback, "Suggest improvements for this section. Be specific; use explanations and examples!", style: "margin-top:1em" %>
+              <%= r.text_area :like_feedback, size: "10x3", placeholder: "Your work could improve _______ by doing __________. An example of this is __________.", class:"form-control expandable comment-quality-checked" %>
+              <%= r.hidden_field :rubric_item_id %>
+            </li>
+          <% end %>
+          <li id="overall-comments">
+            <strong>Overall comments</strong>
+            <legend></legend>
+            <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples."%>
+            <%= f.text_area :comments, size: "10x5", class:"review_text form-control comment-quality-checked", placeholder:"Remember to be positive and encouraging :)" %>
+            <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
+            <legend></legend>
             <table>
-            <tr>
-              <div style="padding-top:1em;">
-                <td style="vertical-align:top; padding: 0 4px 0 0;"><%= r.check_box :miscommunication %> </td>
-                <td style="vertical-align:top;"><%= r.label :miscommunication, "This section of the student submission was unclear." %><small> You can suggest improvements at the end of the entire rubric, in "Overall Comments".</small></td>
-              </div>
-            </tr>
-          </table>
-            <%= r.label :like_feedback, "Suggest improvements for this section. Be specific; use explanations and examples!", style: "margin-top:1em" %>
-            <%= r.text_area :like_feedback, size: "10x3", placeholder: "Your work could improve _______ by doing __________. An example of this is __________.", class:"form-control expandable comment-quality-checked" %>
-            <%= r.hidden_field :rubric_item_id %>
+              <tr>
+                <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an exceptional, out of the box submission.", id: "out-of-box" %></td>
+              </tr>
+            </table>
           </li>
-        <% end %>
-        <li id="overall-comments">
-          <strong>Overall comments</strong>
-          <legend></legend>
-          <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples."%>
-          <%= f.text_area :comments, size: "10x5", class:"review_text form-control comment-quality-checked", placeholder:"Remember to be positive and encouraging :)" %>
-          <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
-          <legend></legend>
-          <table>
-            <tr>
-              <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an exceptional, out of the box submission.", id: "out-of-box" %></td>
-            </tr>
-          </table>
-        </li>
-      </ul>
-
+        </ul>
+      <% end %>
       <div class="actions" id="submit-button">
         <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
-        <%= f.submit "Submit review", class: "btn btn-primary" %>
+        <%= f.submit "Submit review", class: "btn btn-primary", id: "submit-form" %>
         <%= link_to "This submission is blank!", report_blank_answer_path(@review), method: :post, confirm: "If you report this submission as blank, we will not ask others to review it. Are you sure it is blank?", class: "btn btn-danger" %>
       </div>
     <% end %>

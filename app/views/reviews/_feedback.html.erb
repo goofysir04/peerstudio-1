@@ -16,7 +16,7 @@
                   <div class="glyphicon glyphicon-user reviewer<%= i %>"></div>
                 </div>
                 <div class="col-sm-10 col-md-9">
-                  <p><%= comment %></p>
+                  <p><%=Format.markdown comment %></p>
                 </div>
               </div>
           <% end %>
@@ -46,7 +46,7 @@
                       &nbsp;
                       No:
                       <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                        <% if !f.answer_attributes.include?(a_attr) %>
+                        <% if !f.answer_attributes.include?(a_attr)%>
                           <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail"></div>
                         <% end %>
                       <% end %>

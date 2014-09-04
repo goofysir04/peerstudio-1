@@ -5,6 +5,31 @@
 review_completion_metadata = {}
 force_submit = false
 
+feedbackPrompts = [
+	{
+		prompt: "What do you like most about this submission?"
+		translation: "I like:"
+		tips: []
+	}
+	{
+		prompt: "What questions are you left with?"
+		translation: "Open/unresolved questions:"
+		tips: []
+	}
+	{
+		prompt: "What are your suggestions for improving this submission?"
+		translation: "Other suggestions:"
+		tips: []
+	}
+	{
+		prompt: "Finally, what's the simplest change that would make this submission much better?"
+		translation: "One simple idea for improvement:"
+		tips: ["Talk about the intended audience for the visualization", "Make make what to improve in the visualizations more concrete by adding an example question that they can't answer well."]
+	}
+]
+
+currentPromptId = 0
+
 ready = () ->
 	$('.rubric_item:checkbox').click () ->
 		console.log "You clicked, haha"
@@ -14,6 +39,7 @@ ready = () ->
 
 	$('a.see-example').click showExample
 	if $('form.review-form').length > 0
+		getServerData()
 		replaceCheckboxesWithToggles()
 		updateProgressBars()
 		replaceScales()
@@ -33,7 +59,29 @@ ready = () ->
 		$('div.syncHighlighting section').hover syncHighlighting
 		$('div.syncHighlighting section').click syncPersistentHighlighting
 
+		if $('#alternate-review').length > 0
+			showCurrentPrompt()
+			$('#next-prompt').click () ->
+				showNextPrompt()
+				return false
+			$('#previous-prompt').click () ->
+				showPreviousPrompt()
+				return false
+
 	# debugTokenList()
+
+getServerData = () ->
+	server_metadata = $('#review_completion_metadata').val() + ""
+	try
+		review_completion_metadata = JSON.parse(server_metadata)
+		if review_completion_metadata.feedbackPrompts?
+			feedbackPrompts = review_completion_metadata.feedbackPrompts
+	catch e
+		console.log("couldn't parse")
+
+saveServerData = () ->
+	review_completion_metadata.feedbackPrompts = feedbackPrompts
+	$('#review_completion_metadata').val(JSON.stringify(review_completion_metadata))
 
 syncHighlighting = () ->
 	classesToHighlight = findClassesToHighlight(this)
@@ -60,13 +108,6 @@ replaceCheckboxesWithToggles = ()->
 	return if $('input.toggle-checkbox').length is 0
 	$('.btn-checkbox-yes,.btn-checkbox-no').click(syncCheckboxOnToggle)
 
-
-	server_metadata = $('#review_completion_metadata').val() + ""
-	try
-		review_completion_metadata = JSON.parse(server_metadata)
-	catch e
-		console.log("couldn't parse")
-	
 	unless review_completion_metadata.completed_checkboxes?
 		review_completion_metadata.completed_checkboxes = []
 	for box in $('input.toggle-checkbox')
@@ -104,7 +145,7 @@ syncCheckboxOnToggle = (e) ->
 		review_completion_metadata.completed_checkboxes = []
 	linkedCheckbox = el.siblings('input.toggle-checkbox').first()
 	review_completion_metadata.completed_checkboxes.push linkedCheckbox.attr('id') unless linkedCheckbox.attr('id') in review_completion_metadata.completed_checkboxes
-	$('#review_completion_metadata').val(JSON.stringify(review_completion_metadata))
+	saveServerData()
 	syncCheckbox(linkedCheckbox)
 	setProgressBarWidths()
 	return false
@@ -222,7 +263,9 @@ token_list = {
 
 
 checkFormCompleteness = () ->
-	return true if force_submit
+	if $('#alternate-review').length > 0
+		saveCurrentPrompt()
+	return true if force_submit or ($('#alternate-review').length > 0)
 	review_complete = true
 	for item in $('input.toggle-checkbox')
 		console.log "checking #{$(item).attr('id')}"
@@ -277,4 +320,53 @@ debugTokenList = () ->
 		txt += ("#{token}... : #{matcher.score}\n")
 	console.log txt
 
+saveCurrentPrompt = () ->
+	return if currentPromptId >= feedbackPrompts.length
+	currentPrompt = feedbackPrompts[currentPromptId]
+	currentPrompt.response = $('#alternate-review .review-response').val()
+	$('#review_comments').val('')
+	feedback = ""
+	for prompt in feedbackPrompts
+		if prompt.response? and prompt.response.length > 0
+			feedback += "\*#{prompt.translation}\*\n\n#{prompt.response}\n\n"
+	$('#review_comments').val(feedback)
+	saveServerData()
+
+showCurrentPrompt = () ->
+	if currentPromptId > 0 
+		$('#previous-prompt').show()
+	else
+		$('#previous-prompt').hide()
+	if currentPromptId >= (feedbackPrompts.length) 
+		console.log "Last prompt"
+		$('.finished-review').show()
+		$('.feedback-progress').hide()
+		$('#next-prompt').hide()
+		$('#submit-form').show()
+		return
+	else
+		$('#next-prompt').show()
+		$('.finished-review').hide()
+		$('.feedback-progress').show()
+		$('#submit-form').hide()
+
+	currentPrompt = feedbackPrompts[currentPromptId]
+	$('#alternate-review .review-prompt').html("<span class='label label-default number-badge'>#{currentPromptId+1}</span> #{currentPrompt.prompt}")
+	$('#alternate-review .review-response').val(currentPrompt.response or "") 
+
+	if currentPrompt.tips.length is 0 
+		$('#alternate-review .tips').hide()
+	else
+		$('#alternate-review .tips').show()
+		$('#alternate-review .tips').html("Examples: <blockquote>#{currentPrompt.tips.join('</blockquote><blockquote>')}</blockquote>")
+
+
+showNextPrompt = () ->
+	saveCurrentPrompt()
+	currentPromptId += 1
+	showCurrentPrompt()
+showPreviousPrompt = () ->
+	saveCurrentPrompt()
+	currentPromptId -= 1
+	showCurrentPrompt()
 $(document).on 'ready page:load', ready

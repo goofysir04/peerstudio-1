@@ -90,7 +90,7 @@ class Answer < ActiveRecord::Base
   end
   
   def feedback_items_by_rubric_item
-    grouped_items = self.feedback_items.select {|r| r if r.review.active}.group_by(&:rubric_item_id)
+    grouped_items = self.feedback_items.select {|r| r if r.review.active and r.review.review_method=="normal"}.group_by(&:rubric_item_id)
     reviews = self.reviews.where(active: true)
     unless reviews.empty?
       reviews.each do |r|
