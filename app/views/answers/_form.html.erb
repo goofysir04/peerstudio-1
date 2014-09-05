@@ -65,13 +65,14 @@
     </div>
   <% end %>
   <div class="row-fluid">
+    <% if @answer.submitted? or @answer.review_completed? %>
+          <div class="alert alert-info">You submitted this answer for a review, so you can't change it anymore.</div>
+          <div class="clearfix"></div>
+          <%= sanitize @answer.response %>
+    <% else %>
       <%= form_for([@assignment,@answer], remote: true, html: {id: "answer_form"}) do |f| %>      
         <div class="actions">
-          <% if @answer.submitted? or @answer.review_completed? %>
-          You submitted this answer for a review, so you can't change it anymore. 
-          <% else %>
           <%= f.submit "Save Draft", class: "btn btn-default", id: "save-draft"%> <em style="color: #999;"><span class="answer-save-status">Unsaved</span></em> <span class="answer_public_status"></span> 
-          <% end %>
           <div class="navbar-right">
             <% if @answer.submitted? %>
             <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
@@ -83,11 +84,11 @@
              <button class="btn btn-default" id="submit-final">Submit for grading as final</button>
             <% end %>
         </div>
-      
       </div>
       <div class="clearfix"></div>
         <%= f.text_area :response, size: "20x20", :id=>"answer_response", :class=>"editable" %>
       <% end %>
+    <% end %>
 </div>
 
 <script type="text/javascript">
