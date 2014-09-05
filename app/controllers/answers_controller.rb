@@ -42,15 +42,15 @@ class AnswersController < ApplicationController
       redirect_to waitlist_assignment_path(@assignment) and return
     end
 
-    @latest_answer_unreviewed = Answer.where(assignment: @assignment, user: current_user, review_completed: true).order('updated_at desc').first
-    if @latest_answer_unreviewed.nil?
+    @latest_answer_review_completed = Answer.where(assignment: @assignment, user: current_user, review_completed: true).order('updated_at desc').first
+    if @latest_answer_review_completed.nil?
       @answer = Answer.new
       @answer.assignment = @assignment
       @answer.active = false
       @answer.user = current_user
       @answer.response = @assignment.template unless @assignment.template.blank?
     else
-      redirect_to reflect_answer_path(@latest_answer_unreviewed) and return
+      redirect_to reflect_answer_path(@latest_answer_review_completed) and return
     end
     assignment = Assignment.find(params[:assignment_id])
     if assignment.course.students.exists?(current_user.id).nil?
