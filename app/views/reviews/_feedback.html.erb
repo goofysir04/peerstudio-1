@@ -13,7 +13,7 @@
             <% next if comment.nil? %>
               <div class="row">
                 <div class="col-sm-2 col-md-3">
-                  <div class="glyphicon glyphicon-user reviewer<%= i %>"></div>
+                  <div class="glyphicon glyphicon-user reviewer<%= i %>"> <%= "(Staff)" if feedback_items_by_rubric_item["reviewers"][i-1].admin? %></div>
                 </div>
                 <div class="col-sm-10 col-md-9">
                   <p><%=Format.markdown comment %></p>
@@ -40,14 +40,18 @@
                       Yes:
                       <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                         <% if f.answer_attributes.include?(a_attr) %>
-                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success"></div>
+                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success">
+                            <%= "(Staff)" if f.review.user.admin? %>
+                          </div>
                         <% end %>
                       <% end %>
                       &nbsp;
                       No:
                       <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                         <% if !f.answer_attributes.include?(a_attr)%>
-                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail"></div>
+                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail">
+                            <%= "(Staff)" if f.review.user.admin? %>
+                          </div>
                         <% end %>
                       <% end %>
                     </div>

@@ -20,12 +20,12 @@
             <tr>
               <% if f.answer_attributes.include?(a_attr) %>
                 <td>
-                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-success" disabled:"disabled">Yes</button> &nbsp;
+                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-success" disabled:"disabled">Yes</button> &nbsp;<%= "(Staff)" if f.review.user.admin? %>
                 </td>
                 <td style="vertical-align:top;"><%= a_attr.description %></td>
               <% else %>
                 <td>
-                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-danger" disabled:"disabled">No</button> &nbsp;
+                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-danger" disabled:"disabled">No</button> &nbsp;<%= "(Staff)" if f.review.user.admin? %>
                 </td>
                 <td style="vertical-align:top;"><%= a_attr.description %></td>
               <% end %>

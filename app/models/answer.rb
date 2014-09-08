@@ -95,6 +95,7 @@ class Answer < ActiveRecord::Base
     unless reviews.empty?
       reviews.each do |r|
         (grouped_items["comments"] ||= []) << r.comments
+        (grouped_items["reviewers"] ||= []) << r.user
       end
     end
     return grouped_items
