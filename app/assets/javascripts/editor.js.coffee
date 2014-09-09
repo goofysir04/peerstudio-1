@@ -17,7 +17,7 @@ $(document).on 'ready page:load', ->
         lastUpdated = 0
     $('#answer_form').on 'ajax:error', (e,status,error) ->
         console.log error
-        alert("There was a problem saving your draft. Please make a backup, and try again in a bit.")
+        alert("There was a problem saving your draft. Please make a backup, and try again in a bit. If you continue to see this error, please email hello@peerstudio.org")
 
 
     if($('#save-draft').length > 0)
@@ -39,7 +39,7 @@ $(document).on 'ready page:load', ->
                 window.location= next_url
             $('#answer_form').on 'ajax:error', (e,status,error) ->
                 console.log error
-                alert("We had trouble saving your draft. Please try again in a while.")
+                alert("We had trouble saving your draft. Please try again in a while. If you continue to see this error, please email hello@peerstudio.org")
             console.log "saving now"
             $('#answer_form').submit()
             return false
@@ -51,7 +51,7 @@ $(document).on 'ready page:load', ->
            $('#warn-final-modal').modal('show')
         $('#answer_form').on 'ajax:error.submit-warning', (e,status,error) ->
             console.log error
-            alert("We had trouble saving your draft. Please try again in a while.")
+            alert("We had trouble saving your draft. Please try again in a while. If you continue to see this error, please email hello@peerstudio.org")
         $('#answer_form').submit()
         return false       
 

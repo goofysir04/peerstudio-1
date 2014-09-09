@@ -1,11 +1,14 @@
 Potential leads:
-Kaplan
-Coursera - 1 class
-Stanford - 1 class
+Kaplan start whenever, beau
+Coursera - 1+1 class, oct 1, oct 1
+Stanford Online - 1 class (maybe another Oct 1), oct 1
+Tyler, Marti
 
 
 Sep 8-sep 12: First draft of initial paper, with earlier studies. Talk about it being used at small scale, large scale. run expt on large scale
 Sep 15- Sep 19: Set up classes, finish experimental setup
+
+---- Finish the design by now ----
 sep 23- oct 3: A week for DC; first draft of job talk
 oct 5-9: UIST 
 Oct 10: Last possible day for data
