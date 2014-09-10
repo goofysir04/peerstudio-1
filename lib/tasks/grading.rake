@@ -78,7 +78,7 @@ namespace :grading do
 			if !final_answer.nil?
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id, review_method: "normal")
 
-				staff_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id, user_id: admins)
+				staff_reviews = Review.where(review_type: "final", review_method: "normal", active: true, answer_id: final_answer.id, user_id: admins)
 				grade_type = "Peer grade"
 				if !staff_reviews.blank?
 					final_reviews = staff_reviews
