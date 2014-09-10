@@ -23,7 +23,7 @@ class UploadsController < ApplicationController
 
     s3 = AWS::S3.new
     new_object = s3.buckets[ENV['S3_BUCKET_NAME']].objects[upload_params[:obj]]
-    return_url = (new_object.url_for(:get, secure: true, expires: 1*60)).to_s
+    return_url = (new_object.url_for(:get, secure: true, expires: 10*60)).to_s
     redirect_to return_url
   end
 
