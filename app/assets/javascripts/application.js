@@ -22,6 +22,7 @@
 //= require json2
 //= require bootstrap-slider.min
 //= require turbolinks
+//= require redactor
 //Disabled
 //= #require rails.validations
 // require bootstrap-datepicker
