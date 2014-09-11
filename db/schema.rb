@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140711233311) do
+ActiveRecord::Schema.define(version: 20140904011748) do
+
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,24 +61,31 @@ ActiveRecord::Schema.define(version: 20140711233311) do
     t.integer  "user_id"
     t.float    "predicted_score"
     t.float    "current_score"
-    t.integer  "evaluations_wanted",  default: 0
-    t.integer  "total_evaluations",   default: 0
+    t.integer  "evaluations_wanted",    default: 0
+    t.integer  "total_evaluations",     default: 0
     t.float    "confidence"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state",               default: "identify"
-    t.string   "evaluation_type",     default: "default"
-    t.boolean  "staff_graded",        default: false
-    t.integer  "push_count",          default: 0
+    t.string   "state",                 default: "identify"
+    t.string   "evaluation_type",       default: "default"
+    t.boolean  "staff_graded",          default: false
+    t.integer  "push_count",            default: 0
     t.string   "base_revision_name"
     t.integer  "assignment_id"
-    t.boolean  "active",              default: true
-    t.boolean  "starred",             default: false
-    t.integer  "pending_reviews",     default: 0
-    t.boolean  "submitted",           default: false
-    t.boolean  "is_final",            default: false
+    t.boolean  "active",                default: true
+    t.boolean  "starred",               default: false
+    t.integer  "pending_reviews",       default: 0
+    t.boolean  "submitted",             default: false
+    t.boolean  "is_final",              default: false
     t.integer  "previous_version_id"
     t.text     "reflection"
+    t.datetime "submitted_at"
+    t.boolean  "review_completed",      default: false
+    t.text     "review_request"
+    t.boolean  "is_blank_submission",   default: false
+    t.boolean  "revision_email_sent",   default: false
+    t.boolean  "useful_feedback"
+    t.datetime "reviews_first_seen_at"
   end
 
   add_index "answers", ["assignment_id"], name: "fk__answers_assignment_id", using: :btree
@@ -125,7 +133,7 @@ ActiveRecord::Schema.define(version: 20140711233311) do
     t.text     "grade_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "credit",         default: 0.0
+    t.decimal  "credit",         default: 0.0
     t.integer  "marked_reviews", default: 0
     t.integer  "total_reviews",  default: 0
   end
@@ -148,6 +156,7 @@ ActiveRecord::Schema.define(version: 20140711233311) do
     t.datetime "updated_at"
     t.boolean  "grades_released", default: false
     t.text     "template"
+    t.text     "example"
   end
 
   add_index "assignments", ["course_id"], name: "fk__assignments_course_id", using: :btree
@@ -186,8 +195,8 @@ ActiveRecord::Schema.define(version: 20140711233311) do
   create_table "courses", force: true do |t|
     t.text     "title"
     t.text     "institution"
-    t.boolean  "hidden",             default: true
-    t.boolean  "open_enrollment",    default: false
+    t.boolean  "hidden",              default: true
+    t.boolean  "open_enrollment",     default: false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -198,6 +207,11 @@ ActiveRecord::Schema.define(version: 20140711233311) do
     t.text     "forum_link"
     t.text     "consumer_key"
     t.text     "consumer_secret"
+
+    t.text     "instructor_name"
+    t.boolean  "early_feedback_only", default: false
+    t.boolean  "show_timer",          default: true
+    t.boolean  "waitlist_condition",  default: false
   end
 
   add_index "courses", ["user_id"], name: "fk__courses_user_id", using: :btree
@@ -271,6 +285,7 @@ ActiveRecord::Schema.define(version: 20140711233311) do
     t.float    "score"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "miscommunication", default: false
   end
 
   add_index "feedback_items", ["review_id"], name: "fk__feedback_items_review_id", using: :btree
@@ -318,6 +333,7 @@ ActiveRecord::Schema.define(version: 20140711233311) do
     t.text     "reflection"
     t.datetime "completed_at"
     t.text     "completion_metadata"
+    t.string   "review_method",         default: "normal"
   end
 
   add_index "reviews", ["answer_id"], name: "fk__reviews_answer_id", using: :btree
@@ -388,11 +404,12 @@ ActiveRecord::Schema.define(version: 20140711233311) do
   create_table "trigger_actions", force: true do |t|
     t.string   "trigger"
     t.string   "description"
-    t.integer  "count",         default: 0
+    t.integer  "count",           default: 0
     t.integer  "user_id"
     t.integer  "assignment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_email_time"
   end
 
   add_index "trigger_actions", ["assignment_id"], name: "index_trigger_actions_on_assignment_id", using: :btree
@@ -423,6 +440,11 @@ ActiveRecord::Schema.define(version: 20140711233311) do
     t.string   "unconfirmed_email"
     t.boolean  "consented"
     t.boolean  "admin",                  default: false
+    t.boolean  "opted_out_help_email",   default: false
+    t.string   "experimental_group"
+    t.boolean  "tried_answering"
+    t.boolean  "tried_reviewing"
+    t.text     "unsubscribe_reason"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

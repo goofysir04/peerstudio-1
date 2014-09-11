@@ -1,10 +1,24 @@
 class ReviewsController < ApplicationController
-  before_action :set_review, only: [:show, :edit, :update, :destroy, :rate, :create_rating]
+  before_action :set_review, only: [:show, :edit, :update, :destroy, :rate, :create_rating, :report_blank]
+  before_action :set_answer, only: :review_answer
+  before_filter :authenticate_user_is_admin!, only: :review_answer
   before_filter :authenticate_user!
   # GET /reviews
   # GET /reviews.json
   def index
     @answer = Answer.find(params[:answer_id])
+
+    if @answer.assignment.course.students.exists?(current_user.id).nil?
+      redirect_to assignment_path(@answer.assignment), alert: "Reviews in this class are only open to enrolled students, so first create a draft of your own submission (you don't need to submit.)" and return
+    end
+
+
+    @trigger = TriggerAction.pending_action("review_required", current_user, @answer.assignment)
+
+    if @trigger.nil? and @answer.reviews_first_seen_at.nil?
+      @answer.reviews_first_seen_at = Time.now
+      @answer.save!
+    end
   end
 
   # GET /reviews/1
@@ -25,7 +39,13 @@ class ReviewsController < ApplicationController
 
   # GET /reviews/1/edit
   def edit
+    unless @review.user == current_user or current_user.admin?
+      redirect_to @review.assignment, alert: "You can only edit reviews you wrote."
+    end
+
     @answer = @review.answer
+
+    @latest_reviewer_answer = Answer.where(assignment: @answer.assignment, user: current_user).order('updated_at desc').first
   end
 
   # POST /reviews
@@ -49,20 +69,34 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1
   # PATCH/PUT /reviews/1.json
   def update
+    unless @review.user == current_user or current_user.admin?
+      redirect_to @review.assignment, alert: "You can only edit reviews you wrote."
+    end
+    
     # raise params.inspect
     respond_to do |format|
-      if !@review.active?
-        #The review is not active, so this is an update of a pending review
-        @answer = @review.answer
-        @answer.increment!(:total_evaluations)
-        @answer.decrement!(:pending_reviews) unless @answer.pending_reviews == 0
-
-        trigger = TriggerAction.add_trigger(current_user, @answer.assignment, count: -1, trigger:"review_required")
-        trigger.save!
+      @answer= @review.answer
+      process_review_triggers_and_answer!(@review)
+      if save_review_and_attributes!(@review)
+        format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Thanks, we sent that review to your classmate!' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @review.errors, status: :unprocessable_entity }
       end
-      if @review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
-        @review.set_answer_attribute_weights!(review_params[:answer_attribute_weights])
-        format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Ok, we saved that review!' }
+    end
+  end
+
+  def report_blank
+    # raise params.inspect
+    respond_to do |format|
+      @answer= @review.answer
+      @answer.is_blank_submission = true
+      @answer.save!
+      process_review_triggers_and_answer!(@review)
+      if (@review.update(active: true))
+        ReviewMailer.delay.blank_email_notice(@answer, @answer.user_id, @review.assignment_id)
+        format.html { redirect_to review_first_assignment_path(@review.assignment, recent_review: @review), notice: 'Thanks, we\'ll stop asking others to review that submission!' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -81,50 +115,66 @@ class ReviewsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  #Create a new review with a particular type 
+  #Create a new review with a particular type
   # such as paired, exchange, final etc
   def create_with_type
+
+    current_user.tried_reviewing = true
+    current_user.save!
+
+    @assignment = Assignment.find(params[:id])
+    if current_user.experimental_condition(@assignment.course) == "waitlist"
+      redirect_to waitlist_assignment_path(params[:id]) and return
+    end
+
     @submitter = User.find_by_email(params[:typed_review][:email])
     review_type = params[:typed_review][:type]
     if @submitter.nil? and review_type != "final"
       redirect_to assignment_path(params[:id]), alert: "We didn't find a user with the address #{params[:typed_review][:email]}" and return
     end
-    redirect_to assignment_path(params[:id]), alert: "You can't review yourself!" and return if @submitter==current_user 
-    
+    redirect_to assignment_path(params[:id]), alert: "You can't review yourself!" and return if @submitter==current_user
+
     @reviewed_already = Review.where(user: current_user, active: true)
     @reviewed_answers = @reviewed_already.map {|r| r.answer_id}
       # raise @reviewed_answers.inspect
     @reviewed_answers << 0 if @reviewed_answers.blank?
     case review_type
     when "exchange"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, user_id: @submitter.id, assignment_id: params[:id])
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, submitted:true, user_id: @submitter.id, assignment_id: params[:id])
     when "paired"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", [@submitter.id, current_user.id], @reviewed_answers)
+      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true,  submitted:true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", [@submitter.id, current_user.id], @reviewed_answers)
     when "final"
-      @answers = Answer.tagged_with(params[:typed_review][:revision]).where(active: true, assignment_id: params[:id]).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
+      @answers = Answer.where(active: true, submitted:true, review_completed:false, assignment_id: params[:id], is_blank_submission: false).where("user_id NOT in (?) and answers.id NOT in (?)", current_user.id, @reviewed_answers)
     else
-      redirect_to assignment_path(params[:id]), alert: "That review type has not opened yet." and return 
+      redirect_to assignment_path(params[:id]), alert: "That review type has not opened yet." and return
     end
 
     if @answers.empty?
-      redirect_to assignment_path(params[:id]), alert: "We didn't find any drafts to review" and return 
+      redirect_to assignment_path(params[:id]), alert: "We didn't find any drafts to review" and return
     end
 
-    @answer = @answers.order("(pending_reviews + total_evaluations) ASC").first
+    @answer = @answers.order("(pending_reviews + total_evaluations) ASC, submitted_at desc").first
     @review = create_review_for_answer(@answer, params[:typed_review][:type])
 
     if review_type == "paired"
       @review.copilot_email = @submitter.email
-    end 
+    end
     @review.save!
     redirect_to edit_review_path(@review)
   end
 
   def rate
-    @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
+    @trigger = TriggerAction.pending_action("review_required", current_user, @review.assignment)
+    if @review.review_method == "normal"
+      @feedback_items_by_rubric_item = @review.feedback_items.group_by(&:rubric_item_id)
+    else
+      @feedback_items_by_rubric_item = {}
+    end
     unless @review.comments.blank?
       (@feedback_items_by_rubric_item["comments"] ||= []) << @review.comments
     end
+
+    render layout: "one_column"
   end
 
   def create_rating
@@ -144,7 +194,15 @@ class ReviewsController < ApplicationController
         format.json { render json: @review.errors, status: :unprocessable_entity }
       end
     end
+  end
 
+  def review_answer
+    @review = create_review_for_answer(@answer, "final")
+    if @review.save
+      redirect_to edit_review_path @review
+    else
+      redirect_to @answer.assignment, alert: @review.errors.full_messages.join(",")
+    end
   end
 
   private
@@ -159,19 +217,23 @@ class ReviewsController < ApplicationController
       params.permit(:assignment_id)
       params.permit(:typed_review).permit(:email,:type, :revision)
 
-      params.require(:review).permit(:answer_id, :comments, :out_of_box_answer, 
+      params.require(:review).permit(:answer_id, :comments, :out_of_box_answer,
         :accurate_rating,
         :concrete_rating,
         :recognize_rating,
         :other_rating_comments,
         :reflection,
         :completion_metadata,
-        :copilot_email, 
+        :copilot_email,
+        :review_method,
         :answer_attribute_weights => [:weight],
-        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :score, :review_id, 
+        :feedback_items_attributes=>[:id, :rubric_item_id, :like_feedback, :wish_feedback, :miscommunication, :score, :review_id,
           :answer_attribute_ids=>[]])
     end
 
+    def set_answer
+      @answer = Answer.find(params[:answer_id])
+    end
     def create_review_for_answer(answer, type=nil)
       reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment, review_type: type, active:true)
       # if !reviews.empty? and type != "final"
@@ -189,11 +251,43 @@ class ReviewsController < ApplicationController
 
       review = Review.new(answer: answer, user: current_user, assignment: answer.assignment, review_type: type)
       #Set to false to be sure you actually do the review before it's considered active
-      review.active = false 
+      review.active = false
       answer.assignment.rubric_items.each do |item|
         review.feedback_items.build(rubric_item: item)
       end
       review.answer.increment!(:pending_reviews)
       review
+    end
+
+    def process_review_triggers_and_answer!(review)
+      answer = review.answer
+      if !review.active?
+        #The review is not active, so this is an update of a pending review
+        answer.increment!(:total_evaluations)
+        answer.decrement!(:pending_reviews) unless answer.pending_reviews == 0
+        trigger = TriggerAction.add_trigger(current_user, @answer.assignment, count: -1, trigger:"review_required")
+        if trigger.count == 0
+          email_trigger = TriggerAction.where(["trigger = ?, user = ?, assignment = ?","email_count", current_user, @answer.assignment])
+          if email_trigger.nil?
+            email_trigger_save = TriggerAction.add_trigger(current_user, @answer.assignment, count: 4, trigger: "email_count")
+            email_trigger_save.save!
+          end
+        end
+        trigger.save!
+      end
+    end
+
+    def save_review_and_attributes!(review)
+      last_completed_at = review.completed_at
+      if review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
+        if last_completed_at.nil? or last_completed_at < 5.minutes.ago
+          ReviewMailer.delay.reviewed_email(review.answer)
+        end
+        #add "last emailed" column
+        review.set_answer_attribute_weights!(review_params[:answer_attribute_weights])
+        return true
+      else
+        return false
+      end
     end
 end

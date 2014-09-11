@@ -1,0 +1,15 @@
+<h1>Sorry <small>we're not ready for you yet!</small></h1>
+
+<h4>Why am I seeing this page?</h4>
+<p> Because Peerstudio is a research system in active development, we're first testing it with a small number of students. This allows us to, for instance, respond to students when they email us with questions, improve the Peerstudio interface and fix problems. At this time, we will not be able to offer you peer-feedback on your draft.</p>
+
+<h4>What should I do about this?</h4>
+<p>At this moment, you don't need to do anything. 
+	<% if user_signed_in? %> We will let you know when we're ready for you, by emailing you at <strong><%= current_user.email %></strong>.<% end %>
+We estimate that we will be ready in around two weeks; we'll email you then.
+</p>
+
+<h4>I have a different question...</h4>
+<p>Please email us at <%= mail_to "hello@peerstudio.org", "hello@peerstudio.org"%>. We'll get back to you in a day or two.</p>
+
+

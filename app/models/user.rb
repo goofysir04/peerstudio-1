@@ -7,22 +7,52 @@ class User < ActiveRecord::Base
 
 	devise :omniauthable, :omniauth_providers=>[:coursera]
 
-  validate(on: :update) do |user|
-    user.errors[:base] << ("You must choose whether you want to participate in our research.") if user.consented.blank? 
+
+  validate do |user|
+    user.errors[:base] << ("You must choose whether you want to participate in our research.") if user.consented.nil?
   end
 
 	has_many :assessments
 	has_many :verifications
 
-	def experimental_condition
-		if id%5 == 0
-			return "baseline"
-		elsif id%2 == 0
-			return "verify"
-		else
-			return "identify"
-		end	
+  #This was for the L@S paper.
+	def get_and_store_experimental_condition!(course)
+		# if id%5 == 0
+		# 	return "baseline"
+		# elsif id%2 == 0
+		# 	return "verify"
+		# else
+		# 	return "identify"
+		# end
+    if !course.waitlist_condition
+      return "normal"
+    end
+    
+    if self.experimental_group.blank?
+      self.experimental_group = self.experimental_condition(course)
+      self.save!
+    end
+    return self.experimental_group
  	end
+
+  def experimental_condition(course)
+    if !self.experimental_group.blank?
+      return self.experimental_group
+    end
+
+    if !course.waitlist_condition
+      return "normal"
+    elsif id%5==0
+      return "waitlist"
+    elsif id%5 == 1
+      return "review_only"
+    elsif id% 5 == 2
+      return "submit_only"
+    else
+      return "normal"
+    end
+  end
+
 
 
  	class ImportJob <  Struct.new(:file_text)
@@ -35,7 +65,7 @@ class User < ActiveRecord::Base
         #this is a dummy password
           owning_user = User.new :password => Devise.friendly_token[0,20], :email=> row["email"]
         end
-        
+
         owning_user.cid= row["coursera_id"]
         owning_user.save!
         # print "Answer saved"
@@ -48,5 +78,5 @@ class User < ActiveRecord::Base
   def self.import(file)
     raise "Unknown file type" if File.extname(file.original_filename) != ".csv"
     Delayed::Job.enqueue ImportJob.new(file.read)
-  end 
+  end
 end

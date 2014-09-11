@@ -27,6 +27,7 @@ class Answer < ActiveRecord::Base
   acts_as_taggable_on :revisions
 
   validate :revisions_are_valid
+  validate :only_one_final, on: :update
 
   scope :reviewable, -> {where(submitted:true, active: true)}
   
@@ -72,6 +73,14 @@ class Answer < ActiveRecord::Base
       errors.add :revision_list, "You already have more than ten drafts that are #{self.revision_list}. You can't create any more."
     end
   end
+
+  def only_one_final
+    other_final_answers = Answer.where(assignment: self.assignment, user: self.user, is_final: true).where.not(id: self.id)
+    if other_final_answers.count > 0 and self.is_final?
+      errors.add :is_final, "You can only submit one draft as your final for each assignment"
+    end
+  end
+  
   def next_version
     if Answer.where(previous_version: self).exists?
       return Answer.where(previous_version: self).first
@@ -81,11 +90,12 @@ class Answer < ActiveRecord::Base
   end
   
   def feedback_items_by_rubric_item
-    grouped_items = self.feedback_items.group_by(&:rubric_item_id)
-    reviews = self.reviews
+    grouped_items = self.feedback_items.select {|r| r if r.review.active and r.review.review_method=="normal"}.group_by(&:rubric_item_id)
+    reviews = self.reviews.where(active: true)
     unless reviews.empty?
       reviews.each do |r|
         (grouped_items["comments"] ||= []) << r.comments
+        (grouped_items["reviewers"] ||= []) << r.user
       end
     end
     return grouped_items
@@ -151,6 +161,16 @@ class Answer < ActiveRecord::Base
         final_grade = ([question.min_score,grade["final_score"].to_f,question.max_score].sort[1]).floor
     end
     return final_grade
+  end
+
+
+  def self.reviewable_answers(assignment_id,user_id,revision_name)
+    reviewed_already = Review.where(user_id: user_id, active: true)
+    reviewed_answers = reviewed_already.map {|r| r.answer_id}
+      # raise @reviewed_answers.inspect
+    reviewed_answers << 0 if reviewed_answers.blank?
+    answers = Answer.tagged_with(revision_name).where(active: true, submitted:true, assignment_id: assignment_id, is_blank_submission: false).where("user_id NOT in (?) and answers.id NOT in (?)", user_id, reviewed_answers)
+    return answers.count
   end
 
   def self.push_grades(user_id, max_push_count)

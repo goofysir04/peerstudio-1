@@ -1,6 +1,8 @@
 Humanmachine::Application.routes.draw do
 
   get "welcome/index"
+  get "welcome/contact"
+  get "welcome/tos"
   get "uploads/create"
   resources :courses do
     resources :assignments, shallow: true
@@ -25,6 +27,7 @@ Humanmachine::Application.routes.draw do
       get "show_all_answers"
       get 'review_first'
       post 'create_typed_review' => 'reviews#create_with_type'
+      get 'waitlist'
     end
   end
 
@@ -93,6 +96,7 @@ Humanmachine::Application.routes.draw do
       post 'submit_for_grades'
       get 'reflect'
       post 'clone'
+      post 'upgrade'
     end
     resources :reviews, shallow: true
   end
@@ -100,7 +104,8 @@ Humanmachine::Application.routes.draw do
   
   get 'reviews/:id/rate' => "reviews#rate", as: :rate_review
   post 'reviews/:id/rate' => "reviews#create_rating", as: :create_rate_review
-  
+  post 'reviews/:id/blank' => "reviews#report_blank", as: :report_blank_answer
+  post 'reviews/:answer_id/review_answer' => "reviews#review_answer", as: :review_answer
 
   resources :questions do
     #resources :answer_attributes

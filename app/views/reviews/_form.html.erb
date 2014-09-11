@@ -11,9 +11,8 @@
     </div>
   <% end %>
   <% content_for :context_menu do %>
-  <%= form_for(@review, html: {:"class"=>"review-form"}) do |f| %>
-  <p>Here's how this assignment should be assessed</p>
-      <ul class="rubric">
+  <%= form_for(@review, html: {:"class"=>"review-form", :id => "review-checked-form"}) do |f| %>
+      <ul class="rubric" id="review-rubric">
         <% if @review.review_type== "paired"%>
           <li>
               <strong>Who is your pair reviewing partner?</strong>
@@ -21,63 +20,113 @@
               <%= f.email_field :copilot_email, class:"input-block-level", placeholder:"your-partner@ucsd.edu" %>
           </li>
         <% end %>
-        <%= f.fields_for :feedback_items do |r| %>
-          <% next if r.object.rubric_item.nil? %>
-          <li class="compute-score">
-            <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
+        <% if current_user.admin? %>
+          Submission by <%= @review.answer.user.name %> <<%= @review.answer.user.email %>> (Only staff can see names.)
+        <% end %>
+        <% unless @review.answer.review_request.blank? %>
+          <div class="well">
+            <strong>Student's review request:</strong>
+            <p><%= @review.answer.review_request %></p>
+          </div>
+        <% end %>
+        <!-- Alternative review, de-emphasize rubrics, use comment boxes -->
+        <br/>
+        <% if false %>
+        <%= f.hidden_field :comments %>
+        <%= f.hidden_field :review_method, value: "prompts" %>
+          <div id="alternate-review">
+            <div class="row-fluid feedback-progress">
+              <h3 class="review-prompt">What did you like about this submission?</h3>
+              <textarea class="form-control review-response expandable" rows="6"></textarea>
+              <div class="row-fluid">
+                <div class="tips"></div>
+              </div>
+
+            </div>
+
+            <div class="row-fluid finished-review" style="display:none;">
+              <h3>Thank you!</h3>
+              <p>That's all the questions we have. Please click "Submit review" below.</p>
+            </div>
+
+            <div class="row-fluid actions">
+                <button id="previous-prompt" class="btn btn-default" style="display:none;">Previous</button>
+                <button id="next-prompt" class="btn btn-primary pull-right">Continue</button>
+            </div>
             
-            <div class="progress score-progress"></div>
+            <legend></legend>
+            <p><small>You are seeing this reviewing interface because your classmate already has other feedback based on the rubric. </small></p>
+          </div>
 
-            <%= sanitize r.object.rubric_item.title %>
+        <!-- This is the standard review, which uses rubrics. -->
+        <% else %>
+          <%= f.fields_for :feedback_items do |r| %>
+            <% next if r.object.rubric_item.nil? %>
+            <li class="compute-score">
+              <strong><%= r.object.rubric_item.short_title %></strong> <span class="pull-right badge"><%= "(#{r.object.rubric_item.max_label})" unless r.object.rubric_item.max_label.blank?%></span>
 
-            <table>
-                
-              <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
-                <tr>
+              <div class="progress score-progress"></div>
 
-                <td style="vertical-align:top;"><%= b.label %>
-                  <% unless b.object.example.blank? %>
-                    (<a href="#" class="see-example" data-example="example-<%=b.object.id%>">See example</a>)
-                    <div class="hidden" id="example-<%=b.object.id%>">
-                      <%= b.object.example %>
-                    </div>
-                  <% end %>
-                    <% if b.object.attribute_type=="binary" %>
-                      <div class="btn-group btn-toggle"> 
-                        <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
-                        <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
-                        <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
-                      </div>
-                    <% else %>
-                      <div class="scale"><%= b.check_box class:"scale-checkbox" %>
-                        <input type="text" id="answer_attribute_weight_<%=b.object.id%>" name="review[answer_attribute_weights][<%=b.object.id%>][weight]" value="<%= @review.answer_attribute_weight(b.object.id)%>" data-score="<%=b.object.score %>" data-options="<%= b.object.attribute_type%>" class="scale-slider"></input>
+              <%= sanitize r.object.rubric_item.title %>
+
+              <table>
+
+                <%= r.collection_check_boxes(:answer_attribute_ids, AnswerAttribute.where(:rubric_item_id => r.object.rubric_item.id), :id, :description) do |b| %>
+                  <tr>
+
+                  <td style="vertical-align:top;"><%= b.label %>
+                    <% unless b.object.example.blank? %>
+                      (<a href="#" class="see-example" data-example="example-<%=b.object.id%>">See example</a>)
+                      <div class="hidden" id="example-<%=b.object.id%>">
+                        <%= b.object.example %>
                       </div>
                     <% end %>
-                  </td>
-                </tr>
-              <% end %>
+                      <% if b.object.attribute_type=="binary" %>
+                        <div class="btn-group btn-toggle">
+                          <button class="btn btn-xs btn-default btn-checkbox-yes">Yes</button>
+                          <%= b.check_box :style => "margin:0 5px 0 0;", class:"toggle-checkbox", "data-score"=> b.object.score%>
+                          <button class="btn btn-xs btn-default btn-checkbox-no">No</button>
+                        </div>
+                      <% else %>
+                        <div class="scale"><%= b.check_box class:"scale-checkbox" %>
+                          <input type="text" id="answer_attribute_weight_<%=b.object.id%>" name="review[answer_attribute_weights][<%=b.object.id%>][weight]" value="<%= @review.answer_attribute_weight(b.object.id)%>" data-score="<%=b.object.score %>" data-options="<%= b.object.attribute_type%>" class="scale-slider"></input>
+                        </div>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              <table>
+              <tr>
+                <div style="padding-top:1em;">
+                  <td style="vertical-align:top; padding: 0 4px 0 0;"><%= r.check_box :miscommunication %> </td>
+                  <td style="vertical-align:top;"><%= r.label :miscommunication, "This section of the student submission was unclear." %><small> You can suggest improvements at the end of the entire rubric, in "Overall Comments".</small></td>
+                </div>
+              </tr>
             </table>
-            <%= r.text_area :like_feedback, placeholder: "How can I improve on this part?", class:"form-control", size: "10x4" %>
-            <%= r.hidden_field :rubric_item_id %>
+              <%= r.label :like_feedback, "Suggest improvements for this section. Be specific; use explanations and examples!", style: "margin-top:1em" %>
+              <%= r.text_area :like_feedback, size: "10x3", placeholder: "Your work could improve _______ by doing __________. An example of this is __________.", class:"form-control expandable comment-quality-checked" %>
+              <%= r.hidden_field :rubric_item_id %>
+            </li>
+          <% end %>
+          <li id="overall-comments">
+            <strong>Overall comments</strong>
+            <legend></legend>
+            <%= f.label :comments, "Suggest ways to make the student submission clearer. Be specific; use explanations and examples."%>
+            <%= f.text_area :comments, size: "10x5", class:"review_text form-control comment-quality-checked", placeholder:"Remember to be positive and encouraging :)" %>
+            <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
+            <legend></legend>
+            <table>
+              <tr>
+                <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an exceptional, out of the box submission.", id: "out-of-box" %></td>
+              </tr>
+            </table>
           </li>
-        <% end %>
-        <li>
-          <strong>Overall comments</strong> 
-          <legend></legend>
-          <%= f.text_area :comments, size: "10x5", class:"review_text form-control" %>
-          <div class="alert alert-warning" id="review_tips">Review tips appear here as you begin typing.</div>
-          <legend></legend>
-          <table>
-            <tr>
-              <td style="vertical-align:top;"><%= f.check_box :out_of_box_answer, :style => "margin:0 5px 0 0;" %></td><td style="vertical-align:top;"><%= f.label :out_of_box_answer, "This is an excellent, out of the box submission." %></td>
-            </tr>
-          </table>
-        </li>
-      </ul>
-      
-      <div class="actions">
+        </ul>
+      <% end %>
+      <div class="actions" id="submit-button">
         <%= f.hidden_field :completion_metadata, :id=>"review_completion_metadata" %>
-        <%= f.submit "Submit review", class: "btn btn-primary" %>
+        <%= f.submit "Submit review", class: "btn btn-primary", id: "submit-form" %>
+        <%= link_to "This submission is blank!", report_blank_answer_path(@review), method: :post, confirm: "If you report this submission as blank, we will not ask others to review it. Are you sure it is blank?", class: "btn btn-danger" %>
       </div>
     <% end %>
 <% end %>
@@ -108,6 +157,43 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Back to reviewing</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal" id="phoned-in-review-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">This community values substantive comments!</h4>
+        </div>
+        <div class="modal-body">
+          <p>Which comment do you think would help you improve your work most?</p>
+          <% unless @latest_reviewer_answer.nil?%>
+            <div class="row-fluid well">
+                <% answer_excerpt = @latest_reviewer_answer.response.truncate(350) + '...'  if answer_excerpt.blank?
+                 %>
+               <%= Format.markdown answer_excerpt %>
+            </div>
+          <%  end %>
+          <div class="row-fluid">
+            <div class="col-sm-5">
+              <blockquote style="display: table-cell; vertical-align: middle;">"Good essay"</blockquote>
+            </div>
+            <div class="col-sm-2">
+              or
+            </div>
+            <div class="col-sm-5">
+              <blockquote>"I think you have a clear overview of your difficulties, but perhaps it's worth trying to dig more deeply to understand why you have these difficulties? Perhaps you should..."</blockquote>
+            </div>
+          </div>
+          <div class="fluid">
+            <p>Peerstudio is a community that values helpful, substantive reviews. <strong>To get great reviews, we all need to write great reviews.</strong> Could you take a moment to expand on your comments?</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">Yes, I'll expand on my comments</button>
+          <button type="button" class="btn btn-default" id="force-subimt-review">Submit anyway</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

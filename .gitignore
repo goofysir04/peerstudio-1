@@ -19,3 +19,7 @@ analysis/
 .env
 # Ignore application configuration
 /config/application.yml
+
+#Ignore annoying derpy thing
+*.*~
+

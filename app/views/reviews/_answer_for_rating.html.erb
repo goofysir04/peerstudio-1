@@ -3,48 +3,42 @@
     </h1>
 </div>
 
-<div class="row">
-  <div class="assignment-rubric span4">
+<div class="row-fluid">
+  <div class="assignment-rubric">
     <div class="assignment-rubric-content"%>
         <%= yield %>
     </div>
 
     <%= form_for(@review, url: create_rate_review_path(@review), method: :post) do |f| %>
-    <% unless @review.review_type.blank?%>
-      <p><strong><%= @review.review_type.capitalize%> review.</strong></p>
-    <% end %>
     <p>Please answer honestly. Your feedback will be kept anonymous. How do you rate the following statements?</p>
-    <%= f.label :accurate_rating, "\"The reviewer accurately assessed my work on this assignment\"" %>
-
-     <%= f.select :accurate_rating, options_for_select([["strongly disagree",1], ["disagree", 2], ["somewhat disagree",3], ["somewhat agree",4], ["agree",5],
-     ["strongly agree", "6"]]), prompt: "Choose one" %>
-    
-    <%= f.label :concrete_rating, "\"The reviewer provided concrete, actionable steps I can take to improve my  work in this class\""%>
-     <%= f.select :concrete_rating, options_for_select([["strongly disagree",1], ["disagree", 2], ["somewhat disagree",3], ["somewhat agree",4], ["agree",5],
-     ["strongly agree", "6"]]), prompt: "Choose one" %>
-    
-    <%= f.label :recognize_rating, "\"The reviewer helped me to recognize a problem with my work that I had not  before recognized\"" %>
-    <%= f.select :recognize_rating, options_for_select([["strongly disagree",1], ["disagree", 2], ["somewhat disagree",3], ["somewhat agree",4], ["agree",5],
-     ["strongly agree", "6"]]), prompt: "Choose one" %>
-    
-    <%=f.label :other_rating_comments, "Other comments?" %>
-    <%= f.text_area :other_rating_comments %>
-
-    <%=f.label :reflection, "Reflect on the above review. How would you improve your own work?" %>
-    <%= f.text_area :reflection %>
-    <%= f.submit "Submit and rate next review", class: "btn btn-primary" %>
+    <div class="form-group">
+      <%= f.label :accurate_rating, "\"The reviewer accurately assessed my work on this assignment\"" %>
+       <%= f.select :accurate_rating, options_for_select([["strongly disagree","1"], ["disagree", "2"], ["somewhat disagree","3"], ["somewhat agree","4"], ["agree","5"],
+       ["strongly agree", "6"]], @review.accurate_rating), prompt: "Choose one" %>
+    </div>
+    <div class="form-group">
+      <%= f.label :concrete_rating, "\"The reviewer provided concrete, actionable steps I can take to improve my  work in this class\""%>
+       <%= f.select :concrete_rating, options_for_select([["strongly disagree","1"], ["disagree", "2"], ["somewhat disagree","3"], ["somewhat agree","4"], ["agree","5"],
+       ["strongly agree", "6"]], @review.concrete_rating), prompt: "Choose one" %>
+    </div> 
+    <div class="form-group">
+      <%= f.label :recognize_rating, "\"The reviewer helped me to recognize a problem with my work that I had not  before recognized\"" %>
+      <%= f.select :recognize_rating, options_for_select([["strongly disagree","1"], ["disagree", "2"], ["somewhat disagree","3"], ["somewhat agree","4"], ["agree","5"],
+       ["strongly agree", "6"]], @review.recognize_rating), prompt: "Choose one" %>
+    </div>
+    <div class="form-group">
+      <%=f.label :other_rating_comments, "Other comments?" %>
+      <%= f.text_area :other_rating_comments, class:"form-control" %>
+    </div>
+    <div class="form-group">
+      <%= f.submit "Submit and rate next review", class: "btn btn-primary" %>
+    </div>
     <%end %>
-
-
-
-
   </div>
-
+  <h3>Your submission</h3>
   <div class="field span8">
     <div class="edited-content">
       <%= sanitize Format.markdown answer.response unless answer.response.nil? %>
-
-      <%= render partial:"answers/attachments", locals: {answer: answer} %>
     </div>
   </div>
 </div>

@@ -22,6 +22,11 @@
       <%= f.label :template, "Assignment template (See example)" %>
       <%= f.text_area :template, placeholder: "Title\nArgument\nEvidence\nConclusion.", class: "editable" %>
     </div>
+
+        <div class="form-group">
+      <%= f.label :example, "Example of great student work" %>
+      <%= f.text_area :example, placeholder: "Choose something that students should aspire to", class: "editable" %>
+    </div>
   </div>
   <div class="row-fluid">
     <div class="col-sm-6">
@@ -54,14 +59,14 @@
     </div>
   </div>
   
-  <div class="col-md-5 col-sm-6">
+  <div class="col-md-8">
     <ul class="rubric">
       <%= f.fields_for :rubric_items do |r| %>
         <li>
           <div class="row-fluid">
             <div class="row-fluid">
-              <div class="col-sm-11"><strong><%= r.text_field :short_title, placeholder: "Title", class: "form-control" %></strong></div>
-              <span class="badge col-sm-1"><%=r.text_field :max_label, class:"form-control", placeholder: "opt. max score"%></span>
+              <div class="col-sm-9"><strong><%= r.text_field :short_title, placeholder: "Title", class: "form-control" %></strong></div>
+              <span class="badge col-sm-3"><%=r.text_field :max_label, class:"form-control", placeholder: "opt. max score"%></span>
             </div>
             <div class="row-fluid">
               <%=r.text_area :title, placeholder: "An optional longer explanation", class: "form-control" %>

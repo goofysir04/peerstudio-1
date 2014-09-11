@@ -8,9 +8,7 @@
       <div style="inline-block; float:left;">
         <h1>PeerStudio</h1>
         <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
-        <%= mail_to "peerstudio@cs.stanford.edu", subject: "Using PeerStudio in my class" do %>
-          <span class="btn btn-lg btn-primary" role="button"> Instructors, contact us to use PeerStudio in your class. </span>
-        <% end %>
+          <a class="btn btn-lg btn-primary" href="<%=welcome_contact_path%>" role="button"> Instructors, contact us to use PeerStudio in your class. </a>
         <% if !@courses.blank? %>
           <div class="bottom">
             <p>Courses using PeerStudio</p>
@@ -87,9 +85,15 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2 class="featurette-heading text-center">Want to learn more?</h2>
-      <p class="lead text-center">Instructors, <%= mail_to "peerstudio@cs.stanford.edu", "contact us", subject: "Using PeerStudio in my class" %> to use PeerStudio in your class.</p>
+      <h2 class="featurette-heading text-center">Want to use Peerstudio in your class?</h2>
+      <p class="lead text-center"><a href="<%=welcome_contact_path%>">Contact us</a> to use PeerStudio.</p>
     </div>
   </div>
 
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#signInModal').modal('show');
+});
+</script>

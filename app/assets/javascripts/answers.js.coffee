@@ -4,4 +4,4 @@ bind_tab_toggle = ->
     $(".assignment-rubric").toggleClass "span4"
     return
   return
-$(document).ready bind_tab_toggle
+$(document).on 'ready page:load', bind_tab_toggle

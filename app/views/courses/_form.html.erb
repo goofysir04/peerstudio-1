@@ -13,8 +13,9 @@
 </div>
 <div class="row-fluid">
   <%= form_for(@course) do |f| %>
-  <div class="col-sm-6">
-    <ul class="thumbnails">
+
+  <div class="col-sm-4">
+    <ul class="thumbnails" style="padding-left: 0px;">
     <style>
       .row_header {
         font-weight: 700;
@@ -25,7 +26,7 @@
       }
 
       .thumbnails > li {
-        margin-left: 20px;
+        margin-left: 0px;
       }
     </style>
 
@@ -47,7 +48,7 @@
                 INSTRUCTOR
               </td>
               <td>
-                <%=@course.user.name%>
+                <%= f.text_field :instructor_name, class:"form-control", placeholder: "Courtney Noh" %>
               </td>
             </tr>
             <tr>
@@ -56,7 +57,7 @@
               </td>
               <td>
                 <%= f.text_field :institution, class:"form-control", placeholder: "Stanford University" %>
-              </td>        
+              </td>
             </tr>
           </table>
         </div>
@@ -70,9 +71,29 @@
         <%= f.check_box :hidden %> <strong>This course is hidden</strong> (Don't show it on the PeerStudio homepage)
       <% end %>
     </div>
+
+    <div class="checkbox">
+      <%= f.label :show_timer do %>
+        <%= f.check_box :show_timer %> <strong>Show students an estimate of reviewing delay</strong>
+        <div class="well">
+          <p>Preview:</p>
+            <%= render partial: "reviewing_delay", locals:{assignment: nil} %>
+        </div>
+      <% end %>
+    </div>
     <div class="checkbox">
       <%= f.label :open_enrollment do %>
         <%= f.check_box :open_enrollment %> <strong>This class is now active</strong> (students can submit work)
+      <% end %>
+    </div>
+        <div class="checkbox">
+      <%= f.label :early_feedback_only do %>
+        <%= f.check_box :early_feedback_only %> <strong>Only use PeerStudio for early feedback </strong> (students submit final work elsewhere)
+      <% end %>
+    </div>
+        <div class="checkbox">
+      <%= f.label :waitlist_condition do %>
+        <%= f.check_box :waitlist_condition %> <strong>This class has a waitlist for students</strong> (for research!)
       <% end %>
     </div>
 

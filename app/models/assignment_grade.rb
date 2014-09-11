@@ -8,7 +8,7 @@ class AssignmentGrade < ActiveRecord::Base
       csv << ['name', 'email', 'grade']
       self.group(:user_id).sum(:credit).each do |user,grade|
       	student = User.find(user)
-        csv << [student.name,student.email, grade.round]
+        csv << [student.name,student.email, grade.round(2)]
       end
     end
   end

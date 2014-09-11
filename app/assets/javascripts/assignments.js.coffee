@@ -7,7 +7,9 @@
 #   local: ['timtrueman', 'JakeHarding', 'vskarich']
 # })
 
-$(document).ready () ->
+$(document).on 'ready page:load', () ->
+	$('#write').click showSubmitWarning
+	$('#give-feedback').click showReviewWarning
 	$("#typed_review_type").change(()->
 		$("#typed_review_email").show().attr("placeholder","Choose a review type first")
 		$("#start_review").val("Start review")
@@ -22,3 +24,17 @@ $(document).ready () ->
 				$("#typed_review_email").hide()
 				$("#start_review").val("Start final review")
 	)
+
+showSubmitWarning = (el) ->
+	if($(this).data('showLateWarning'))
+		$('#submit-late-work').modal('show')
+		return false
+	else
+		return true
+
+showReviewWarning = (el) ->
+	if($(this).data('showLateWarning'))
+		$('#review-late-work').modal('show')
+		return false
+	else
+		return true

@@ -1,0 +1,89 @@
+<style type="text/css">
+  .rubric {margin: 0;}
+  .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
+  </style>
+  <% if trigger.nil? %>
+    <ul class="rubric">
+      <% unless feedback_items_by_rubric_item["comments"].nil? %>
+        <li>
+          <strong>Overall feedback:</strong>
+          <br/>
+          <legend></legend>
+          <% feedback_items_by_rubric_item["comments"].each.with_index(1) do |comment,i| %>
+            <% next if comment.nil? %>
+              <div class="row">
+                <div class="col-sm-2 col-md-3">
+                  <div class="glyphicon glyphicon-user reviewer<%= i %>"> <%= "(Staff)" if feedback_items_by_rubric_item["reviewers"][i-1].admin? %></div>
+                </div>
+                <div class="col-sm-10 col-md-9">
+                  <p><%=Format.markdown comment %></p>
+                </div>
+              </div>
+          <% end %>
+        </li>
+      <% end %>
+      <% answer.assignment.rubric_items.each do |r| %>
+        <li>
+          <strong><%= r.short_title %></strong>
+          <!-- <span class="pull-right label">Max: <%=r.max %><%= "(#{r.max_label})" unless r.max_label.blank?%></span> -->
+          <br/>
+          <legend></legend>
+          <%= sanitize r.title %>
+          <% if feedback_items_by_rubric_item[r.id].nil? %>
+          No review.
+          <% else %>
+            <div class="row-fluid">
+                <% answer.assignment.rubric_items.find(r.id).answer_attributes.each do |a_attr| %>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <p><%= a_attr.description %></p>
+                      Yes:
+                      <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
+                        <% if f.answer_attributes.include?(a_attr) %>
+                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success">
+                            <%= "(Staff)" if f.review.user.admin? %>
+                          </div>
+                        <% end %>
+                      <% end %>
+                      &nbsp;
+                      No:
+                      <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
+                        <% if !f.answer_attributes.include?(a_attr)%>
+                          <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail">
+                            <%= "(Staff)" if f.review.user.admin? %>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                  <legend></legend>
+                <% end %>
+              Comments <br/>
+              <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
+
+                  <% unless f.like_feedback.blank? %>
+                    <div class="col-sm-2 col-md-3">
+                      <div class="reviewer-label reviewer<%= i %>"></div>
+                    </div>
+                    <div class="col-sm-10 col-md-9">
+                      <p><%= f.like_feedback %></p>
+                    </div>
+                  <% end %>
+
+              <% end %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="well">
+      <h2>Reviews locked!</h2>
+      <p>
+        To see your reviews, you need review others first. You have <strong><%= trigger.count %> reviews</strong> to complete before you can see your own review.
+      </p>
+
+        <%= link_to "Give feedback now", create_typed_review_assignment_path(answer.assignment_id,assignment_id:answer.assignment_id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %>
+
+    </div>
+  <% end %>

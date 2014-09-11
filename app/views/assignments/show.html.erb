@@ -1,24 +1,24 @@
 <h1>
   <%= @assignment.title %>
-  <small>  Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %> 
+  <small>
+    <% if @assignment.ended?%>
+    Closed
+    <% else %>
+    Due on <%= (@assignment.due_at).strftime "%b %e, %l:%M %p" %>
+    <% end %>
   </small>
 </p>
 </h1>
-
 <div class="row-fluid header-buttons">
 
   <!-- The basic UI here is two big fat buttons, and a subsidiary menu for the lawyers -->
   <div class="col-xs-6">
-    <%= link_to new_assignment_answer_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write" do %>
-    Write your answer <div class="deadline"> (Due <%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</div>
+    <%= link_to new_assignment_answer_path(@assignment), class:"btn paper paper-curl-right btn-block", id: "write", data: {:"show-late-warning" => @assignment.ended?} do %> Create/edit your draft <div class="deadline"> (Due <%= "in " if @assignment.due_at > Time.now %><%= distance_of_time_in_words @assignment.due_at, Time.now %><%= " ago" if @assignment.due_at < Time.now %>)</div>
     <% end %>
   </div>
   <div class="col-xs-5">
-    <%= link_to create_typed_review_assignment_path(assignment_id:3,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback" do %>
-    Give peers feedback 
-      <% unless @trigger.nil? %>
-        <div class="deadline">(Pending: <%= @trigger.count %> reviews)</div>
-      <% end %>
+    <%= link_to create_typed_review_assignment_path(assignment_id:@assignment,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class:"btn paper paper-curl-left btn-block", id: "give-feedback", data: {:"show-late-warning" => @assignment.ended?} do %>
+    Give peers feedback
     <% end %>
   </div>
   <div class="btn-group col-xs-1">
@@ -36,18 +36,25 @@
   </div>
 </div>
 <div class="clearfix"></div>
+<% if !@assignment.ended?%>
+ <%= render partial: "courses/reviewing_delay", locals:{assignment: @assignment} %>
+<% end %>
+
 <div class="row-fluid">
-  <div id="assignment_description">
-    <%= sanitize @assignment.description %>
-  </div>
+
+  <% if @my_answers.blank? %>
+    <div id="assignment_description">
+      <%= sanitize @assignment.description %>
+    </div>
+  <% end %>
   <div id="assignment_answers">
     <ul class="nav nav-tabs">
       <li class="active"><a href="#my_answers" data-toggle="tab">My Drafts</a></li>
       <li><a href="#my_reviews" data-toggle="tab">My reviews</a></li>
       <% if user_signed_in? and current_user.admin? %>
-      <li><a href="#out_of_box_answers" data-toggle="tab">Out of box answers</a></li>
+      <li><a href="#out_of_box_answers" data-toggle="tab">Exceptional answers</a></li>
       <% end %>
-      <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
+      <% if @assignment.ended? %>
       <li><a href="#all_answers" data-toggle="tab">All answers</a></li>
       <li><a href="#starred_answers" data-toggle="tab">Starred answers</a></li>
       <% end %>
@@ -60,7 +67,6 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Draft</th>
                   <th>Preview</th>
                   <th>Actions</th>
                 </tr>
@@ -69,28 +75,37 @@
                 <% if @my_answers %>
                   <% @my_answers.each do |answer| %>
                   <tr>
-                    <td><%= answer.revision_name %> </td>
                     <td><%= sanitize truncate(answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                       <td>
                       <% if answer.submitted? %>
-                      <span class="label label-important">Being reviewed</span> 
-                      <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
+                        <% if answer.review_completed? %>
+                          <span class="label label-info">No longer reviewed</span>
+                        <% else %>
+                          <span class="label label-success">Being reviewed</span>
+                        <% end %>
+                        <% if answer.is_final? %><span class="label label-danger">Submitted for final</span><% end %>
+                      <% if answer.is_final? %>
+                        <%= link_to "See reviews", answer_reviews_path(answer) %>
                       <% else %>
-                    
-                      <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
+                        <%= link_to "See reviews/revise submission", answer_reviews_path(answer) %>
+                          ||  
+                        <%= link_to "Submit for final?", upgrade_answer_path(answer), method: :post %>
+                      <% end %>
+                      
+                      <% else %>
+                        <span class="label label-warning">Editing</span>
+                        <%= link_to "Edit", edit_answer_path(answer), class:"btn" %> <%= link_to 'Delete draft', answer, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                       <% end %>
                     </td>
-                    
+
                   </tr>
-                  <% end %> 
+                  <% end %>
                 <% end %>
               </tbody>
             </table>
             <% next_due_milestone = @assignment.task_list.detect {|task| task[:open_at] < Time.now and task[:close_at] > Time.now} %>
             <% if !next_due_milestone.blank? and @my_answers.tagged_with(next_due_milestone[:name]).blank? %>
               <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Create your #{next_due_milestone[:name]}", new_assignment_answer_path(@assignment, draft_type: next_due_milestone[:name]), :class=>"btn btn-success" %></p>
-            <% else %>
-              <p  style="text-align:center; padding:10px 0 10px 0">Update your draft above</p>
             <% end %>
           <% end %>
         </div>
@@ -102,7 +117,6 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Draft title</th>
                 <th>Preview</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -112,7 +126,7 @@
               <% if @my_reviews %>
                 <% @my_reviews.each do |review| %>
                 <tr>
-                  <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
+
                   <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
                   <% if review.rating_completed? %>
                     <td><span class="label label-success">Rating complete</span></td>
@@ -123,17 +137,15 @@
                   <%= link_to "Read and Rate", rate_review_path(review), class:"btn btn-primary" %>
                 </td>
                 </tr>
-                <% end %> 
-              <% end %> 
+                <% end %>
+              <% end %>
             </tbody>
           </table>
           <h3>Reviews I wrote</h3>
           <table class="table">
             <thead>
               <tr>
-                <th>Draft title</th>
                 <th>Answer preview</th>
-                <th>Review type</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -142,21 +154,15 @@
               <% if !@reviews_by_me.blank? %>
                 <% @reviews_by_me.each do |review| %>
                 <tr>
-                  <td><%= review.answer.revision_name.blank? ? "<em>Unnamed</em>".html_safe : review.answer.revision_name %></td>
                   <td><%= sanitize truncate(review.answer.response, length:50, escape: false) or "<em>Not found</em>" %></td>
-                  <td><%= review.review_type.capitalize unless review.review_type.nil? %> review 
-                    <% if review.review_type == "paired" and review.copilot_email == current_user.email %>
-                      (Copilot)
-                    <% end %>
-                  </td>
                   <td>
                       <%= link_to "Edit", edit_review_path(review), class:"btn" %> <%= link_to 'Delete review', review, method: :delete, data: { confirm: 'Are you sure? You can\'t undo this' } %>
                   </td>
                 </tr>
-                <% end %> 
-              <% end %> 
+                <% end %>
+              <% end %>
             </tbody>
-          </table> 
+          </table>
           <% end %>
         </div>
         <% if user_signed_in? and current_user.admin? %>
@@ -164,7 +170,7 @@
             <%= render partial: "reviews/answers_with_reviews", locals: {answers: Answer.find(@out_of_box_answers.keys)} %>
           </div>
         <% end %>
-        <% if !@assignment.task_list.last.blank? and @assignment.task_list.last[:review_close_at] < Time.now %>
+        <% if @assignment.ended?%>
         <div id="all_answers" class="tab-pane">
           <%= render partial: "reviews/answers_with_reviews", locals: {answers: @all_answers} %>
           <p  style="text-align:center; padding:10px 0 10px 0"><%= link_to "Show more answers", show_all_answers_assignment_path(@assignment), class: "btn btn-primary", remote: true %></p>
@@ -175,5 +181,45 @@
         <% end %>
     </div>
   </div>
+    <% if !@my_answers.blank? %>
+    <div id="assignment_description">
+      <h3>Assignment Description</h3>
+      <%= sanitize @assignment.description %>
+    </div>
+  <% end %>
 </div>
 
+<% content_for(:modals) do %>
+  <div class="modal" id="submit-late-work">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">You're submitting after the deadline!</h4>
+        </div>
+        <div class="modal-body">
+          <p> Submitting work after the deadline will inform staff!</p>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Create draft anyway", new_assignment_answer_path(@assignment), class: "btn btn-default"%>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal" id="review-late-work">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">You're reviewing after the deadline!</h4>
+        </div>
+        <div class="modal-body">
+          <p> Reviewing work after the deadline will inform staff!</p>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Review anyway", create_typed_review_assignment_path(assignment_id:@assignment,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-default"%>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<% end %>

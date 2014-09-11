@@ -1,5 +1,7 @@
-<h1>Please select a course to begin</h1>
-<ul class="thumbnails">
+<h1 id="course_header">Please select a course to begin</h1> 
+<p><button id="startTourBtn" class="btn btn-large btn-primary">First time here? Take a tour of PeerStudio</button></p>
+
+<ul class="thumbnails" style="padding-left:0px;">
     <% @courses.each do |course| %>
       <%= render :partial => 'course_box', :locals => { :course => course } %>
     <% end %>

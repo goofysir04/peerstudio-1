@@ -35,5 +35,9 @@ module Humanmachine
 
     # config.autoload_paths += %W(#{config.root}/app/models/ckeditor)
 
+    #Allow section tags in the sanitized html
+    config.action_view.sanitized_allowed_tags = 'table', 'tr', 'td', 'thead', 'section'
+
+
   end
 end

@@ -1,16 +1,21 @@
 class CoursesController < ApplicationController
   # before_filter authenticate_user! except: :index
+
   before_action :set_course, only: [:show, :edit, :update, :destroy, :regenerate_consumer_secret, :enroll_lti]
   skip_before_filter :verify_authenticity_token, :only => [:enroll_lti]
+
+  layout "one_column"
+
   # GET /courses
   # GET /courses.json
   def index
-    @courses = Course.where(hidden: false)
+    @courses = Course.where(hidden: false).order('created_at desc')
   end
 
   # GET /courses/1
   # GET /courses/1.json
   def show
+    @closest_assign = @course.closest_open(params[:id])
   end
 
   # GET /courses/new
@@ -96,6 +101,7 @@ class CoursesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_params
       params.require(:course).permit(:title, :institution, :hidden, :open_enrollment, :user_id, :photo,
+        :instructor_name, :early_feedback_only, :show_timer, :waitlist_condition,
         :consumer_key,
         #All the LTI params
         :tool_consumer_info_product_family_code,

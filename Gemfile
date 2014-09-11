@@ -111,6 +111,7 @@ gem 'acts-as-taggable-on'
 gem 'nested_form'
 
 gem 'newrelic_rpm'
+gem 'whenever', :require => false
 
 
 gem 'ims-lti'

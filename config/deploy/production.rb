@@ -18,7 +18,7 @@ set :rails_env, "production"
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'www.peerstudio.org', user: 'deploy', roles: %w{web app}, my_property: :my_value
+server 'peerstudio', user: 'deploy', roles: %w{web app}
 
 # set :deploy_to, 
 set :deploy_to, '/srv/www/peerstudio'

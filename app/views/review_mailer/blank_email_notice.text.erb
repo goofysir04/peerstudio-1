@@ -1,0 +1,9 @@
+Hello <%= @user.name%>!
+
+A reviewer marked your submission for <%= @assignment.title%> as blank, so we stopped asking your classmates to review it.
+
+Head on over and revise your draft, and then try submitting again. Remember to click "Save Draft" before you submit for feedback!
+
+Revise your submission?: <%= reflect_answer_url(@answer)%>
+
+Thanks!

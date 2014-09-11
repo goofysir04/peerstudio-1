@@ -18,10 +18,11 @@ set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 set :migration_role, :db
 set :conditionally_migrate, :false
-
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_roles, [:db, :app]
 
 set :default_env, { path: "/home/deploy/.rvm/gems/ruby-2.1.2/bin:/home/deploy/.rvm/gems/ruby-2.1.2@global/bin:/home/deploy/.rvm/rubies/ruby-2.1.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/deploy/.rvm/bin:$PATH" }
-# set :keep_releases, 5
+set :keep_releases, 5
 SSHKit.config.command_map[:rake]  = "bundle exec rake" #8
 SSHKit.config.command_map[:rails] = "bundle exec rails"
 
@@ -38,6 +39,9 @@ namespace :deploy do
         end
         execute :touch, release_path.join('tmp/restart.txt')
         execute :bundle, "exec thin restart -O -C config/thin.yml"
+        with rails_env: fetch(:rails_env) do
+            execute :bundle, "exec bin/delayed_job restart"
+        end
       end
     end
   end

@@ -5,8 +5,14 @@ class Course < ActiveRecord::Base
 
   has_many :enrollments
   has_many :students, through: :enrollments, source: :user
+  
   def ended?
   	!self.open_enrollment
+  end
+
+  def closest_open(id)
+  	assignment = self.assignments.where('due_at > ?', Time.now).order('due_at asc').limit(1).first
+  	return assignment
   end
 
   def regenerate_consumer_secret

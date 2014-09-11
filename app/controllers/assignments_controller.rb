@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
   # add_breadcrumb :set_breadcrumb_link, only: assignment_actions
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
-  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades]
+  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades, :edit]
   # GET /assignments
   # GET /assignments.json
   def index
@@ -22,7 +22,7 @@ class AssignmentsController < ApplicationController
       @my_reviews = Review.where(answer_id: @my_answers, active: true, assignment_id: @assignment.id)
       @reviews_by_me = Review.where(active: true, assignment_id: @assignment.id).where("user_id = ? or copilot_email = ?", current_user.id,current_user.email)
       @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
-      
+
       unless @out_of_box_answers_with_count.blank?
         @out_of_box_answers = @out_of_box_answers_with_count.reject {|k,v| v < 2 }
       end
@@ -37,7 +37,7 @@ class AssignmentsController < ApplicationController
 
   def show_all_answers
     @all_answers = @assignment.answers.reviewable
-    respond_to do |format| 
+    respond_to do |format|
       format.js
     end
   end
@@ -98,14 +98,43 @@ class AssignmentsController < ApplicationController
   end
 
   def stats
-    @students = @assignment.course.students
-    @milestones = @assignment.milestones
+    # Data for more stats
+    # @students = @assignment.course.students
+    # @milestones = @assignment.milestones
 
-    @action_items = ActionItem.where(assignment: @assignment)
+    # @action_items = ActionItem.where(assignment: @assignment)
+
+    @reviews_last_day_lagging = Review.where(assignment: @assignment).where("completed_at > ?", Time.now-1.day).count
+    @submissions_last_day_lagging = @assignment.answers.where("submitted_at > ?", Time.now-1.day).count
+    @submissions_last_day_havent_seen_reviews = @assignment.answers.where("submitted_at > ?", Time.now-1.day).where(reviews_first_seen_at: nil).where('total_evaluations > ?',0).count
+    @revisions_last_day_lagging = @assignment.answers.where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count
+    @revisions_with_useful_feedback = @assignment.answers.where(useful_feedback: true, review_completed: true).where("created_at > ? and previous_version_id is NOT NULL", Time.now-1.day).count
+
+    @top_reviewers_lagged = Review.where(assignment: @assignment).where('completed_at > ?', Time.now-1.day).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
+    @top_reviewers = Review.where(assignment: @assignment).group(:user_id).count.sort_by {|k,v| -v }[0..4].map {|u,v| [User.find(u),v]}
+    @unreviewed_right_now = @assignment.answers.where(submitted: true, total_evaluations: 0, active: true, review_completed:false).count
+    @unreviewed_answers = @assignment.answers.where(submitted: true, total_evaluations: 0, active: true, review_completed:false).order('submitted_at asc')
+    @submissions_total_submitted = @assignment.answers(submitted: true).count
+    @total_users_submitted = @assignment.answers(submitted: true).select(:user_id).distinct.count
+
+    if @total_users_submitted <= 300
+      # Add individual student stats
+      @students = @assignment.course.students
+      @review_count = Review.where(assignment: @assignment).group(:user_id).count
+      @submitted_answers = Answer.where(assignment: @assignment, submitted: true).group(:user_id).count
+
+      @admins = User.where(admin: true)
+      @reviews_by_instructors = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
+      @unreviewed_by_staff = @assignment.answers.where(submitted: true, is_final: true).count - @reviews_by_instructors.count
+
+      @grades = AssignmentGrade.where(assignment: @assignment).group(:user_id).sum(:credit)
+    end
+
+    render layout: "one_column"
   end
 
   def grades
-    if current_user.admin? 
+    if current_user.admin?
       @permitted_user = params[:user].nil? ? current_user : User.find(params.require(:user))
     else
       redirect_to @assignment and return unless @assignment.grades_released?
@@ -146,16 +175,15 @@ def review_first
     @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
 
     unless params[:recent_review].nil?
-      @recent_review = Review.find(params[:recent_review])  
-    end
-
-
-    if @trigger.nil? 
-      #this means that either the required reviews were completed, or that we never had a trigger. 
-      #In either case, check if there are
-      redirect_to root_path
+      @recent_review = Review.find(params[:recent_review])
     end
     #otherwise render
+    if current_user.admin?
+      @admins = User.where(admin: true)
+      @reviewed_by_staff = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
+      @next_staff_submission = @assignment.answers.where(submitted: true, is_final: true).where.not(id: @reviewed_by_staff).first
+    end
+    render layout: "one_column"
   end
 
   private
@@ -179,7 +207,7 @@ def review_first
       params.permit(:grade_id)
       params.permit(:assignment_grade => [:credit])
       params.permit(:recent_review)
-      params.require(:assignment).permit(:title, :description, :template, :milestone_list, :due_at, :open_at, :rubric_items_attributes=>[
+      params.require(:assignment).permit(:title, :description, :template, :example, :milestone_list, :due_at, :open_at, :rubric_items_attributes=>[
         :id, :title, :short_title, :show_for_feedback, :show_for_final,
         :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :attribute_type, :example, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
     end

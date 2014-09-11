@@ -1,12 +1,54 @@
+<% content_for :title do %>
+  Peerstudio | <%= @course.title %>
+<% end %>
+
+<style>
+  .bright {
+    font-size: 1.3em;
+    font-style: italic;
+  }
+
+  .closed {
+    opacity:0.5;
+  }
+</style>
+
+  <% if @closest_assign.nil? %>
+    <h1 id="assignment_title">No assignments open at this moment.</h1>
+  <% else %>
+  <h1 id="assignment_title"><%= link_to @closest_assign.title, @closest_assign %>
+  <small> <%=due_date(@closest_assign.due_at) %></h1>
+    <% if user_signed_in? and current_user.admin? %>
+            <td><%= link_to 'Destroy', @closest_assign, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <% end %>
+  </small>
+
+<div class="row-fluid header-buttons">
+  <div class="row-fluid">
+    <div id="assignment_description">
+      <%= truncate (sanitize @closest_assign.description), length: 500, escape: false %> <%= link_to "(More)" , @closest_assign %>
+    </div>
+  </div>
+  <div class="btn-group">
+      <%= link_to "Write your answer", new_assignment_answer_path(@closest_assign), class: "btn btn-default" %>
+  </div>
+  <div class="btn-group">
+      <%= link_to create_typed_review_assignment_path(@closest_assign, assignment_id:@closest_assign,typed_review:{type:"final", revision:"Final Draft"}), class: "btn btn-default", method: :post do %> Give peers feedback <% end %>
+  </div>
+  <%= render partial: "reviewing_delay", locals: {assignment: @closest_assign} %>
+</div>
+  <div class="clearfix"></div>
+<% end %>
+
+
+<div style="padding-left:20px">
 <div class="row">
-  <h2>Assignments</h2>
-  <table class="table table-striped">
+  <h1 id="other_assignments">Other assignments</h1>
+  <table class="table">
   <thead>
     <tr>
       <th>Title</th>
-      <th>Description</th>
-      <th>Due at</th>
-      <th>Open at</th>
+      <th>Due on</th>
       <% if user_signed_in? && current_user.admin? %>
       <th colspan="2"><%= link_to "Add assignment", new_course_assignment_path(@course), class: "btn btn-success"%> </th>
       <% end %>
@@ -14,24 +56,15 @@
   </thead>
 
   <tbody>
-    <% @course.assignments.each do |assignment| %>
-      <tr>
-        <td><%= link_to assignment.title, assignment %></td>
-        <td><%= truncate (sanitize assignment.description), length: 200, escape: false %></td>
-        <td><%= assignment.due_at %></td>
-        <td><%= assignment.open_at %></td>
-        <% if user_signed_in? && current_user.admin? %>
-        <td><%= link_to 'Edit', edit_assignment_path(assignment) %></td>
-        <td><%= link_to 'Destroy', assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
-      </tr>
-    <% end %>
+    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at > ? ', Time.now).order('due_at asc').offset(1)%>
+    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at < ? ', Time.now).order('due_at asc')%>
   </tbody>
 </table>
 
 </div>
 <div class="row">
   <% if user_signed_in? && current_user.admin? %>
-  <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p> 
+  <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p>
   <% end %>
+</div>
 </div>
