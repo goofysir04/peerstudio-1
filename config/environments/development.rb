@@ -46,5 +46,7 @@ Humanmachine::Application.configure do
     }
   }
 
+  OAUTH_10_SUPPORT = true
+  
   $stdout.sync = true
 end

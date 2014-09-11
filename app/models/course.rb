@@ -52,6 +52,7 @@ class Course < ActiveRecord::Base
 				return user
 			end
 		else 
+			raise "Not an outcome service".inspect
 			return nil
 		end
 	else
