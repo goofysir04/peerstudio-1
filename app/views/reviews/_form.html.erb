@@ -95,16 +95,12 @@
                     </td>
                   </tr>
                 <% end %>
-              <table>
-              <tr>
-                <div style="padding-top:1em;">
-                  <td style="vertical-align:top; padding: 0 4px 0 0;"><%= r.check_box :miscommunication %> </td>
-                  <td style="vertical-align:top;"><%= r.label :miscommunication, "This section of the student submission was unclear." %><small> You can suggest improvements at the end of the entire rubric, in "Overall Comments".</small></td>
-                </div>
-              </tr>
-            </table>
-              <%= r.label :like_feedback, "Suggest improvements for this section. Be specific; use explanations and examples!", style: "margin-top:1em" %>
-              <%= r.text_area :like_feedback, size: "10x3", placeholder: "Your work could improve _______ by doing __________. An example of this is __________.", class:"form-control expandable comment-quality-checked" %>
+              </table>
+              <!--   removed the miscommunication checkbox because it wasnt being used. 
+                Absent: 18415 feedback_items
+                Present: 1121 feedback_items 
+              -->
+              <%= r.text_area :like_feedback, placeholder: "One way you can improve _______ is by doing __________, e.g. __________.", class:"form-control expandable comment-quality-checked rubric-comment", style: "margin-top:1em" %>
               <%= r.hidden_field :rubric_item_id %>
             </li>
           <% end %>
