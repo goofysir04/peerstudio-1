@@ -4,6 +4,8 @@ Humanmachine::Application.routes.draw do
   get "welcome/contact"
   get "welcome/tos"
   get "uploads/create"
+  get "uploads/authenticate_asset" => "uploads#authenticate_asset"
+
   resources :courses do
     resources :assignments, shallow: true
     collection do 

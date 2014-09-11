@@ -6,7 +6,7 @@ selectEverything = () ->
     $('.selectAll').click () ->
         $(this).select()
 
-$(document).on 'ready page:load', ->
+ready = () ->
     $('.clickable').click ()-> 
         console.log "You clicked, haha"
         if $('.clickable:checked').length == $('.clickable').length
@@ -66,13 +66,14 @@ $(document).on 'ready page:load', ->
         this.style.height = this.scrollHeight + 'px'
         return true
       )
-    uploadCompleted = (r) ->
-        $("#attachment_progress").hide()
-        $("#attachments").html(r.responseText)
-        selectEverything()
-    $('a.see-example').click showExample
-    # shakeStage
-    # console.log $('#rubric input[type="checkbox"]')
+    # uploadCompleted = (r) ->
+    #     $("#attachment_progress").hide()
+    #     $("#attachments").html(r.responseText)
+    #     selectEverything()
+    # $('a.see-example').click showExample
+    # # shakeStage
+    # # console.log $('#rubric input[type="checkbox"]')
+
 
 showExample = (el) ->
     console.log $(this).data("example")
@@ -87,6 +88,9 @@ shakeStage = () ->
         if ('.clickable:checked').length == $('clickable').length
             console.log "WE MADE IT!"
 
+
+
+$(document).on 'ready page:load', ready
 
     # server_edit_metadata = $('#editor_completion_metadata').val() + ""
     # try

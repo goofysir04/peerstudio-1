@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require lodash.min
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
@@ -22,6 +23,7 @@
 //= require json2
 //= require bootstrap-slider.min
 //= require turbolinks
+//= require redactor
 //Disabled
 //= #require rails.validations
 // require bootstrap-datepicker

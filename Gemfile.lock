@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/chinmayk/turbolinks.git
+  revision: e3e4122bd04a381da62dc4c13e0a33d696ea39a8
+  specs:
+    turbolinks (2.3.0)
+      coffee-rails
+
+GIT
   remote: git://github.com/intridea/omniauth-openid.git
   revision: e9965493e2d8a2fc138ccae39c8bcf49311e496f
   specs:
@@ -212,8 +219,6 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbolinks (2.0.0)
-      coffee-rails
     tzinfo (0.3.38)
     uglifier (2.3.2)
       execjs (>= 0.3.0)
@@ -271,7 +276,7 @@ DEPENDENCIES
   sdoc
   therubyracer
   thin
-  turbolinks
+  turbolinks!
   uglifier (>= 1.3.0)
   unicorn
   validates_email_format_of

@@ -5390,7 +5390,7 @@
 				{
 					this.imageResize(elem);
 				}
-
+				
 			}, this));
 
 			// royalSlider and fotorama
@@ -7675,18 +7675,34 @@
 						this.hideProgressBar();
 
 						var s3image = url.split('?');
-
+						var authenticated_asset_path = "/uploads/authenticate_asset?obj=";
+						var asset_path = null;
 						if (!s3image[0])
 						{
 							 // url parsing is fail
 							 return false;
 						}
+						else {
+							//All our asset paths are:
+							// bucket/guid.ext
+							// so, find guid.ext
+							asset_path = (s3image[0]).split("s3.amazonaws.com/")[1];
+						}
+
+						if(!asset_path) {
+							//Again, parsing failed
+							return false;
+						}
+						else {
+							authenticated_asset_path += asset_path;
+						}
 
 						this.selectionRestore();
 
+
 						var html = '';
 						if(this.tempFile!== undefined && this.tempFile.type.slice(0, "image".length) === "image") {
-							html = '<img id="image-marker" src="' + s3image[0] + '" />';
+							html = '<img class="aws-asset" id="image-marker" src="' + authenticated_asset_path + '" />';
 							if (this.opts.paragraphy) html = '<p>' + html + '</p>';
 
 							this.execCommand('inserthtml', html, false);
@@ -7702,7 +7718,7 @@
 							this.callback('imageUpload', image, false);
 						}
 						else {
-							var link = '<a href="' + s3image[0] + '" id="filelink-marker">' + 'Attachment (' + this.tempFile.type + ') </a>';
+							var link = '<a class="aws-asset" href="' + authenticated_asset_path + '" id="filelink-marker">' + 'Attachment (' + this.tempFile.type + ') </a>';
 
 							// chrome fix
 							if (this.browser('webkit') && !!this.window.chrome)
