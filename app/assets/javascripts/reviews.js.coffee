@@ -51,6 +51,7 @@ ready = () ->
 		replaceCheckboxesWithToggles()
 		updateProgressBars()
 		replaceScales()
+
 		$('form.review-form').submit checkFormCompleteness
 
 		$('.review_text').keyup () ->
@@ -153,10 +154,16 @@ syncCheckboxOnToggle = (e) ->
 		review_completion_metadata.completed_checkboxes = []
 	linkedCheckbox = el.siblings('input.toggle-checkbox').first()
 	review_completion_metadata.completed_checkboxes.push linkedCheckbox.attr('id') unless linkedCheckbox.attr('id') in review_completion_metadata.completed_checkboxes
-	saveServerData()
-	syncCheckbox(linkedCheckbox)
-	setProgressBarWidths()
-	return false
+	try
+		saveServerData()
+		syncCheckbox(linkedCheckbox)
+		setProgressBarWidths()
+		showCommentsPromptIfRequired(linkedCheckbox)
+	catch e
+		console.log e
+	finally
+		#Don't let an error submit the form
+		return false
 
 updateProgressBars = () ->
 	#First find all scored items, calculate their total score, and set it
@@ -183,6 +190,36 @@ setProgressBarWidths = () ->
 			console.log "fail"
 		$(".progress-bar[data-scored-item=#{checkbox_name}]").attr('style', "width: #{completedWidth}").removeClass('progress-bar-danger').
 		removeClass('progress-bar-success').addClass(bar_type)
+
+suggestPlaceholderForComments = (allCheckboxes) ->
+	if (_.every allCheckboxes, (box) -> $(box).prop('checked') is true)
+			return "What do you like most about this section?"
+	if (_.every allCheckboxes, (box) -> $(box).prop('checked') is false)
+			return "What's the first thing you'd suggest to get started?"
+	
+	uncheckedBoxes = _.filter allCheckboxes, (box) -> $(box).prop('checked') is false
+	if uncheckedBoxes.length == 1
+		uncheckedId = $(uncheckedBoxes[0]).attr('id')
+		label = $("label[for=#{uncheckedId}]")
+
+		return "This section looks mostly good, except for \"#{label.text()}\". What do you suggest they try?"
+	else
+		return "What's the first thing you'd suggest to improve this section?"
+
+	return null
+
+
+showCommentsPromptIfRequired = ($linkedCheckbox) ->
+	# The linkedCheckbox is the original checkbox that we replaced with toggles
+	otherCheckboxes = $linkedCheckbox.closest('li.compute-score').find('input[data-score]')
+	commentBox = $linkedCheckbox.closest('li.compute-score').find('textarea.rubric-comment')
+	if (_.every otherCheckboxes, (box) -> $(box).attr('id') in review_completion_metadata.completed_checkboxes)
+		#everything is reviewed in this section
+		prompt = suggestPlaceholderForComments(otherCheckboxes)
+		if prompt?
+			$(commentBox).attr('placeholder', prompt)
+			$(commentBox).animate({rows: "5"}).focus()
+
 
 replaceScales = () ->
 	$('input.scale-checkbox').prop('checked','true')
