@@ -78,6 +78,7 @@ class CoursesController < ApplicationController
   end
 
   def enroll_lti
+    raise params.inspect
     user = @course.enroll_with_lti(request)
     if user
       sign_in(:user, user)

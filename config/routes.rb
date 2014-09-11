@@ -123,6 +123,10 @@ Humanmachine::Application.routes.draw do
   root :to => 'welcome#index'
   # get 'welcome' => 'welcome#index'
 
+  #Connect controller
+
+  post "connect/assignments/:id" => "lti#enroll_in_assignment"
+  get "connect/test" => "lti#test"
 
   # Example resource route with options:
   #   resources :products do
