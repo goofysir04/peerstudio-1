@@ -6,20 +6,25 @@
   background: transparent;
   height: 480px;
   max-height: 480px;
+  text-align: center;
 
-  h1, h3 {
+  h1, h2, h3 {
     color: #fff;
-  }
-
-  h1 {
-    font-family: 'Rock Salt', cursive;
+    font-family: 'Source Sans Pro', 'Helvetica Neue',Arial,Helvetica,sans-serif;
+    font-weight: 300;
   }
   
   .bottom {
     position: absolute;
     top: 254px;
   }
+
+  .login-btn-container {
+    max-width: 300px;
+    text-align: center;
+  }
 }
+
 
 #jumbotron-image-container {
   position: absolute; 
@@ -37,12 +42,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
-  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C */
+  background: -moz-linear-gradient(top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.6) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.80)), color-stop(100%,rgba(0,0,0,0.6))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.80) 0%,rgba(0,0,0,0.6) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(0,0,0,0.80) 0%,rgba(0,0,0,0.6) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(0,0,0,0.80) 0%,rgba(0,0,0,0.6) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.80) 0%,rgba(0,0,0,0.6) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
 }
 
@@ -104,4 +109,22 @@ blockquote .lead {
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
   
+}
+
+.password-login {
+  display:none;
+}
+
+.story  {
+  float: none;
+  margin: 0 auto;
+  font-size: 1.25em;
+  line-height: 1.35em;
+  max-width: 680px;
+  h1,h2 {
+    font-family: 'Source Sans Pro', 'Helvetica Neue',Arial,Helvetica,sans-serif;
+  }
+  p {
+    
+  }
 }
