@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 
+  assignment_id: 
+  lti_user_id: MyText
+  lis_result_sourcedid: MyText
+  lis_outcome_service_url: MyText
+
+two:
+  user_id: 
+  assignment_id: 
+  lti_user_id: MyText
+  lis_result_sourcedid: MyText
+  lis_outcome_service_url: MyText

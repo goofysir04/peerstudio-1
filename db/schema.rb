@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140904011748) do
-
+ActiveRecord::Schema.define(version: 20140912204623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -207,7 +206,6 @@ ActiveRecord::Schema.define(version: 20140904011748) do
     t.text     "forum_link"
     t.text     "consumer_key"
     t.text     "consumer_secret"
-
     t.text     "instructor_name"
     t.boolean  "early_feedback_only", default: false
     t.boolean  "show_timer",          default: true
@@ -302,6 +300,19 @@ ActiveRecord::Schema.define(version: 20140904011748) do
 
   add_index "feedback_preferences", ["answer_id"], name: "index_feedback_preferences_on_answer_id", using: :btree
   add_index "feedback_preferences", ["rubric_item_id"], name: "index_feedback_preferences_on_rubric_item_id", using: :btree
+
+  create_table "lti_enrollments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "assignment_id"
+    t.text     "lti_user_id"
+    t.text     "lis_result_sourcedid"
+    t.text     "lis_outcome_service_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "lti_enrollments", ["assignment_id"], name: "index_lti_enrollments_on_assignment_id", using: :btree
+  add_index "lti_enrollments", ["user_id"], name: "index_lti_enrollments_on_user_id", using: :btree
 
   create_table "questions", force: true do |t|
     t.text     "title"

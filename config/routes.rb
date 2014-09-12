@@ -127,7 +127,8 @@ Humanmachine::Application.routes.draw do
 
   #Connect controller
 
-  post "connect/assignments/:id" => "lti#enroll_in_assignment"
+  post "connect/assignments/:id" => "lti#enroll_in_assignment", as: :lti_enrollment
+  get "connect/complete/:id" => "lti#complete_enrollment", as: :complete_lti_enrollment
   get "connect/test" => "lti#test"
 
   # Example resource route with options:
