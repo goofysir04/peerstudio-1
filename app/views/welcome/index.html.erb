@@ -5,95 +5,107 @@
         <%= image_tag("jumbotron.jpg", :id => "jumbotron-image") %>
         <div class="jumbotron-fade"></div>
       </div>
-      <div style="inline-block; float:left;">
-        <h1>PeerStudio</h1>
-        <h3 style="font-weight: 100;">critique • improve • help • motivate</h3>
-          <a class="btn btn-lg btn-primary" href="<%=welcome_contact_path%>" role="button"> Instructors, contact us to use PeerStudio in your class. </a>
-        <% if !@courses.blank? %>
-          <div class="bottom">
-            <p>Courses using PeerStudio</p>
-              <% @courses.each do |course| %>
-                <% unless course.ended?%>
-                  <a class="btn btn-lg btn-primary" href="<%=course_path(course) %>" role="button"><%= course.title %>, <%= course.institution %></a>
-                <% end %>
-              <% end %>
-          </div>
-        <% end %>
-      </div>
-      <div style="inline-block;">
-        <iframe src="//www.youtube.com/embed/lh1YLxs7cgU?rel=0" frameborder="0" allowfullscreen="" style="float:right; width: 560px; height: 350px;"></iframe>
-      </div>
+        <h1>Get fast, actionable feedback<br/> from classmates</h1>
+        <div class="login-btn-container center-block">
+          <%= render partial:"devise/sessions/login_buttons" %>
+          <br/>
+          <a href="#" class="enable-password-login">(Or log in with your password)</a>
+        </div>
     </div>
   </div>
 <% end %>
+<div class="row-fluid">
+  <div class="story col-sm-9 col-md-6">
+    <h2>What is Peerstudio?</h2>
+    <p>Peerstudio makes it easy for students in a class to give each other feedback on assignments. It's designed so students get feedback that is fast and helpful for revision. Then, when you're done, you can turn in your final work, and have it assessed by peers. Watch this video to find out more. </p>
+      <div style="margin: 0 auto;">
+          <iframe width="640" height="390" src="//www.youtube.com/embed/lh1YLxs7cgU" frameborder="0" allowfullscreen></iframe>
+      </div>
+    <h2>I'm a teacher. Why should I use Peerstudio?</h2>
+    <p>Here are three reasons</p>
+    <ul>
+      <li>Using Peerstudio, students can get feedback faster than teaching staff can provide. Often, students on Peerstudio get feedback in <em>minutes</em>, if not in hours. Getting feedback faster helps students make progress faster.</li>
+      <li>Looking at peer work encourages students and sparks new ideas.</li>
+      <li>When peers lead the feedback and assessment process, it frees instructors to set the standards for high-quality work, and coach students. For instance, when students' grades depend on peer assessment, they're more likely to see teachers as mentors (instead of assessors), and creates more room for conversation.</li>
+    </ul>
 
-<div class="container marketing">
+    <h2>I teach a MOOC. Can I use PeerStudio with Coursera and/or OpenEdX?</h2>
+    <p>Yes. <a href="//www.coursera.org/course/learning">One class on Coursera</a> has used it already, and other classes on both platforms are planning to use it.</p>
 
-  <div class="row">
-    <div class="col-md-7">
-      <h2 class="featurette-heading">Get (and give) fast, iterative feedback, both in-person and online</h2>
-      <p class="lead">PeerStudio engages students not only in creative activity, but in the review and evaluation of the work of their peers -- through both in-person classes and MOOCs. It creates a guided process where students work on open ended work, and get and give structured feedback to their classmates. Feedback givers benefit from seeing the different perspectives of their classmates, feedback receivers get detailed feedback faster than staff can provide. </p>
-    </div>
-    <div class="col-md-5">
-      <span class="helper"></span><%= image_tag("getfeedback.jpg", :class => "img-responsive") %>
-    </div>
-  </div>
+    <h2>Do you use LTI?</h2>
+    <p>Yes. LTI is a standard that allows, for instance, grades on Peerstudio to be passed back to other systems, e.g. Coursera or OpenEdX. When a class uses LTI, grades are automatically sent back (no programming required), and students can log in with their existing credentials. </p>
 
-  <hr class="featurette-divider">
+    <h2>What makes Peerstudio different from other systems?</h2>
+    <p>While there are many <a href="http://help.coursera.org/customer/portal/articles/1163294-how-do-peer-assessments-work-">excellent</a> <a href="http://cpr.molsci.ucla.edu/Home.aspx">peer assessment</a> systems, here are key differences:</p>
+    <ul>
+      <li>we built Peerstudio with a focus on speed, and on improvement-oriented comments. Peerstudio scaffolds students so they can provide great feedback, even when they are still working on an assignment themselves.</li>
+      <li>Peerstudio has explicit support for revision. We think students do their best work when they have excellent feedback, and <em>an opportunity to revise</em> before they are graded.</li>
+      <li>Peerstudio is data-driven. For instance, we use data to decide what reviewing tips to show students questions to show while reviewing, or which assessment items to seek comments on.</li>
+    </ul>
 
-  <div class="row">
-    <div class="col-md-5">
-      <%= image_tag("waystoimprove.jpg", :class => "img-responsive") %>
-    </div>
-    <div class="col-md-7">
-      <h2 class="featurette-heading">Supporting instructors as coaches</h2>
-      <p class="lead">When peers lead the feedback and assessment process, it frees instructors to set the standards for high-quality work, and coach students to work towards achieving them. Peerstudio highlights unclear standards and gaps in students' understanding to help instructors in their new role.</p>
-    </div>
-  </div>
-
-  <hr class="featurette-divider">
-  <div class="row">
-    <div class="col-lg-6" style="border-right:1px solid #eee">
-      <div class="row">
-        <div class="col-lg-3">
-          <%= image_tag("hutchins.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
-        </div>
-        <div class="col-lg-9">
-          <blockquote>
-            <p class="lead">PeerStudio focuses on providing the support students need to create the very best projects they can.</p>
-            <footer>Edwin Hutchins, Professor in Cognitive Science, UCSD</footer>
-          </blockquote>
-        </div>
+    <p>Like other assessment systems, Peerstudio allows staff oversight into final grading, due dates etc. </p>
+    
+    <h2>What do teachers who've used Peerstudio say about it?</h2>
+    <p>Here are two reactions</p>
+    <div class="row">
+      <div class="col-lg-3">
+        <%= image_tag("hutchins.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
+      </div>
+      <div class="col-lg-9">
+        <blockquote>
+          <p class="lead">PeerStudio focuses on providing the support students need to create the very best projects they can.</p>
+          <footer>Edwin Hutchins, Professor in Cognitive Science, UCSD</footer>
+        </blockquote>
       </div>
     </div>
-    <div class="col-lg-6">
-      <div class="row">
-        <div class="col-lg-3">
-          <%= image_tag("irani.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
-        </div>
-        <div class="col-lg-9">
-          <blockquote>
-            <p class="lead">PeerStudio got my students writing, teaching, talking, and moving in class. They came to me surprised to read their peers' work, challenged to offer constructive feedback, and excited to edit their writing craft. Structured but open-ended rubrics let me scaffold the process, allowing them to develop a sensibility for what quality work looks like. </p>
-            <footer>Lilly Irani, Assistant Professor in Communication, UCSD</footer>
-          </blockquote>
-        </div>
+
+    <div class="row">
+      <div class="col-lg-3">
+        <%= image_tag("irani.jpg", :class => "img-circle pull-right", :style => "width:91px; height:91px;") %>
+      </div>
+      <div class="col-lg-9">
+        <blockquote>
+          <p class="lead">PeerStudio got my students writing, teaching, talking, and moving in class. They came to me surprised to read their peers' work, challenged to offer constructive feedback, and excited to edit their writing craft. Structured but open-ended rubrics let me scaffold the process, allowing them to develop a sensibility for what quality work looks like. </p>
+          <footer>Lilly Irani, Assistant Professor in Communication, UCSD</footer>
+        </blockquote>
       </div>
     </div>
+
+    <h2>Who's used Peerstudio?</h2>
+    <p>So far, <%= @user_count %> students have used Peerstudio in <%= @courses.count %> classes. </p>
+      <style>
+        .row_header {
+          font-weight: 700;
+          font-size: 10pt;
+          text-align: right;
+          padding-right: 10px;
+          vertical-align: top;
+        }
+
+        .thumbnails > li {
+          /*display: inline-block;*/
+          vertical-align: top;
+          margin:20px;
+        }
+        .scroll-horizontal {
+          overflow-x: scroll;
+          width: 100%
+        }
+      </style>
+      <div class="scroll-horizontal">
+        <div style="width: <%= 385*@courses.count %>px;">
+          <ul class="list-inline">
+            <% @courses.each do |course| %>
+                <%= render :partial => 'courses/course_box', :locals => { :course => course } %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <h2>What does Peerstudio cost?</h2>
+    <p>Peerstudio is a research project, and is free both for teachers and students.</p>
+    <h2>I'd like to use Peerstudio in the class I teach!</h2>
+      <p>Please fill out <%= link_to "this form", welcome_contact_path %>, and we'll get in touch. Please email us at <%= mail_to "hello@peerstudio.org", "hello@peerstudio.org" %> if you have other questions. </p>
+    <h2>Who's behind Peerstudio?</h2>
+    <p>Here's information <%= link_to "about us", about_courses_path %>.
   </div>
-
-  <hr class="featurette-divider">
-
-  <div class="row">
-    <div class="col-md-12">
-      <h2 class="featurette-heading text-center">Want to use Peerstudio in your class?</h2>
-      <p class="lead text-center"><a href="<%=welcome_contact_path%>">Contact us</a> to use PeerStudio.</p>
-    </div>
-  </div>
-
 </div>
-
-<script type="text/javascript">
-$(document).ready(function() {
-  $('#signInModal').modal('show');
-});
-</script>
