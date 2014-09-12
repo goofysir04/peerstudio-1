@@ -45,8 +45,6 @@ Humanmachine::Application.configure do
       :s3_host_name => ENV['AWS_HOST_NAME']
     }
   }
-
-  OAUTH_10_SUPPORT = true
   
   $stdout.sync = true
 end
