@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # layout :layout_by_resource
   impersonates :user
   require 'oauth/request_proxy/rack_request' 
+  require 'oauth/request_proxy/action_controller_request'
 
 	def authenticate_user_is_admin!
     return true if Rails.env.development?
