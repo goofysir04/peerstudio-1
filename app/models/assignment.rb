@@ -9,6 +9,8 @@ class Assignment < ActiveRecord::Base
   accepts_nested_attributes_for :taggings, :allow_destroy => true
   scope :active, -> { where("due_at > ?", Time.now)}
 
+  has_many :lti_enrollments
+
   def task_list
     task_list = []
   	taggings = Tagging.where("taggable_id = ?", self.id)
@@ -27,4 +29,12 @@ class Assignment < ActiveRecord::Base
     self.due_at < Time.now
   end
 
+  def enroll_with_lti(user, lti_params)
+    enrollment = self.lti_enrollments.find_or_initialize_by_user_id(user.id)
+    enrollment.lti_user_id = lti_params[:user_id]
+    enrollment.lis_result_sourcedid = lti_params[:lis_result_sourcedid]
+    enrollment.lis_outcome_service_url = lti_params[:lis_outcome_service_url]
+
+    return enrollment.save
+  end
 end

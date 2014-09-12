@@ -12,6 +12,10 @@ Humanmachine::Application.routes.draw do
       get 'help'
       get 'about'
     end
+    member do
+      post 'regenerate_consumer_secret'
+      post 'enroll_lti'
+    end
   end
 
   resources :assignments do
@@ -121,6 +125,11 @@ Humanmachine::Application.routes.draw do
   root :to => 'welcome#index'
   # get 'welcome' => 'welcome#index'
 
+  #Connect controller
+
+  post "connect/assignments/:id" => "lti#enroll_in_assignment", as: :lti_enrollment
+  get "connect/complete/:id" => "lti#complete_enrollment", as: :complete_lti_enrollment
+  get "connect/test" => "lti#test"
 
   # Example resource route with options:
   #   resources :products do
