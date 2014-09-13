@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/chinmayk/ims-lti.git
-  revision: ee557543f0288a89ab977112d2b2479d3a03b7a0
+  revision: 2df71e61e9b3e84611e7fe4375363fb3814326a1
   specs:
     ims-lti (1.1.6)
       builder

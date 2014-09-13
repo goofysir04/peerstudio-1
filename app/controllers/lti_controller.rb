@@ -23,6 +23,7 @@ class LtiController < ApplicationController
       lti_params)
     if provider.valid_request?(request, false)
       #Process
+      redirect_to root_path, notice: "Success" and return
       if user_signed_in? 
         if @assignment.enroll_with_lti(current_user, lti_params)
           redirect_to @assignment, notice: "Welcome back, #{current_user.name}" and return
