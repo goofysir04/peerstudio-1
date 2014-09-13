@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/chinmayk/ims-lti.git
-  revision: 10e1c53c3f7908b91290e82e89137455089b56eb
+  revision: d0dd67e18eb7ec2f47bca88eae7221fc52960d05
   specs:
-    ims-lti (1.1.5)
+    ims-lti (1.1.6)
       builder
       oauth (~> 0.4.5)
       uuid

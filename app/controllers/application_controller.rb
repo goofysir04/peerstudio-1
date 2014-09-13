@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   # layout :layout_by_resource
   impersonates :user
-  require 'oauth/request_proxy/rack_request' 
   # require 'oauth/request_proxy/action_controller_request'
 
 	def authenticate_user_is_admin!

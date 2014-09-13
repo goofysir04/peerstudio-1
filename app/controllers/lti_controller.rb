@@ -1,7 +1,7 @@
+require 'oauth/request_proxy/rack_request'
 class LtiController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:enroll_in_assignment]
   before_filter :authenticate_user!, only: :complete_enrollment
-
   def enroll_in_assignment
     # this workhorse method has to:
     # - accept incoming LTI connections
