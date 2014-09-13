@@ -114,7 +114,7 @@ gem 'newrelic_rpm'
 gem 'whenever', :require => false
 
 
-gem 'ims-lti'
+gem 'ims-lti', github: "chinmayk/ims-lti"
 
 #for pushing grades to coursera
 # gem "always_verify_ssl_certificates"

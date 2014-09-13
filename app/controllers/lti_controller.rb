@@ -18,7 +18,7 @@ class LtiController < ApplicationController
     provider = IMS::LTI::ToolProvider.new(@course.consumer_key, 
       @course.consumer_secret, 
       lti_params)
-    if provider.valid_request?(request) or !lti_params.nil?
+    if provider.valid_request?(request, false)
       #Process
       if user_signed_in? 
         if @assignment.enroll_with_lti(current_user, lti_params)
