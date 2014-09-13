@@ -15,8 +15,11 @@ class LtiController < ApplicationController
     @assignment = Assignment.find(lti_params[:id])
     @course = @assignment.course
 
-    provider = IMS::LTI::ToolProvider.new(@course.consumer_key, 
-      @course.consumer_secret, 
+    # provider = IMS::LTI::ToolProvider.new(@course.consumer_key, 
+    #   @course.consumer_secret, 
+    #   lti_params)
+      provider = IMS::LTI::ToolProvider.new("kaplan", 
+      "Z9CMzvIECeo/DogdR26ZnKXJ0pPDWYBYxWsJ3HPPGVg=", 
       lti_params)
     if provider.valid_request?(request, false)
       #Process
