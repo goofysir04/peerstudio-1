@@ -22,6 +22,11 @@ class LtiController < ApplicationController
       # "Z9CMzvIECeo/DogdR26ZnKXJ0pPDWYBYxWsJ3HPPGVg=", 
       # lti_params)
 
+      # YEAH, this line is necessary since we're behind a reverse 
+      # proxy on production, so the rails server thinks we are actually
+      # running on http/80. 
+      # Since the signature is https/443, we need to fool this rack request
+      # into believing it's actually on https
       env['rack.url_scheme'] = "https" if Rails.env.production?
       if provider.valid_request?(request, false)
       #Process
