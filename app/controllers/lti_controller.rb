@@ -21,7 +21,9 @@ class LtiController < ApplicationController
       provider = IMS::LTI::ToolProvider.new("kaplan", 
       "Z9CMzvIECeo/DogdR26ZnKXJ0pPDWYBYxWsJ3HPPGVg=", 
       lti_params)
-    if provider.valid_request?(request, false)
+
+      env['rack.url_scheme'] = "https" if Rails.env.production?
+      if provider.valid_request?(request, false)
       #Process
       redirect_to root_path, notice: "Success" and return
       if user_signed_in? 
