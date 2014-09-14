@@ -1,5 +1,5 @@
 Humanmachine::Application.routes.draw do
-
+  Rails.application.routes.default_url_options[:protocol]="https"
   get "welcome/index"
   get "welcome/contact"
   get "welcome/tos"

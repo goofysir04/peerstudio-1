@@ -93,5 +93,4 @@ Humanmachine::Application.configure do
     }
   }
   GA.tracker = "UA-35198919-3"
-
 end
