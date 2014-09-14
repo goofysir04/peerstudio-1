@@ -94,5 +94,4 @@ Humanmachine::Application.configure do
   }
   GA.tracker = "UA-35198919-3"
 
-  config.force_ssl = true
 end
