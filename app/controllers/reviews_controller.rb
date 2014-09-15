@@ -197,7 +197,7 @@ class ReviewsController < ApplicationController
   end
 
   def review_answer
-    @review = create_review_for_answer(@answer, "final")
+    @review = create_review_for_answer(@answer, "final", false)
     if @review.save
       redirect_to edit_review_path @review
     else
@@ -234,17 +234,19 @@ class ReviewsController < ApplicationController
     def set_answer
       @answer = Answer.find(params[:answer_id])
     end
-    def create_review_for_answer(answer, type=nil)
+    def create_review_for_answer(answer, type=nil, force_pending = true)
       reviews = Review.where(answer: answer, user: current_user, assignment: answer.assignment, review_type: type, active:true)
       # if !reviews.empty? and type != "final"
       #   return reviews.first
       # end
       #else
-      pending_reviews = Review.where(user: current_user, active: false)
-      pending_reviews.each do |r|
-        if(r.answer.assignment_id == answer.assignment_id and r.review_type==type)
-          #return the first pending review from this student
-          return r
+      if force_pending
+        pending_reviews = Review.where(user: current_user, active: false)
+        pending_reviews.each do |r|
+          if(r.answer.assignment_id == answer.assignment_id and r.review_type==type)
+            #return the first pending review from this student
+            return r
+          end
         end
       end
       #else
