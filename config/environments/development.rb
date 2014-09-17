@@ -30,7 +30,7 @@ Humanmachine::Application.configure do
   config.assets.debug = true
 
   #For devise
-  config.action_mailer.default_url_options = { :host => 'peerstudio.org' }
+  config.action_mailer.default_url_options = { :host => 'www.peerstudio.org', :protocol => "https"}
 
   config.action_mailer.delivery_method = ACTION_MAILER_DELIVERY_METHOD
   config.action_mailer.smtp_settings = ACTION_MAILER_SMTP_SETTINGS_DEVELOPMENT
