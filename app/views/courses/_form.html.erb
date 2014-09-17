@@ -114,7 +114,11 @@
       <%end%>
       <div class="row-fluid">
         <%= f.text_field :consumer_secret, class:"form-control", disabled:"disabled", placeholder:"Click regenerate to set" %>
-        <%= link_to "Regenerate secret", regenerate_consumer_secret_course_path(@course), class:"btn btn-default ", method: :post %>
+        <% unless @course.id.nil? %>
+          <%= link_to "Regenerate secret", regenerate_consumer_secret_course_path(@course), class:"btn btn-default ", method: :post %>
+        <% else %>
+          <%= link_to "Regenerate secret (save course first)", "#", class:"btn btn-default", disabled:"disabled" %>
+        <% end %>
       </div>
       
     </div>
