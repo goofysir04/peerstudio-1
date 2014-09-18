@@ -1,6 +1,7 @@
 class AssignmentsController < ApplicationController
   # include Humanize
-  assignment_actions = [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, :export_grades, :resolve_action_item, :review_first]
+  assignment_actions = [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, 
+      :export_grades, :resolve_action_item, :review_first, :flipbook]
 
   before_action :set_assignment, only: assignment_actions
   # add_breadcrumb :set_breadcrumb_link, only: assignment_actions
@@ -42,6 +43,11 @@ class AssignmentsController < ApplicationController
     end
   end
 
+
+  def flipbook
+    @answers = @assignment.answers.where(is_final: true).paginate(:page => params[:page], :per_page=>1)
+    render layout: "one_column"
+  end
   # GET /assignments/new
   def new
     #Course id is set in callback
@@ -207,8 +213,10 @@ def review_first
       params.permit(:grade_id)
       params.permit(:assignment_grade => [:credit])
       params.permit(:recent_review)
-      params.require(:assignment).permit(:title, :description, :template, :example, :milestone_list, :due_at, :open_at, :rubric_items_attributes=>[
-        :id, :title, :short_title, :show_for_feedback, :show_for_final,
+      params.permit(:page)
+      params.require(:assignment).permit(:title, :description, :template, :example, :milestone_list, :due_at, :open_at, 
+        :rubric_items_attributes=>[
+          :id, :title, :short_title, :show_for_feedback, :show_for_final,
         :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :attribute_type, :example, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
     end
 

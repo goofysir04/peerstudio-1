@@ -30,6 +30,7 @@ Humanmachine::Application.routes.draw do
       get 'review_first'
       post 'create_typed_review' => 'reviews#create_with_type'
       get 'waitlist'
+      get 'flipbook'
     end
   end
 
