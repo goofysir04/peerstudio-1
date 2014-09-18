@@ -4,7 +4,7 @@
 <% unless @answers.previous_page.nil? %>
   <li><%= link_to "Previous", flipbook_assignment_path(@assignment, page: @answers.previous_page) %></a></li>
  <% end %>
-  	<li><strong><%= answer.user.name %></strong></li>
+  	<li><span style="min-width: 200px"><strong><%= answer.user.name %></strong></span></li>
   <% if @answers.next_page.nil? %>
   	<li><%= link_to "Start over", flipbook_assignment_path(@assignment) %></a></li>
   	<%else %>
