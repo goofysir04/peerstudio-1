@@ -67,8 +67,9 @@ ol {
 			<li>Set <strong>LTI ID</strong> to <code>peerstudio</code></li>
 			<li>For <strong>LTI URL</strong>, enter these values:
 				<ul>
+					<% connect_protocol = Rails.env.development? ? "http" : "https"%>
 					<% @course.assignments.each do |a| %>
-					<li>For <strong><%= a.title %></strong>, enter <code><%= lti_enrollment_url(a) %></code></li>
+					<li>For <strong><%= a.title %></strong>, enter <code><%= lti_enrollment_url(a, protocol: connect_protocol) %></code></li>
 					<% end %>
 				</ul>
 			</li>
