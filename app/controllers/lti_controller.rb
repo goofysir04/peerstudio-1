@@ -63,6 +63,7 @@ class LtiController < ApplicationController
   end
 
   def guide
+    authenticate_user_is_admin!
     @course = Course.find(lti_params[:id])
     render layout: "one_column"
   end
