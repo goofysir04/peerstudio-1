@@ -37,6 +37,7 @@ module Humanmachine
 
     #Allow section tags in the sanitized html
     config.action_view.sanitized_allowed_tags = 'table', 'tr', 'td', 'thead', 'section'
+    config.action_view.sanitized_allowed_attributes = %w(target)
 
 
   end
