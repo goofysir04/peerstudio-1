@@ -1,0 +1,83 @@
+<h1>Integration into (Open)EdX</h1>
+
+<p>This guide will help you integrate your assignments into OpenEdx. This process takes around 5 minutes. This guide is customized for <strong><%= @course.title %></strong>. If this is not your class, please contact us for the right guide.</p>
+
+<p>Throughout this guide, text you need to type is shown like this: <code>text to enter</code>. Please enter text exactly as shown (best to copy-paste).</p>
+<style type="text/css">
+code {
+	border: 1px solid #f99;
+}
+
+img.screenshot {
+	border: 1px solid #B1b1b1;
+}
+
+ol {
+	line-height: 2em;
+}
+
+</style>
+<div class="alert alert-warning">
+	Before you start, ensure you're able to change your class settings in Studio. To do this, you must be <strong>course staff</strong> or <strong>administrator.</strong> 
+</div>
+
+
+
+<h2>Steps- Part A: Add Peerstudio to your class</h2>
+<p>You only need to complete these steps once. If you've already added Peerstudio to your class, you can skip to part B, to add links to each assignment.</p>
+<ol>
+	<li>Login to edX Studio</li>
+	<li>Click <strong>Settings</strong> > <strong>Advanced Settings</strong><br/>
+		<%= image_tag "lti-edx-advanced-settings.png", class:"img-responsive screenshot"  %>
+	</li>
+	<li>Find the <strong>advanced_modules</strong> policy key, and add <code>"lti"</code> into the value field. If you already have other modules, then your screen should look like this:<br/>
+		<%= image_tag "lti-edx-advanced-modules.png", class:"img-responsive screenshot"  %>
+	</li>
+	<li>Find the <strong>lti_passports</strong>	policy key, and enter <code>["peerstudio:<%=@course.consumer_key%>:<%=@course.consumer_secret%>"]</code>.
+		<br/>
+		<%= image_tag "lti-edx-lti-passports.png", class:"img-responsive screenshot"  %>
+
+		<ul>
+			<li><strong>Note:</strong> The text in this screenshot shows sample values, and does not exactly match what you enter. </li>
+			<li><strong>Advanced:</strong> If you're using other LTI components, e.g. Piazza, then you should append <code>"peerstudio:<%=@course.consumer_key%>:<%=@course.consumer_secret%>"</code> within the []. For example, yours might look like <code> ["piazza_id:piazza.sandbox:test_only_secret", "peerstudio:<%=@course.consumer_key%>:<%=@course.consumer_secret%>"]</code>.</li>
+		</ul>
+	</li>
+	<li>Click Save Changes at the bottom of the screen. <br/>
+		<%= image_tag "lti-edx-save-changes.png", class:"img-responsive screenshot"  %>
+	<li>At this point, you have completed the one-time setup required to add Peerstudio to your class. Follow the steps below to add the actual assignments. </li>
+</ol>
+<h2>Steps- Part B: Add links to assignments</h2>
+<ol>
+	<li>Go to your content outline. <br/>
+		<%= image_tag "lti-edx-content-outline.png", class:"img-responsive screenshot"  %>
+	</li>
+	<li>Choose the sub-section you want to add your assignment to. In this guide, we use the <strong>Week 1: Introduction</strong> > <strong>Why learn about organizational behavior?</strong> sub-section as an example.
+		<%= image_tag "lti-edx-sample-subsection.png", class:"img-responsive screenshot"  %>
+	</li>
+		
+	<li>Click the <span class="glyphicon glyphicon-play
+"></span> drop-down button, and then click <strong>+ New Unit</strong>. <%= image_tag "lti-edx-add-new-unit.png", class:"img-responsive screenshot"  %></li>
+	<li>Choose <strong>Advanced</strong> > <strong>LTI</strong>
+		<br/>
+		<%= image_tag "lti-edx-add-advanced.png", class:"img-responsive screenshot"  %>
+	</li>
+	<li>Click <strong>Edit</strong> to add your assignment. </li>
+	<li><ul>
+			<li>Change <strong>Display Name </strong> to your assignment title. </li>
+			<li>Set <strong>LTI ID</strong> to <code>peerstudio</code></li>
+			<li>For <strong>LTI URL</strong>, enter these values:
+				<ul>
+					<% @course.assignments.each do |a| %>
+					<li>For <strong><%= a.title %></strong>, enter <code><%= lti_enrollment_url(a) %></code></li>
+					<% end %>
+				</ul>
+			</li>
+			<li>Set <strong>Scored</strong> to <strong>True</strong>.</li>
+		</ul>
+	</li>
+	<li>When it's all done, you should see an assignment like this <br/>
+		<%= image_tag "lti-edx-assignment-finished.png", class:"img-responsive screenshot"  %>
+	</li>
+</ol>
+
+<p>Congratulations! You've added your Peerstudio assignment to your class. When students get grades, they will automatically be sent to your class. Please repeat <strong>Part B</strong> whenever you want to add an assignment. <%= mail_to "hello@peerstudio.org", "Contact us" %> if you have questions!</p>

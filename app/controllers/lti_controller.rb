@@ -2,6 +2,8 @@ require 'oauth/request_proxy/rack_request'
 class LtiController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:enroll_in_assignment]
   before_filter :authenticate_user!, only: :complete_enrollment
+  assignment_actions = [:enroll_in_assignment]
+  before_action :set_assignment, only: assignment_actions
   def enroll_in_assignment
     # this workhorse method has to:
     # - accept incoming LTI connections
@@ -58,6 +60,11 @@ class LtiController < ApplicationController
     else
       redirect_to root_path, alert: "Your LTI request was broken. If you're a student, please let your staff know."
     end
+  end
+
+  def guide
+    @course = Course.find(lti_params[:id])
+    render layout: "one_column"
   end
 
 	def test
@@ -119,6 +126,10 @@ class LtiController < ApplicationController
               </imsx_POXBody>
             </imsx_POXEnvelopeRequest>'
 	end
+
+  def set_assignment
+    @assignment = Assignment.find(lti_params[:id])
+  end
 
   def lti_params
     params.permit(:tool_consumer_info_product_family_code,
