@@ -25,6 +25,10 @@ $(document).on 'ready page:load', () ->
 				$("#start_review").val("Start final review")
 	)
 
+	$('#flipbook-reveal-author').click () ->
+		$(this).text($(this).data('author'))
+		return false
+
 showSubmitWarning = (el) ->
 	if($(this).data('showLateWarning'))
 		$('#submit-late-work').modal('show')

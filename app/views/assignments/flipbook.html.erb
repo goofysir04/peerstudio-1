@@ -4,7 +4,15 @@
 <% unless @answers.previous_page.nil? %>
   <li><%= link_to "Previous", flipbook_assignment_path(@assignment, page: @answers.previous_page) %></a></li>
  <% end %>
-  	<li><span style="min-width: 200px"><strong><%= answer.user.name %></strong></span></li>
+  	<li><span style="min-width: 200px">
+			<strong>
+	  		<%if current_user.admin? %>
+	  			<a href="#" id="flipbook-reveal-author" data-author="<%= answer.user.name %>"> Click to reveal name</a>
+	  		<% else %>
+	  			Anonymized
+	  		<% end %>
+		</strong>
+		</span></li>
   <% if @answers.next_page.nil? %>
   	<li><%= link_to "Start over", flipbook_assignment_path(@assignment) %></a></li>
   	<%else %>
@@ -13,4 +21,6 @@
 </ul>
 
 	<%= sanitize answer.response %>
+	<p><%= link_to "See reviews", answer_reviews_path(answer), class: "btn btn-default" %></p>
 <% end %>
+
