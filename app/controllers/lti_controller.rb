@@ -59,7 +59,7 @@ class LtiController < ApplicationController
         #Our provider didn't send us an email. If the user is already enrolled log them in. 
         # else get credentials
         user = @assignment.lti_user(lti_params)
-        if @assignment.lti_user(lti_params).nil?
+        if user.nil?
           session["user_return_to"] = complete_lti_enrollment_path(@assignment, lti_params)
           flash[:notice] = "We need additional information to create your Peerstudio account. Please click the sign in button to continue."
           authenticate_user!
