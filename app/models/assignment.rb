@@ -38,4 +38,13 @@ class Assignment < ActiveRecord::Base
 
     return enrollment.save
   end
+
+  def lti_user(lti_params)
+    enrollment = self.lti_enrollments.find_or_initialize_by_lti_user_id(lti_params[:user_id])
+    if enrollment.nil?
+      return nil
+    else
+      return enrollment.user
+    end
+  end
 end

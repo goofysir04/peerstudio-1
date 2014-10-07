@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-	devise :omniauthable, :omniauth_providers=>[:coursera]
+	devise :omniauthable, :omniauth_providers=>[:coursera,:stanford]
 
 
   validate do |user|

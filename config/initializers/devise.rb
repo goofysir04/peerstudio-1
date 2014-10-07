@@ -234,6 +234,12 @@ Devise.setup do |config|
     :name => 'coursera', 
     :identifier => 'https://accounts.coursera.org/openid/v1', 
     :require => 'omniauth-openid'
+
+  config.omniauth :open_id, 
+    :store => OpenID::Store::Filesystem.new('/tmp'), 
+    :name => 'stanford', 
+    :identifier => 'https://class.stanford.edu/openid/provider/xrds/', 
+    :require => 'omniauth-openid'
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
