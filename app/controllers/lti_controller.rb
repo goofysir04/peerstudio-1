@@ -80,27 +80,6 @@ class LtiController < ApplicationController
     render layout: "one_column"
   end
 
-	def test
-		@course = Course.find(1)
-		#coursera
-		@lis_outcome_service_url = "https://api.coursera.org/lti/v1/grade"
-		@lis_result_sourcedid = "970447::1::585446::mxAHNKDlx3Rp9THqlKmSDmUSGGA"
-
-
-		#edx
-		# @lis_outcome_service_url = "https://preview.class.stanford.edu/courses/Stanford/EXP1/Experimental_Assessment_Test/xblock/i4x:;_;_Stanford;_EXP1;_lti;_0392af58fbaf4415bbcc4fedb3220ea9/handler_noauth/grade_handler"
-		# @lis_result_sourcedid = "Stanford/EXP1/Experimental_Assessment_Test:class.stanford.edu-i4x-Stanford-EXP1-lti-0392af58fbaf4415bbcc4fedb3220ea9:9fac061ede3489b6c1cac27c0b93a338"
-		consumer = OAuth::Consumer.new(@course.consumer_key, @course.consumer_secret)
-      	token = OAuth::AccessToken.new(consumer)
-      	res = token.post(
-              @lis_outcome_service_url,
-              generate_request_xml(0.4, @lis_result_sourcedid),
-              'Content-Type' => 'application/xml'
-      	)
-
-		render xml: res.body
-	end
-
   def complete_enrollment
     @assignment = Assignment.find(lti_params[:id])
 

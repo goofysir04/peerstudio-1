@@ -16,6 +16,30 @@ namespace :grading do
 		end
 	end
 
+#begin vineet
+  desc "push grades to edx"
+  task :push_grades_edx => :environment do
+    logger = Rails.logger
+    users = User.all
+    
+    #assignment_id = ENV['ASSIGNMENT']
+    @assignment=Assignment.find(1)
+    #@assignment=Assignment.find(assignment_id)
+
+    logger.info "Pushing grades for #{users.count} users"
+    users.each  do |user| 
+      #logger.info "Attempting to push grades for #{user.email} (#{user.cid})"
+      puts "Attempting to push grades for #{user.email} (#{user.cid})" #why cid?
+      @assignment.push_grades_edx(user)
+
+      if user.id % 3 == 0
+        print "."
+        $stdout.flush
+      end
+    end
+  end
+#end vineet
+
 	desc "ASSIGNMENT=id; Find low agreement rubric items"
 	task :low_agreement => :environment do 
 		assignment_id = ENV['ASSIGNMENT']
