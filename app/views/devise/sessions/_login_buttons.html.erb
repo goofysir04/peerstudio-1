@@ -3,6 +3,11 @@
       1-click sign-in with <%= image_tag "coursera_white.svg" %> <br/>
       <div class="login-progress" style="display:none;"><small>(Signing in...)</small></div>
     <% end %>
+    <br/>
+    <%= link_to omniauth_authorize_path(resource,"stanford"), :class=> "btn btn-lg btn-danger btn-block login_button" do %>
+      1-click sign-in with <span style="font-family: 'Source Sans Pro', sans-serif; font-weight: bold'">Stanford ONLINE</span> <br/>
+      <div class="login-progress" style="display:none;"><small>(Signing in...)</small></div>
+    <% end %>
 </div>
 
 <div class="row-fluid password-login">

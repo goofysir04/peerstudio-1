@@ -1,5 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_filter :verify_authenticity_token, :only => [:coursera]
+  skip_before_filter :verify_authenticity_token, :only => [:coursera, :stanford]
   # before_filter :set_return_path_on_sign_in_page
 
   def facebook
@@ -16,6 +16,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
   
   def coursera
+    open_id_callback
+  end
+
+  def stanford
+    open_id_callback
+  end
+
+  private
+
+  def open_id_callback
     @user = User.find_for_authentication(:email => request.env["omniauth.auth"]["info"]["email"]) || current_user
     if !@user.nil?
       if @user.sign_in_count == 0
@@ -37,8 +47,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       redirect_to start_openid_registration_url
     end
   end
-
-  private
 
   # def set_return_path_on_sign_in_page
   #   request.env['omniauth.origin'] = session[:user_return_to] unless  session[:user_return_to].nil? 

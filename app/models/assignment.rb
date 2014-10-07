@@ -38,6 +38,16 @@ class Assignment < ActiveRecord::Base
 
     return enrollment.save
   end
+
+  def lti_user(lti_params)
+    enrollment = self.lti_enrollments.find_or_initialize_by_lti_user_id(lti_params[:user_id])
+    if enrollment.nil?
+      return nil
+    else
+      return enrollment.user
+    end
+  end
+
  
   def push_grades(user_id, max_push_count)
     answers = Answer.where("user_id = ? and push_count <= ?", user_id, max_push_count)
@@ -77,35 +87,35 @@ class Assignment < ActiveRecord::Base
     end
   end
 
-#begin vineet
+  #begin vineet
   def push_grades_edx(user)
-    puts "user_id is #{user.id}"
-    puts "starting pushing grades for user #{user.email}"
-    
-    answers = Answer.where("user_id = ?", user.id)
-    puts "ansers are #{answers}"
-    
-  if !answers.nil?
-    answers.each do |a| 
-      # raise user_id.inspect
-      if a.state != "graded" #special case qn 1
-        #todo - fix current_score
-        a.current_score = 1#a.new_get_grade
-        puts "ans current score is #{a.current_score}"
-        a.save
-      end
+      puts "user_id is #{user.id}"
+      puts "starting pushing grades for user #{user.email}"
       
-      #coursera
-    #@lis_outcome_service_url = "https://api.coursera.org/lti/v1/grade"
-    #@lis_result_sourcedid = "970447::1::585446::mxAHNKDlx3Rp9THqlKmSDmUSGGA"
-     
-    @course = Course.find(1) #or self.course
-    @enrollment = self.lti_enrollments.find(user.id) #todo - when is lti_enrollment set up
-    puts "#{@enrollment.lis_outcome_service_url}"
-    #edx
-    #@lis_outcome_service_url = "https://preview.class.stanford.edu/courses/Stanford/EXP1/Experimental_Assessment_Test/xblock/i4x:;_;_Stanford;_EXP1;_lti;_bc7feed267bb404bbf6da1e8749ef45a/handler_noauth/grade_handler"
-    #@lis_result_sourcedid = "Stanford/EXP1/Experimental_Assessment_Test:class.stanford.edu-i4x-Stanford-EXP1-lti-bc7feed267bb404bbf6da1e8749ef45a:9fac061ede3489b6c1cac27c0b93a338"
-    consumer = OAuth::Consumer.new(@course.consumer_key, @course.consumer_secret)
+      answers = Answer.where("user_id = ?", user.id)
+      puts "ansers are #{answers}"
+      
+    if !answers.nil?
+      answers.each do |a| 
+        # raise user_id.inspect
+        if a.state != "graded" #special case qn 1
+          #todo - fix current_score
+          a.current_score = 1#a.new_get_grade
+          puts "ans current score is #{a.current_score}"
+          a.save
+        end
+          
+          #coursera
+        #@lis_outcome_service_url = "https://api.coursera.org/lti/v1/grade"
+        #@lis_result_sourcedid = "970447::1::585446::mxAHNKDlx3Rp9THqlKmSDmUSGGA"
+         
+        @course = Course.find(1) #or self.course
+        @enrollment = self.lti_enrollments.find(user.id) #todo - when is lti_enrollment set up
+        puts "#{@enrollment.lis_outcome_service_url}"
+        #edx
+        #@lis_outcome_service_url = "https://preview.class.stanford.edu/courses/Stanford/EXP1/Experimental_Assessment_Test/xblock/i4x:;_;_Stanford;_EXP1;_lti;_bc7feed267bb404bbf6da1e8749ef45a/handler_noauth/grade_handler"
+        #@lis_result_sourcedid = "Stanford/EXP1/Experimental_Assessment_Test:class.stanford.edu-i4x-Stanford-EXP1-lti-bc7feed267bb404bbf6da1e8749ef45a:9fac061ede3489b6c1cac27c0b93a338"
+        consumer = OAuth::Consumer.new(@course.consumer_key, @course.consumer_secret)
         token = OAuth::AccessToken.new(consumer)
         begin
           res = token.post(
@@ -115,9 +125,9 @@ class Assignment < ActiveRecord::Base
           )
 
           puts "#{res.code}"
-         rescue Exception => e
+        rescue Exception => e
           puts "Connect failed. Exception: #{e.inspect}"     
-         end #end of begin
+        end #end of begin
     
         if res.body = "200" #res.body == '{"status":"200"}'        
           puts "Success: Response #{res.body}"
@@ -125,12 +135,11 @@ class Assignment < ActiveRecord::Base
         else
           puts "Push failed for answer id=#{a.id}; Response #{res.body}"
         end
-    
-    puts "finished pushing grades for user #{user.email}"
-    end #end of do
+        
+        puts "finished pushing grades for user #{user.email}"
+      end #end of do
     end # end of if answer.nil
   end #end of def method
   #end vineet 
-
 end
 
