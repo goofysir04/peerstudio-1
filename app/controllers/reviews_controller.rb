@@ -288,7 +288,7 @@ class ReviewsController < ApplicationController
           u = User.where("id = 4")#?", a.user_id)
           if u.experimental_group=="batched-email"
             #do nothing
-            logger.info "Not sending emails"
+            
           else 
             ReviewMailer.delay.reviewed_email(review.answer)
           end
