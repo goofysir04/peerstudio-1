@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
       return self.experimental_group
     end
 
-      #vineet
-    if email="1@test.com"
+    #begin vineet
+    if self.email="2@test.com"
       return "batched_email"
     end 
     #end vineet
