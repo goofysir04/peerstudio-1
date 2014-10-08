@@ -40,6 +40,12 @@ class User < ActiveRecord::Base
       return self.experimental_group
     end
 
+      #vineet
+    if email="1@test.com"
+      return "batched_email"
+    end 
+    #end vineet
+    
     if !course.waitlist_condition
       return "normal"
     elsif id%5==0
