@@ -125,3 +125,6 @@ gem 'ims-lti' , github: "chinmayk/ims-lti" #, path: "~/projects/ims-lti" #
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+#vineet
+gem 'hirb'
