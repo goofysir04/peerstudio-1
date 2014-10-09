@@ -44,12 +44,14 @@ class ReviewMailer < ActionMailer::Base
 	#begin vineet
 	#I dont know how the mail method works, just copying from method above
 	def unmailed_reviews(review, assignment)
-	  @answer = Answer.find(review.answer_id)
-	  @user = User.find(@answer.user_id)
+	  @answer = review.answer
+	  @user = answer.user
 	  @assignment = assignment
-	  emailTitle = @user.name + ", someone sent you a review!"
+	  emailTitle = 'Someone reviewed your work!'
 	  #mail(to: @user.email, subject: emailTitle)
 	  mail(to:@user.email, subject:emailTitle, template_name:"reviewed_email")
+	  review.email_sent=true
+	  review.save!
 	end
 	#end vineet
 

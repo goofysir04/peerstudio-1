@@ -10,14 +10,12 @@ namespace :assignment do
 			#	ReviewMailer.delay.unsubmitted_answers_email(answer, a)
 			#begin vineet	
 			# sending emails for all those reviews which were updated more than 2 hours ago (randomly chosen) and emails havent been sent already
-			unmailed_reviews = Review.where(assignment: a).where(('email_sent IS NULL OR email_sent=?'), false).where(["submitted_at < ?", Time.now-24.hours ])
+			unmailed_reviews = Review.where(assignment: a).where(('email_sent IS NULL OR email_sent=?'), false).where(["completed_at < ?", 24.hours.ago ])
 			puts unmailed_reviews.inspect
 			unmailed_reviews.each do |review|
 			  ReviewMailer.delay.unmailed_reviews(review, a)
-			  review.email_sent=true
-			  review.save!
-			#end vineet	
 			end
+			#end vineet	
 		end
 	end
 end
