@@ -77,8 +77,10 @@
             <% if @answer.submitted? %>
             <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path, :class=>"btn btn-danger", :role=>"button", :method=>:post %>
             <% else %>
-            <% seek_feedback_class = (@answer.assignment.due_at - Time.now > 1.day) ? "btn-primary": "btn-default" %>  
-            <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :id=>"submit-for-feedback", :role=>"button", :"data-no-turbolink" => true%> 
+            <% seek_feedback_class = (@answer.assignment.due_at - Time.now > 1.day) ? "btn-primary": "btn-default" %>
+              <% unless current_user.get_and_store_experimental_condition!(@answer.assignment.course) == "no_early_feedback" %>  
+                <%= link_to "Get feedback on draft", submit_for_feedback_answer_path, :class=>"btn #{seek_feedback_class}", :id=>"submit-for-feedback", :role=>"button", :"data-no-turbolink" => true%> 
+              <% end %>
             <% end %>
             <% unless @answer.is_final? or @answer.assignment.course.early_feedback_only? %>
              <button class="btn btn-default" id="submit-final">Submit for grading as final</button>

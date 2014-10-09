@@ -51,7 +51,8 @@ class LtiController < ApplicationController
           end
         else
           #We can't find this user, even though our provider gave us an email address
-          session["user_return_to"] = complete_lti_enrollment_path(@assignment, lti_params)
+          session[:lti_params] = lti_params
+          session["user_return_to"] = complete_lti_enrollment_path(@assignment)
           flash[:notice] = "We need additional information to create your Peerstudio account. Please click the sign in button to continue."
           authenticate_user!  
         end
@@ -60,7 +61,8 @@ class LtiController < ApplicationController
         # else get credentials
         user = @assignment.lti_user(lti_params)
         if user.nil?
-          session["user_return_to"] = complete_lti_enrollment_path(@assignment, lti_params)
+          session[:lti_params] = lti_params
+          session["user_return_to"] = complete_lti_enrollment_path(@assignment)
           flash[:notice] = "We need additional information to create your Peerstudio account. Please click the sign in button to continue."
           authenticate_user!
         else
@@ -81,11 +83,14 @@ class LtiController < ApplicationController
   end
 
   def complete_enrollment
+    lti_params = session[:lti_params]
     @assignment = Assignment.find(lti_params[:id])
 
     if @assignment.enroll_with_lti(current_user, lti_params)
+      session[:lti_params] = nil
       redirect_to @assignment, notice: "Welcome back, #{current_user.name}" and return
     else
+      session[:lti_params] = nil
       redirect_to @assignment, alert: "We didn't get your LTI credentials. Try again." and return
     end
   end

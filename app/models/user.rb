@@ -48,12 +48,12 @@ class User < ActiveRecord::Base
     
     if !course.waitlist_condition
       return "normal"
-    elsif id%5==0
-      return "waitlist"
-    elsif id%5 == 1
-      return "review_only"
-    elsif id% 5 == 2
-      return "submit_only"
+    elsif id%3==0
+      return "normal"
+    elsif id%3 == 1
+      return "no_early_feedback"
+    elsif id%3 == 2
+      return "batched_email"
     else
       return "normal"
     end

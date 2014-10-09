@@ -117,6 +117,7 @@ gem 'whenever', :require => false
 
 
 gem 'ims-lti' , github: "chinmayk/ims-lti" #, path: "~/projects/ims-lti" #
+gem 'activerecord-session_store'
 
 #for pushing grades to coursera
 # gem "always_verify_ssl_certificates"
