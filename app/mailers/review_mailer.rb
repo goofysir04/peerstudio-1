@@ -48,7 +48,8 @@ class ReviewMailer < ActionMailer::Base
 	  @user = User.find(@answer.user_id)
 	  @assignment = assignment
 	  emailTitle = @user.name + ", someone sent you a review!"
-	  mail(to: @user.email, subject: emailTitle)
+	  #mail(to: @user.email, subject: emailTitle)
+	  mail(to:@user.email, subject:emailTitle, template_name:"reviewed_email")
 	end
 	#end vineet
 
