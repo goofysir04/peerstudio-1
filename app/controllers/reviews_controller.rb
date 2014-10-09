@@ -284,11 +284,13 @@ class ReviewsController < ApplicationController
       if review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
         if last_completed_at.nil? or last_completed_at < 5.minutes.ago
           #begin vineet
-          a = Answer.where("id = ?",review.answer_id)
-          u = User.where("id = 4")#?", a.user_id)
+          a = Answer.find(review.answer_id)
+          u = User.find(a.user_id)
+          assign = Assignment.find(review.assignment_id)
+          course = Course.find(assign.course_id)
+          u.get_and_store_experimental_condition!(course)
           if u.experimental_group=="batched-email"
-            #do nothing
-            
+            #do nothing         
           else 
             ReviewMailer.delay.reviewed_email(review.answer)
           end
