@@ -289,7 +289,7 @@ class ReviewsController < ApplicationController
           assign = Assignment.find(review.assignment_id)
           course = Course.find(assign.course_id)
           u.get_and_store_experimental_condition!(course)
-          if u.experimental_group=="batched-email"
+          if u.experimental_group=="batched_email"
             #do nothing         
           else 
             ReviewMailer.delay.reviewed_email(review.answer)

@@ -39,7 +39,7 @@ every :day do
 end
 
 #begin vineet
-every :day do
+every :hour do
   rake "assignment:send_emails_batched"
 end 
 #end vineet
