@@ -126,3 +126,6 @@ gem 'activerecord-session_store'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+#vineet
+gem 'hirb', group: [:development, :test]

@@ -283,7 +283,18 @@ class ReviewsController < ApplicationController
       last_completed_at = review.completed_at
       if review.update(review_params.except(:answer_attribute_weights).merge(active: true, completed_at: Time.now))
         if last_completed_at.nil? or last_completed_at < 5.minutes.ago
-          ReviewMailer.delay.reviewed_email(review.answer)
+          #begin vineet
+          a = Answer.find(review.answer_id)
+          u = User.find(a.user_id)
+          assign = Assignment.find(review.assignment_id)
+          course = Course.find(assign.course_id)
+          u.get_and_store_experimental_condition!(course)
+          if u.experimental_group=="batched_email"
+            #do nothing         
+          else 
+            ReviewMailer.delay.reviewed_email(review.answer)
+          end
+         #end vineet
         end
         #add "last emailed" column
         review.set_answer_attribute_weights!(review_params[:answer_attribute_weights])

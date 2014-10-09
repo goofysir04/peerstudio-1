@@ -40,6 +40,20 @@ class ReviewMailer < ActionMailer::Base
 		emailTitle = @user.name + ", don't forget to get feedback!"
 		mail(to: @user.email, subject: emailTitle)
 	end
+	
+	#begin vineet
+	#I dont know how the mail method works, just copying from method above
+	def unmailed_reviews(review, assignment)
+	  @answer = review.answer
+	  @user = answer.user
+	  @assignment = assignment
+	  emailTitle = 'Someone reviewed your work!'
+	  #mail(to: @user.email, subject: emailTitle)
+	  mail(to:@user.email, subject:emailTitle, template_name:"reviewed_email")
+	  review.email_sent=true
+	  review.save!
+	end
+	#end vineet
 
 	def unrevised_answers_email(answer, assignment)
 		@user = User.find(answer.user_id)

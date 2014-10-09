@@ -21,6 +21,10 @@ class AssignmentsController < ApplicationController
       @trigger = TriggerAction.pending_action("review_required", current_user, @assignment)
       @my_answers = Answer.where(user: current_user, assignment: @assignment, active: true)
       @my_reviews = Review.where(answer_id: @my_answers, active: true, assignment_id: @assignment.id)
+
+      if current_user.get_and_store_experimental_condition!(@assignment.course) == "batched_email"
+        @my_reviews = Review.where(answer_id: @my_answers, active: true, assignment_id: @assignment.id).where('created_at < ?', 1.day.ago)
+      end
       @reviews_by_me = Review.where(active: true, assignment_id: @assignment.id).where("user_id = ? or copilot_email = ?", current_user.id,current_user.email)
       @out_of_box_answers_with_count = Review.where(assignment_id: @assignment.id, out_of_box_answer: true).group(:answer_id).count
 

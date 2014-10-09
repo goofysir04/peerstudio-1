@@ -345,6 +345,7 @@ ActiveRecord::Schema.define(version: 20141009091133) do
     t.datetime "completed_at"
     t.text     "completion_metadata"
     t.string   "review_method",         default: "normal"
+    t.boolean  "email_sent"
   end
 
   add_index "reviews", ["answer_id"], name: "fk__reviews_answer_id", using: :btree

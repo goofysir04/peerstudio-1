@@ -37,3 +37,9 @@ end
 every :day do
 	rake "assignment:send_emails_to_unrevised_answers"
 end
+
+#begin vineet
+every :hour do
+  rake "assignment:send_emails_batched"
+end 
+#end vineet
