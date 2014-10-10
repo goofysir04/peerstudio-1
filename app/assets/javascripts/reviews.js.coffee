@@ -193,7 +193,7 @@ setProgressBarWidths = () ->
 
 suggestPlaceholderForComments = (allCheckboxes) ->
 	if (_.every allCheckboxes, (box) -> $(box).prop('checked') is true)
-			return "What do you like most about this section?"
+			return "What do you like most about this?"
 	if (_.every allCheckboxes, (box) -> $(box).prop('checked') is false)
 			return "What's the first thing you'd suggest to get started?"
 	
@@ -202,9 +202,9 @@ suggestPlaceholderForComments = (allCheckboxes) ->
 		uncheckedId = $(uncheckedBoxes[0]).attr('id')
 		label = $("label[for=#{uncheckedId}]")
 
-		return "This section looks mostly good, except for \"#{label.text()}\". What do you suggest they try?"
+		return "This looks mostly good, except for \"#{label.text()}\". What do you suggest they try?"
 	else
-		return "What's the first thing you'd suggest to improve this section?"
+		return "What's the first thing you'd suggest to improve this?"
 
 	return null
 
