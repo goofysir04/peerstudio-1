@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009091133) do
+ActiveRecord::Schema.define(version: 20141010044031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,6 +210,7 @@ ActiveRecord::Schema.define(version: 20141009091133) do
     t.boolean  "early_feedback_only", default: false
     t.boolean  "show_timer",          default: true
     t.boolean  "waitlist_condition",  default: false
+    t.text     "custom_script"
   end
 
   add_index "courses", ["user_id"], name: "fk__courses_user_id", using: :btree

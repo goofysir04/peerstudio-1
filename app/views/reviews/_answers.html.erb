@@ -2,10 +2,10 @@
 Reviewing <%= answer.assignment.title %>
 <% end %>
 
+<span id="reviewingPage" <%= raw('data-force-tour="true"') if current_user.sign_in_count == 1 %>></span>
 <%= yield %>
 <% content_for :local_nav do %>
     <li><%= link_to answer.assignment.title, answer.assignment %></li>
-    <li><button id="startReviewTourBtn" class="btn btn-primary" style="margin-top:7px;">First time reviewing? Take a tour!</button></li>
 <% end %>
 
 <div class="row-fluid syncHighlighting">
@@ -25,6 +25,7 @@ Reviewing <%= answer.assignment.title %>
   </div>
 <% else %>
   <div class="paper">
+    <h3 id="student-work">Give feedback on this submission</h3>
     <%= sanitize answer.response unless answer.response.nil? %>
   </div>
 <% end %>

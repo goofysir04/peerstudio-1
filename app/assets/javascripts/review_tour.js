@@ -36,21 +36,27 @@ var reviewtour = {
       title: "When you're done, click submit! It's that simple!",
       target:"submit-button",
       placement: "top"
+    },
+    {
+      title: "If you need to see this again, it's right here in the Help menu",
+      target:"help-menu",
+      placement: "left"
     }
   ]
 };
 
-init = function() {
-  var startButton = document.getElementById("startReviewTourBtn");
-  state = hopscotch.getState();
-  if (startButton !== null) {
-    startButton.onclick = function() {hopscotch.startTour(reviewtour);};
-  }
+var init = function() {
+  $(".startReviewTourBtn").click(function() {var state = hopscotch.getState();
+      hopscotch.startTour(reviewtour);
+      return false;});
 };
 
-window.onload = function() {
+$(document).on('ready page:load',(function() {
   init();
-};
+  if($('span#reviewingPage').data('forceTour')) {
+    hopscotch.startTour(reviewtour);
+  }
+}));
 
 // hopscotch.startTour(reviewtour);
 
