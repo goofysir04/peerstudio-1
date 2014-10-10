@@ -36,6 +36,12 @@
           <%= f.text_field :due_at, :value => f.object.due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
           <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
         </div>
+
+        <%= f.label :review_due_at %>
+        <div class="input-append date datetime-picker">
+          <%= f.text_field :review_due_at, :value => f.object.due_at, "data-format"=>"yyyy-MM-dd hh:mm:ss"%>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
       </div>
     </div>
     <div class="col-sm-6">

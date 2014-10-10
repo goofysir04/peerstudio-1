@@ -220,6 +220,7 @@ def review_first
       params.permit(:recent_review)
       params.permit(:page)
       params.require(:assignment).permit(:title, :description, :template, :example, :milestone_list, :due_at, :open_at, 
+        :review_due_at,
         :rubric_items_attributes=>[
           :id, :title, :short_title, :show_for_feedback, :show_for_final,
           :like_feedback_prompt,
