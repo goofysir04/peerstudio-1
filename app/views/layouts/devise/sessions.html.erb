@@ -4,5 +4,6 @@
 <body>
   <%= render :partial => 'layouts/notice', :locals => {:notice => notice, :alert => alert} %>
   <%= yield %>
+  <%= render :partial=>'layouts/global_includes_async' %>
 </body>
 </html>
