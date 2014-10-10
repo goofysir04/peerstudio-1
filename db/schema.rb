@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141010044031) do
+ActiveRecord::Schema.define(version: 20141010214736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -370,8 +370,8 @@ ActiveRecord::Schema.define(version: 20141010044031) do
     t.text     "title"
     t.string   "short_title"
     t.datetime "ends_at"
-    t.boolean  "final_only",        default: false
-    t.float    "min",               default: 0.0
+    t.boolean  "final_only",           default: false
+    t.float    "min",                  default: 0.0
     t.float    "max"
     t.string   "min_label"
     t.string   "max_label"
@@ -381,9 +381,10 @@ ActiveRecord::Schema.define(version: 20141010044031) do
     t.datetime "updated_at"
     t.text     "common_wishes"
     t.datetime "open_at"
-    t.boolean  "show_for_feedback", default: true
-    t.boolean  "show_for_final",    default: true
-    t.boolean  "show_as_radio",     default: false
+    t.boolean  "show_for_feedback",    default: true
+    t.boolean  "show_for_final",       default: true
+    t.boolean  "show_as_radio",        default: false
+    t.text     "like_feedback_prompt"
   end
 
   add_index "rubric_items", ["assignment_id"], name: "fk__rubric_items_assignment_id", using: :btree
