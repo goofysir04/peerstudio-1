@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009091133) do
+ActiveRecord::Schema.define(version: 20141010215536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 20141009091133) do
     t.boolean  "grades_released", default: false
     t.text     "template"
     t.text     "example"
+    t.datetime "review_due_at"
   end
 
   add_index "assignments", ["course_id"], name: "fk__assignments_course_id", using: :btree
@@ -210,6 +211,7 @@ ActiveRecord::Schema.define(version: 20141009091133) do
     t.boolean  "early_feedback_only", default: false
     t.boolean  "show_timer",          default: true
     t.boolean  "waitlist_condition",  default: false
+    t.text     "custom_script"
   end
 
   add_index "courses", ["user_id"], name: "fk__courses_user_id", using: :btree
@@ -369,8 +371,8 @@ ActiveRecord::Schema.define(version: 20141009091133) do
     t.text     "title"
     t.string   "short_title"
     t.datetime "ends_at"
-    t.boolean  "final_only",        default: false
-    t.float    "min",               default: 0.0
+    t.boolean  "final_only",           default: false
+    t.float    "min",                  default: 0.0
     t.float    "max"
     t.string   "min_label"
     t.string   "max_label"
@@ -380,9 +382,10 @@ ActiveRecord::Schema.define(version: 20141009091133) do
     t.datetime "updated_at"
     t.text     "common_wishes"
     t.datetime "open_at"
-    t.boolean  "show_for_feedback", default: true
-    t.boolean  "show_for_final",    default: true
-    t.boolean  "show_as_radio",     default: false
+    t.boolean  "show_for_feedback",    default: true
+    t.boolean  "show_for_final",       default: true
+    t.boolean  "show_as_radio",        default: false
+    t.text     "like_feedback_prompt"
   end
 
   add_index "rubric_items", ["assignment_id"], name: "fk__rubric_items_assignment_id", using: :btree

@@ -19,7 +19,16 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li> <%= link_to "Terms", welcome_tos_path %> </li>
-        <li> <%= link_to "Help", help_courses_path %> </li>
+        <li class="dropdown" id="help-menu">
+          <%= link_to help_courses_path, :"class"=>"dropdown-toggle", :"data-toggle"=>"dropdown" do %>
+          Help <b class="caret"></b>
+          <% end %>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="startReviewTourBtn">How do I review?</a></li>
+            <li><%= link_to "Help", help_courses_path %> </li>
+          </ul>
+          
+        </li>
         <% if user_signed_in? %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

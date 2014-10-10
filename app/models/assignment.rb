@@ -10,7 +10,7 @@ class Assignment < ActiveRecord::Base
   scope :active, -> { where("due_at > ?", Time.now)}
 
   has_many :lti_enrollments
-  validates_presence_of :due_at, :title
+  validates_presence_of :due_at, :title, :review_due_at
 
   def task_list
     task_list = []

@@ -100,7 +100,8 @@
                 Absent: 18415 feedback_items
                 Present: 1121 feedback_items 
               -->
-              <%= r.text_area :like_feedback, placeholder: "One way you can improve _______ is by doing __________, e.g. __________.", class:"form-control expandable comment-quality-checked rubric-comment", style: "margin-top:1em" %>
+              <% feedback_prompt = r.object.rubric_item.like_feedback_prompt.blank? ? "One way you can improve _______ is by doing __________, e.g. __________." : r.object.rubric_item.like_feedback_prompt %>
+              <%= r.text_area :like_feedback, placeholder: feedback_prompt, class:"form-control expandable comment-quality-checked rubric-comment", style: "margin-top:1em" %>
               <%= r.hidden_field :rubric_item_id %>
             </li>
           <% end %>

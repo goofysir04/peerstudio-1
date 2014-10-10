@@ -131,7 +131,7 @@ class AssignmentsController < ApplicationController
     if @total_users_submitted <= 300
       # Add individual student stats
       @students = @assignment.course.students
-      @review_count = Review.where(assignment: @assignment).group(:user_id).count
+      @review_count = Review.where(assignment: @assignment, active: true).group(:user_id).count
       @submitted_answers = Answer.where(assignment: @assignment, submitted: true).group(:user_id).count
 
       @admins = User.where(admin: true)
@@ -220,8 +220,10 @@ def review_first
       params.permit(:recent_review)
       params.permit(:page)
       params.require(:assignment).permit(:title, :description, :template, :example, :milestone_list, :due_at, :open_at, 
+        :review_due_at,
         :rubric_items_attributes=>[
           :id, :title, :short_title, :show_for_feedback, :show_for_final,
+          :like_feedback_prompt,
         :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :attribute_type, :example, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
     end
 
