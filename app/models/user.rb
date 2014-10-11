@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
 		if self.experimental_group.blank?
 			self.experimental_group = self.experimental_condition(course)
 			# self.save! #don't save, we have some validation issue. 
+			self.save!
 		end
 		return self.experimental_group
 	end
@@ -40,11 +41,11 @@ class User < ActiveRecord::Base
 			return self.experimental_group
 		end
 
-		#begin vineet
-		if self.email="2@test.com"
-			return "batched_email"
-		end 
-		#end vineet
+		# #begin vineet
+		# if self.email="2@test.com"
+		# 	return "batched_email"
+		# end 
+		# #end vineet
 		
 		if !course.waitlist_condition
 			return "normal"
