@@ -93,7 +93,7 @@ class Answer < ActiveRecord::Base
     grouped_items = self.feedback_items.select {|r| r if r.review.active and r.review.review_method=="normal"}.group_by(&:rubric_item_id)
 
     if self.user.get_and_store_experimental_condition!(self.assignment.course) == "batched_email"
-      grouped_items = self.feedback_items.select {|r| r if r.review.active and r.review.review_method=="normal" and r.review.completed_at < 1.day.ago}.group_by(&:rubric_item_id)
+      grouped_items = self.feedback_items.select {|r| r if r.review.active and r.review.review_method=="normal" and (!r.review.completed_at.blank? and r.review.completed_at < 1.day.ago)}.group_by(&:rubric_item_id)
     end
     reviews = self.reviews.where(active: true)
     if self.user.get_and_store_experimental_condition!(self.assignment.course) == "batched_email"
