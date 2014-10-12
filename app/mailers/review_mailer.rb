@@ -45,7 +45,7 @@ class ReviewMailer < ActionMailer::Base
 	#I dont know how the mail method works, just copying from method above
 	def unmailed_reviews(review, assignment)
 	  @answer = review.answer
-	  @user = answer.user
+	  @user = @answer.user
 	  @assignment = assignment
 	  emailTitle = 'Someone reviewed your work!'
 	  #mail(to: @user.email, subject: emailTitle)
