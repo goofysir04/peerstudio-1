@@ -47,6 +47,8 @@ class ReviewMailer < ActionMailer::Base
 	  @answer = review.answer
 	  @user = @answer.user
 	  @assignment = assignment
+
+	  @reviewed_work = @assignment
 	  emailTitle = 'Someone reviewed your work!'
 	  #mail(to: @user.email, subject: emailTitle)
 	  mail(to:@user.email, subject:emailTitle, template_name:"reviewed_email")
