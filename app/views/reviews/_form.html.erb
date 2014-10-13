@@ -166,7 +166,7 @@
         </div>
         <div class="modal-body">
           <p>Which comment do you think would help you improve your work most?</p>
-          <% unless @latest_reviewer_answer.nil?%>
+          <% if false and !@latest_reviewer_answer.nil?%>
             <div class="row-fluid well">
                 <% answer_excerpt = @latest_reviewer_answer.response.truncate(350) + '...'  if answer_excerpt.blank?
                  %>
