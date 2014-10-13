@@ -14,6 +14,8 @@ namespace :assignment do
 			puts unmailed_reviews.inspect
 			unmailed_reviews.each do |review|
 			  ReviewMailer.delay.unmailed_reviews(review, a)
+			  review.email_sent=true
+			  review.save!
 			end
 			#end vineet	
 		end
