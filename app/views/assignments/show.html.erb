@@ -37,7 +37,7 @@
   </div>
 </div>
 <div class="clearfix"></div>
-<% if !@assignment.ended? and current_user.get_and_store_experimental_condition!(@answer.assignment.course) != "batched_email" %>
+<% if !@assignment.ended? and current_user.get_and_store_experimental_condition!(@assignment.course) != "batched_email" %>
  <%= render partial: "courses/reviewing_delay", locals:{assignment: @assignment} %>
 <% end %>
 
