@@ -56,8 +56,14 @@
   </thead>
 
   <tbody>
-    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at > ? ', Time.now).order('due_at asc').offset(1)%>
-    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at < ? ', Time.now).order('due_at asc')%>
+    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at > ? and open_at < ?', Time.now, Time.now).order('due_at asc').offset(1)%>
+    <%= render partial: "assignments/short_show", collection:@course.assignments.where('due_at < ? and open_at < ?', Time.now, Time.now).order('due_at asc')%>
+    <% if current_user.admin? %>
+    <tr>
+      <td colspan="4"><strong>Assignments below this line yet open (visible only to staff)</strong></td>
+    </tr>
+      <%= render partial: "assignments/short_show", collection:@course.assignments.where('open_at > ? ', Time.now).order('due_at asc')%>
+    <% end %>
   </tbody>
 </table>
 
