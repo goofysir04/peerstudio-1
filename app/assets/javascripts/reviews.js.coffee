@@ -312,6 +312,7 @@ checkFormCompleteness = () ->
 		saveCurrentPrompt()
 	return true if force_submit or ($('#alternate-review').length > 0)
 	review_complete = true
+	$('li.compute-score').removeClass('incomplete-rubric')
 	for item in $('input.toggle-checkbox')
 		console.log "checking #{$(item).attr('id')}"
 		unless $(item).attr('id') in review_completion_metadata.completed_checkboxes
