@@ -52,8 +52,6 @@ class ReviewMailer < ActionMailer::Base
 	  emailTitle = 'Someone reviewed your work!'
 	  #mail(to: @user.email, subject: emailTitle)
 	  mail(to:@user.email, subject:emailTitle, template_name:"reviewed_email")
-	  review.email_sent=true
-	  review.save!
 	end
 	#end vineet
 

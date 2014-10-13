@@ -2,6 +2,7 @@ namespace :analysis do
 	task :how_fucked_are_we => :environment do
 		logger = Rails.logger
 		@assignment = Assignment.find(9)
+		#vineet to chinmay: does the above line need to be fixed to make it general? also, do you want to reconsider this filename? 
 		@answers = Answer.where(assignment: @assignment, submitted: true)
 		@answers.each do |a|
 			feedback_items_by_rubric_item = a.feedback_items_by_rubric_item
