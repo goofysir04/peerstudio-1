@@ -28,6 +28,7 @@ namespace :assignment do
 		logger.error "This is a dangerous email."
 		logger.info "Sending emails to people haven't enrolled in this course, but used Coursera credentials!"
 		a = Assignment.find(9)
+		#vineet to chinmay: does the above line need to be fixed to make it general? 
 		enrollments = Enrollment.where(course: a.course).select("user_id").map { |e| e.user_id }
 		users_that_havent_enrolled = User.where(provider: "coursera").where(" id not in (?)", enrollments)
 		users_that_havent_enrolled.each do |user|
