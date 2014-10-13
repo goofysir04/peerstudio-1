@@ -57,7 +57,7 @@ setNewTime = (clock, feedbackTime, feedbackDay) ->
 	prevDeadline = getPreviousDeadline()
 	nextDeadline = getLaterTime(prevDeadline, 4)
 	timeDiff = getTimeDiff(nextDeadline)
-	feedbackDeadline = getLaterTime(nextDeadline, 8)
+	feedbackDeadline = getLaterTime(nextDeadline, 4)
 	clock.text(toHHMMSS(timeDiff))
 	feedbackTime.text(getFeedbackDeadlineTime(feedbackDeadline))
 	feedbackDay.text(getFeedbackDeadlineDay(feedbackDeadline)) 
