@@ -24,7 +24,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks', github: "chinmayk/turbolinks"
+gem 'turbolinks', :git => 'https://github.com/chinmayk/turbolinks'
 gem 'jquery-turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -47,7 +47,7 @@ gem 'rails-bootstrap-markdown'
 # User Authentication and Authorization
 gem "devise"
 gem "omniauth"
-gem 'omniauth-openid', :git => 'git://github.com/intridea/omniauth-openid.git'
+gem 'omniauth-openid', :git => 'https://github.com/intridea/omniauth-openid.git'
 gem "cancan"
 
 gem "mysql2", group: :production
@@ -92,7 +92,7 @@ gem 'airbrake'
 gem "paperclip"
 # gem "ckeditor", :github => "galetahub/ckeditor"
 gem "aws-sdk", '~>1.42'
-# gem 's3_direct_upload', :git => "git://github.com/waynehoover/s3_direct_upload.git" # direct upload (CORS) form helper and assets
+# gem 's3_direct_upload', :git => "https://github.com/waynehoover/s3_direct_upload.git" # direct upload (CORS) form helper and assets
 
 
 # gem 'rmagick', '2.13.2'
@@ -116,7 +116,7 @@ gem 'nested_form'
 gem 'whenever', :require => false
 
 
-gem 'ims-lti' , github: "chinmayk/ims-lti" #, path: "~/projects/ims-lti" #
+gem 'ims-lti' , :git => "https://github.com/chinmayk/ims-lti" #, path: "~/projects/ims-lti" #
 gem 'activerecord-session_store'
 
 #for pushing grades to coursera
