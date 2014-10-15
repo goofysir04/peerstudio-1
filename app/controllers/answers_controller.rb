@@ -98,6 +98,10 @@ class AnswersController < ApplicationController
     unless @answer.user == current_user or current_user.admin?
       redirect_to assignment_path(@answer.assignment), alert: "You can only edit your own answers!" and return
     end
+
+    if @answer.submitted?
+      redirect_to @answer.assignment, alert: "You submitted this answer for a review, so you can't change it anymore." and return
+    end
     respond_to do |format|
       if @answer.update(answer_params.merge(active: true)) #set active to true so the answer shows up everywhere
         format.html { redirect_to (@answer), notice: 'Answer was successfully updated.' }
