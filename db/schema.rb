@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141010215536) do
+ActiveRecord::Schema.define(version: 20141015224727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,8 +135,11 @@ ActiveRecord::Schema.define(version: 20141010215536) do
     t.decimal  "credit",         default: 0.0
     t.integer  "marked_reviews", default: 0
     t.integer  "total_reviews",  default: 0
+    t.integer  "answer_id"
+    t.boolean  "is_final",       default: true
   end
 
+  add_index "assignment_grades", ["answer_id"], name: "index_assignment_grades_on_answer_id", using: :btree
   add_index "assignment_grades", ["assignment_id"], name: "fk__assignment_grades_assignment_id", using: :btree
   add_index "assignment_grades", ["assignment_id"], name: "index_assignment_grades_on_assignment_id", using: :btree
   add_index "assignment_grades", ["rubric_item_id"], name: "fk__assignment_grades_rubric_item_id", using: :btree

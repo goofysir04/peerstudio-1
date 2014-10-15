@@ -98,35 +98,39 @@ namespace :grading do
 			# end
 
 			##grades for assignment rubrics
-			final_answer = Answer.where(user_id: student.id, submitted: true, assignment_id: assignment_id, is_final: true).order('submitted_at desc').first
-			if !final_answer.nil?
-				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id, review_method: "normal")
+			answers = Answer.where(user_id: student.id, submitted: true, assignment_id: assignment_id).order('submitted_at desc')
+			answers.each do |answer|
+				if !answer.nil?
+					final_reviews = Review.where(review_type: "final", active: true, answer_id: answer.id, review_method: "normal")
 
-				staff_reviews = Review.where(review_type: "final", review_method: "normal", active: true, answer_id: final_answer.id, user_id: admins)
-				grade_type = "Peer grade"
-				if !staff_reviews.blank?
-					final_reviews = staff_reviews
-					grade_type = "Staff grade"
-				end
-				assignment.rubric_items.each do |rubric|
-					rubric.answer_attributes.each do |answer_attribute|
-						marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+					staff_reviews = Review.where(review_type: "final", review_method: "normal", active: true, answer_id: answer.id, user_id: admins)
+					grade_type = "Peer grade"
+					if !staff_reviews.blank?
+						final_reviews = staff_reviews
+						grade_type = "Staff grade"
+					end
+					assignment.rubric_items.each do |rubric|
+						rubric.answer_attributes.each do |answer_attribute|
+							marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
 
-						attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
-						attribute_credit = (if final_reviews.count >= 3 
-											 marked_count >= 2 ? attribute_score : 0
-											elsif final_reviews.count > 0 and final_reviews.count < 3
-											 ((attribute_score * marked_count/final_reviews.count))
-											else
-												0
-											end)
+							attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
+							attribute_credit = (if final_reviews.count >= 3 
+												 marked_count >= 2 ? attribute_score : 0
+												elsif final_reviews.count > 0 and final_reviews.count < 3
+												 ((attribute_score * marked_count/final_reviews.count))
+												else
+													0
+												end)
 
-						AssignmentGrade.create(user: student, assignment: assignment, 
-							grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
-							credit: attribute_credit, 
-							marked_reviews: marked_count, 
-							total_reviews: final_reviews.count, 
-							rubric_item_id: rubric.id)
+							AssignmentGrade.create(user: student, assignment: assignment, 
+								answer: answer,
+								is_final: answer.is_final?,
+								grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
+								credit: attribute_credit, 
+								marked_reviews: marked_count, 
+								total_reviews: final_reviews.count, 
+								rubric_item_id: rubric.id)
+						end
 					end
 				end
 			end

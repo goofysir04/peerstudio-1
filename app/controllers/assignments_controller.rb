@@ -138,7 +138,7 @@ class AssignmentsController < ApplicationController
       @reviews_by_instructors = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
       @unreviewed_by_staff = @assignment.answers.where(submitted: true, is_final: true).count - @reviews_by_instructors.count
 
-      @grades = AssignmentGrade.where(assignment: @assignment).group(:user_id).sum(:credit)
+      @grades = AssignmentGrade.where(assignment: @assignment, is_final: true).group(:user_id).sum(:credit)
     end
 
     render layout: "one_column"
@@ -151,7 +151,7 @@ class AssignmentsController < ApplicationController
       redirect_to @assignment and return unless @assignment.grades_released?
       @permitted_user = current_user
     end
-    @grades = AssignmentGrade.where(assignment: @assignment, user: @permitted_user)
+    @grades = AssignmentGrade.where(assignment: @assignment, user: @permitted_user, is_final:true)
   end
 
   def update_grade
