@@ -21,6 +21,16 @@ class Review < ActiveRecord::Base
 	return review_blank
   end
 
+  def all_comments
+    comments = "" 
+    comments << (self.comments or "")
+    self.feedback_items.each do |f|
+      comments << " "
+      comments << (f.like_feedback or "")
+    end
+    return comments
+  end
+
   def set_answer_attribute_weights!(weights)
   	return if weights.nil?
     weights.each do |id, attrs|
