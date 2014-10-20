@@ -37,9 +37,9 @@ namespace :experimental do
 		task :dump_comments => :environment do
 			reviews = Review.where(active:true)
 			file = CSV.generate({force_quotes: true}) do |csv|
-				csv << ["id", "answer_id", "assignment_id", "accurate_rating", "concrete_rating", "recognize_rating", "other_rating_comments", "all_comments"]
+				csv << ["id", "author_id", "answer_id", "assignment_id", "accurate_rating", "concrete_rating", "recognize_rating", "other_rating_comments", "all_comments"]
 				reviews.each do |r|
-					csv << [r.id, r.answer_id, r.assignment_id, r.accurate_rating, r.concrete_rating, r.recognize_rating, r.other_rating_comments, r.all_comments.gsub(/\n|\r/,'')]
+					csv << [r.id, r.user_id, r.answer_id, r.assignment_id, r.accurate_rating, r.concrete_rating, r.recognize_rating, r.other_rating_comments, r.all_comments.gsub(/\n|\r/,'')]
 			  	end
 			end
 			print file
