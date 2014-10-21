@@ -5,7 +5,7 @@
         <%= image_tag("jumbotron.jpg", :id => "jumbotron-image") %>
         <div class="jumbotron-fade"></div>
       </div>
-        <h1>Get fast, actionable feedback<br/> from classmates</h1>
+        <h1>Get fast, actionable feedback<br/> from classmates <span id="class-types"></span></h1>
         <div class="login-btn-container center-block">
           <%= render partial:"devise/sessions/login_buttons" %>
           <br/>
@@ -25,8 +25,9 @@
     <p>Here are three reasons</p>
     <ul>
       <li>Using Peerstudio, students can get feedback faster than teaching staff can provide. Often, students on Peerstudio get feedback in <em>minutes</em>, if not in hours. Getting feedback faster helps students make progress faster.</li>
-      <li>Looking at peer work encourages students and sparks new ideas.</li>
-      <li>When peers lead the feedback and assessment process, it frees instructors to set the standards for high-quality work, and coach students. For instance, when students' grades depend on peer assessment, they're more likely to see teachers as mentors (instead of assessors), and creates more room for conversation.</li>
+      <li>With peer review and assessment, looking at peer work encourages students and sparks new ideas.</li>
+      <li>When peers lead the feedback and assessment process, it frees instructors to set the standards for high-quality work and coach students. For instance, when students' grades depend on peer assessment, they're more likely to see teachers as mentors (instead of assessors), and creates more room for conversation.</li>
+      <li>(Bonus!) Peerstudio uses the data from peer feedback and peer assessment to help you understand your class better. What are most students confused about? When they critique peer work, are they focusing on important aspects?
     </ul>
 
     <h2>I teach a MOOC. Can I use PeerStudio with Coursera and/or OpenEdX?</h2>
@@ -38,12 +39,12 @@
     <h2>What makes Peerstudio different from other systems?</h2>
     <p>While there are many <a href="http://help.coursera.org/customer/portal/articles/1163294-how-do-peer-assessments-work-">excellent</a> <a href="http://cpr.molsci.ucla.edu/Home.aspx">peer assessment</a> systems, here are key differences:</p>
     <ul>
-      <li>we built Peerstudio with a focus on speed, and on improvement-oriented comments. Peerstudio scaffolds students so they can provide great feedback, even when they are still working on an assignment themselves.</li>
-      <li>Peerstudio has explicit support for revision. We think students do their best work when they have excellent feedback, and <em>an opportunity to revise</em> before they are graded.</li>
+      <li>We built Peerstudio with a focus on speed, and on improvement-oriented comments. Peerstudio scaffolds students so they can provide great feedback, even when they are still working on an assignment themselves.</li>
+      <li>Peerstudio explicitly supports and encourages revision.We think students do their best work when they have excellent feedback, and an opportunity to revise <em> before they are graded</em>. For example, in your writing class, students can first get feedback on an outline, and revise their drafts a couple times before submitting their best work.</li>
       <li>Peerstudio is data-driven. For instance, we use data to decide what reviewing tips to show students questions to show while reviewing, or which assessment items to seek comments on.</li>
     </ul>
 
-    <p>Like other assessment systems, Peerstudio allows staff oversight into final grading, due dates etc. </p>
+    <p>Like other assessment and grading systems, Peerstudio allows staff oversight into final grading, due dates etc. </p>
     
     <h2>What do teachers who've used Peerstudio say about it?</h2>
     <p>Here are two reactions</p>
@@ -109,3 +110,22 @@
     <p>Here's information <%= link_to "about us", about_courses_path %>.
   </div>
 </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var class_types = ["for writing",
+    "for design",
+    "for research papers",
+    "for art",
+    "for making videos",
+    "to learn better"];
+    var i =0;
+    $('span#class-types').text(class_types[0]).show('slow');
+    var refreshBanner = window.setInterval(function() {
+      if(i >= class_types.length) {return;}
+      $('span#class-types').text(class_types[i++ % class_types.length]).show('slow');
+      if(i === class_types.length) {$('span#class-types').addClass('highlight');
+        window.clearInterval(refreshBanner);
+      }
+    },2000);
+  });
+</script>
