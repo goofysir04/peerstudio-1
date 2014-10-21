@@ -5,7 +5,7 @@
         <%= image_tag("jumbotron.jpg", :id => "jumbotron-image") %>
         <div class="jumbotron-fade"></div>
       </div>
-        <h1>Get fast, actionable feedback<br/> from classmates <span id="class-types"></span></h1>
+        <h1>Get fast, actionable feedback<br/> from classmates <span id="class-types"><u>to learn better</u></span></h1>
         <div class="login-btn-container center-block">
           <%= render partial:"devise/sessions/login_buttons" %>
           <br/>
@@ -112,20 +112,20 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
-    var class_types = ["for writing",
-    "for design",
-    "for research papers",
-    "for art",
-    "for making videos",
+    var class_types = ["on writing",
+    "on design",
+    "on research papers",
+    "on art",
+    "on making videos",
     "to learn better"];
     var i =0;
-    $('span#class-types').text(class_types[0]).show('slow');
+    $('span#class-types').show('slow');
     var refreshBanner = window.setInterval(function() {
       if(i >= class_types.length) {return;}
       $('span#class-types').text(class_types[i++ % class_types.length]).show('slow');
-      if(i === class_types.length) {$('span#class-types').addClass('highlight');
+      if(i === class_types.length) {$('span#class-types').addClass('highlighted');
         window.clearInterval(refreshBanner);
       }
-    },2000);
+    },1500);
   });
 </script>
