@@ -1,13 +1,13 @@
 class AssignmentsController < ApplicationController
   # include Humanize
   assignment_actions = [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, 
-      :export_grades, :resolve_action_item, :review_first, :flipbook]
+      :export_grades, :resolve_action_item, :review_first, :flipbook, :regrade]
 
   before_action :set_assignment, only: assignment_actions
   # add_breadcrumb :set_breadcrumb_link, only: assignment_actions
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
-  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades, :edit]
+  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades, :edit, :regrade]
   # GET /assignments
   # GET /assignments.json
   def index
@@ -62,6 +62,12 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1/edit
   def edit
     #noop
+  end
+
+  #POST /regrade
+  def regrade
+    @assignment.regrade!
+    redirect_to stats_assignment_path(@assignment), notice: "Regrade started; grades may take upto ten minutes to show on this page."
   end
 
   # POST /assignments
