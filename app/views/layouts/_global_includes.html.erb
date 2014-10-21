@@ -1,5 +1,5 @@
 <head>
-  <title><%= content_for?(:title) ? content_for(:title) : "Stanford+UCSD | #{t :PeerStudio}" %></title>
+  <title><%= content_for?(:title) ? content_for(:title) : "#{t :Peerstudio_title}" %></title>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,8 @@
     <meta property="og:type" content="cause"/>
     <meta property="og:url" content="<%= "#{request.protocol}#{request.host_with_port}#{request.fullpath}" %>"/>
     <meta property="og:site_name" content="peerstudio"/>
-    <meta property="og:description" content="<%= (@project && !@project.description.blank?) ? @project.description.truncate(100) : "Collaborative human and machine grading." %>" />
+    <meta property="og:description" content="<%= (@project && !@project.description.blank?) ? @project.description.truncate(100) : "Peer assessment for the small and massive classroom" %>" />
+    <meta name="keywords" content="peer assessment, peer grading, online education, in class writing, writing assignment, gradebook, online gradebook, gradebook software, free gradebook software"><meta name="description" content="Free, easy to use Peer assessment for the small and massive classroom. Tools for students and teachers alike.">
     <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
