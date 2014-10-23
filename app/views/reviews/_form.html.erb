@@ -21,7 +21,7 @@
           </li>
         <% end %>
         <% if current_user.admin? %>
-          Submission by <%= @review.answer.user.name %> <<%= @review.answer.user.email %>> (Only staff can see names.)
+          Submission by <%= @review.answer.user.name %> (<%= @review.answer.user.email %>) Only staff can see names.
         <% end %>
         <% unless @review.answer.review_request.blank? %>
           <div class="well">

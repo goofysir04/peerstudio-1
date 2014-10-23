@@ -26,40 +26,47 @@
 }
 
 .reviewer2 { 
-	color: #ff7f0e;
-}
-
-.reviewer3 { 
-	color: #2ca02c;
-}
-
-.reviewer4 { 
-	color: #d62728;
-}
-
-.reviewer5 { 
 	color: #9467bd;
 }
 
-.reviewer6 {
+.reviewer3 {
 	color: #8c564b;
 }
 
-.reviewer7 { 
-	color: #e377c2;
-}
 
-.reviewer8 { 
+.reviewer4 { 
 	color: #7f7f7f;
 }
 
-.reviewer9 { 
-	color: #bcbd22;
-}
-
-.reviewer10 { 
+.reviewer5 { 
 	color: #17becf;
 }
+
+/* avoid reviewer colors that are culturally charged, or have strong valence */
+.reviewer6 { 
+	color: #e377c2;
+}
+
+/* avoid reviewer colors that are culturally charged, or have strong valence */
+.reviewer7 { 
+	color: #bcbd22;
+}
+/* avoid reviewer colors that are culturally charged, or have strong valence */
+.reviewer8 { 
+	color: #2ca02c;
+}
+
+/* avoid reviewer colors that are culturally charged, or have strong valence */
+.reviewer9 { 
+	color: #d62728;
+}
+
+/* avoid reviewer colors that are culturally charged, or have strong valence */
+.reviewer10 { 
+	color: #ff7f0e;
+}
+
+
 
 .rubric {margin: 0; padding: 0;}
 .rubric li {list-style-type: none; background-color:#e7e7e7; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:0.5em;}

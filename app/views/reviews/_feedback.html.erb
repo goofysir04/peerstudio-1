@@ -13,7 +13,8 @@
             <% next if comment.nil? %>
               <div class="row">
                 <div class="col-sm-2 col-md-3">
-                  <div class="glyphicon glyphicon-user reviewer<%= i %>"> <%= "(Staff)" if feedback_items_by_rubric_item["reviewers"][i-1].admin? %></div>
+                  <div class="glyphicon glyphicon-user reviewer<%= i %>"> <%= "(Staff)" if feedback_items_by_rubric_item["reviewers"][i-1].admin? %>
+                  </div>
                 </div>
                 <div class="col-sm-10 col-md-9">
                   <p><%=Format.markdown comment %></p>
@@ -58,16 +59,17 @@
                   </div>
                   <legend></legend>
                 <% end %>
-              Comments <br/>
               <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
 
                   <% unless f.like_feedback.blank? %>
+                  <div class="row">
                     <div class="col-sm-2 col-md-3">
-                      <div class="reviewer-label reviewer<%= i %>"></div>
+                      <div class="glyphicon glyphicon-user reviewer<%= i%10 %>"></div>
                     </div>
                     <div class="col-sm-10 col-md-9">
                       <p><%= f.like_feedback %></p>
                     </div>
+                  </div>
                   <% end %>
 
               <% end %>
