@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141015224727) do
+ActiveRecord::Schema.define(version: 20141028213143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,8 @@ ActiveRecord::Schema.define(version: 20141015224727) do
     t.integer  "total_reviews",  default: 0
     t.integer  "answer_id"
     t.boolean  "is_final",       default: true
+    t.boolean  "experimental",   default: false
+    t.string   "source",         default: "peer"
   end
 
   add_index "assignment_grades", ["answer_id"], name: "index_assignment_grades_on_answer_id", using: :btree
