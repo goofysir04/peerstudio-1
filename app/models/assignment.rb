@@ -257,7 +257,7 @@ class Assignment < ActiveRecord::Base
         AssignmentGrade.create(user: student, assignment: assignment, 
           answer: answer,
           is_final: answer.is_final?,
-          grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
+          grade_type: "#{rubric.short_title}: #{answer_attribute.description}", 
           credit: attribute_credit, 
           marked_reviews: marked_count, 
           total_reviews: final_reviews.count, 
