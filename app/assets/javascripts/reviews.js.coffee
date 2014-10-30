@@ -46,6 +46,9 @@ ready = () ->
 	recalculateGrade()
 
 	$('a.see-example').click showExample
+
+	if $("span.display-attribute-weight").length > 0
+		replaceScalesOutput()
 	if $('form.review-form').length > 0
 		getServerData()
 		replaceCheckboxesWithToggles()
@@ -236,6 +239,12 @@ replaceScales = () ->
 				label = $(element).data('options').split(',')[Math.round(val*($(element).data('options').split(',').length-1))]
 				return label + ""
 			)
+
+replaceScalesOutput = () ->
+	for element in $("span.display-attribute-weight")
+		val = $(element).data('score')
+		label = $(element).data('options').split(',')[Math.round(val*($(element).data('options').split(',').length-1))]
+		$(element).text(label)
 
 showExample = (el) ->
 	console.log $(this).data("example")
