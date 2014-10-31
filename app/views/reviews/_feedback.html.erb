@@ -41,6 +41,7 @@
                         <% if a_attr.attribute_type != "binary" %>
                           <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                             <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success" style="display: block;">
+                              <% next if f.feedback_item_attributes.where(answer_attribute: a_attr).first.nil? %>
                               <% weight= f.feedback_item_attributes.where(answer_attribute: a_attr).first.weight %>
                               <%= "(Staff)" if f.review.user.admin? %>
                                 <span class="display-attribute-weight" data-options="<%= a_attr.attribute_type%>" data-score="<%= weight %>"><%= weight %></span>
