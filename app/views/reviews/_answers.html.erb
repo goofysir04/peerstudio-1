@@ -19,8 +19,10 @@ Reviewing <%= answer.assignment.title %>
     </div>
   </div>
   <div class="paper col-md-6">
+  <% if (@answer.assignment.id != 39 && @answer.assignment.id != 44) %>
   	<h3 id="excellent-work">Here's an example of excellent work
   	<small>Compare work to this example to suggest improvements</small></h3>
+  <% end %>
     <div style="opacity: 0.6;"><%= sanitize answer.assignment.example %></div>
   </div>
 <% else %>

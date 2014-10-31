@@ -15,9 +15,13 @@
   
       <% content_for :context_menu do %>
       <ul class="nav nav-tabs" role="tablist">
+       <% if (@answer.assignment.id != 39 && @answer.assignment.id != 44) %>
         <li class="active"><a href="#evaluation" role="tab" data-toggle="tab">Assessment</a></li>
+      <% end %>
         <li><a href="#reviews" role="tab" data-toggle="tab">Reviews</a></li>
       </ul>
+      
+      <% if (@answer.assignment.id != 39 && @answer.assignment.id != 44) %>
       <div class="tab-content">
         <div class="tab-pane active" id="evaluation">
           <div class="assignment-rubric-static"%>
@@ -51,6 +55,7 @@
             </ul>    
           </div>
         </div>
+        <% end %>
 
         <div class="tab-pane" id="reviews">
           <% if @answer.previous_version.nil? %>
