@@ -105,6 +105,7 @@
               <%= r.hidden_field :rubric_item_id %>
             </li>
           <% end %>
+          <% if (@answer.assignment.id != 39 && @answer.assignment.id != 44) || ((@answer.assignment.id == 39 || @answer.assignment.id == 44) && !@answer.previous_version.nil?) %>
           <li id="overall-comments">
             <strong>Overall comments</strong>
             <legend></legend>
@@ -118,6 +119,7 @@
               </tr>
             </table>
           </li>
+          <% end %>
         </ul>
       <% end %>
       <div class="actions" id="submit-button">
@@ -158,6 +160,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+  
   <div class="modal" id="phoned-in-review-modal">
     <div class="modal-dialog">
       <div class="modal-content">

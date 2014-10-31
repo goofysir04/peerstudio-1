@@ -5,6 +5,8 @@
   <% if trigger.nil? %>
     <ul class="rubric">
       <% unless feedback_items_by_rubric_item["comments"].nil? %>
+      
+      <% if (@answer.assignment.id != 39 && @answer.assignment.id != 44) || ((@answer.assignment.id == 39 || @answer.assignment.id == 44) && !@answer.previous_version.nil?) %>
         <li>
           <strong>Overall feedback:</strong>
           <br/>
@@ -22,6 +24,7 @@
               </div>
           <% end %>
         </li>
+      <% end %>
       <% end %>
       <% answer.assignment.rubric_items.each do |r| %>
         <li>
