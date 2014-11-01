@@ -30,7 +30,11 @@
     </div>
   </div>
   <div class="btn-group">
+    <% if @closest_assign.due_at > Time.now %>
       <%= link_to "Write your answer", new_assignment_answer_path(@closest_assign), class: "btn btn-default" %>
+    <% else %>
+      You can't submit anymore, but you can review. 
+    <% end %>
   </div>
   <div class="btn-group">
       <%= link_to create_typed_review_assignment_path(@closest_assign, assignment_id:@closest_assign,typed_review:{type:"final", revision:"Final Draft"}), class: "btn btn-default", method: :post do %> Give peers feedback <% end %>

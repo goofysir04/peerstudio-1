@@ -11,7 +11,7 @@ class Course < ActiveRecord::Base
   end
 
   def closest_open(id)
-  	assignment = self.assignments.where('due_at > ?', Time.now).order('due_at asc').limit(1).first
+  	assignment = self.assignments.where('due_at > ? or (review_due_at is not null and review_due_at > ?)', Time.now, Time.now).order('due_at asc').limit(1).first
   	return assignment
   end
 
