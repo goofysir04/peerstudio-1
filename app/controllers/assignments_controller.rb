@@ -50,7 +50,7 @@ class AssignmentsController < ApplicationController
 
   def flipbook
     authenticate_user_is_admin!
-    @answers = @assignment.answers.where(is_final: true).paginate(:page => params[:page], :per_page=>1)
+    @answers = @assignment.answers.where(submitted: true).paginate(:page => params[:page], :per_page=>1)
     render layout: "one_column"
   end
   # GET /assignments/new
