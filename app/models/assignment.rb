@@ -175,16 +175,30 @@ class Assignment < ActiveRecord::Base
           end
           assignment.rubric_items.each do |rubric|
             rubric.answer_attributes.each do |answer_attribute|
-              marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+              if answer_attribute.attribute_type == "binary"
+                marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
 
-              attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
-              attribute_credit = (if final_reviews.count >= 3 
-                         marked_count >= 2 ? attribute_score : 0
-                        elsif final_reviews.count > 0 and final_reviews.count < 3
-                         ((attribute_score * marked_count/final_reviews.count))
-                        else
-                          0
-                        end)
+                attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
+                attribute_credit = (if final_reviews.count >= 3 
+                           marked_count >= 2 ? attribute_score : 0
+                          elsif final_reviews.count > 0 and final_reviews.count < 3
+                           ((attribute_score * marked_count/final_reviews.count))
+                          else
+                            0
+                          end)
+              else
+                #this is a non-binary score
+                attribute_weights = FeedbackItemAttribute.where(
+                  answer_attribute: answer_attribute, 
+                  feedback_item_id: answer_attribute.feedback_items.where(review_id: final_reviews)
+                  ).pluck(:weight)
+                if attribute_weights.empty?
+                  attribute_credit = 0
+                else  
+                  attribute_credit= attribute_weights.median * answer_attribute.score
+                end
+                marked_count = attribute_weights.length
+              end
 
               AssignmentGrade.create(user: student, assignment: assignment, 
                 answer: answer,
@@ -269,5 +283,13 @@ class Assignment < ActiveRecord::Base
   end
 
   handle_asynchronously :regrade!
+end
+
+class Array
+  def median
+    sorted = self.sort
+    half_len = (sorted.length / 2.0).ceil
+    (sorted[half_len-1] + sorted[-half_len]) / 2.0
+  end
 end
 
