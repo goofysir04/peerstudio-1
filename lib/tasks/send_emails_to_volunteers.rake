@@ -55,7 +55,7 @@ namespace :assignment do
 						logger.info "Sending emails to people who need it (required)"
 						have_to_review_still.each do |h|
 							logger.info "Sending emails to people who need it: #{h.user_id}"
-							unless h.nil? or h.user.opted_out_help_email?
+							unless h.nil? or h.user.nil? or h.user.opted_out_help_email?
 								unless h.user.experimental_condition(assign.course) == "waitlist"
 									ReviewMailer.delay.need_review_email(h.user, assign, review_requests)
 									h.last_email_time = Time.now
