@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy,:star,
-    :submit_for_feedback, :submit_for_grades, :unsubmit_for_feedback,
+    :submit_for_feedback, :submit_for_grades, :unsubmit_for_feedback, :unsubmit_for_grades,
     :feedback_preferences,
     :reflect, :clone]
   before_action :set_assignment, only: [:new]
@@ -178,6 +178,22 @@ class AnswersController < ApplicationController
         format.js
       else
         format.html {redirect_to answer_path(@answer), alert: "We couldn't submit your assignment because " + @answer.errors.full_messages.join(". ")}
+        format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
+  end
+
+  def unsubmit_for_grades
+    authenticate_user_is_admin!
+    @answer.is_final = false
+    respond_to do |format|
+      if @answer.save 
+        format.html {redirect_to stats_assignment_path(@answer.assignment), notice: "Marked submission as non-final"}
+        format.json { head :no_content }
+        format.js
+      else
+        format.html {redirect_to stats_assignment_path(@answer.assignment), alert: "We couldn't undo that because " + @answer.errors.full_messages.join(". ")}
         format.json { render json: @answer.errors, status: :unprocessable_entity }
         format.js
       end

@@ -98,6 +98,7 @@ Humanmachine::Application.routes.draw do
       post 'submit_for_feedback'
       post 'unsubmit_for_feedback'
       post 'submit_for_grades'
+      post 'unsubmit_for_grades'
       get 'reflect'
       post 'clone'
       post 'upgrade'

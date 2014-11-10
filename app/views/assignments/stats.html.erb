@@ -82,7 +82,7 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 							<% if final.nil? %>
 								<td style="background-color: rgb(244,109,67);">Not Submitted</td>
 							<% elsif final.total_evaluations == 0  %>
-								<td style="background-color: rgb(255,255,191);"><%= link_to "Not yet reviewed/graded", review_answer_path(final), method: :post %></td>
+								<td style="background-color: rgb(255,255,191);"><%= link_to "Not yet reviewed/graded", review_answer_path(final), method: :post %> | <%= link_to "Mark non-final", unsubmit_for_grades_answer_path(final), method: :post, confirm: "This will set the student's draft as non-final, so they can submit a different version instead." %></td>
 							<% else %>
 								<td><%= link_to "#{final.total_evaluations} reviews", answer_reviews_path(final) %>
 								<% if @reviews_by_instructors.include?(final.id) %>
@@ -91,6 +91,7 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 									<%= link_to "Review as staff", review_answer_path(final), method: :post %>
 								<% end %>
 								<% if final.submitted_at > @assignment.due_at %> <strong>Late</strong><% end %>
+								 | <%= link_to "Mark non-final", unsubmit_for_grades_answer_path(final), method: :post, confirm: "This will set the student's draft as non-final, so they can submit a different version instead." %>
 								</td>
 							<% end %>
 						</td>
