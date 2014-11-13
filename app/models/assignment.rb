@@ -212,6 +212,23 @@ class Assignment < ActiveRecord::Base
                 source: grade_type)
             end #answer_attribute
           end #rubric
+
+          final_reviews_count = final_reviews.count
+          if final_reviews_count > 0
+            how_exceptional = final_reviews.where(out_of_box_answer: true).count/final_reviews_count
+            if how_exceptional >= 0.5
+                  AssignmentGrade.create(user: student, assignment: assignment, 
+                  answer: answer,
+                  is_final: answer.is_final?,
+                  grade_type: "Exceptionally good submission (bonus)", 
+                  credit: 1, 
+                  marked_reviews: 1, 
+                  total_reviews: final_reviews.count, 
+                  rubric_item_id: nil,
+                  experimental: false,
+                  source: grade_type)
+            end
+          end
         end  #!answer.nil?
       end #answer
     end #enrollment
