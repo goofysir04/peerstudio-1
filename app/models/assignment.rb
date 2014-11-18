@@ -216,7 +216,7 @@ class Assignment < ActiveRecord::Base
           final_reviews_count = final_reviews.count
           if final_reviews_count > 0
             how_exceptional = final_reviews.where(out_of_box_answer: true).count/final_reviews_count
-            if how_exceptional >= 0.5
+            if how_exceptional > 0.5
                   AssignmentGrade.create(user: student, assignment: assignment, 
                   answer: answer,
                   is_final: answer.is_final?,
