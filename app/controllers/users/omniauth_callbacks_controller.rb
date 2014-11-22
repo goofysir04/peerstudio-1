@@ -37,7 +37,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         redirect_to start_openid_registration_url
         @user.skip_confirmation!
       else
-        flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Coursera"
+        flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => request.env["omniauth.auth"]["provider"]
         sign_in_and_redirect @user, :event => :authentication #this will throw if @user is not activated
       end
     else
