@@ -1,9 +1,8 @@
 <div class="row-fluid omniauth-login">
-  <div class="well">
-    Coursera sign in is temporarily unavailable. Please click '<%= link_to "Forgot password", new_user_password_path %>' and we'll email you a way to login with a password. Please use your Coursera email address.
-
-    Then,<a href="#" class="enable-password-login">log in with the  password you created.</a>
-  </div>
+    <%= link_to omniauth_authorize_path(resource,"coursera"), :class=> "btn btn-lg btn-primary btn-block login_button" do %>
+      1-click sign-in with <%= image_tag "coursera_white.svg" %> <br/>
+      <div class="login-progress" style="display:none;"><small>(Signing in...)</small></div>
+    <% end %>
     <br/>
     <%= link_to omniauth_authorize_path(resource,"stanford"), :class=> "btn btn-lg btn-danger btn-block login_button" do %>
       1-click sign-in with <span style="font-family: 'Source Sans Pro', sans-serif; font-weight: bold'">Stanford ONLINE</span> <br/>
@@ -36,14 +35,7 @@
         <%= f.submit "Sign in", :class => 'btn btn-primary' %>
         
     </div>
-  <script type="text/javascript">
-  // $(document).on('ready page:load', function() {
-  //   $('.login-coursera').click(function(){
-  //     alert("Sorry, Coursera logins are temporarily broken. Please click 'Forgot password' and we'll email you a way to login with a password. Please use your Coursera email address.");
-  //     return false;
-  //   })
-  // });
-  </script>
+
     <%= render "devise/shared/links" %>
   </div>
   <% end %>
