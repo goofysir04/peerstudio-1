@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   # layout :layout_by_resource
   impersonates :user
+
+  before_filter :ensure_user_is_not_banned
   # require 'oauth/request_proxy/action_controller_request'
 
 	def authenticate_user_is_admin!
@@ -27,4 +29,12 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     session["user_return_to"] || request.env['omniauth.origin'] || root_path
   end
+
+  def ensure_user_is_not_banned
+    if user_signed_in? and current_user.banned? 
+      render text: "We're currently unable to handle your request. Error: U7tuAgRwq", status: 410
+      return
+    end
+  end
+
 end
