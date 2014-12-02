@@ -185,7 +185,7 @@ class AnswersController < ApplicationController
   end
 
   def unsubmit_for_grades
-    authenticate_user_is_admin!
+    authenticate_user_is_admin!`
     @answer.is_final = false
     respond_to do |format|
       if @answer.save 

@@ -164,75 +164,82 @@ class Assignment < ActiveRecord::Base
       next if student.nil?
       answers = self.answers.where(user_id: student.id, submitted: true).order('submitted_at desc')
       answers.each do |answer|
-        if !answer.nil?
-          final_reviews = Review.where(review_type: "final", active: true, answer_id: answer.id, review_method: "normal")
-
-          staff_reviews = Review.where(review_type: "final", review_method: "normal", active: true, answer_id: answer.id, user_id: admins)
-          grade_type = "Peer grade"
-          if !staff_reviews.blank?
-            final_reviews = staff_reviews
-            grade_type = "Staff grade"
-          end
-          assignment.rubric_items.each do |rubric|
-            rubric.answer_attributes.each do |answer_attribute|
-              if answer_attribute.attribute_type == "binary"
-                marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
-
-                attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
-                attribute_credit = (if final_reviews.count >= 3 
-                           marked_count >= 2 ? attribute_score : 0
-                          elsif final_reviews.count > 0 and final_reviews.count < 3
-                           ((attribute_score * marked_count/final_reviews.count))
-                          else
-                            0
-                          end)
-              else
-                #this is a non-binary score
-                attribute_weights = FeedbackItemAttribute.where(
-                  answer_attribute: answer_attribute, 
-                  feedback_item_id: answer_attribute.feedback_items.where(review_id: final_reviews)
-                  ).pluck(:weight)
-                if attribute_weights.empty?
-                  attribute_credit = 0
-                else  
-                  attribute_credit= attribute_weights.median * answer_attribute.score
-                end
-                marked_count = attribute_weights.length
-              end
-
-              AssignmentGrade.create(user: student, assignment: assignment, 
-                answer: answer,
-                is_final: answer.is_final?,
-                grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
-                credit: attribute_credit, 
-                marked_reviews: marked_count, 
-                total_reviews: final_reviews.count, 
-                rubric_item_id: rubric.id,
-                experimental: false,
-                source: grade_type)
-            end #answer_attribute
-          end #rubric
-
-          final_reviews_count = final_reviews.count
-          if final_reviews_count > 0
-            how_exceptional = final_reviews.where(out_of_box_answer: true).count/final_reviews_count
-            if how_exceptional > 0.5
-                  AssignmentGrade.create(user: student, assignment: assignment, 
-                  answer: answer,
-                  is_final: answer.is_final?,
-                  grade_type: "Exceptionally good submission (bonus)", 
-                  credit: 1, 
-                  marked_reviews: 1, 
-                  total_reviews: final_reviews.count, 
-                  rubric_item_id: nil,
-                  experimental: false,
-                  source: grade_type)
-            end
-          end
-        end  #!answer.nil?
+        regrade_submission(answer)
       end #answer
     end #enrollment
   end #def
+
+  def regrade_submission(answer)
+    assignment = self
+    AssignmentGrade.destroy_all(assignment_id: assignment.id, answer_id: answer.id)
+    admins = User.where(admin: true)
+    student = answer.user
+    if !answer.nil?
+      final_reviews = Review.where(review_type: "final", active: true, answer_id: answer.id, review_method: "normal")
+      staff_reviews = Review.where(review_type: "final", review_method: "normal", active: true, answer_id: answer.id, user_id: admins)
+      grade_type = "Peer grade"
+      if !staff_reviews.blank?
+        final_reviews = staff_reviews
+        grade_type = "Staff grade"
+      end
+      assignment.rubric_items.each do |rubric|
+        rubric.answer_attributes.each do |answer_attribute|
+          if answer_attribute.attribute_type == "binary"
+            marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+
+            attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
+            attribute_credit = (if final_reviews.count >= 3 
+                       marked_count >= 2 ? attribute_score : 0
+                      elsif final_reviews.count > 0 and final_reviews.count < 3
+                       ((attribute_score * marked_count/final_reviews.count))
+                      else
+                        0
+                      end)
+          else
+            #this is a non-binary score
+            attribute_weights = FeedbackItemAttribute.where(
+              answer_attribute: answer_attribute, 
+              feedback_item_id: answer_attribute.feedback_items.where(review_id: final_reviews)
+              ).pluck(:weight)
+            if attribute_weights.empty?
+              attribute_credit = 0
+            else  
+              attribute_credit= attribute_weights.median * answer_attribute.score
+            end
+            marked_count = attribute_weights.length
+          end
+
+          AssignmentGrade.create(user: student, assignment: assignment, 
+            answer: answer,
+            is_final: answer.is_final?,
+            grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
+            credit: attribute_credit, 
+            marked_reviews: marked_count, 
+            total_reviews: final_reviews.count, 
+            rubric_item_id: rubric.id,
+            experimental: false,
+            source: grade_type)
+        end #answer_attribute
+      end #rubric
+
+      final_reviews_count = final_reviews.count
+      if final_reviews_count > 0
+        how_exceptional = final_reviews.where(out_of_box_answer: true).count/final_reviews_count
+        if how_exceptional > 0.5
+              AssignmentGrade.create(user: student, assignment: assignment, 
+              answer: answer,
+              is_final: answer.is_final?,
+              grade_type: "Exceptionally good submission (bonus)", 
+              credit: 1, 
+              marked_reviews: 1, 
+              total_reviews: final_reviews.count, 
+              rubric_item_id: nil,
+              experimental: false,
+              source: grade_type)
+        end
+      end
+    end  #!answer.nil?
+  end
 
   def experimental_grade!
     ###

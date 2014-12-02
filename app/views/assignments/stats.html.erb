@@ -91,14 +91,14 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 									<%= link_to "Review as staff", review_answer_path(final), method: :post %>
 								<% end %>
 								<% if final.submitted_at > @assignment.due_at %> <strong>Late</strong><% end %>
-								 | <%= link_to "Mark non-final", unsubmit_for_grades_answer_path(final), method: :post %>
+								 | <%= link_to "Mark non-final", unsubmit_for_grades_answer_path(final), method: :post %> 
 								</td>
 							<% end %>
 						</td>
 						<% if @grades.nil? %>
 							<td>No grade yet</td>
 						<% else %>
-							<td>
+							<td data-no-turbolink="true">
 								<% if @grades[s.id].blank? %>
 									No grade 
 								<% else %>

@@ -16,9 +16,9 @@
 		<% @grades.each do |grade| %>
 			<tr>
 				<% if current_user.admin? %>
-					<%= form_for grade, :url=>update_grade_assignment_path(@assignment, grade), method: :post do |f| %>
-					<td><%=f.text_field :grade_type %></td>
-					<td><%= f.number_field :credit, :step=>"0.1" %> <%= f.submit "Set grade", class: "btn"%></td>
+					<%= form_for grade, :url=>update_grade_assignment_path(@assignment, grade), method: :post, remote: false do |f| %>
+					<td><%=grade.grade_type %></td>
+					<td><%= f.number_field :credit, :step=>"0.1" %> <%= f.submit  class: "btn"%></td>
 					<%end %>
 				<% else %>
 					<td><%=grade.grade_type %></td>

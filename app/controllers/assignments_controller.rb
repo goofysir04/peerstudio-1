@@ -158,6 +158,7 @@ class AssignmentsController < ApplicationController
       @permitted_user = current_user
     end
     @grades = AssignmentGrade.where(assignment: @assignment, user: @permitted_user, is_final:true, experimental:false)
+    render layout: "one_column"
   end
 
   def update_grade
