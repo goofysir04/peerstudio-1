@@ -39,7 +39,7 @@ namespace :assignment do
 					review_requests = thirty_min_ans.where('review_request is not NULL').map {|a| a.review_request}
 					if have_to_review_still.empty? #nil didn't work, so used empty
 						#if no one needs to give reviews, we move onto volunteers, aka people who don't need to give any more reviews
-						volunteers = TriggerAction.where(assignment_id:assign.id,trigger: "email_count").where(["count > ? and (last_email_time IS NULL or last_email_time < ?)", 0, 12.hours.ago]).order(random_function).limit(4)
+						volunteers = TriggerAction.where(assignment_id:assign.id,trigger: "email_count").where(["count > ? and (last_email_time IS NULL or last_email_time < ?)", 0, 24.hours.ago]).order(random_function).limit(4)
 						volunteers.each do |vol| #send email, set last_email_time, decrement "email_count"
 							logger.info "Sending emails to people who volunteered: #{vol.user.id}"
 							unless vol.nil? or vol.user.opted_out_help_email?
