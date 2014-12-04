@@ -16,7 +16,15 @@ class ApplicationController < ActionController::Base
     sign_out_and_redirect(current_user) unless (current_user.admin?)
 	end
 
-  before_filter :set_timezone 
+  def authenticate_user_is_instructor!(course)
+    return true if Rails.env.development?
+    unless user_signed_in?
+      authenticate_user!
+    end
+    sign_out_and_redirect(current_user) unless (current_user.instructor_for?(course))
+  end
+
+  before_filter :set_timezone
 
   def set_timezone
     if user_signed_in?
@@ -31,7 +39,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_user_is_not_banned
-    if user_signed_in? and current_user.banned? 
+    if user_signed_in? and current_user.banned?
       render text: "We're currently unable to handle your request. Error: U7tuAgRwq", status: 410
       return
     end

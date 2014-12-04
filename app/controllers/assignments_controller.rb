@@ -7,7 +7,7 @@ class AssignmentsController < ApplicationController
   # add_breadcrumb :set_breadcrumb_link, only: assignment_actions
   before_action :set_course, only: [:index, :new, :create]
   before_filter :authenticate_user!, except: :show
-  before_filter :authenticate_user_is_admin!, only: [:stats, :update_grade, :export_grades, :edit, :regrade]
+  before_filter :authenticate_user_is_instructor_for_this_assignment!, only: [:flipbook, :stats, :update_grade, :export_grades, :edit, :regrade]
   # GET /assignments
   # GET /assignments.json
   def index
@@ -49,7 +49,6 @@ class AssignmentsController < ApplicationController
 
 
   def flipbook
-    authenticate_user_is_admin!
     @answers = @assignment.answers.where(submitted: true).paginate(:page => params[:page], :per_page=>1)
     render layout: "one_column"
   end
@@ -140,7 +139,7 @@ class AssignmentsController < ApplicationController
       @review_count = Review.where(assignment: @assignment, active: true).group(:user_id).count
       @submitted_answers = Answer.where(assignment: @assignment, submitted: true).group(:user_id).count
 
-      @admins = User.where(admin: true)
+      @admins = @assignment.course.instructors
       @reviews_by_instructors = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
       @unreviewed_by_staff = @assignment.answers.where(submitted: true, is_final: true).count - @reviews_by_instructors.count
 
@@ -232,6 +231,10 @@ def review_first
           :id, :title, :short_title, :show_for_feedback, :show_for_final,
           :like_feedback_prompt,
         :_destroy, :answer_attributes_attributes=>[:id, :description, :score, :attribute_type, :example, :_destroy]], :taggings_attributes=>[:id, :open_at, :close_at, :review_open_at, :review_close_at]) #don't allow user id. set to current user
+    end
+
+    def authenticate_user_is_instructor_for_this_assignment!
+      authenticate_user_is_instructor!(@assignment.course)
     end
 
 end

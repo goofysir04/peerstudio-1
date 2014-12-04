@@ -6,7 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
       devise_parameter_sanitizer.for(:complete_openid) { |u| u.permit(:email, :password, :password_confirmation, :name, :consented)}
       super
   end
-  
+
   def update
     @user = User.find(current_user.id)
 
@@ -38,7 +38,7 @@ class RegistrationsController < Devise::RegistrationsController
     @name = session["devise.openid_data"]["name"]
     @email = session["devise.openid_data"]["email"]
     @provider = session["devise.openid_data"]["provider"]
-    
+
     self.resource = resource_class.new()
     clean_up_passwords(self.resource)
     render layout: "one_column"
@@ -81,14 +81,8 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def upload
-    authenticate_user_is_admin!
-    # User.import(params[:file])
-    # redirect_to root_path, :notice => "User file imported"
-  end
-
   def find_by_name
-    
+
   end
   private
 

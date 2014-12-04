@@ -5,7 +5,6 @@ class AnswersController < ApplicationController
     :reflect, :clone]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
-  # before_filter :authenticate_user_is_admin!
   # GET /answers
   # GET /answers.json
   def index
@@ -185,7 +184,7 @@ class AnswersController < ApplicationController
   end
 
   def unsubmit_for_grades
-    authenticate_user_is_admin!
+    authenticate_user_is_instructor!(@answer.assignment.course)
     @answer.is_final = false
     respond_to do |format|
       if @answer.save

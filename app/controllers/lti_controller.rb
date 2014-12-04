@@ -10,29 +10,29 @@ class LtiController < ApplicationController
     # - Check if the target assignment is LTI-friendly
     # -- If the user logged in, store the LTI credentials in a user assignment join table
     # -- If not, save those credentials temporarily, and ask the user to create an account
-    # --- But if the LTI request comes with email and name (e.g. from Coursera), 
+    # --- But if the LTI request comes with email and name (e.g. from Coursera),
     # we don't need to ask about accounts. If the account exists, we simply log in
     # If not, after log in, we store credentials
     #redirect to assignment
     @assignment = Assignment.find(lti_params[:id])
     @course = @assignment.course
 
-    provider = IMS::LTI::ToolProvider.new(@course.consumer_key, 
-      @course.consumer_secret, 
+    provider = IMS::LTI::ToolProvider.new(@course.consumer_key,
+      @course.consumer_secret,
       lti_params)
-      # provider = IMS::LTI::ToolProvider.new("kaplan", 
-      # "Z9CMzvIECeo/DogdR26ZnKXJ0pPDWYBYxWsJ3HPPGVg=", 
+      # provider = IMS::LTI::ToolProvider.new("kaplan",
+      # "Z9CMzvIECeo/DogdR26ZnKXJ0pPDWYBYxWsJ3HPPGVg=",
       # lti_params)
 
-      # YEAH, this line is necessary since we're behind a reverse 
+      # YEAH, this line is necessary since we're behind a reverse
       # proxy on production, so the rails server thinks we are actually
-      # running on http/80. 
+      # running on http/80.
       # Since the signature is https/443, we need to fool this rack request
       # into believing it's actually on https
       env['rack.url_scheme'] = "https" if Rails.env.production?
       if provider.valid_request?(request, false)
       #Process
-      if user_signed_in? 
+      if user_signed_in?
         if @assignment.enroll_with_lti(current_user, lti_params)
           redirect_to @assignment, notice: "Welcome back, #{current_user.name}" and return
         else
@@ -47,17 +47,17 @@ class LtiController < ApplicationController
           if @assignment.enroll_with_lti(current_user, lti_params)
             redirect_to @assignment, notice: "Welcome back, #{current_user.name}!" and return
           else
-            redirect_to @assignment, alert: "We couldn't get your credentials" and return  
+            redirect_to @assignment, alert: "We couldn't get your credentials" and return
           end
         else
           #We can't find this user, even though our provider gave us an email address
           session[:lti_params] = lti_params
           session["user_return_to"] = complete_lti_enrollment_path(@assignment)
           flash[:notice] = "We need additional information to create your Peerstudio account. Please click the sign in button to continue."
-          authenticate_user!  
+          authenticate_user!
         end
       else
-        #Our provider didn't send us an email. If the user is already enrolled log them in. 
+        #Our provider didn't send us an email. If the user is already enrolled log them in.
         # else get credentials
         user = @assignment.lti_user(lti_params)
         if user.nil?
@@ -77,8 +77,9 @@ class LtiController < ApplicationController
   end
 
   def guide
-    authenticate_user_is_admin!
+
     @course = Course.find(lti_params[:id])
+    authenticate_user_is_instructor!(@course)
     render layout: "one_column"
   end
 
