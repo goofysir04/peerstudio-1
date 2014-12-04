@@ -120,9 +120,11 @@
           <%= link_to "Regenerate secret (save course first)", "#", class:"btn btn-default", disabled:"disabled" %>
         <% end %>
       </div>
-      
+
     </div>
 
+
+    <p>Change who is on the <%= link_to "teaching staff", instructor_list_course_path(@course) %>.</p>
     <div class="form-group">
       <%= f.submit :"class"=> "btn btn-primary" %>
     </div>
