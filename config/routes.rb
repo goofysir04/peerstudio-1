@@ -8,19 +8,21 @@ Humanmachine::Application.routes.draw do
 
   resources :courses do
     resources :assignments, shallow: true
-    collection do 
+    collection do
       get 'help'
       get 'about'
     end
     member do
       post 'regenerate_consumer_secret'
       post 'enroll_lti'
+      post 'make_instructor'
+      get 'instructor_list'
     end
   end
 
   resources :assignments do
     resources :answers, shallow: true
-    member do 
+    member do
       get 'stats'
       get 'grades'
       get 'export_grades'
@@ -39,7 +41,7 @@ Humanmachine::Application.routes.draw do
   # mount Ckeditor::Engine => '/ckeditor'
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "registrations" }
 
-  devise_scope :user do 
+  devise_scope :user do
     get 'users/start' => 'registrations#start_openid', :as => :start_openid_registration
     post 'users/complete' => 'registrations#complete_openid', :as => :complete_openid_registration
     get 'users/impersonate' => 'registrations#impersonate', :as=>:impersonate_user
@@ -47,33 +49,11 @@ Humanmachine::Application.routes.draw do
     get 'users/import' => 'registrations#import'
   end
 
-  get "grading/identify/:id" => "grading#identify", as: :grade_identification
-  post "grading/identify" => 'grading#create_assessment', as: :create_grade_identification
-  get "grading/undo_identify/:id" => "grading#undo_assessment", as: :undo_grade_identification
-  
-  get "grading/verify/:id" => "grading#verify", as: :grade_verification
-  post "grading/verify" => "grading#create_verification", as: :create_grade_verification
-  
-  get "grading/evaluate/:id" => "grading#baseline_evaluate", as: :grade_baseline
-  post "grading/evaluate" => 'grading#create_baseline_assessment', as: :create_grade_baseline
-
-  get "grading/my_grades" => "grading#my_grades", as: :my_grades
-  get "grading/push_grades" => "grading#push_grades", as: :push_grades
-
-  get "grading/appeal/:id" => "grading#appeal", as: :appeal_grading
-  post "grading/appeal/:id" => "grading#create_appeal", as: :create_appeal_grading
-
-  get "grading/staff_grade/:id" => "grading#staff_grade", as: :staff_grade
-  post "grading/staff_grade" => "grading#create_staff_grade", as: :create_staff_grade
-
-  get "grading/critique/:id" => "grading#early_feedback", as: :early_feedback
-  resources :questions
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -83,13 +63,13 @@ Humanmachine::Application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  
+
   resources :answers do
-    collection do 
+    collection do
       get 'import'
       post 'upload'
     end
-    member do 
+    member do
       post 'upload_attachment'
       post 'direct_upload_attachment'
       delete 'delete_attachment'
@@ -106,7 +86,7 @@ Humanmachine::Application.routes.draw do
     resources :reviews, shallow: true
   end
 
-  
+
   get 'reviews/:id/rate' => "reviews#rate", as: :rate_review
   post 'reviews/:id/rate' => "reviews#create_rating", as: :create_rate_review
   post 'reviews/:id/blank' => "reviews#report_blank", as: :report_blank_answer
@@ -116,7 +96,7 @@ Humanmachine::Application.routes.draw do
     #resources :answer_attributes
   end
 
-  resources :rubric_items do 
+  resources :rubric_items do
     resources :answer_attributes, shallow: true
   end
 
@@ -160,7 +140,7 @@ Humanmachine::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
-  
+
   # Example resource route with concerns:
   #   concern :toggleable do
   #     post 'toggle'

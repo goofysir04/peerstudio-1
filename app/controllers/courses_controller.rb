@@ -1,7 +1,7 @@
 class CoursesController < ApplicationController
   # before_filter authenticate_user! except: :index
 
-  before_action :set_course, only: [:show, :edit, :update, :destroy, :regenerate_consumer_secret, :enroll_lti]
+  before_action :set_course, only: [:show, :edit, :update, :destroy, :regenerate_consumer_secret, :enroll_lti, :make_instructor, :instructor_list]
   skip_before_filter :verify_authenticity_token, :only => [:enroll_lti]
 
   layout "one_column"
@@ -26,6 +26,21 @@ class CoursesController < ApplicationController
   # GET /courses/1/edit
   def edit
   end
+
+
+  def instructor_list
+    @admins = User.where(admin: true) #Show the admins in the system, to easily add them as instructors
+  end
+  #POST make_instructor
+  def make_instructor
+    authenticate_user_is_instructor!(@course)
+
+    @new_instructor = User.find_for_authentication(email: params[:instructor_email])
+    if @course.make_instructor(@new_instructor)
+      redirect_to instructor_list_course_path(@course), notice: "Added new instructor"
+    end
+  end
+
 
   # POST /courses
   # POST /courses.json
@@ -85,7 +100,7 @@ class CoursesController < ApplicationController
       if user.consented.nil?
         redirect_to @course, notice: "TODO Consent"
       else
-        
+
         redirect_to @course, notice: "Enrollment successful"
       end
     else
