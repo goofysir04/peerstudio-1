@@ -6,7 +6,7 @@
 <ul class="rubric">
   <% answer.assignment.rubric_items.each do |r| %>
     <li>
-      <strong><%= r.short_title %></strong> 
+      <strong><%= r.short_title %></strong>
       <!-- <span class="pull-right label">Max: <%=r.max %><%= "(#{r.max_label})" unless r.max_label.blank?%></span> -->
       <br/>
       <legend></legend>
@@ -20,12 +20,12 @@
             <tr>
               <% if f.answer_attributes.include?(a_attr) %>
                 <td>
-                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-success" disabled:"disabled">Yes</button> &nbsp;<%= "(Staff)" if f.review.user.admin? %>
+                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-success" disabled:"disabled">Yes</button> &nbsp;<%= "(Staff)" if f.review.user.instructor_for?(answer.assignment.course) %>
                 </td>
                 <td style="vertical-align:top;"><%= a_attr.description %></td>
               <% else %>
                 <td>
-                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-danger" disabled:"disabled">No</button> &nbsp;<%= "(Staff)" if f.review.user.admin? %>
+                  <button class="btn btn-xs btn-default btn-checkbox-yes btn-danger" disabled:"disabled">No</button> &nbsp;<%= "(Staff)" if f.review.user.instructor_for?(answer.assignment.course) %>
                 </td>
                 <td style="vertical-align:top;"><%= a_attr.description %></td>
               <% end %>

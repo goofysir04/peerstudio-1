@@ -5,7 +5,7 @@
   <% if trigger.nil? %>
     <ul class="rubric">
       <% unless feedback_items_by_rubric_item["comments"].nil? %>
-      
+
       <% if (@answer.assignment.id != 39 && @answer.assignment.id != 44) || ((@answer.assignment.id == 39 || @answer.assignment.id == 44) && !@answer.previous_version.nil?) %>
         <li>
           <strong>Overall feedback:</strong>
@@ -15,7 +15,7 @@
             <% next if comment.nil? %>
               <div class="row">
                 <div class="col-sm-2 col-md-3">
-                  <div class="glyphicon glyphicon-user reviewer<%= i %>"> <%= "(Staff)" if feedback_items_by_rubric_item["reviewers"][i-1].admin? %>
+                  <div class="glyphicon glyphicon-user reviewer<%= i %>"> <%= "(Staff)" if feedback_items_by_rubric_item["reviewers"][i-1].instructor_for?(@answer.assignment.course) %>
                   </div>
                 </div>
                 <div class="col-sm-10 col-md-9">
@@ -46,7 +46,7 @@
                             <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success" style="display: block;">
                               <% next if f.feedback_item_attributes.where(answer_attribute: a_attr).first.nil? %>
                               <% weight= f.feedback_item_attributes.where(answer_attribute: a_attr).first.weight %>
-                              <%= "(Staff)" if f.review.user.admin? %>
+                              <%= "(Staff)" if f.review.user.instructor_for?(@answer.assignment.course) %>
                                 <span class="display-attribute-weight" data-options="<%= a_attr.attribute_type%>" data-score="<%= weight %>"><%= weight %></span>
                                 <div class="progress" style="height: 5px">
                                   <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= weight*100 %>%; height: 20px;">
@@ -59,7 +59,7 @@
                           <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                             <% if f.answer_attributes.include?(a_attr) %>
                               <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success">
-                                <%= "(Staff)" if f.review.user.admin? %>
+                                <%= "(Staff)" if f.review.user.instructor_for?(@answer.assignment.course) %>
                               </div>
                             <% end %>
                           <% end %>
@@ -68,7 +68,7 @@
                           <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
                             <% if !f.answer_attributes.include?(a_attr)%>
                               <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail">
-                                <%= "(Staff)" if f.review.user.admin? %>
+                                <%= "(Staff)" if f.review.user.instructor_for?(@answer.assignment.course) %>
                               </div>
                             <% end %>
                           <% end %>

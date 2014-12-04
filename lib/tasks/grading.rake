@@ -5,7 +5,7 @@ namespace :grading do
 		users = User.all
 
 		logger.info "Pushing grades for #{users.count} users"
-		users.each	do |user| 
+		users.each	do |user|
 			logger.info "Attempting to push grades for #{user.email} (#{user.cid})"
 			Answer.push_grades(user, 0)
 
@@ -21,13 +21,13 @@ namespace :grading do
   task :push_grades_edx => :environment do
     logger = Rails.logger
     users = User.all
-    
+
     #assignment_id = ENV['ASSIGNMENT']
     @assignment=Assignment.find(1)
     #@assignment=Assignment.find(assignment_id)
 
     logger.info "Pushing grades for #{users.count} users"
-    users.each  do |user| 
+    users.each  do |user|
       #logger.info "Attempting to push grades for #{user.email} (#{user.cid})"
       puts "Attempting to push grades for #{user.email} (#{user.cid})" #why cid?
       @assignment.push_grades_edx(user)
@@ -41,13 +41,13 @@ namespace :grading do
 #end vineet
 
 	desc "ASSIGNMENT=id; Find low agreement rubric items"
-	task :low_agreement => :environment do 
+	task :low_agreement => :environment do
 		assignment_id = ENV['ASSIGNMENT']
 		rubrics_with_low_agreement(assignment_id)
 	end
 
 	desc "ASSIGNMENT=id; Grade all students for an assignment"
-	task :regrade => :environment do 
+	task :regrade => :environment do
 		assignment_id = ENV['ASSIGNMENT']
 		final_draft_name = ENV['FINAL_DRAFT']
 		###
@@ -59,12 +59,12 @@ namespace :grading do
 		final_review_credit = 3
 		paired_review_threshold = 1
 		final_review_threshold = 1
-		
+
 
 		puts "Regrading Assignment #{assignment_id}"
 		assignment = Assignment.find(assignment_id)
 		AssignmentGrade.destroy_all(assignment_id: assignment.id)
-		admins = User.where(admin: true)
+		admins = assignment.course.instructors
 		Enrollment.where(course: assignment.course).each do |enrollment|
 			student = enrollment.user
 			next if student.nil?
@@ -79,7 +79,7 @@ namespace :grading do
 
 			# transcript = Answer.tagged_with("Transcript Writeup").where(assignment: assignment, active:true, user: student)
 			# if(transcript.count > 0)
-			# 	AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Completion: Transcript and index", credit: 7)	
+			# 	AssignmentGrade.create(user: student, assignment: assignment, grade_type: "Completion: Transcript and index", credit: 7)
 			# end
 
 			# Review.where(user: student, assignment: assignment, active: true).group(:review_type).count.each do |review_type, review_count|
@@ -114,7 +114,7 @@ namespace :grading do
 							marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
 
 							attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
-							attribute_credit = (if final_reviews.count >= 3 
+							attribute_credit = (if final_reviews.count >= 3
 												 marked_count >= 2 ? attribute_score : 0
 												elsif final_reviews.count > 0 and final_reviews.count < 3
 												 ((attribute_score * marked_count/final_reviews.count))
@@ -122,13 +122,13 @@ namespace :grading do
 													0
 												end)
 
-							AssignmentGrade.create(user: student, assignment: assignment, 
+							AssignmentGrade.create(user: student, assignment: assignment,
 								answer: answer,
 								is_final: answer.is_final?,
-								grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
-								credit: attribute_credit, 
-								marked_reviews: marked_count, 
-								total_reviews: final_reviews.count, 
+								grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})",
+								credit: attribute_credit,
+								marked_reviews: marked_count,
+								total_reviews: final_reviews.count,
 								rubric_item_id: rubric.id)
 						end
 					end
@@ -138,7 +138,7 @@ namespace :grading do
 	end
 
 	desc "ASSIGNMENT=id; Find assignments with few reviews"
-	task :reviews_without_items => :environment do 
+	task :reviews_without_items => :environment do
 		assignment_id = ENV['ASSIGNMENT']
 		final_draft_name = ENV['FINAL_DRAFT']
 		puts "Finding assignments with problematic reviews"
@@ -154,18 +154,18 @@ namespace :grading do
 		Enrollment.where(course: assignment.course).each do |enrollment|
 			student = enrollment.user
 			#First set participation credit
-			
+
 			##grades for assignment rubrics
 			final_answer = Answer.where(user: student, active: true, assignment_id: assignment_id).tagged_with(final_draft_name).first
 			if !final_answer.nil?
 				final_reviews = Review.where(review_type: "final", active: true, answer_id: final_answer.id)
-				final_reviews.each do |r| 
-					
+				final_reviews.each do |r|
+
 					review_blank = r.blank?
 					if review_blank
 						ActionItem.create(
 							assignment: assignment,
-							user: student, 
+							user: student,
 							reason_code: "BLANK_REVIEW",
 							reason: "#{r.user.name} (#{r.user.email}) submitted a blank review. The current grade for submission is #{AssignmentGrade.where(user: student, assignment_id: assignment_id).sum(:credit).round}",
 							review: r,
@@ -182,8 +182,8 @@ namespace :grading do
 
     					if total_rating <= 4
     						ActionItem.create(
-							assignment: assignment,    							
-							user: student, 
+							assignment: assignment,
+							user: student,
 							reason_code: "BAD_REVIEW",
 							reason: "Review rated poorly.",
 							review: r,
@@ -196,7 +196,7 @@ namespace :grading do
 				if final_answer.reviews.where(active: true).count < reviews_needed
 					ActionItem.create(
 							assignment: assignment,
-							user: student, 
+							user: student,
 							reason_code: "TOO_FEW_REVIEWS",
 							reason: "Submission has only #{final_reviews.count} reviews, we need #{reviews_needed}. The current grade for submission is #{AssignmentGrade.where(user: student, assignment_id: assignment_id).sum(:credit).round}",
 							answer: final_answer,
@@ -237,8 +237,8 @@ namespace :grading do
 
 		ActionItem.delete_all(assignment: assignment, reason_code: ["POOR_AGREEMENT"])
 
-		top_three.each do |it| 
-			ActionItem.create(assignment: assignment, 
+		top_three.each do |it|
+			ActionItem.create(assignment: assignment,
 				reason_code: "POOR_AGREEMENT",
 				reason: "#{it[:attribute].description} (#{it[:attribute].rubric_item.short_title}). Mean score: #{it[:mean_score]} (best is 1.0), median_score: #{it[:median_score]}",
 				priority: 3*it[:mean_score])

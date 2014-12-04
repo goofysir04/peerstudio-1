@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141125025259) do
+ActiveRecord::Schema.define(version: 20141204185334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,25 +90,6 @@ ActiveRecord::Schema.define(version: 20141125025259) do
   add_index "answers", ["assignment_id"], name: "fk__answers_assignment_id", using: :btree
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
   add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
-
-  create_table "appeals", force: true do |t|
-    t.text     "comments"
-    t.integer  "question_id"
-    t.integer  "answer_id"
-    t.boolean  "accepted"
-    t.boolean  "inspected"
-    t.float    "appeal_score"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "experimental_condition"
-    t.text     "instructor_comments"
-    t.text     "answer_text"
-  end
-
-  add_index "appeals", ["answer_id"], name: "fk__appeals_answer_id", using: :btree
-  add_index "appeals", ["answer_id"], name: "index_appeals_on_answer_id", using: :btree
-  add_index "appeals", ["question_id"], name: "fk__appeals_question_id", using: :btree
-  add_index "appeals", ["question_id"], name: "index_appeals_on_question_id", using: :btree
 
   create_table "assessments", force: true do |t|
     t.integer  "user_id"
@@ -247,6 +228,7 @@ ActiveRecord::Schema.define(version: 20141125025259) do
     t.string   "lti_user_id"
     t.string   "roles"
     t.text     "raw_lti_params"
+    t.boolean  "instructor",           default: false
   end
 
   add_index "enrollments", ["course_id"], name: "fk__enrollments_course_id", using: :btree
@@ -320,17 +302,6 @@ ActiveRecord::Schema.define(version: 20141125025259) do
 
   add_index "lti_enrollments", ["assignment_id"], name: "index_lti_enrollments_on_assignment_id", using: :btree
   add_index "lti_enrollments", ["user_id"], name: "index_lti_enrollments_on_user_id", using: :btree
-
-  create_table "questions", force: true do |t|
-    t.text     "title"
-    t.text     "explanation"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.float    "min_score",                default: 0.0
-    t.float    "max_score",                default: 1.0
-    t.text     "baseline_explanation"
-    t.string   "score_aggregation_method", default: "sum"
-  end
 
   create_table "reviews", force: true do |t|
     t.integer  "answer_id"

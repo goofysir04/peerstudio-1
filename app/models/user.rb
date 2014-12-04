@@ -15,6 +15,11 @@ class User < ActiveRecord::Base
 	has_many :assessments
 	has_many :verifications
 
+	#This is necessary for doing things like current_user.instructor_for?
+	def instructor_for?(course)
+		self.admin? or !course.instructors.include?(self).nil?
+	end
+
 	#This was for the L@S paper.
 	def get_and_store_experimental_condition!(course)
 		# if id%5 == 0
@@ -27,10 +32,10 @@ class User < ActiveRecord::Base
 		if !course.waitlist_condition
 			return "normal"
 		end
-		
+
 		if self.experimental_group.blank?
 			self.experimental_group = self.experimental_condition(course)
-			# self.save! #don't save, we have some validation issue. 
+			# self.save! #don't save, we have some validation issue.
 			self.save!
 		end
 		return self.experimental_group
@@ -44,9 +49,9 @@ class User < ActiveRecord::Base
 		# #begin vineet
 		# if self.email="2@test.com"
 		# 	return "batched_email"
-		# end 
+		# end
 		# #end vineet
-		
+
 		if !course.waitlist_condition
 			return "normal"
 		elsif id%3==0

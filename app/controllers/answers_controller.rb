@@ -5,11 +5,10 @@ class AnswersController < ApplicationController
     :reflect, :clone]
   before_action :set_assignment, only: [:new]
   before_filter :authenticate_user!
-  # before_filter :authenticate_user_is_admin!
   # GET /answers
   # GET /answers.json
   def index
-    redirect_to root_path and return unless current_user.admin? #FIXME Make this so students can only see it after the due date.
+    redirect_to root_path and return unless current_user.admin? #FIXME Make this it is visible to instructors
     @answers = Answer.where('assignment_id = ? and active =?', params[:assignment_id], true).order('user_id').order('created_at DESC').paginate(:page => params[:page])
   end
 
@@ -67,7 +66,7 @@ class AnswersController < ApplicationController
 
   # GET /answers/1/edit
   def edit
-    unless @answer.user == current_user or current_user.admin?
+    unless @answer.user == current_user or current_user.instructor_for?(@answer.assignment.course)
       redirect_to assignment_path(@answer.assignment), alert: "You can only edit your own answers!" and return
     end
     @trigger = TriggerAction.pending_action("review_required", current_user, @answer.assignment)
@@ -95,7 +94,7 @@ class AnswersController < ApplicationController
   # PATCH/PUT /answers/1
   # PATCH/PUT /answers/1.json
   def update
-    unless @answer.user == current_user or current_user.admin?
+    unless @answer.user == current_user or current_user.instructor_for?(@answer.assignment.course)
       redirect_to assignment_path(@answer.assignment), alert: "You can only edit your own answers!" and return
     end
 
@@ -185,10 +184,10 @@ class AnswersController < ApplicationController
   end
 
   def unsubmit_for_grades
-    authenticate_user_is_admin!
+    authenticate_user_is_instructor!(@answer.assignment.course)
     @answer.is_final = false
     respond_to do |format|
-      if @answer.save 
+      if @answer.save
         format.html {redirect_to stats_assignment_path(@answer.assignment), notice: "Marked submission as non-final"}
         format.json { head :no_content }
         format.js

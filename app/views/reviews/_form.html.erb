@@ -20,7 +20,7 @@
               <%= f.email_field :copilot_email, class:"input-block-level", placeholder:"your-partner@ucsd.edu" %>
           </li>
         <% end %>
-        <% if current_user.admin? %>
+        <% if current_user.instructor_for?(@review.assignment.course) %>
           Submission by <%= @review.answer.user.name %> (<%= @review.answer.user.email %>) Only staff can see names.
         <% end %>
         <% unless @review.answer.review_request.blank? %>
@@ -53,7 +53,7 @@
                 <button id="previous-prompt" class="btn btn-default" style="display:none;">Previous</button>
                 <button id="next-prompt" class="btn btn-primary pull-right">Continue</button>
             </div>
-            
+
             <legend></legend>
             <p><small>You are seeing this reviewing interface because your classmate already has other feedback based on the rubric. </small></p>
           </div>
@@ -96,9 +96,9 @@
                   </tr>
                 <% end %>
               </table>
-              <!--   removed the miscommunication checkbox because it wasnt being used. 
+              <!--   removed the miscommunication checkbox because it wasnt being used.
                 Absent: 18415 feedback_items
-                Present: 1121 feedback_items 
+                Present: 1121 feedback_items
               -->
               <% feedback_prompt = r.object.rubric_item.like_feedback_prompt.blank? ? "One way you can improve _______ is by doing __________, e.g. __________." : r.object.rubric_item.like_feedback_prompt %>
               <%= r.text_area :like_feedback, placeholder: feedback_prompt, class:"form-control expandable comment-quality-checked rubric-comment", style: "margin-top:1em" %>
@@ -160,7 +160,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-  
+
   <div class="modal" id="phoned-in-review-modal">
     <div class="modal-dialog">
       <div class="modal-content">

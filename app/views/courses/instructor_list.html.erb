@@ -1,0 +1,25 @@
+<h1>Instructors for <em><%= @course.title %></em></h1>
+
+<%= form_tag make_instructor_course_path(@course) do %>
+<div class="form-group">
+  <label for="instructor_email">Email address</label>
+  <%=email_field_tag :instructor_email, "", class:"form-control", placeholder:"Enter email to add an instructor" %>
+</div>
+<%= submit_tag "Add instructor", class:"btn btn-default" %>
+<% end %>
+
+
+<h2>Instructors</h2>
+  <ul>
+  <% @course.instructors.each do |instructor| %>
+    <li><%= instructor.name %> (<%= instructor.email %>)</li>
+  <% end %>
+  </ul>
+
+<h2>System administrators</h2>
+<p>System administrators have access to student submissions, reviews and suggested grades, so they can help students if they face problems. They cannot review as staff.</p>
+  <ul>
+    <% @admins.each do |admin| %>
+    <li><%= admin.name %> (<%= admin.email %>)</li>
+    <% end %>
+  </ul>

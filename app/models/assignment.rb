@@ -48,7 +48,7 @@ class Assignment < ActiveRecord::Base
     end
   end
 
- 
+
   def push_grades(user_id, max_push_count)
     answers = Answer.where("user_id = ? and push_count <= ?", user_id, max_push_count)
     uri = URI.parse "https://class.coursera.org/hci-004/assignment/api/update_score"
@@ -58,13 +58,13 @@ class Assignment < ActiveRecord::Base
     http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
     # req = Net::HTTP::Post.new(uri.request_uri)
-    answers.each do |a| 
+    answers.each do |a|
       # raise user_id.inspect
       if a.state != "graded" #special case qn 1
         a.current_score = a.new_get_grade
         a.save
       end
-      post_args = {'api_key' => API_KEY, 'user_id' => user_id.cid, 
+      post_args = {'api_key' => API_KEY, 'user_id' => user_id.cid,
         'assignment_part_sid' => "question#{a.question_id}",
         'score' => a.current_score}
 
@@ -74,11 +74,11 @@ class Assignment < ActiveRecord::Base
       rescue Exception => e
         logger.error "Push failed for answer id=#{a.id}; Exception: #{e.inspect}"
         sleep(10)
-        logger.error "Restarting after waiting 10s"  
+        logger.error "Restarting after waiting 10s"
         next
       end
 
-      if resp.body == '{"status":"202"}'        
+      if resp.body == '{"status":"202"}'
         logger.info "Success: Response #{resp.body}"
         a.increment!(:push_count)
       else
@@ -91,12 +91,12 @@ class Assignment < ActiveRecord::Base
   def push_grades_edx(user)
       puts "user_id is #{user.id}"
       puts "starting pushing grades for user #{user.email}"
-      
+
       answers = Answer.where("user_id = ?", user.id)
       puts "ansers are #{answers}"
-      
+
     if !answers.nil?
-      answers.each do |a| 
+      answers.each do |a|
         # raise user_id.inspect
         if a.state != "graded" #special case qn 1
           #todo - fix current_score
@@ -104,11 +104,11 @@ class Assignment < ActiveRecord::Base
           puts "ans current score is #{a.current_score}"
           a.save
         end
-          
+
           #coursera
         #@lis_outcome_service_url = "https://api.coursera.org/lti/v1/grade"
         #@lis_result_sourcedid = "970447::1::585446::mxAHNKDlx3Rp9THqlKmSDmUSGGA"
-         
+
         @course = Course.find(1) #or self.course
         @enrollment = self.lti_enrollments.find(user.id) #todo - when is lti_enrollment set up
         puts "#{@enrollment.lis_outcome_service_url}"
@@ -126,21 +126,21 @@ class Assignment < ActiveRecord::Base
 
           puts "#{res.code}"
         rescue Exception => e
-          puts "Connect failed. Exception: #{e.inspect}"     
+          puts "Connect failed. Exception: #{e.inspect}"
         end #end of begin
-    
-        if res.body = "200" #res.body == '{"status":"200"}'        
+
+        if res.body = "200" #res.body == '{"status":"200"}'
           puts "Success: Response #{res.body}"
           #a.increment!(:push_count)
         else
           puts "Push failed for answer id=#{a.id}; Response #{res.body}"
         end
-        
+
         puts "finished pushing grades for user #{user.email}"
       end #end of do
     end # end of if answer.nil
   end #end of def method
-  #end vineet 
+  #end vineet
 
 
   def regrade!
@@ -153,12 +153,12 @@ class Assignment < ActiveRecord::Base
     final_review_credit = 3
     paired_review_threshold = 1
     final_review_threshold = 1
-    
+
 
     logger.info "Regrading Assignment #{self.id}"
     assignment = self
     AssignmentGrade.destroy_all(assignment_id: assignment.id)
-    admins = User.where(admin: true)
+    admins = assignment.course.instructors
     Enrollment.where(course: assignment.course).each do |enrollment|
       student = enrollment.user
       next if student.nil?
@@ -172,7 +172,7 @@ class Assignment < ActiveRecord::Base
   def regrade_submission(answer)
     assignment = self
     AssignmentGrade.destroy_all(assignment_id: assignment.id, answer_id: answer.id)
-    admins = User.where(admin: true)
+    admins = assignment.course.instructors
     student = answer.user
     if !answer.nil?
       final_reviews = Review.where(review_type: "final", active: true, answer_id: answer.id, review_method: "normal")
@@ -188,7 +188,7 @@ class Assignment < ActiveRecord::Base
             marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
 
             attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
-            attribute_credit = (if final_reviews.count >= 3 
+            attribute_credit = (if final_reviews.count >= 3
                        marked_count >= 2 ? attribute_score : 0
                       elsif final_reviews.count > 0 and final_reviews.count < 3
                        ((attribute_score * marked_count/final_reviews.count))
@@ -198,24 +198,24 @@ class Assignment < ActiveRecord::Base
           else
             #this is a non-binary score
             attribute_weights = FeedbackItemAttribute.where(
-              answer_attribute: answer_attribute, 
+              answer_attribute: answer_attribute,
               feedback_item_id: answer_attribute.feedback_items.where(review_id: final_reviews)
               ).pluck(:weight)
             if attribute_weights.empty?
               attribute_credit = 0
-            else  
+            else
               attribute_credit= attribute_weights.median * answer_attribute.score
             end
             marked_count = attribute_weights.length
           end
 
-          AssignmentGrade.create(user: student, assignment: assignment, 
+          AssignmentGrade.create(user: student, assignment: assignment,
             answer: answer,
             is_final: answer.is_final?,
-            grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})", 
-            credit: attribute_credit, 
-            marked_reviews: marked_count, 
-            total_reviews: final_reviews.count, 
+            grade_type: "#{rubric.short_title}: #{answer_attribute.description} (#{grade_type})",
+            credit: attribute_credit,
+            marked_reviews: marked_count,
+            total_reviews: final_reviews.count,
             rubric_item_id: rubric.id,
             experimental: false,
             source: grade_type)
@@ -226,13 +226,13 @@ class Assignment < ActiveRecord::Base
       if final_reviews_count > 0
         how_exceptional = final_reviews.where(out_of_box_answer: true).count/final_reviews_count
         if how_exceptional > 0.5
-              AssignmentGrade.create(user: student, assignment: assignment, 
+              AssignmentGrade.create(user: student, assignment: assignment,
               answer: answer,
               is_final: answer.is_final?,
-              grade_type: "Exceptionally good submission (bonus)", 
-              credit: 1, 
-              marked_reviews: 1, 
-              total_reviews: final_reviews.count, 
+              grade_type: "Exceptionally good submission (bonus)",
+              credit: 1,
+              marked_reviews: 1,
+              total_reviews: final_reviews.count,
               rubric_item_id: nil,
               experimental: false,
               source: grade_type)
@@ -251,11 +251,11 @@ class Assignment < ActiveRecord::Base
     final_review_credit = 3
     paired_review_threshold = 1
     final_review_threshold = 1
-    
+
 
     logger.info "Regrading Assignment #{self.id}"
     assignment = self
-    admins = User.where(admin: true)
+    admins = assignment.course.instructors
     Enrollment.where(course: assignment.course).each do |enrollment|
       student = enrollment.user
       next if student.nil?
@@ -284,7 +284,7 @@ class Assignment < ActiveRecord::Base
         marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
 
         attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
-        attribute_credit = (if final_reviews.count >= 3 
+        attribute_credit = (if final_reviews.count >= 3
                    marked_count >= 2 ? attribute_score : 0
                   elsif final_reviews.count > 0 and final_reviews.count < 3
                    ((attribute_score * marked_count/final_reviews.count))
@@ -292,15 +292,15 @@ class Assignment < ActiveRecord::Base
                     0
                   end)
 
-        AssignmentGrade.create(user: student, assignment: assignment, 
+        AssignmentGrade.create(user: student, assignment: assignment,
           answer: answer,
           is_final: answer.is_final?,
-          grade_type: "#{rubric.short_title}: #{answer_attribute.description}", 
-          credit: attribute_credit, 
-          marked_reviews: marked_count, 
-          total_reviews: final_reviews.count, 
+          grade_type: "#{rubric.short_title}: #{answer_attribute.description}",
+          credit: attribute_credit,
+          marked_reviews: marked_count,
+          total_reviews: final_reviews.count,
           rubric_item_id: rubric.id,
-          experimental: true, 
+          experimental: true,
           source: grade_type)
       end #answer_attribute
     end #rubric
@@ -316,4 +316,3 @@ class Array
     (sorted[half_len-1] + sorted[-half_len]) / 2.0
   end
 end
-
