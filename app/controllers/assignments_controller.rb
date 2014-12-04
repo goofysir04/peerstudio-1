@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
   # include Humanize
-  assignment_actions = [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades, 
+  assignment_actions = [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades,
       :export_grades, :resolve_action_item, :review_first, :flipbook, :regrade]
 
   before_action :set_assignment, only: assignment_actions
@@ -151,7 +151,7 @@ class AssignmentsController < ApplicationController
   end
 
   def grades
-    if current_user.admin?
+    if current_user.instructor_for?(@assignment.course)
       @permitted_user = params[:user].nil? ? current_user : User.find(params.require(:user))
     else
       redirect_to @assignment and return unless @assignment.grades_released?
@@ -196,8 +196,8 @@ def review_first
       @recent_review = Review.find(params[:recent_review])
     end
     #otherwise render
-    if current_user.admin?
-      @admins = User.where(admin: true)
+    if current_user.instructor_for?(@assignment.course)
+      @admins = @assignment.course.instructors
       @reviewed_by_staff = Review.where(assignment_id: @assignment.id, user_id: @admins, active: true).select(:answer_id).distinct.pluck(:answer_id)
       @next_staff_submission = @assignment.answers.where(submitted: true, is_final: true).where.not(id: @reviewed_by_staff).first
     end
@@ -226,7 +226,7 @@ def review_first
       params.permit(:assignment_grade => [:credit])
       params.permit(:recent_review)
       params.permit(:page)
-      params.require(:assignment).permit(:title, :description, :template, :example, :milestone_list, :due_at, :open_at, 
+      params.require(:assignment).permit(:title, :description, :template, :example, :milestone_list, :due_at, :open_at,
         :review_due_at,
         :rubric_items_attributes=>[
           :id, :title, :short_title, :show_for_feedback, :show_for_final,

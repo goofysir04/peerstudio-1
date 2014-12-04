@@ -9,10 +9,6 @@ class Course < ActiveRecord::Base
 
   has_many :instructors, through: :instructor_enrollments, source: :user
 
-  def is_instructor?(user)
-    user.admin? or !self.instructors.include?(user).nil?
-  end
-
   def make_instructor(user)
     enrollment = self.instructor_enrollments.where(user: user).first
     if enrollment.nil?
