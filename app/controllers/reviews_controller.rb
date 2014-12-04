@@ -39,7 +39,7 @@ class ReviewsController < ApplicationController
 
   # GET /reviews/1/edit
   def edit
-    unless @review.user == current_user or current_user.admin?
+    unless @review.user == current_user or current_user.instructor_for?(@review.assignment.course)
       redirect_to @review.assignment, alert: "You can only edit reviews you wrote."
     end
 
@@ -69,10 +69,10 @@ class ReviewsController < ApplicationController
   # PATCH/PUT /reviews/1
   # PATCH/PUT /reviews/1.json
   def update
-    unless @review.user == current_user or current_user.admin?
+    unless @review.user == current_user or current_user.instructor_for?(@review.assignment.course)
       redirect_to @review.assignment, alert: "You can only edit reviews you wrote."
     end
-    
+
     # raise params.inspect
     respond_to do |format|
       @answer= @review.answer
@@ -292,8 +292,8 @@ class ReviewsController < ApplicationController
           u.get_and_store_experimental_condition!(course)
           if u.experimental_group=="batched_email"
             #do nothing
-            review.email_sent = false         
-          else 
+            review.email_sent = false
+          else
             ReviewMailer.delay.reviewed_email(review.answer)
             review.email_sent = true
           end

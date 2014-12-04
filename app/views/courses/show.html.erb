@@ -18,7 +18,7 @@
   <% else %>
   <h1 id="assignment_title"><%= link_to @closest_assign.title, @closest_assign %>
   <small> <%=due_date(@closest_assign.due_at) %></h1>
-    <% if user_signed_in? and current_user.admin? %>
+    <% if user_signed_in? and current_user.instructor_for?(@course) %>
             <td><%= link_to 'Destroy', @closest_assign, method: :delete, data: { confirm: 'Are you sure?' } %></td>
     <% end %>
   </small>
@@ -33,7 +33,7 @@
     <% if @closest_assign.due_at > Time.now %>
       <%= link_to "Write your answer", new_assignment_answer_path(@closest_assign), class: "btn btn-default" %>
     <% else %>
-      You can't submit anymore, but you can review. 
+      You can't submit anymore, but you can review.
     <% end %>
   </div>
   <div class="btn-group">
@@ -53,7 +53,7 @@
     <tr>
       <th>Title</th>
       <th>Due on</th>
-      <% if user_signed_in? && current_user.admin? %>
+      <% if user_signed_in? && current_user.instructor_for?(@course) %>
       <th colspan="2"><%= link_to "Add assignment", new_course_assignment_path(@course), class: "btn btn-success"%> </th>
       <% end %>
     </tr>
@@ -62,7 +62,7 @@
   <tbody>
     <%= render partial: "assignments/short_show", collection:@course.assignments.where('(due_at > ? or (review_due_at is not null and review_due_at > ?)) and open_at < ?', Time.now, Time.now, Time.now).order('due_at asc').offset(1)%>
     <%= render partial: "assignments/short_show", collection:@course.assignments.where('(due_at < ? or (review_due_at is not null and review_due_at < ?)) and open_at < ?', Time.now, Time.now, Time.now).order('due_at asc')%>
-    <% if user_signed_in? and current_user.admin? %>
+    <% if user_signed_in? and current_user.instructor_for?(@course) %>
     <tr>
       <td colspan="4"><strong>Assignments below this line yet open (visible only to staff)</strong></td>
     </tr>
@@ -73,7 +73,7 @@
 
 </div>
 <div class="row">
-  <% if user_signed_in? && current_user.admin? %>
+  <% if user_signed_in? && current_user.instructor_for?(@course) %>
   <p class="lead">This course is <strong><%= @course.hidden? ? "hidden from students" : "visible to students"%></strong>, and is currently <strong><%= @course.open_enrollment? ? "open" : "closed" %> </strong> for enrollment. <%= link_to '(Modify)', edit_course_path(@course) %> </p>
   <% end %>
 </div>

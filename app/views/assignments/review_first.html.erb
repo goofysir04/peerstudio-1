@@ -16,18 +16,18 @@
 
 <div class="controls">
 
-	<% if current_user.admin? %>
+	<% if current_user.instructor_for?(@assignment.course) %>
 		<%unless @next_staff_submission.blank? %>
 			<%= link_to "Give staff feedback", review_answer_path(@next_staff_submission), method: :post, class: "btn btn-primary" %>
 		<% else %>
 			No more ungraded submissions.
 		<% end %>
 
-		<%= link_to "Give non-graded feedback", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-default" %> 
+		<%= link_to "Give non-graded feedback", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-default" %>
 	<% else %>
-		<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %> 
-	<% end %>		
+		<%= link_to "Give feedback now", create_typed_review_assignment_path(assignment_id:@assignment.id,typed_review:{type:"final", revision:"Final Draft"}), method: :post, class: "btn btn-primary" %>
+	<% end %>
 	<% unless @recent_review.nil? %>
-		| <%= link_to "Edit your review", edit_review_path(@recent_review),class: "btn btn-default" %> 
+		| <%= link_to "Edit your review", edit_review_path(@recent_review),class: "btn btn-default" %>
 	<% end %>
 </div>
