@@ -1,7 +1,7 @@
 class ReviewsController < ApplicationController
   before_action :set_review, only: [:show, :edit, :update, :destroy, :rate, :create_rating, :report_blank]
   before_action :set_answer, only: :review_answer
-  before_filter :authenticate_user_is_admin!, only: :review_answer
+  # before_filter :authenticate_user_is_admin!, only: :review_answer
   before_filter :authenticate_user!
   # GET /reviews
   # GET /reviews.json
@@ -198,6 +198,7 @@ class ReviewsController < ApplicationController
   end
 
   def review_answer
+    authenticate_user_is_instructor!(@answer.assignment.course)
     @review = create_review_for_answer(@answer, "final", false)
     if @review.save
       redirect_to edit_review_path @review
