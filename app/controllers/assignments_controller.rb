@@ -1,7 +1,7 @@
 class AssignmentsController < ApplicationController
   # include Humanize
   assignment_actions = [:show, :show_all_answers, :edit, :update, :destroy, :stats, :grades,
-      :export_grades, :resolve_action_item, :review_first, :flipbook, :regrade]
+      :export_grades, :resolve_action_item, :review_first, :flipbook, :regrade, :update_grade]
 
   before_action :set_assignment, only: assignment_actions
   # add_breadcrumb :set_breadcrumb_link, only: assignment_actions
