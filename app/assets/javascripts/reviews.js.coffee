@@ -63,7 +63,7 @@ ready = () ->
 		$('#force-subimt-review').click () ->
 			force_submit = true
 			$("form#review-checked-form").submit()
-		
+
 		$('#other_review_types').click(() ->
 			alert "These review types are not yet open for this assignment."
 			return false)
@@ -106,7 +106,7 @@ syncPersistentHighlighting = () ->
 	classesToHighlight = findClassesToHighlight(this)
 	return if classesToHighlight is ""
 	#Remove all existing highlighting
-	removeHighlightingOnly =  $(this).hasClass('persistentHighlighted')  
+	removeHighlightingOnly =  $(this).hasClass('persistentHighlighted')
 	$('div.syncHighlighting section').removeClass "persistentHighlighted"
 	$("div.syncHighlighting section#{classesToHighlight}").addClass "persistentHighlighted" unless removeHighlightingOnly
 
@@ -129,7 +129,7 @@ replaceCheckboxesWithToggles = ()->
 		else
 			$(box).siblings('.btn-checkbox-yes').removeClass('active btn-success')
 			if review_completion_metadata.completed_checkboxes? and $(box).attr('id') in review_completion_metadata.completed_checkboxes
-				#Only set as unchecked if it exists in our collection	
+				#Only set as unchecked if it exists in our collection
 				$(box).siblings('.btn-checkbox-no').addClass('active btn-danger')
 
 syncCheckbox = (box) ->
@@ -139,7 +139,7 @@ syncCheckbox = (box) ->
 		else
 			$(box).siblings('.btn-checkbox-yes').removeClass('active btn-success')
 			if review_completion_metadata.completed_checkboxes? and $(box).attr('id') in review_completion_metadata.completed_checkboxes
-				#Only set as unchecked if it exists in our collection	
+				#Only set as unchecked if it exists in our collection
 				$(box).siblings('.btn-checkbox-no').addClass('active btn-danger')
 
 syncCheckboxOnToggle = (e) ->
@@ -199,7 +199,7 @@ suggestPlaceholderForComments = (allCheckboxes) ->
 			return "What do you like most about this?"
 	if (_.every allCheckboxes, (box) -> $(box).prop('checked') is false)
 			return "What's the first thing you'd suggest to get started?"
-	
+
 	uncheckedBoxes = _.filter allCheckboxes, (box) -> $(box).prop('checked') is false
 	if uncheckedBoxes.length == 1
 		uncheckedId = $(uncheckedBoxes[0]).attr('id')
@@ -225,7 +225,7 @@ showCommentsPromptIfRequired = ($linkedCheckbox) ->
 
 
 replaceScales = () ->
-	$('input.scale-checkbox').prop('checked','true')
+	$('input.scale-checkbox').attr('checked','checked')
 	for el in $('input.scale-slider')
 		console.log "setting max to ", 1/(+$(el).data('score'))
 		$(el).slider(
@@ -235,7 +235,7 @@ replaceScales = () ->
 			value: (+$(el).val())
 			# tooltip:'always'
 			formater: (val) ->
-				element = this.element 
+				element = this.element
 				label = $(element).data('options').split(',')[Math.round(val*($(element).data('options').split(',').length-1))]
 				return label + ""
 			)
@@ -276,16 +276,16 @@ token_list = {
 	"connect" : {regex: new RegExp("\\s" + "connect","gi"), score: 1}
 	"content" : {regex: new RegExp("\\s" + "content","gi"), score: 1}
 	"contribute" : {regex: new RegExp("\\s" + "contribute","gi"), score: 1}
-	"could" : {regex: new RegExp("\\s" + "could","gi"), score: 2} 
+	"could" : {regex: new RegExp("\\s" + "could","gi"), score: 2}
 	"deep" : {regex: new RegExp("\\s" + "deep","gi"), score: 1}
 	"depth" : {regex: new RegExp("\\s" + "depth","gi"), score: 1}
 	"detail" : {regex: new RegExp("\\s" + "detail","gi"), score: 3}
 	"elaborat" : {regex: new RegExp("\\s" + "elaborat","gi"), score: 1}
 	"enhance" : {regex: new RegExp("\\s" + "enhance","gi"), score: 1}
 	"enough" : {regex: new RegExp("\\s" + "enough","gi"), score: 1}
-	"event" : {regex: new RegExp("\\s" + "event","gi"), score: 3} 
+	"event" : {regex: new RegExp("\\s" + "event","gi"), score: 3}
 	"eviden" : {regex: new RegExp("\\s" + "eviden","gi"), score: 1} #evident, evidence, evidentially,...
-	"experience" : {regex: new RegExp("\\s" + "experience","gi"), score: 1} 
+	"experience" : {regex: new RegExp("\\s" + "experience","gi"), score: 1}
 	"explanat" : {regex: new RegExp("\\s" + "explanat","gi"), score: 2}
 	# "grammat" : {regex: new RegExp("\\s" + "grammat","gi"), score: -1, feedback: "Don't comment on grammar"} #don't talk about grammar
 	# "grammar" : {regex: new RegExp("\\s" + "grammar","gi"), score: -1, feedback: "Don't comment on grammar"}
@@ -332,9 +332,9 @@ checkFormCompleteness = () ->
 	$('#incomplete-review-modal').modal('show') unless review_complete
 
 	if review_complete
-		#Check if they're phoning it in. 
+		#Check if they're phoning it in.
 		comments_are_good = comments_are_substantive()
-		$('#phoned-in-review-modal').modal('show') unless comments_are_substantive()	
+		$('#phoned-in-review-modal').modal('show') unless comments_are_substantive()
 	return (review_complete and comments_are_good)
 
 comments_are_substantive = () ->
@@ -344,7 +344,7 @@ comments_are_substantive = () ->
 	return lengthOfComments > 20
 
 getReviewQuality = (text) ->
-	content_score = 0 
+	content_score = 0
 	feedback = []
 	for token, matcher of token_list
 		count = (text?.match(matcher.regex) or []).length
@@ -358,13 +358,13 @@ getReviewQuality = (text) ->
 	if lengthScore < 10
 		feedback.push "Say more..."
 
-	if (content_score - lengthScore)/(1.0+lengthScore) < 0.5 and lengthScore > 8	
+	if (content_score - lengthScore)/(1.0+lengthScore) < 0.5 and lengthScore > 8
 		feedback.push("Quick check: Is your feedback actionable? Are you expressing yourself succinctly?")
 
 
 	totalScore = content_score + lengthScore
 	console.log "Content score: #{content_score}, lengthScore: #{lengthScore}, totalScore: #{totalScore} feedback: #{feedback}"
-	
+
 	$('#review_tips').html(feedback.join(" "))
 	return {totalScore: totalScore, feedback: feedback, lengthScore: lengthScore}
 
@@ -388,11 +388,11 @@ saveCurrentPrompt = () ->
 	saveServerData()
 
 showCurrentPrompt = () ->
-	if currentPromptId > 0 
+	if currentPromptId > 0
 		$('#previous-prompt').show()
 	else
 		$('#previous-prompt').hide()
-	if currentPromptId >= (feedbackPrompts.length) 
+	if currentPromptId >= (feedbackPrompts.length)
 		console.log "Last prompt"
 		$('.finished-review').show()
 		$('.feedback-progress').hide()
@@ -407,9 +407,9 @@ showCurrentPrompt = () ->
 
 	currentPrompt = feedbackPrompts[currentPromptId]
 	$('#alternate-review .review-prompt').html("<span class='label label-default number-badge'>#{currentPromptId+1}</span> #{currentPrompt.prompt}")
-	$('#alternate-review .review-response').val(currentPrompt.response or "") 
+	$('#alternate-review .review-response').val(currentPrompt.response or "")
 
-	if currentPrompt.tips.length is 0 
+	if currentPrompt.tips.length is 0
 		$('#alternate-review .tips').hide()
 	else
 		$('#alternate-review .tips').show()

@@ -4,7 +4,7 @@ class RubricItem < ActiveRecord::Base
   has_many :answer_attributes, :dependent => :destroy
   accepts_nested_attributes_for :answer_attributes, :allow_destroy => true, reject_if: proc { |attributes| attributes['description'].blank? }
 
-  default_scope :order=>'ends_at ASC, open_at ASC, created_at ASC'
+  default_scope -> {order('ends_at ASC, open_at ASC, created_at ASC')}
 
   has_many :answers, through: :feedback_preferences
   # validates :ends_at, presence: true
