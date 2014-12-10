@@ -162,7 +162,7 @@ class AssignmentsController < ApplicationController
 
   def update_grade
     @grade = AssignmentGrade.find(params[:grade_id])
-    if(@grade.update(params.require(:assignment_grade).permit(:credit,:grade_type)))
+    if(@grade.update(params.require(:assignment_grade).permit(:credit,:grade_type).merge(overridden:true)))
       redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), notice: "Grade updated"
     else
       redirect_to grades_assignment_path(@grade.assignment, user: @grade.user), alert: "Could not update grade"

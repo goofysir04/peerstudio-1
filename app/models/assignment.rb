@@ -171,6 +171,7 @@ class Assignment < ActiveRecord::Base
 
   def regrade_submission(answer)
     assignment = self
+    return if AssignmentGrade.where(answer_id: answer.id, overridden: true).count > 0
     AssignmentGrade.destroy_all(assignment_id: assignment.id, answer_id: answer.id)
     admins = assignment.course.instructors
     student = answer.user
@@ -185,7 +186,7 @@ class Assignment < ActiveRecord::Base
       assignment.rubric_items.each do |rubric|
         rubric.answer_attributes.each do |answer_attribute|
           if answer_attribute.attribute_type == "binary"
-            marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+            marked_count = answer_attribute.feedback_items.where(review_id: final_reviews.pluck(:id)).select("review_id").distinct.count
 
             attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
             attribute_credit = (if final_reviews.count >= 3
@@ -199,7 +200,7 @@ class Assignment < ActiveRecord::Base
             #this is a non-binary score
             attribute_weights = FeedbackItemAttribute.where(
               answer_attribute: answer_attribute,
-              feedback_item_id: answer_attribute.feedback_items.where(review_id: final_reviews)
+              feedback_item_id: answer_attribute.feedback_items.where(review_id: final_reviews.pluck(:id))
               ).pluck(:weight)
             if attribute_weights.empty?
               attribute_credit = 0
@@ -281,7 +282,7 @@ class Assignment < ActiveRecord::Base
     return if final_reviews.count == 0
     assignment.rubric_items.each do |rubric|
       rubric.answer_attributes.each do |answer_attribute|
-        marked_count = answer_attribute.feedback_items.where(review_id: final_reviews).select("review_id").distinct.count
+        marked_count = answer_attribute.feedback_items.where(review_id: final_reviews.pluck(:id)).select("review_id").distinct.count
 
         attribute_score = answer_attribute.score.nil? ? 0 : answer_attribute.score
         attribute_credit = (if final_reviews.count >= 3
