@@ -3,14 +3,14 @@
 <%= form_for(resource, :as => resource_name, :url => complete_openid_registration_path) do |f| %>
 	<div class="row-fluid">
 		<h1 class="script">Hi, <%= @name %>!</h1>
+		<p>Welcome to PeerStudio: We need just a little more info to get started! </p>
 	</div>
 	<div class="row-fluid">
-	  <%= render :partial=>"optional_fields", :locals=>{:f=>f} %> 
+	  <%= render :partial=>"optional_fields", :locals=>{:f=>f, :name=> @name, :email=>@email} %>
 	</div>
 	<div class="row-fluid">
-		<%= f.submit "Sign up", :class => 'btn btn-large btn-primary' %> &nbsp;&nbsp;&nbsp; We will send all email to your <%=@provider.titleize%> email address, <strong><%=@email%></strong>. By signing up, you agree to the <%= link_to "Terms of Service and Privacy Policy", welcome_tos_path %>
+		<%= f.submit "Sign up", :class => 'btn btn-large btn-primary' %> &nbsp;&nbsp;&nbsp; By signing up, you agree to the <%= link_to "Terms of Service and Privacy Policy", welcome_tos_path %>
 	</div>
 </div>
 
 <% end %>
-

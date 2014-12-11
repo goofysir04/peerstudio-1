@@ -1,13 +1,31 @@
 <%= f.hidden_field :coursera_id, :value=>session[:coursera_id]%>
-<div class="row-fluid">
-<h2> Select a timezone <small>so we can show you deadlines in your local time</small></h2>
-<div class="col-sm-12">
+<h2><span class="label label-default number-badge">1</span> Personal information</h2>
+<% if name.nil? %>
+<div class="form-group"><%= f.label :name, class: "col-sm-2 control-label" %><div class="col-sm-10"><%= f.text_field :name, :placeholder => "Your name", :class=>"form-control" %>
+  <p class="help-block">We use your name when we email you, and to help staff find your work. Your name is not shared with your classmates or other people.</p>
+</div></div>
+<% end %>
+
+<% if email.nil?%>
+<div class="form-group"><%= f.label :email, class: "col-sm-2 control-label" %><div class="col-sm-10"><%= f.email_field :email, :placeholder => "Your email", :class=>"form-control" %>
+  <p class="help-block">We email you when your work is reviewed, or to remind you. Your name is not shared with your classmates or other people.</p>
+</div></div>
+<% end %>
+
 <div class="form-group">
-  <%= time_zone_select( :user, :time_zone, nil, :default => "Pacific Time (US & Canada)", :class =>"form-control") %>
-</div>
-</div>
+    <%= f.label :time_zone, class: "col-sm-2 control-label" %>
+  <div class="col-sm-10">
+      <%= time_zone_select( :user, :time_zone, nil, :default => "Pacific Time (US & Canada)", :class =>"form-control") %>
+      <p class="help-block">So we can show you deadlines in your local time.</p>
+  </div>
 </div>
 
+<div class="form-group"><%= f.label :gender, class: "col-sm-2 control-label" %><div class="col-sm-10"><%= f.select :gender, ['', 'Male', 'Female', 'Other'], {:include_blank => true}, {'data-placeholder' => 'Choose your gender', 'class'=>"form-control"} %>
+  <p class="help-block">Help us better understand who uses PeerStudio. Your gender is not shared with your teachers, classmates or other people.</p>
+</div></div>
+<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+<div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+<% end %>
 
 <script>
 $().ready(function() {
@@ -20,9 +38,9 @@ $('[data-toggle=tooltip]').tooltip();
 <hr/>
 
 <div class="row-fluid">
-  <h2> Help us improve peer assessment? <small>we'll be so happy if you do!</small></h2>
+  <h2><span class="label label-default number-badge">2</span> Help us improve peer assessment? <small>we'll be so happy if you do!</small></h2>
 
-  <p>Peerstudio is a research project at Stanford University and UC San Diego. As you use Peerstudio, we'd like to show you new features, and collect data about how Peerstudio works. This data will be used only for research-- you'll help us improve peer assessment, both for yourself, and for everyone else! We have more information about the research we have planned <a href="https://docs.google.com/document/d/1kZKBs2JXX9rFSQ4LzAy-XBOxNPPmHFS6l7CwXtP63JY/pub" target="_blank"><strong>here</strong></a>. We'd love to have your help!</p>
+  <p>Peerstudio is a research project at Stanford University and UC San Diego. As you use Peerstudio, we'd like to show you new features, and collect data about how Peerstudio works. This data is only for research-- you'll help us improve peer assessment, both for yourself, and for everyone else! We have more information about the research we have planned <a href="https://docs.google.com/document/d/1kZKBs2JXX9rFSQ4LzAy-XBOxNPPmHFS6l7CwXtP63JY/pub" target="_blank"><strong>here</strong></a>. We'd love to have your help!</p>
   <span class="help-block">You can still use Peerstudio without participating in our research.</span>
 </div>
 

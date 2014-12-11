@@ -1,40 +1,33 @@
-<h2>Sign up</h2>
-
-<style>
-  .form_field {
-    padding-bottom: 20px;
-  }
-</style>
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+<h2>Sign up for PeerStudio&mdash; it only takes a minute!</h2>
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class=>"form-horizontal" }) do |f| %>
   <%= devise_error_messages! %>
+  <%= render :partial=> "optional_fields", :locals=> {:f => f, :name=>nil, :email=>nil} #pass in the form
+  %>
+  <hr/>
+  <div class="row-fluid">
+    <h2><span class="label label-default number-badge">3</span> Passwords!</small></h2>
 
-  <div class="span6" style="backround:#ffffff; margin-left: 0px;">
+      <div class="form-group">
+        <%= f.label :password, class: "col-sm-2 control-label" %>
+        <div class="col-sm-10">
+          <%= f.password_field :password, :placeholder => "Password", :data => { :toggle => 'tooltip', :placement => 'right'}, :title => "Use at least 8 characters, letters and numbers only.", :class=>"form-control" %>
+        </div>
+      </div>
 
-    <div class="form_field">
-      <%= f.text_field :name, :placeholder => "Your name", :autofocus => true, :data => { :toggle => 'tooltip', :placement => 'right'}, :title => "First and last name"%>
-    </div>
-    <div class="form_field">
-        <%= f.email_field :email, :placeholder => "Email", :data => { :toggle => 'tooltip', :placement => 'right'}, :title => "We'll use this email to send you reminders" %>
-    </div>
-    <div class="form_field">
-      <%= f.password_field :password, :placeholder => "Password", :data => { :toggle => 'tooltip', :placement => 'right'}, :title => "Use at least 8 characters, letters and numbers only." %>
-    </div>
-    <div class="form_field">
-        <%= f.password_field :password_confirmation, :placeholder => "Password confirmation", :data => { :toggle => 'tooltip', :placement => 'right'}, :title => "Must match the password entered above" %>
-    </div>
-    <%= render :partial=> "optional_fields", :locals=> {:f => f} #pass in the form 
-    %>
-  </div>
-<div class="clearfix"></div>
-
-<div class="form-actions">
-  <%= f.submit "Sign up", :class => 'btn btn-large btn-primary' %> &nbsp;&nbsp;&nbsp; By signing up, you agree to the <%= link_to "Terms of Service and Privacy Policy", welcome_tos_path %>
+      <div class="form-group">
+        <%= f.label :password_confirmation, "Confirm your password", class: "col-sm-2 control-label" %>
+        <div class="col-sm-10">
+          <%= f.password_field :password_confirmation, :placeholder => "Your password again", :data => { :toggle => 'tooltip', :placement => 'right'}, :title => "Must match the password entered before", :class=>"form-control" %>
+        </div>
+      </div>
+      <hr/>
+</div>
+<div class="row-fluid">
+<div class="form-group col-sm-12">
+  <%= f.submit "Sign up", :class => 'btn btn-lg btn-primary' %> &nbsp;&nbsp; By signing up, you agree to the <%= link_to "Terms of Service and Privacy Policy", welcome_tos_path %>
   <div style="float:right;">
     <%= render "devise/shared/links" %>
   </div>
 </div>
-
+</div>
 <% end %>
-
-
-
