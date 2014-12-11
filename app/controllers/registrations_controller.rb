@@ -1,6 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
 
-
+  layout 'one_column'
   def create
       devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :name, :consented)}
       devise_parameter_sanitizer.for(:complete_openid) { |u| u.permit(:email, :password, :password_confirmation, :name, :consented)}
