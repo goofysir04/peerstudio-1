@@ -154,7 +154,7 @@ class Assignment < ActiveRecord::Base
     paired_review_threshold = 1
     final_review_threshold = 1
 
-
+    return if self.grades_frozen?
     logger.info "Regrading Assignment #{self.id}"
     assignment = self
     AssignmentGrade.destroy_all(assignment_id: assignment.id)
@@ -171,7 +171,7 @@ class Assignment < ActiveRecord::Base
 
   def regrade_submission(answer)
     assignment = self
-    return if AssignmentGrade.where(answer_id: answer.id, overridden: true).count > 0
+    return if AssignmentGrade.where(answer_id: answer.id, overridden: true).count > 0 or assignment.grades_frozen?
     AssignmentGrade.destroy_all(assignment_id: assignment.id, answer_id: answer.id)
     admins = assignment.course.instructors
     student = answer.user

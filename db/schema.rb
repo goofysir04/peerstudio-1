@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141210053047) do
+ActiveRecord::Schema.define(version: 20141217084220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,6 +144,7 @@ ActiveRecord::Schema.define(version: 20141210053047) do
     t.text     "template"
     t.text     "example"
     t.datetime "review_due_at"
+    t.boolean  "grades_frozen",   default: false
   end
 
   add_index "assignments", ["course_id"], name: "fk__assignments_course_id", using: :btree
