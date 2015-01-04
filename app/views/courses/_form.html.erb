@@ -103,28 +103,32 @@
       <%end%>
       <%= f.url_field :forum_link, class:"form-control", placeholder:"https://..." %>
     </div>
+    <% if @course.persisted? %>
+      <div class="form-group">
+        <%= f.label :consumer_key do %>
+          LTI Consumer key <small>(Use this to set up pushing grades to coursera/edx/etc.)</small>
+        <%end%>
+        <%= f.text_field :consumer_key, class:"form-control", placeholder:"coursera_course_title" %>
+        <%= f.label :consumer_secret do %>
+          LTI Consumer secret<small>(Use this to set up pushing grades to coursera/edx/etc.)</small>
+        <%end%>
 
-    <div class="form-group">
-      <%= f.label :consumer_key do %>
-        LTI Consumer key <small>(Use this to set up pushing grades to coursera/edx/etc.)</small>
-      <%end%>
-      <%= f.text_field :consumer_key, class:"form-control", placeholder:"coursera_course_title" %>
-      <%= f.label :consumer_secret do %>
-        LTI Consumer secret<small>(Use this to set up pushing grades to coursera/edx/etc.)</small>
-      <%end%>
-      <div class="row-fluid">
-        <%= f.text_field :consumer_secret, class:"form-control", disabled:"disabled", placeholder:"Click regenerate to set" %>
-        <% unless @course.id.nil? %>
-          <%= link_to "Regenerate secret", regenerate_consumer_secret_course_path(@course), class:"btn btn-default ", method: :post %>
-        <% else %>
-          <%= link_to "Regenerate secret (save course first)", "#", class:"btn btn-default", disabled:"disabled" %>
-        <% end %>
+
+          <div class="row-fluid">
+            <%= f.text_field :consumer_secret, class:"form-control", disabled:"disabled", placeholder:"Click regenerate to set" %>
+            <% unless @course.id.nil? %>
+              <%= link_to "Regenerate secret", regenerate_consumer_secret_course_path(@course), class:"btn btn-default ", method: :post %>
+            <% else %>
+              <%= link_to "Regenerate secret (save course first)", "#", class:"btn btn-default", disabled:"disabled" %>
+            <% end %>
+          </div>
       </div>
-
-    </div>
-
-
-    <p>Change who is on the <%= link_to "teaching staff", instructor_list_course_path(@course) %>.</p>
+    <% end %>
+    <% if @course.persisted? %>
+      <p>Change who is on the <%= link_to "teaching staff", instructor_list_course_path(@course) %>.</p>
+    <% else %>
+      <p> Save the course to edit the teaching staff and LTI credentials. </p>
+    <% end %>
     <div class="form-group">
       <%= f.submit :"class"=> "btn btn-primary" %>
     </div>

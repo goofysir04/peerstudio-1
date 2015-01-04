@@ -1,7 +1,9 @@
 class CoursesController < ApplicationController
   # before_filter authenticate_user! except: :index
+  before_filter :authenticate_user_is_admin!, only: [:new, :create]
 
   before_action :set_course, only: [:show, :edit, :update, :destroy, :regenerate_consumer_secret, :enroll_lti, :make_instructor, :instructor_list]
+  before_filter :authenticate_user_is_instructor_for_this_course!, only: [:edit, :update, :destroy, :regenerate_consumer_secret, :make_instructor, :instructor_list]
   skip_before_filter :verify_authenticity_token, :only => [:enroll_lti]
 
   layout "one_column"
@@ -112,6 +114,10 @@ class CoursesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_course
       @course = Course.find(params[:id])
+    end
+
+    def authenticate_user_is_instructor_for_this_course!
+      authenticate_user_is_instructor!(@course)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
