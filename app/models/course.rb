@@ -10,7 +10,7 @@ class Course < ActiveRecord::Base
   has_many :instructors, through: :instructor_enrollments, source: :user
 
   def make_instructor(user)
-    enrollment = self.enrollments.where(user: user).first
+    enrollment = self.enrollments.where(user_id: user.id).first
     if enrollment.nil?
       self.instructors << user
     else #Don't recreate an enrollment if a "student" enrollment exists.
