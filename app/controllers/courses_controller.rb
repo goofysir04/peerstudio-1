@@ -38,6 +38,9 @@ class CoursesController < ApplicationController
     authenticate_user_is_instructor!(@course)
 
     @new_instructor = User.find_for_authentication(email: params[:instructor_email])
+    if @new_instructor.nil?
+      redirect_to instructor_list_course_path(@course), alert: "No user with that email." and return
+    end
     if @course.make_instructor(@new_instructor)
       redirect_to instructor_list_course_path(@course), notice: "Added new instructor"
     end
