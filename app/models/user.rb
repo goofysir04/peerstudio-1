@@ -17,7 +17,12 @@ class User < ActiveRecord::Base
 
 	#This is necessary for doing things like current_user.instructor_for?
 	def instructor_for?(course)
+		return false if !self.view_mode.nil? and self.view_mode== "student"
 		self.admin? or !course.instructors.include?(self).nil?
+	end
+
+	def instructor_for_some_course?
+		self.admin? or Enrollment.where(instructor: true, user: self).empty?
 	end
 
 	#This was for the L@S paper.

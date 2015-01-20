@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
 	end
 
   def authenticate_user_is_instructor!(course)
-    return false if session["view_mode"]=="student"
     return true if Rails.env.development?
     unless user_signed_in?
       authenticate_user!
@@ -40,10 +39,13 @@ class ApplicationController < ActionController::Base
   end
 
   def toggle_view_mode
-    if session["view_mode"]=="student"
-      session["view_mode"]="staff"
+    authenticate_user!
+    if current_user.view_mode=="student"
+      current_user.view_mode="staff"
+      current_user.save
     else
-      session["view_mode"] = "student"
+      current_user.view_mode="student"
+      current_user.save
     end
 
     redirect_to :back

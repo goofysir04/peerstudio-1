@@ -34,12 +34,4 @@ module ApplicationHelper
 		end
 	end
 
-	def view_mode?
-		if session["view_mode"].nil?
-			return "staff"
-		else
-			return session["view_mode"]
-		end
-	end
-
 end
