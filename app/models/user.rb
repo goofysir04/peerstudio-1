@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
 	end
 
 	def instructor_for_some_course?
-		self.admin? or Enrollment.where(instructor: true, user: self).empty?
+		self.admin? or !Enrollment.where(instructor: true, user: self).empty?
 	end
 
 	#This was for the L@S paper.
