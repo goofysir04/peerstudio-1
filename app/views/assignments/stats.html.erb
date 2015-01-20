@@ -76,7 +76,12 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 					<% if answer_count.nil? or answer_count == 0 %>
 						<td style="background-color: rgb(244,109,67);">Not Submitted</td>
 					<% else %>
-						<td><%= answer_count %></td>
+						<td>
+							<% non_final_drafts = Answer.where(assignment: @assignment, submitted: true, is_final: false, user:s).order("submitted_at asc") %>
+							<% non_final_drafts.each_with_index do |draft,i| %>
+								<%= link_to "##{i+1} (#{time_ago_in_words draft.submitted_at} ago)", answer_reviews_path(draft) %>
+							<% end %>
+						</td>
 					<% end %>
 							<% final = Answer.where(assignment: @assignment, submitted: true, is_final: true, user:s).order("submitted_at desc").first %>
 							<% if final.nil? %>
@@ -91,7 +96,7 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 									<%= link_to "Review as staff", review_answer_path(final), method: :post %>
 								<% end %>
 								<% if final.submitted_at > @assignment.due_at %> <strong>Late</strong><% end %>
-								 | <%= link_to "Mark non-final", unsubmit_for_grades_answer_path(final), method: :post %> 
+								 | <%= link_to "Mark non-final", unsubmit_for_grades_answer_path(final), method: :post %>
 								</td>
 							<% end %>
 						</td>
@@ -100,9 +105,9 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 						<% else %>
 							<td data-no-turbolink="true">
 								<% if @grades[s.id].blank? %>
-									No grade 
+									No grade
 								<% else %>
-									<%= @grades[s.id].round(2) %> 
+									<%= @grades[s.id].round(2) %>
 								<% end %>
 								<%= link_to "Override", grades_assignment_path(@assignment, user: s.id) %></td>
 						<% end %>
@@ -120,6 +125,6 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 	</table>
 <% end %>
 <h2>Export</h2>
-<%= link_to "Download gradebook", export_grades_assignment_path(@assignment, format: "csv"), class: "btn" %> 
+<%= link_to "Download gradebook", export_grades_assignment_path(@assignment, format: "csv"), class: "btn" %>
 
 <%= button_to "Regrade all submissions (drops current grades)", regrade_assignment_path(@assignment), method: :post, class: "btn btn-danger" %> <br/>
