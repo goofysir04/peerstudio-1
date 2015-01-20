@@ -25,7 +25,7 @@ module ApplicationHelper
 	end
 
 	def due_date(date)
-		return "Due on " + date.strftime("%b %e, %l:%M %p") 
+		return "Due on " + date.strftime("%b %e, %l:%M %p")
 	end
 
 	def non_pii_user_id
@@ -33,4 +33,13 @@ module ApplicationHelper
 			Digest::MD5.hexdigest("#{ENV['ANALYTICS_USER_KEY']}\n\n#{current_user.id}")
 		end
 	end
+
+	def view_mode?
+		if session["view_mode"].nil?
+			return "staff"
+		else
+			return session["view_mode"]
+		end
+	end
+
 end

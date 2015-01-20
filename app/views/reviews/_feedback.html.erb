@@ -2,7 +2,7 @@
   .rubric {margin: 0;}
   .rubric li {list-style-type: none; background-color:#efefef; margin:20px 0; padding:10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px;}
   </style>
-  <% if trigger.nil? %>
+  <% if trigger.nil? or current_user.instructor_for?(@answer.assignment.course) %>
     <ul class="rubric">
       <% unless feedback_items_by_rubric_item["comments"].nil? %>
 

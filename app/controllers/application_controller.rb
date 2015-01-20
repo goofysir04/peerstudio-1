@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
 	end
 
   def authenticate_user_is_instructor!(course)
+    return false if session["view_mode"]=="student"
     return true if Rails.env.development?
     unless user_signed_in?
       authenticate_user!
@@ -36,6 +37,16 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     session["user_return_to"] || request.env['omniauth.origin'] || root_path
+  end
+
+  def toggle_view_mode
+    if session["view_mode"]=="student"
+      session["view_mode"]="staff"
+    else
+      session["view_mode"] = "student"
+    end
+
+    redirect_to :back
   end
 
   def ensure_user_is_not_banned

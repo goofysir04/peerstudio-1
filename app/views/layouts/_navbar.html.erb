@@ -18,6 +18,15 @@
        <%= content_for(:local_nav) %>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <% if user_signed_in? %>
+        <li>
+          <% if view_mode? == "staff" %>
+            <%= link_to toggle_view_mode_path do %> Viewing as <span class="badge" style="background: #b33; border-radius: 4px;">Staff</span> <% end %>
+          <% else %>
+            <%= link_to toggle_view_mode_path do %> Viewing as <span class="badge" style="background: #3b5; border-radius: 4px;">Student</span> <% end %>
+          <% end %>
+        </li>
+        <% end %>
         <li> <%= link_to "Terms", welcome_tos_path %> </li>
         <li class="dropdown" id="help-menu">
           <%= link_to help_courses_path, :"class"=>"dropdown-toggle", :"data-toggle"=>"dropdown" do %>
@@ -27,12 +36,12 @@
             <li><a href="#" class="startReviewTourBtn">How do I review?</a></li>
             <li><%= link_to "Help", help_courses_path %> </li>
           </ul>
-          
+
         </li>
         <% if user_signed_in? %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-             <%= current_user.name %> 
+             <%= current_user.name %>
              <% if true_user != current_user %>
                 <span class="badge" style="background: #b33;">Impersonating </span>
               <% end %>

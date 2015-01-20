@@ -47,6 +47,7 @@ Humanmachine::Application.routes.draw do
     get 'users/impersonate' => 'registrations#impersonate', :as=>:impersonate_user
     post 'users/upload' => 'registrations#upload', as: :upload_users
     get 'users/import' => 'registrations#import'
+    get 'sessions/toggle' => 'application#toggle_view_mode', as: :toggle_view_mode
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
