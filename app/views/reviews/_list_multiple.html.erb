@@ -2,16 +2,26 @@
 <% content_for :context_menu do %>
   <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: feedback_items_by_rubric_item, answer: answer, trigger: @trigger} %>
   <br/>
+  <div class="row-fluid">
+
+    <div class="col-sm-8 control-label">Help us provide reviewers better reviewing hints.</div>
+    <div class="col-sm-4"><%= link_to "Rate reviews", rate_review_path(answer.reviews.where(active: true).first), class: "btn btn-default" %></div>
+  </div>
   <% if show_revision_link %>
+
     <div class="form-controls">
-      <%= link_to "Revise submission", reflect_answer_path(answer), class: "btn btn-primary"%>
-      <% if !answer.review_completed? %>
-        <div class="pull-right">
-            <%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path(answer), :class=>"btn btn-danger", :role=>"button", :method=>:post %>
+      <div class="row-fluid">
+        <div class="col-sm-8 control-label">Your grade will be based on your revised (and improved) work.</div>
+        <div class="col-sm-4"><%= link_to "Revise submission", reflect_answer_path(answer), class: "btn btn-primary"%></div>
+      </div>
+      <% if !answer.review_completed? and !answer.is_final? %>
+        <div class="row-fluid">
+          <div class="col-sm-8 control-label">If you already have enough feedback, why not save your classmates some time?</div>
+          <div class="col-sm-4"><%= link_to "Stop reviewing", unsubmit_for_feedback_answer_path(answer), :class=>"btn btn-danger", :role=>"button", :method=>:post %></div>
         </div>
       <% else %>
-        <div class="pull-right">
-            No longer being reviewed
+        <div class="row-fluid">
+            <p>No longer being reviewed</p>
         </div>
       <% end %>
     </div>
