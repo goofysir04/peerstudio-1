@@ -5,7 +5,10 @@
   <div class="row-fluid">
 
     <div class="col-sm-8 control-label">Help us provide reviewers better reviewing hints.</div>
-    <div class="col-sm-4"><%= link_to "Rate reviews", rate_review_path(answer.reviews.where(active: true).first), class: "btn btn-default" %></div>
+    <div class="col-sm-4">
+      <% if answer.reviews.where(active: true, rating_completed: false).count > 0 %>
+        <%= link_to "Rate reviews", rate_review_path(answer.reviews.where(active: true).first), class: "btn btn-default" %></div>
+      <% end %>
   </div>
   <% if show_revision_link %>
 
