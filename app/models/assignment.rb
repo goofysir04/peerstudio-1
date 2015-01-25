@@ -205,7 +205,7 @@ class Assignment < ActiveRecord::Base
             if attribute_weights.empty?
               attribute_credit = 0
             else
-              attribute_credit= attribute_weights.median * answer_attribute.score
+              attribute_credit = attribute_weights.median * answer_attribute.score
             end
             marked_count = attribute_weights.length
           end

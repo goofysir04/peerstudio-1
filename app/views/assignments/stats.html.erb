@@ -79,7 +79,7 @@ Detailed stats are unavailable because you have more than 300 students. Contact 
 						<td>
 							<% non_final_drafts = Answer.where(assignment: @assignment, submitted: true, is_final: false, user:s).order("submitted_at asc") %>
 							<% non_final_drafts.each_with_index do |draft,i| %>
-								<%= link_to "##{i+1} (#{time_ago_in_words draft.submitted_at} ago)", answer_reviews_path(draft) %>
+								<%= link_to "##{i+1} (#{time_ago_in_words draft.submitted_at} ago)", answer_reviews_path(draft), title: draft.submitted_at.strftime("%b %e %Y, %l:%M %p") %>
 							<% end %>
 						</td>
 					<% end %>
