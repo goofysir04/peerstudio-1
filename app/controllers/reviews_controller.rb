@@ -93,6 +93,7 @@ class ReviewsController < ApplicationController
     respond_to do |format|
       @answer= @review.answer
       @answer.is_blank_submission = true
+      @answer.is_final = false #toallow people to resubmit
       @answer.save!
       process_review_triggers_and_answer!(@review)
       if (@review.update(active: true))
