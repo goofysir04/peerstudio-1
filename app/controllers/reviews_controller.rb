@@ -296,7 +296,9 @@ class ReviewsController < ApplicationController
             #do nothing
             review.email_sent = false
           else
-            ReviewMailer.delay.reviewed_email(review.answer)
+            if review.assignment_id != 23 #special casing for a little post-class grading. 
+              ReviewMailer.delay.reviewed_email(review.answer)
+            end
             review.email_sent = true
           end
 
