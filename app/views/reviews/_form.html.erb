@@ -21,7 +21,12 @@
           </li>
         <% end %>
         <% if current_user.instructor_for?(@review.assignment.course) %>
-          Submission by <%= @review.answer.user.name %> (<%= @review.answer.user.email %>) Only staff can see names.
+          <% unless @review.answer.user.nil? %>
+            <% 
+              #This ensures students who deleted accounts
+              %>
+            Submission by <%= @review.answer.user.name %> (<%= @review.answer.user.email %>) Only staff can see names.
+          <% end %>
         <% end %>
         <% unless @review.answer.review_request.blank? %>
           <div class="well">
