@@ -55,23 +55,13 @@
                             </div>
                           <% end %>
                         <% else %>
-                          Yes:
-                          <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                            <% if f.answer_attributes.include?(a_attr) %>
-                              <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-success">
-                                <%= "(Staff)" if f.review.user.instructor_for?(@answer.assignment.course) %>
-                              </div>
-                            <% end %>
-                          <% end %>
+                        <% yes_count = a_attr.feedback_items.where(review_id: @answer.reviews.pluck(:id)).count 
+                           review_count = @answer.reviews.where(active: true).count 
+                        %>
+                          Yes: <%= yes_count %> <div class="glyphicon glyphicon-user reviewer1 reviewer-success"></div>
+                         
                           &nbsp;
-                          No:
-                          <% feedback_items_by_rubric_item[r.id].each.with_index(1) do |f,i| %>
-                            <% if !f.answer_attributes.include?(a_attr)%>
-                              <div class="glyphicon glyphicon-user reviewer<%= i%10 %> reviewer-fail">
-                                <%= "(Staff)" if f.review.user.instructor_for?(@answer.assignment.course) %>
-                              </div>
-                            <% end %>
-                          <% end %>
+                          No: <%= review_count - yes_count %>  <div class="glyphicon glyphicon-user reviewer3 reviewer-failure"></div>
                         <% end %>
                     </div>
                   </div>
