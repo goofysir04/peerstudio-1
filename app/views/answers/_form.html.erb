@@ -63,7 +63,8 @@
             <h3>No reviews yet.</h3> 
             <p>To get feedback on this answer, click "Get feedback on draft"</p>
           <% else %>
-            <%= render partial: "reviews/feedback", locals: {feedback_items_by_rubric_item: @answer.previous_version.feedback_items_by_rubric_item, answer: @answer.previous_version, trigger: @trigger} %>
+            <h3>Temporarily disabled, as we work on server stability.</h3>
+            
           <% end %>
         </div>
       </div>
