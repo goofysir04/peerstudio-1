@@ -289,20 +289,19 @@ class ReviewsController < ApplicationController
           #begin vineet
           a = review.answer
           u = a.user
-          unless u.nil?
-            assign = review.assignment
-            course = assign.course
-            u.get_and_store_experimental_condition!(course)
-            if u.experimental_group=="batched_email"
-              #do nothing
-              review.email_sent = false
-            else
-              if review.assignment_id != 23 #special casing for a little post-class grading. 
-                ReviewMailer.delay.reviewed_email(review.answer)
-              end
-              review.email_sent = true
+          assign = review.assignment
+          course = assign.course
+          u.get_and_store_experimental_condition!(course)
+          if u.experimental_group=="batched_email"
+            #do nothing
+            review.email_sent = false
+          else
+            if review.assignment_id != 23 #special casing for a little post-class grading. 
+              ReviewMailer.delay.reviewed_email(review.answer)
             end
+            review.email_sent = true
           end
+
           review.save! #so we know if we sent the email
          #end vineet
         end
