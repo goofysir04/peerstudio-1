@@ -56,11 +56,13 @@ class AssignmentsController < ApplicationController
   def new
     #Course id is set in callback
     @assignment = Assignment.new(:course=>@course)
+    render layout: "one_column"
   end
 
   # GET /assignments/1/edit
   def edit
     #noop
+    render layout: "one_column"
   end
 
   #POST /regrade

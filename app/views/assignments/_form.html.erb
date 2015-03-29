@@ -48,7 +48,9 @@
       <h3>Rubric items
       </h3>
       <p>A rubric item is an assessment dimension. For instance, an essay might have rubric items related to conceptual soundness, logical flow, and writing and grammar.</p>
-      <p>You can choose whether dimensions are shown for early feedback, for assessment, or both (default) </p>
+
+      <p>For assessment criteria, instead of binary, you can also use scales e.g. "Never, Sometimes, Always"</p>
+
     </div>
   </div>
 
@@ -58,30 +60,46 @@
         <li>
           <div class="row-fluid">
             <div class="row-fluid">
-              <div class="col-sm-9"><strong><%= r.text_field :short_title, placeholder: "Title", class: "form-control" %></strong></div>
-              <span class="badge col-sm-3"><%=r.text_field :max_label, class:"form-control", placeholder: "opt. max score"%></span>
+              <div class="col-sm-12"><strong><%= r.text_field :short_title, placeholder: "Title", class: "form-control" %></strong></div>
             </div>
             <div class="row-fluid">
+              <div class="col-sm-12">
               <%=r.text_area :title, placeholder: "An optional longer explanation", class: "form-control" %>
+              </div>
             </div>
-            <div class="row-fluid form-inline" id="checkboxes-<%=r.object.id%>">
-              <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
-                <div class="fields row-fluid">
-                  <div class="form-group" style="width: 75%;"><input type="checkbox" disabled="disabled"><%= a.text_field :description, placeholder: "Enter a criteria. Keep it to one line if possible", class:"form-control", style: "width: 95%" %></div><div class="form-group" style="width: 7%;"><%= a.text_field :score, placeholder: "0", class:"form-control", style: "width: 100%" %></div><div class="form-group"><%= a.link_to_remove "Remove", class:"btn btn-default", tabindex: "-1"%></div><div class="form-group"><%= a.text_field :attribute_type, class:"form-control", tabindex: "-1"%>
-                  <%= a.text_area :example, class:"editable" %>
-                </div>
+            <div class="row-fluid" id="checkboxes-<%=r.object.id%>">
 
+              <%= r.fields_for :answer_attributes, :wrapper => false do |a| %>
+                <div class="fields">
+                  <div class="form-inline">
+                       <%= a.text_field :description, placeholder: "Enter a criteria. Keep it to one line if possible", class:"form-control", style: "width: 350px;" %>
+                      </span>
+                      <%= a.text_field :score, placeholder: "Score", class:"form-control"%>
+                      <%= a.text_field :attribute_type, class:"form-control", tabindex: "-1"%>
+                      <%= a.link_to_remove "", class:"glyphicon glyphicon-minus btn btn-danger", tabindex: "-1"%> Remove criterion
+                  </div>
+                  <div class="row-fluid">
+                    <div class="form-group">
+                  <%= a.text_area :example, class:"form-control editable", placeholder: "Example of work that scores well on this attribute"%>
+                    </div>
+                  </div>
                 </div>
               <% end %>
             </div>
             <div class="row-fluid">
-              <%= r.link_to_add "Add an assessment criterion", :answer_attributes, :data => { :target => "#checkboxes-#{r.object.id}" }, class: "" %>
+              <div class="col-sm-12">
+                <%= r.link_to_add "", :answer_attributes, :data => { :target => "#checkboxes-#{r.object.id}" }, class: "btn btn-success glyphicon glyphicon-plus" %> Add an assessment criterion
+              </div>  
             </div>
-            <div class="row-fluid">
-              <%= r.text_area :like_feedback_prompt, placeholder: "Prompt for student comments (leave blank to use automatically generated tips)", class:"form-control" %>
+            <div class="form-group">
+              <div class="row-fluid">
+                <div class="col-sm-12">
+                  <%= r.text_area :like_feedback_prompt, placeholder: "Prompt for student comments (leave blank to use automatically generated tips)", class:"form-control" %>
+                </div>
+              </div>
             </div>
             <legend></legend>
-            <div class="row-fluid">
+            <div class="row-fluid" style="display:none;">
               <%= r.label :show_for_feedback, class:"checkbox-inline" do %>
                 <%= r.check_box :show_for_feedback %> Recommend this for early feedback
               <% end %>
